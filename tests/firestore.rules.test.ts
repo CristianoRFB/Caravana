@@ -142,6 +142,44 @@ describe("Firestore security rules", () => {
     expect(reserved).toBe(1);
   });
 
+  it("accepts optional CPF and birth date only in the validated formats", async () => {
+    await seed();
+    const guest = env.unauthenticatedContext().firestore();
+    const reserve = async (id: string, cpf: string, birthDate: string) =>
+      runTransaction(guest, async (tx) => {
+        const caravanRef = doc(guest, "caravans/ride-a");
+        const snapshot = await tx.get(caravanRef);
+        tx.update(caravanRef, {
+          reservedSeats: snapshot.data()!.reservedSeats + 1,
+          lastReservationId: id,
+        });
+        tx.set(doc(guest, `registrations/${id}`), {
+          id,
+          organizationId: "org-a",
+          caravanId: "ride-a",
+          caravanName: "Viagem A",
+          passengerName: "Pessoa Teste",
+          cpf,
+          birthDate,
+          phone: "11999999999",
+          email: "",
+          city: "São Paulo",
+          boardingPointId: "p1",
+          boardingPointName: "Terminal",
+          emergencyContact: "Contato 11999999999",
+          notes: "",
+          amountCents: 8500,
+          registrationStatus: "awaiting_payment",
+          paymentStatus: "pending",
+          createdAt: new Date().toISOString(),
+        });
+      });
+    await expect(reserve(secretA, "123", "2000-01-01")).rejects.toBeTruthy();
+    await expect(
+      reserve(secretB, "12345678901", "2000-01-01"),
+    ).resolves.toBeUndefined();
+  });
+
   it("does not let a passenger approve their own payment", async () => {
     await seed();
     const guest = env.unauthenticatedContext().firestore();

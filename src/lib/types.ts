@@ -46,6 +46,8 @@ export interface Registration {
   caravanId: string;
   caravanName: string;
   passengerName: string;
+  cpf?: string;
+  birthDate?: string;
   phone: string;
   email: string;
   city: string;

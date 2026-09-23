@@ -481,6 +481,8 @@ function RegistrationPage() {
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     passengerName: "",
+    cpf: "",
+    birthDate: "",
     phone: "",
     email: "",
     city: "",
@@ -508,6 +510,13 @@ function RegistrationPage() {
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (!caravan) return;
+    const cpfDigits = form.cpf.replace(/\D/g, "");
+    if (cpfDigits && cpfDigits.length !== 11) {
+      setError(
+        "Confira o CPF: informe os 11 números ou deixe o campo em branco.",
+      );
+      return;
+    }
     setError("");
     setBusy(true);
     try {
@@ -577,6 +586,34 @@ function RegistrationPage() {
                     value={form.phone}
                     onChange={(e) => change("phone", e.target.value)}
                     placeholder="(11) 99999-9999"
+                  />
+                </Field>
+                <Field label="CPF (opcional)">
+                  <input
+                    inputMode="numeric"
+                    autoComplete="off"
+                    maxLength={14}
+                    value={form.cpf}
+                    onChange={(e) =>
+                      change(
+                        "cpf",
+                        e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 11)
+                          .replace(/(\d{3})(\d)/, "$1.$2")
+                          .replace(/(\d{3})(\d)/, "$1.$2")
+                          .replace(/(\d{3})(\d{1,2})$/, "$1-$2"),
+                      )
+                    }
+                    placeholder="000.000.000-00"
+                  />
+                </Field>
+                <Field label="Data de nascimento (opcional)">
+                  <input
+                    type="date"
+                    autoComplete="bday"
+                    value={form.birthDate}
+                    onChange={(e) => change("birthDate", e.target.value)}
                   />
                 </Field>
                 <Field label="E-mail">
@@ -1888,6 +1925,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
   const [selected, setSelected] = useState(routeId || "");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState(pendingOnly ? "awaiting_review" : "all");
+  const [boardingFilter, setBoardingFilter] = useState("all");
   const [notice, setNotice] = useState("");
   const [proofUrl, setProofUrl] = useState("");
   const [proofBusy, setProofBusy] = useState("");
@@ -1914,12 +1952,16 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           (filter === "all" ||
             r.paymentStatus === filter ||
             (filter === "confirmed" && r.registrationStatus === "confirmed") ||
-            (filter === "boarded" && !!r.checkedInAt)) &&
+            (filter === "boarded" && !!r.checkedInAt) ||
+            (filter === "absent" &&
+              r.registrationStatus === "confirmed" &&
+              !r.checkedInAt)) &&
+          (boardingFilter === "all" || r.boardingPointId === boardingFilter) &&
           `${r.passengerName} ${r.phone} ${r.id}`
             .toLowerCase()
             .includes(search.toLowerCase()),
       ),
-    [regs, filter, search],
+    [regs, filter, boardingFilter, search],
   );
   async function approve(r: Registration, ok: boolean) {
     const reason = ok
@@ -2034,6 +2076,21 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           <option value="pending">Aguardando pagamento</option>
           <option value="rejected">Recusados</option>
           <option value="boarded">Embarcados</option>
+          <option value="absent">Faltantes</option>
+        </select>
+        <select
+          value={boardingFilter}
+          onChange={(e) => setBoardingFilter(e.target.value)}
+          aria-label="Filtrar por ponto de embarque"
+        >
+          <option value="all">Todos os pontos</option>
+          {caravans
+            .find((c) => c.id === selected)
+            ?.boardingPoints.map((point) => (
+              <option value={point.id} key={point.id}>
+                {point.name}
+              </option>
+            ))}
         </select>
       </div>
       {notice && (

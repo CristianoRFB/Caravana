@@ -86,6 +86,8 @@ export async function reserveSeat(
   form: Pick<
     Registration,
     | "passengerName"
+    | "cpf"
+    | "birthDate"
     | "phone"
     | "email"
     | "city"
@@ -121,6 +123,7 @@ export async function reserveSeat(
     });
     tx.set(registrationRef, {
       ...form,
+      ...(form.cpf ? { cpf: form.cpf.replace(/\D/g, "") } : {}),
       id,
       organizationId: current.organizationId,
       caravanId: current.id,
