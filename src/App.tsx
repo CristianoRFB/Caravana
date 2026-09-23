@@ -1356,7 +1356,17 @@ function AdminCaravans() {
   const [capacity, setCapacity] = useState("50");
   const [key, setKey] = useState("");
   const [receiver, setReceiver] = useState("");
-  const [point, setPoint] = useState("");
+  const [event, setEvent] = useState("");
+  const [description, setDescription] = useState("");
+  const [departureTime, setDepartureTime] = useState("06:00");
+  const [returnTime, setReturnTime] = useState("21:30");
+  const [address, setAddress] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [pointsText, setPointsText] = useState("");
+  const [benefitsText, setBenefitsText] = useState("");
+  const [rulesText, setRulesText] = useState("");
+  const [faqsText, setFaqsText] = useState("");
+  const [announcementsText, setAnnouncementsText] = useState("");
   useEffect(() => {
     if (!orgId) return;
     return watchAdminCaravans(orgId, setList, (e) => setError(errorMessage(e)));
@@ -1371,7 +1381,19 @@ function AdminCaravans() {
     setCapacity("50");
     setKey("");
     setReceiver("");
-    setPoint("");
+    setEvent("");
+    setDescription(
+      "Uma viagem organizada para curtir o evento com tranquilidade e boa companhia.",
+    );
+    setDepartureTime("06:00");
+    setReturnTime("21:30");
+    setAddress("");
+    setWhatsapp("");
+    setPointsText("Terminal Tietê | Av. Cruzeiro do Sul, 1800 | 06:00");
+    setBenefitsText("Transporte de ida e volta\nEquipe acompanhando a viagem");
+    setRulesText("Chegue 15 minutos antes do embarque.");
+    setFaqsText("");
+    setAnnouncementsText("");
     setShow(true);
   }
   function openEdit(c: Caravan) {
@@ -1384,7 +1406,23 @@ function AdminCaravans() {
     setCapacity(String(c.capacity));
     setKey(c.pixKey);
     setReceiver(c.pixReceiver);
-    setPoint(c.boardingPoints[0]?.name || "");
+    setEvent(c.event);
+    setDescription(c.description);
+    setDepartureTime(c.departureTime);
+    setReturnTime(c.returnTime);
+    setAddress(c.address);
+    setWhatsapp(c.whatsapp);
+    setPointsText(
+      c.boardingPoints
+        .map((p) => `${p.name} | ${p.address} | ${p.time}`)
+        .join("\n"),
+    );
+    setBenefitsText(c.benefits.join("\n"));
+    setRulesText(c.rules.join("\n"));
+    setFaqsText(c.faqs.map((f) => `${f.question} | ${f.answer}`).join("\n"));
+    setAnnouncementsText(
+      c.announcements.map((a) => `${a.title} | ${a.body}`).join("\n"),
+    );
     setShow(true);
   }
   async function duplicate(c: Caravan) {
@@ -1449,8 +1487,60 @@ function AdminCaravans() {
   }
   async function submit(e: FormEvent) {
     e.preventDefault();
-    setBusy(true);
     setError("");
+    const parseLines = (value: string) =>
+      value
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+    const boardingRows = parseLines(pointsText).map((line) =>
+      line.split("|").map((part) => part.trim()),
+    );
+    const faqRows = parseLines(faqsText).map((line) =>
+      line.split("|").map((part) => part.trim()),
+    );
+    const announcementRows = parseLines(announcementsText).map((line) =>
+      line.split("|").map((part) => part.trim()),
+    );
+    if (
+      !boardingRows.length ||
+      boardingRows.some(
+        (row) => row.length < 3 || row.slice(0, 3).some((part) => !part),
+      )
+    ) {
+      setError(
+        "Informe ao menos um ponto no formato: Nome | endereço | HH:MM.",
+      );
+      return;
+    }
+    if (
+      faqRows.some(
+        (row) => row.length < 2 || row.slice(0, 2).some((part) => !part),
+      )
+    ) {
+      setError("Revise as perguntas no formato: Pergunta | resposta.");
+      return;
+    }
+    if (
+      announcementRows.some(
+        (row) => row.length < 2 || row.slice(0, 2).some((part) => !part),
+      )
+    ) {
+      setError("Revise os avisos no formato: Título | mensagem.");
+      return;
+    }
+    const existing = list.find((c) => c.id === editingId);
+    const nextCapacity = Number(capacity);
+    if (
+      !Number.isInteger(nextCapacity) ||
+      nextCapacity < (existing?.reservedSeats || 0)
+    ) {
+      setError(
+        `As vagas não podem ser menores que as ${existing?.reservedSeats || 0} já reservadas.`,
+      );
+      return;
+    }
+    setBusy(true);
     try {
       const norm =
         slug ||
@@ -1460,41 +1550,38 @@ function AdminCaravans() {
           .replace(/[\u0300-\u036f]/g, "")
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "");
-      const existing = list.find((c) => c.id === editingId);
       const payload = {
         name,
         slug: norm,
-        event: existing?.event || name,
-        description:
-          existing?.description ||
-          "Uma viagem organizada para curtir o evento com tranquilidade e boa companhia.",
+        event: event || name,
+        description,
         date,
-        departureTime: existing?.departureTime || "06:00",
-        returnTime: existing?.returnTime || "21:30",
+        departureTime,
+        returnTime,
         city,
         destination: city,
-        address: existing?.address || city,
+        address: address || city,
         priceCents: Math.round(Number(price) * 100),
         capacity: Number(capacity),
         pixKey: key,
         pixReceiver: receiver,
-        whatsapp: existing?.whatsapp || "",
+        whatsapp,
         status: existing?.status || ("published" as const),
-        boardingPoints: existing?.boardingPoints || [
-          {
-            id: "principal",
-            name: point || "Ponto principal",
-            address: city,
-            time: "06:00",
-          },
-        ],
-        benefits: existing?.benefits || [
-          "Transporte de ida e volta",
-          "Equipe acompanhando a viagem",
-        ],
-        rules: existing?.rules || ["Chegue 15 minutos antes do embarque."],
-        faqs: existing?.faqs || [],
-        announcements: existing?.announcements || [],
+        boardingPoints: boardingRows.map(
+          ([pointName, pointAddress, time], index) => ({
+            id: existing?.boardingPoints[index]?.id || `ponto-${index + 1}`,
+            name: pointName,
+            address: pointAddress,
+            time,
+          }),
+        ),
+        benefits: parseLines(benefitsText),
+        rules: parseLines(rulesText),
+        faqs: faqRows.map(([question, answer]) => ({ question, answer })),
+        announcements: announcementRows.map(([title, body]) => ({
+          title,
+          body,
+        })),
       };
       if (editingId) await updateCaravan(editingId, payload);
       else await createCaravan(orgId, payload);
@@ -1645,6 +1732,36 @@ function AdminCaravans() {
                     placeholder="São Paulo - SP"
                   />
                 </Field>
+                <Field label="Evento">
+                  <input
+                    value={event}
+                    onChange={(e) => setEvent(e.target.value)}
+                    placeholder="Anime Friends"
+                  />
+                </Field>
+                <Field label="Endereço de destino">
+                  <input
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Distrito Anhembi"
+                  />
+                </Field>
+                <Field label="Saída">
+                  <input
+                    type="time"
+                    required
+                    value={departureTime}
+                    onChange={(e) => setDepartureTime(e.target.value)}
+                  />
+                </Field>
+                <Field label="Retorno">
+                  <input
+                    type="time"
+                    required
+                    value={returnTime}
+                    onChange={(e) => setReturnTime(e.target.value)}
+                  />
+                </Field>
                 <Field label="Preço (R$)" required>
                   <input
                     type="number"
@@ -1664,14 +1781,6 @@ function AdminCaravans() {
                     onChange={(e) => setCapacity(e.target.value)}
                   />
                 </Field>
-                <Field label="Ponto de embarque" required>
-                  <input
-                    required
-                    value={point}
-                    onChange={(e) => setPoint(e.target.value)}
-                    placeholder="Terminal Tietê"
-                  />
-                </Field>
                 <Field label="Recebedor Pix" required>
                   <input
                     required
@@ -1687,6 +1796,69 @@ function AdminCaravans() {
                     onChange={(e) => setKey(e.target.value)}
                     placeholder="Chave fornecida pela organização"
                   />
+                </Field>
+                <Field label="WhatsApp de contato">
+                  <input
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
+                    placeholder="5511999999999"
+                  />
+                </Field>
+                <Field label="Descrição" full>
+                  <textarea
+                    rows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </Field>
+                <Field label="Pontos de embarque" full>
+                  <textarea
+                    rows={4}
+                    required
+                    value={pointsText}
+                    onChange={(e) => setPointsText(e.target.value)}
+                    placeholder="Nome | endereço | HH:MM"
+                  />
+                  <small>
+                    Um por linha: Nome | endereço | horário. Ex.: Terminal Tietê
+                    | Av. Cruzeiro do Sul, 1800 | 06:00
+                  </small>
+                </Field>
+                <Field label="O que está incluso" full>
+                  <textarea
+                    rows={3}
+                    value={benefitsText}
+                    onChange={(e) => setBenefitsText(e.target.value)}
+                    placeholder="Um benefício por linha"
+                  />
+                </Field>
+                <Field label="Regras da viagem" full>
+                  <textarea
+                    rows={3}
+                    value={rulesText}
+                    onChange={(e) => setRulesText(e.target.value)}
+                    placeholder="Uma regra por linha"
+                  />
+                </Field>
+                <Field label="Perguntas frequentes" full>
+                  <textarea
+                    rows={4}
+                    value={faqsText}
+                    onChange={(e) => setFaqsText(e.target.value)}
+                    placeholder="Pergunta | resposta (uma por linha)"
+                  />
+                  <small>Separe cada pergunta e resposta com |.</small>
+                </Field>
+                <Field label="Avisos aos passageiros" full>
+                  <textarea
+                    rows={4}
+                    value={announcementsText}
+                    onChange={(e) => setAnnouncementsText(e.target.value)}
+                    placeholder="Título | mensagem (um aviso por linha)"
+                  />
+                  <small>
+                    Os avisos aparecem na área privada de quem se inscreveu.
+                  </small>
                 </Field>
               </div>
               {error && <div className="error-message">{error}</div>}
