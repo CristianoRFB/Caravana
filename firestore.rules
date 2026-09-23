@@ -1,0 +1,79 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function adminOrg() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.organizationId
+        : '';
+    }
+    function isAdmin(orgId) { return signedIn() && adminOrg() == orgId; }
+    function publicCaravan(caravanId) {
+      return exists(/databases/$(database)/documents/caravans/$(caravanId))
+        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published';
+    }
+
+    match /admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    match /organizations/{orgId} {
+      allow get: if isAdmin(orgId);
+      allow list, create, update, delete: if false;
+    }
+
+    match /caravans/{caravanId} {
+      allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId);
+      allow create: if isAdmin(request.resource.data.organizationId)
+        && request.resource.data.reservedSeats == 0
+        && request.resource.data.capacity is int
+        && request.resource.data.capacity > 0
+        && request.resource.data.capacity <= 1000;
+      allow update: if isAdmin(resource.data.organizationId)
+        || (resource.data.status == 'published'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reservedSeats', 'lastReservationId', 'updatedAt'])
+          && request.resource.data.reservedSeats == resource.data.reservedSeats + 1
+          && request.resource.data.reservedSeats <= resource.data.capacity
+          && request.resource.data.lastReservationId is string
+          && existsAfter(/databases/$(database)/documents/registrations/$(request.resource.data.lastReservationId))
+          && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.lastReservationId)).data.caravanId == caravanId
+          && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.lastReservationId)).data.registrationStatus == 'awaiting_payment');
+      allow delete: if isAdmin(resource.data.organizationId);
+    }
+
+    match /registrations/{registrationId} {
+      // Direct reads require the high-entropy bearer ID in the private link. Collection listing stays forbidden.
+      allow get: if resource != null && (isAdmin(resource.data.organizationId) || registrationId.matches('^[a-f0-9]{64}$'));
+      allow list: if isAdmin(resource.data.organizationId);
+      allow create: if request.resource.data.id == registrationId
+        && request.resource.data.keys().hasOnly(['id', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
+        && request.resource.data.registrationStatus == 'awaiting_payment'
+        && request.resource.data.paymentStatus == 'pending'
+        && request.resource.data.passengerName is string
+        && request.resource.data.passengerName.size() >= 2
+        && request.resource.data.passengerName.size() <= 120
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 8
+        && request.resource.data.phone.size() <= 30
+        && request.resource.data.organizationId is string
+        && request.resource.data.caravanId is string
+        && publicCaravan(request.resource.data.caravanId)
+        && get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.organizationId == request.resource.data.organizationId
+        && get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.priceCents == request.resource.data.amountCents
+        && request.resource.data.boardingPointId is string
+        && request.resource.data.boardingPointName is string
+        && request.resource.data.createdAt is string
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats == get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats + 1
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.lastReservationId == registrationId;
+      allow update: if isAdmin(resource.data.organizationId)
+        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofPath', 'paymentStatus', 'registrationStatus', 'proofUploadedAt'])
+          && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
+          && request.resource.data.paymentStatus == 'awaiting_review'
+          && request.resource.data.registrationStatus == 'awaiting_review'
+          && request.resource.data.proofPath is string
+          && request.resource.data.proofPath.matches('^proofs/' + resource.data.organizationId + '/' + resource.data.caravanId + '/' + registrationId + '/.*$'));
+      allow delete: if isAdmin(resource.data.organizationId);
+    }
+  }
+}
