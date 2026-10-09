@@ -126,7 +126,7 @@ export async function reserveSeat(
       ...(form.cpf ? { cpf: form.cpf.replace(/\D/g, "") } : {}),
       id,
       organizationId: current.organizationId,
-      caravanId: current.id,
+      caravanId: caravanRef.id,
       caravanName: current.name,
       amountCents: current.priceCents,
       registrationStatus: "awaiting_payment",
