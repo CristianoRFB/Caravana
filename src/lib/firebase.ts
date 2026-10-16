@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
+import { assertFirebaseEnvironment } from "./firebase-environment";
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -10,16 +11,15 @@ const config = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
+const useEmulators = import.meta.env.VITE_USE_EMULATORS === "true";
+assertFirebaseEnvironment(typeof window === "undefined" ? undefined : window.location.hostname, config.projectId, useEmulators, import.meta.env.DEV);
+
 export const firebaseConfigured = Object.values(config).every(Boolean);
 const app = firebaseConfigured ? initializeApp(config) : null;
 export const auth = app ? getAuth(app) : null;
 export const db = app ? getFirestore(app) : null;
 
-if (import.meta.env.VITE_USE_EMULATORS === "true") {
-  const loopback = typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
-  if (!import.meta.env.DEV || !loopback || !config.projectId?.startsWith("demo-")) {
-    throw new Error("O modo de testes exige execução local com um projeto Firebase demo.");
-  }
+if (useEmulators) {
   if (auth) connectAuthEmulator(auth, "http://127.0.0.1:19099", { disableWarnings: true });
   if (db) connectFirestoreEmulator(db, "127.0.0.1", 18080);
 }

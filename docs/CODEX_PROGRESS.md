@@ -19,6 +19,8 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F1-CSV | P0 | PASS parcial | Função real de importação sobre fixtures | Replay mesmo lote e capacity atômica, f1-policy-import-tests.log | Dedupe entre lotes/rollback permanecem TODO F3; nenhuma importação real |
 | F1-E2E | P0 | PASS parcial do baseline | Ambiente totalmente sintético; quatro larguras; financeiro e fluxo legado | f1-e2e-mobile-header-final.log: 12 PASS; f1-e2e-regression-unit.log: 43 PASS; lint/typecheck/build PASS | Capturas reais sintéticas; F1 completo não homologado |
 | CLIENT-PRESERVATION | P0 | PASS para auditoria atual; obrigação futura | Cinco confirmações registradas antes de F2 | CLIENT_PRESERVATION_ITALO_2026-10-16.md | Nenhuma escrita real autorizada; continuar localmente |
+| F1-LOCAL-SAFETY | P0 | PASS | Guard antes do SDK, dev sintético por padrão e E2E sobre dist-e2e compilado | 8 casos de ambiente; f1-environment-unit.log 51 PASS; f1-compiled-e2e.log 12 PASS | Build real recusa loopback; nenhum bypass para produção |
+| F1-PORTAL | P0 | PASS local | Revogação aditiva, limpeza do portal, no-referrer; recusa/reenvio/cancelamento e Pix incompleto | f1-portal-unit.log 52 PASS; f1-portal-e2e-green.log 20 PASS; lint/typecheck/build PASS | Primeiros E2E falharam por seleção de heading, commit assíncrono e texto esperado; corrigidos sem skip/retry |
 | F2 | P0 | TODO | Core multi-tenant e migração sintética | A×B, RBAC, restore | Nunca migrar produção |
 | F3 | P0/P1 | TODO | Estados, reservas, CSV, check-in | Jornadas sintéticas | F2 dependente |
 | F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |
@@ -27,4 +29,4 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F7 | P1 | TODO | CI, observabilidade e release local | E2E/docs/runbook | Publicação bloqueada por autorização |
 | F8 | P1 | TODO | Relatório de aceite | Gates e checkpoint | Sem merge/push/PR remoto ainda |
 
-Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançados preservados objetivamente. F1–F8 continuam TODO. Cada checkpoint registra o commit por git log (evitar SHA autorreferente no próprio commit), comandos, logs, resultado e próximo passo exato.
+Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançados preservados objetivamente. F1 tem baseline local PASS parcial; staging/Storage reais não homologados, CSV cross-batch será F3. F2–F8 permanecem pendentes. Cada checkpoint registra o commit por git log (evitar SHA autorreferente no próprio commit), comandos, logs, resultado e próximo passo exato.

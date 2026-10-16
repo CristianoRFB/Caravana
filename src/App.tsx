@@ -1,6 +1,5 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -51,13 +50,13 @@ import {
   findCaravan,
   getAdminOrganization,
   getCaravanById,
-  getRegistration,
   importLegacyRegistrations,
   loadProof,
   login,
   logout,
   reserveSeat,
   reviewPayment,
+  setPortalAccessRevoked,
   toggleCheckin,
   updateCaravan,
   updateAuthorizationStatus,
@@ -1017,35 +1016,34 @@ function MyRegistration() {
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [linkError, setLinkError] = useState("");
-  const refresh = useCallback(
-    () =>
-      getRegistration(id)
-        .then(async (r) => {
-          setReg(r);
-          if (r)
-            setCaravan(await getCaravanById(r.caravanId).catch(() => null));
-        })
-        .catch((e) => setError(errorMessage(e)))
-        .finally(() => setLoading(false)),
-    [id],
-  );
-  useEffect(
-    () =>
-      watchRegistration(
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    setReg(null);
+    setCaravan(null);
+    setLoading(true);
+    setMessage("");
+    setError("");
+    const unsubscribe = watchRegistration(
         id,
         async (r) => {
+          const currentRevision = ++revision;
+          const trip = r ? await getCaravanById(r.caravanId).catch(() => null) : null;
+          if (!active || currentRevision !== revision) return;
           setReg(r);
-          if (r)
-            setCaravan(await getCaravanById(r.caravanId).catch(() => null));
+          setCaravan(trip);
           setLoading(false);
         },
-        (e) => {
-          setError(errorMessage(e));
+        () => {
+          revision++;
+          if (!active) return;
+          setReg(null);
+          setCaravan(null);
           setLoading(false);
         },
-      ),
-    [id],
-  );
+      );
+    return () => { active = false; revision++; unsubscribe(); };
+  }, [id]);
   async function sendFile(file?: File) {
     if (!file || !reg) return;
     setBusy(true);
@@ -1053,7 +1051,6 @@ function MyRegistration() {
     try {
       await uploadProof(reg, file);
       setMessage("Comprovante enviado. Aguardando análise.");
-      await refresh();
     } catch (e) {
       setError(errorMessage(e));
     } finally {
@@ -1085,7 +1082,7 @@ function MyRegistration() {
       setLinkError("Não foi possível copiar. Salve esta página no navegador.");
     }
   }
-  if (loading)
+  if (loading || (reg !== null && reg.id !== id))
     return (
       <>
         <Topbar />
@@ -1099,8 +1096,8 @@ function MyRegistration() {
         <main className="center-page">
           <div className="empty-box">
             <LockKeyhole />
-            <h1>Inscrição não encontrada</h1>
-            <p>Confira o link que você recebeu.</p>
+            <h1>Inscrição indisponível</h1>
+            <p>Confira o link recebido ou procure a organização pelo canal oficial.</p>
           </div>
         </main>
       </>
@@ -1185,7 +1182,7 @@ function MyRegistration() {
             </div>
             {reg.registrationStatus === "confirmed" && (
               <Notice>
-                Pagamento confirmado! Guarde esta página e chegue 15 minutos
+                Inscrição confirmada! Guarde esta página e chegue 15 minutos
                 antes.
               </Notice>
             )}
@@ -2571,6 +2568,16 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
       setTimeout(() => setNotice(""), 3200);
     }
   }
+  async function changePortalAccess(registration: Registration) {
+    const revoked = !registration.portalAccessRevoked;
+    if (!window.confirm(revoked
+      ? `Revogar o link privado de ${registration.passengerName}? Quem tiver esse link perderá o acesso. A inscrição e o histórico serão preservados.`
+      : `Reativar o mesmo link de ${registration.passengerName}? Todas as pessoas que já possuem esse link voltarão a ter acesso.`)) return;
+    try {
+      await setPortalAccessRevoked(registration.id, revoked);
+      setNotice(revoked ? "Link privado revogado. Inscrição preservada." : "Link privado reativado.");
+    } catch (e) { setNotice(errorMessage(e)); }
+  }
   function prepareImportText(source: string, fileName = "texto-colado.csv") {
     setImportFileName(fileName);
     setImportCsvText(source);
@@ -3110,6 +3117,12 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                             <Copy size={13} /> Link privado
                           </button>
                         )}
+                        <button
+                          className="button button-tiny button-outline"
+                          onClick={() => void changePortalAccess(r)}
+                        >
+                          {r.portalAccessRevoked ? "Reativar link" : "Revogar link"}
+                        </button>
                         {r.paymentStatus === "awaiting_review" && (
                           <>
                             <button

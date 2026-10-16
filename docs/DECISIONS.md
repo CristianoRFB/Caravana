@@ -19,3 +19,11 @@ npm test usa Firebase demo-caravana77-test, portas loopback separadas e suites s
 ## ADR-005 — Preservar comprovantes inline e normalizar a policy
 
 O fluxo recuperado comprovadamente usa Firestore proofs/current, sem serviço Storage ativo no frontend. Preservar esse armazenamento; policy central src/lib/proof-policy.ts controla cliente/UI, testes validam os limites nas Rules. Limite binário 600*1024=614400, base64 819200. A antiga tolerância de 820000 no Firestore permitia alguns bytes extras via bypass e foi corrigida somente no candidato local. Storage legado conservado com limite equivalente, fora da configuração ativa. Nenhuma migração de arquivos/serviço/cobrança.
+
+## ADR-006 — Desenvolvimento sintético por padrão e teste do build compilado
+
+Antes de inicializar SDK, bloquear configuração Firebase real em modo DEV ou loopback, e restringir modo emulador ao projeto demo-caravana77-test e loopback. npm run dev seleciona e2e; Playwright compila e serve dist-e2e com a mesma configuração sintética. O build de produção continua disponível para inspeção, mas executá-lo em loopback é recusado. Não há bypass para testar com dados reais.
+
+## ADR-007 — Revogação aditiva do link privado
+
+Links legados continuam válidos enquanto portalAccessRevoked não for true. A organização pode revogar explicitamente a leitura pública e o envio de comprovante sem apagar inscrição, comprovante ou histórico. Reativação reutiliza o mesmo link e avisa sobre todos os portadores antigos. Um link compartilhado é um bearer token: não oferece identidade do passageiro nem recuperação segura automática; rotação de token é melhoria separada. O portal limpa dados em erro/revogação e ignora callbacks atrasados; referrer-policy no-referrer evita enviar o token em navegação externa. Apenas Rules locais foram alteradas.

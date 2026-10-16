@@ -103,6 +103,7 @@ export interface Caravan {
 }
 export interface Registration {
   id: string;
+  portalAccessRevoked?: boolean;
   reservationNonce?: string;
   importedFromLegacy?: boolean;
   organizationId: string;

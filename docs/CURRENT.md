@@ -12,6 +12,8 @@ F1-policy: política única de comprovantes com 614400 bytes (600 KiB, rótulo l
 
 F1-E2E: 12 testes PASS em 320/375/768/1440, com totais Tudo/caravana, reload, tentativa de acessar financeiro B e jornada reserva→PDF→revisão→check-in. Sem erros JS ou tentativas de Firebase remoto detectadas. Capturas e manifesto em versions/v1-recovery-2026-10-16/; fontes externas bloqueadas (fallback de sistema). Ajuste de overflow do filtro e espaçamento do cabeçalho móvel validado.
 
-Próxima tarefa: F1, revogação de link privado, recusa/reenvio e configuração Pix vazia. O build novo é candidato local, não foi publicado. F1 ainda IN_PROGRESS. Antes de F2, ler e respeitar CLIENT_PRESERVATION_ITALO_2026-10-16.md (cinco confirmações do proprietário).
+F1-preservação: 52 unit/Rules/integration PASS e 20 E2E compilados PASS (54,9s), nas quatro larguras. Cobertos recusa/reenvio/cancelamento, revogação/reativação de link aberto em contexto visitante separado, configuração Pix ausente/não Pix/chave vazia/cópia e prazo. Desenvolvimento sintético por padrão, guard antes do SDK e zero Firebase remoto nos navegadores. Backups e 54 arquivos originais novamente verificados, zero divergências. As cinco confirmações pré-F2 estão registradas em CLIENT_PRESERVATION_ITALO_2026-10-16.md.
+
+Próxima tarefa: F2 local, começar pelo modelo de memberships e simulador puro/dry-run aditivo com conflitos, replay e restore sintético. F1 tem cobertura local do baseline; gate de staging e Storage real não é alegado, e dedupe CSV cross-batch permanece F3. O build novo é candidato local, não foi publicado. Produção continua BLOCKED sem autorização específica.
 
 Retomada: ler este arquivo, CODEX_PROGRESS.md, SOURCE_RECONCILIATION.md, ISSUES_AND_BLOCKERS.md e TEST_EVIDENCE.md; conferir git status e log. Continuar a primeira tarefa não PASS, sem reiniciar a auditoria.

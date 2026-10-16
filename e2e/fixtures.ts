@@ -5,10 +5,24 @@ import type { Caravan, Registration } from "../src/lib/types";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
 
-export async function seedSyntheticEnvironment() {
+function assertSyntheticEndpoints() {
   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
     throw new Error("E2E seeding is restricted to the configured local demo emulators.");
   }
+}
+
+export async function patchSyntheticTrip(fields: Partial<Caravan>) {
+  assertSyntheticEndpoints();
+  const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try {
+    await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), "caravans/ride-a"), fields, { merge: true });
+    });
+  } finally { await env.cleanup(); }
+}
+
+export async function seedSyntheticEnvironment() {
+  assertSyntheticEndpoints();
   const projectId = "demo-caravana77-test";
   const env = await initializeTestEnvironment({ projectId, firestore: { rules: readFileSync("firestore.rules", "utf8") } });
   await env.clearFirestore();

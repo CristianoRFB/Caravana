@@ -45,3 +45,15 @@ Playwright 1.64.1 + Chromium1248, Auth19099/Firestore18080, demo-caravana77-test
 - Oito screenshots finais e quatro anteriores ao ajuste, em versions/v1-recovery-2026-10-16/screenshots, com SHA256/dimensões no manifesto. Dataset inteiramente sintético e fontes externas bloqueadas.
 
 F1 ainda IN_PROGRESS: ciclo de revogação, recusa/reenvio e Pix incompleto. F2 não iniciada; confirmação de preservação real registrada separadamente. Testes locais não homologam a base real do Ítalo.
+
+## F1-preservação — aplicativo compilado e ciclo do portal
+
+- Guard antes do SDK recusa projeto real no loopback/DEV; emulador exige o projeto demo exato e loopback. Oito testes puros adicionais. npm run dev escolhe e2e; Playwright usa build:e2e/preview:e2e, sem servir dist real.
+- f1-environment-unit.log: 51 PASS. f1-compiled-e2e.log: 12 PASS sobre build compilado.
+- Revogação local aditiva: visitante perde get/upload; admin mantém registro e valores, estranho não pode reativar. Rules locais apenas. Portal limpa dados após revogação e ignora respostas atrasadas; link legado continua válido por padrão.
+- f1-portal-unit.log: 52 PASS. f1-portal-e2e.log registra primeiras falhas: heading esperado não correspondia ao cumprimento existente e navegação antes da confirmação do write gerou corrida na recusa. Esperas agora confirmam aviso após commit, não só snapshot otimista. f1-portal-e2e-final.log:16 PASS/4 FAIL por texto esperado no teste de Pix; corrigido para a mensagem real sem alterar produto.
+- f1-portal-e2e-green.log: **20 PASS**, 54,9s, sem retry/skip. Todos os casos em 320/375/768/1440: financeiro Tudo/caravana e reload, rota B negada, reserva→PDF→recusa→reenvio→aprovação→check-in→cancelamento, visitante em contexto separado→revogação imediata→reload negado→reativação, Pix ausente/não Pix/chave e recebedor vazios/prazo/cópia sintética. Zero erros JS e zero tentativas Firebase remoto.
+- f1-preservation-lint.log/typecheck.log PASS; f1-portal-build.log PASS, compilação final sintética também executa tsc. Oito screenshots recolhidos com novo manifesto SHA256 e JSON E2E. Produção continua antiga; não houve deploy, Rules implantadas ou dados reais alterados.
+- client-preservation-verified.json atualizado:54 arquivos originais,0 divergências,ZIP e bundle intactos. Backup de código não é backup de banco.
+
+F2 pode prosseguir localmente com simulações aditivas; autorização real permanece BLOCKED. Não alegar gate Storage/backup real ou prontidão comercial com estes resultados.

@@ -151,7 +151,8 @@ service cloud.firestore {
           && signedIn()
           && exists(/databases/$(database)/documents/admins/$(request.auth.uid)))
         || (resource != null
-          && (isAdmin(resource.data.organizationId) || registrationId.matches('^[a-f0-9]{64}$')));
+          && (isAdmin(resource.data.organizationId) || (registrationId.matches('^[a-f0-9]{64}$')
+            && (!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false))));
       allow list: if isAdmin(resource.data.organizationId);
       allow create: if validLegacyImport(registrationId) || (request.resource.data.id == registrationId
         && registrationId.matches('^[a-f0-9]{64}$')
@@ -194,7 +195,8 @@ service cloud.firestore {
         && request.resource.data.boardingPointName is string
         && request.resource.data.createdAt is string);
       allow update: if isAdmin(resource.data.organizationId)
-        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt'])
+        || ((!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt'])
           && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
           && request.resource.data.paymentStatus == 'awaiting_review'
           && request.resource.data.registrationStatus == 'awaiting_review'
@@ -262,6 +264,7 @@ service cloud.firestore {
           let registrationData = registration();
           let updatedRegistration = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
           return proofId == 'current'
+            && (!('portalAccessRevoked' in registrationData) || registrationData.portalAccessRevoked == false)
             && request.resource.data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId', 'contentType', 'fileName', 'content', 'uploadedAt'])
             && request.resource.data.registrationId == registrationId
             && request.resource.data.organizationId == registrationData.organizationId

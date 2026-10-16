@@ -14,7 +14,7 @@ const runtime = vi.hoisted(() => ({
   firebaseConfigured: true,
 }));
 vi.mock("../src/lib/firebase", () => runtime);
-import { cancelRegistration, getCaravanById, getRegistration, importLegacyRegistrations, recordPassengerPayment, reserveSeat, reviewPayment, toggleCheckin, uploadProof, voidPassengerPayment } from "../src/lib/data";
+import { cancelRegistration, getCaravanById, getRegistration, importLegacyRegistrations, recordPassengerPayment, reserveSeat, reviewPayment, setPortalAccessRevoked, toggleCheckin, uploadProof, voidPassengerPayment } from "../src/lib/data";
 
 let env: RulesTestEnvironment;
 beforeAll(async () => {
@@ -64,6 +64,29 @@ async function seedRegistration(extra: Partial<Registration> = {}) {
 }
 
 describe("production data functions on synthetic emulator fixtures", () => {
+  it("keeps legacy bearer links readable until explicitly revoked; revocation denies reads, uploads and guest reactivation", async () => {
+    const registration = await seedRegistration();
+    runtime.db = env.unauthenticatedContext().firestore();
+    expect((await getRegistration(registration.id))?.passengerName).toBe(passenger.passengerName);
+    await assertFails(setPortalAccessRevoked(registration.id, true));
+    runtime.db = env.authenticatedContext("admin-a").firestore();
+    await setPortalAccessRevoked(registration.id, true);
+    const preserved = await getRegistration(registration.id);
+    expect(preserved?.portalAccessRevoked).toBe(true);
+    expect(preserved?.registrationStatus).toBe(registration.registrationStatus);
+    expect(preserved?.paymentTotalCents).toBe(0);
+    runtime.db = env.authenticatedContext("foreign-admin").firestore();
+    await assertFails(getRegistration(registration.id));
+    await assertFails(setPortalAccessRevoked(registration.id, false));
+    runtime.db = env.unauthenticatedContext().firestore();
+    await assertFails(getRegistration(registration.id));
+    await assertFails(uploadProof(registration, new File(["%PDF-1.4\nsynthetic"], "proof.pdf", { type: "application/pdf" })));
+    await assertFails(setPortalAccessRevoked(registration.id, false));
+    runtime.db = env.authenticatedContext("admin-a").firestore();
+    await setPortalAccessRevoked(registration.id, false);
+    runtime.db = env.unauthenticatedContext().firestore();
+    expect((await getRegistration(registration.id))?.id).toBe(registration.id);
+  });
   it("books a document without a stored id and links both registration and private receipt to its reference", async () => {
     const trip = await seedTrip();
     const id = await reserveSeat(trip, passenger);

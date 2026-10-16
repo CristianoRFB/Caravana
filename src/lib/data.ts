@@ -265,6 +265,15 @@ export function watchRegistration(
     fail,
   );
 }
+export async function setPortalAccessRevoked(registrationId: string, revoked: boolean): Promise<void> {
+  if (!db || !auth?.currentUser) throw new Error("Sessão administrativa não encontrada.");
+  await updateDoc(doc(db, "registrations", registrationId), {
+    portalAccessRevoked: revoked,
+    portalAccessUpdatedAt: serverTimestamp(),
+    portalAccessUpdatedBy: auth.currentUser.uid,
+  });
+}
+
 export async function uploadProof(
   registration: Registration,
   file: File,

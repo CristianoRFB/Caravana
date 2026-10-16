@@ -23,9 +23,9 @@ export default defineConfig({
     { name: "mobile-320", use: { viewport: { width: 320, height: 740 } } },
   ],
   webServer: {
-    command: "npm run dev -- --host 127.0.0.1 --port 4177 --strictPort --mode e2e",
+    command: "npm run build:e2e && npm run preview:e2e",
     url: "http://127.0.0.1:4177",
     reuseExistingServer: false,
-    timeout: 30000,
+    timeout: 60000,
   },
 });

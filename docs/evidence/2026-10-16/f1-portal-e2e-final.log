@@ -1,0 +1,219 @@
+
+> caravana-77@0.1.0 test:e2e
+> node scripts/run-local-tests.mjs e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test
+[WebServer] (node:16312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 20 tests using 1 worker
+
+(node:8508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (3.9s)
+  ok  2 [desktop-1440] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (1.3s)
+  ok  3 [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (3.9s)
+  ok  4 [desktop-1440] › e2e\baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (2.7s)
+  x   5 [desktop-1440] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (10.9s)
+(node:15432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 [tablet-768] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (1.5s)
+  ok  7 [tablet-768] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (927ms)
+  ok  8 [tablet-768] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (3.0s)
+  ok  9 [tablet-768] › e2e\baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (2.1s)
+  x  10 [tablet-768] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (10.7s)
+(node:11524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 11 [mobile-375] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (1.8s)
+  ok 12 [mobile-375] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (869ms)
+  ok 13 [mobile-375] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (3.2s)
+  ok 14 [mobile-375] › e2e\baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (1.9s)
+  x  15 [mobile-375] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (10.6s)
+(node:15692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 16 [mobile-320] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (1.8s)
+  ok 17 [mobile-320] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (896ms)
+  ok 18 [mobile-320] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (3.6s)
+  ok 19 [mobile-320] › e2e\baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (1.8s)
+  x  20 [mobile-320] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (10.6s)
+
+
+  1) [desktop-1440] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.payment-card')
+    Expected substring: "não processa pagamentos"
+    Received string:    "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" locator('.payment-card') with timeout 10000ms
+      - waiting for locator('.payment-card')
+        24 × locator resolved to <section class="portal-card payment-card">…</section>
+           - unexpected value "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+
+
+      148 |   await expect(page.getByRole("heading", { name: "Oi, Pessoa!" })).toBeVisible();
+      149 |   await expect(page.locator(".pix-recipient")).toHaveCount(0);
+    > 150 |   await expect(page.locator(".payment-card")).toContainText("não cobra nem recebe pagamentos");
+          |                                               ^
+      151 |   await expect(page.getByText("Prazo informado pela organização")).toHaveCount(0);
+      152 |   await patchSyntheticTrip({ paymentMethod: "Dinheiro" });
+      153 |   await page.reload();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:150:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [tablet-768] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.payment-card')
+    Expected substring: "não processa pagamentos"
+    Received string:    "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" locator('.payment-card') with timeout 10000ms
+      - waiting for locator('.payment-card')
+        23 × locator resolved to <section class="portal-card payment-card">…</section>
+           - unexpected value "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+
+
+      148 |   await expect(page.getByRole("heading", { name: "Oi, Pessoa!" })).toBeVisible();
+      149 |   await expect(page.locator(".pix-recipient")).toHaveCount(0);
+    > 150 |   await expect(page.locator(".payment-card")).toContainText("não cobra nem recebe pagamentos");
+          |                                               ^
+      151 |   await expect(page.getByText("Prazo informado pela organização")).toHaveCount(0);
+      152 |   await patchSyntheticTrip({ paymentMethod: "Dinheiro" });
+      153 |   await page.reload();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:150:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-tablet-768\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-tablet-768\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-tablet-768\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-tablet-768\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile-375] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.payment-card')
+    Expected substring: "não processa pagamentos"
+    Received string:    "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" locator('.payment-card') with timeout 10000ms
+      - waiting for locator('.payment-card')
+        23 × locator resolved to <section class="portal-card payment-card">…</section>
+           - unexpected value "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+
+
+      148 |   await expect(page.getByRole("heading", { name: "Oi, Pessoa!" })).toBeVisible();
+      149 |   await expect(page.locator(".pix-recipient")).toHaveCount(0);
+    > 150 |   await expect(page.locator(".payment-card")).toContainText("não cobra nem recebe pagamentos");
+          |                                               ^
+      151 |   await expect(page.getByText("Prazo informado pela organização")).toHaveCount(0);
+      152 |   await patchSyntheticTrip({ paymentMethod: "Dinheiro" });
+      153 |   await page.reload();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:150:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-375\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-375\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-375\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-375\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-320] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.payment-card')
+    Expected substring: "não processa pagamentos"
+    Received string:    "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" locator('.payment-card') with timeout 10000ms
+      - waiting for locator('.payment-card')
+        23 × locator resolved to <section class="portal-card payment-card">…</section>
+           - unexpected value "COMPROVANTE · FORMA A DEFINIR · CONFERÊNCIA MANUALComprovante aprovadoEste site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual. Envie o comprovante em PDF, PNG ou JPG, até 600 KB.Valor exatoR$ 85,00JPG, PNG ou PDF · até 600 KBEnviar o comprovante não significa aprovação automática."
+
+
+      148 |   await expect(page.getByRole("heading", { name: "Oi, Pessoa!" })).toBeVisible();
+      149 |   await expect(page.locator(".pix-recipient")).toHaveCount(0);
+    > 150 |   await expect(page.locator(".payment-card")).toContainText("não cobra nem recebe pagamentos");
+          |                                               ^
+      151 |   await expect(page.getByText("Prazo informado pela organização")).toHaveCount(0);
+      152 |   await patchSyntheticTrip({ paymentMethod: "Dinheiro" });
+      153 |   await page.reload();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:150:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Pix-configuration-fba65-ing-uses-the-configured-key-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [desktop-1440] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+    [tablet-768] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+    [mobile-375] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+    [mobile-320] › e2e\baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key 
+  16 passed (1.5m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test" exited with code 1
+Stopped test emulator started by this run (PID 7896).

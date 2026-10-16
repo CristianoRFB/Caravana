@@ -23,3 +23,11 @@ Reforço explícito do proprietário recebido em 2026-10-16. Esta confirmação 
 Backups de código/assets não são backup do banco real. Nenhum export de passageiros/PII foi feito. Backup/restore real, schema documental real, migrações, aplicação de Rules, deploy, merge, reset, exclusão e substituição reais continuam BLOCKED sem autorização específica. Toda validação local deve ser apresentada como sintética, nunca como homologação dos dados financeiros reais do cliente.
 
 Antes de iniciar F2: conferir este documento, CURRENT.md, SOURCE_RECONCILIATION.md, status Git e logs. Continuar tarefas locais independentes mesmo quando uma etapa real estiver BLOCKED.
+
+## Barreiras adicionais após a confirmação
+
+- `npm run dev` seleciona `.env.e2e`, projeto exato `demo-caravana77-test` e loopback por padrão. A configuração real ignorada foi mantida apenas para reproduzir o build preservado.
+- `assertFirebaseEnvironment` executa antes de `initializeApp`: recusa Firebase real em localhost/loopback ou qualquer modo DEV; recusa build de emulador em hostname remoto ou com outro projectId.
+- E2E passou a compilar um `dist-e2e` separado, com configuração sintética. Não utiliza `dist` preservado nem produção. Browser bloqueia todos os hosts externos e verifica ausência de chamadas Firebase remoto.
+- A validação anterior à nova revogação somou 51 testes locais e 12 E2E compilados PASS (`f1-environment-unit.log`, `f1-compiled-e2e.log`). Testes adicionais têm evidências próprias; nenhuma execução muda Rules implantadas.
+- Scripts de migração futuros devem usar o mesmo projeto demo exato e portas locais; não oferecer uma flag de bypass para produção. Operações reais permanecem BLOCKED.

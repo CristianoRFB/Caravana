@@ -1,0 +1,263 @@
+
+> caravana-77@0.1.0 test:e2e
+> node scripts/run-local-tests.mjs e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test
+[WebServer] (node:5888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:9136) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:1076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (3.9s)
+  ok  2 [desktop-1440] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (1.3s)
+  x   3 [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (12.1s)
+(node:16276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   4 [desktop-1440] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record (10.9s)
+(node:1288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  5 [tablet-768] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (1.8s)
+  ok  6 [tablet-768] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (960ms)
+  ok  7 [tablet-768] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (2.5s)
+  x   8 [tablet-768] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record (10.6s)
+(node:11436) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 [mobile-375] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (1.9s)
+  ok 10 [mobile-375] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (905ms)
+  ok 11 [mobile-375] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (2.7s)
+  x  12 [mobile-375] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record (10.6s)
+(node:5864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 13 [mobile-320] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (1.9s)
+  ok 14 [mobile-320] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (863ms)
+  ok 15 [mobile-320] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (3.1s)
+  x  16 [mobile-320] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record (10.5s)
+
+
+  1) [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.error-message')
+    Expected substring: "Comprovante sintético ilegível"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.error-message') with timeout 10000ms
+      - waiting for locator('.error-message')
+
+
+      89 |   await expect(row).toContainText("Recusado");
+      90 |   await page.goto(portalUrl);
+    > 91 |   await expect(page.locator(".error-message")).toContainText("Comprovante sintético ilegível");
+         |                                                ^
+      92 |   await page.locator("input[type=file]").setInputFiles({ name: "synthetic-corrected.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\nSYNTHETIC CORRECTED") });
+      93 |   await expect(page.locator(".upload-button")).toContainText("Enviar outro comprovante");
+      94 |   await page.goto("/admin/caravanas/ride-a/passageiros");
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:91:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop-1440] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pessoa Sintética ride-a' }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+
+
+      111 |   try {
+      112 |     await portal.goto(`/minha-inscricao/${"a".repeat(64)}`);
+    > 113 |     await expect(portal.getByRole("heading", { name: "Pessoa Sintética ride-a" })).toBeVisible();
+          |                                                                                    ^
+      114 |     await signIn(page);
+      115 |     await page.goto("/admin/caravanas/ride-a/passageiros");
+      116 |     const row = page.getByRole("row").filter({ hasText: "Pessoa Sintética ride-a" });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:113:84
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-desktop-1440\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-desktop-1440\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [tablet-768] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pessoa Sintética ride-a' }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+
+
+      111 |   try {
+      112 |     await portal.goto(`/minha-inscricao/${"a".repeat(64)}`);
+    > 113 |     await expect(portal.getByRole("heading", { name: "Pessoa Sintética ride-a" })).toBeVisible();
+          |                                                                                    ^
+      114 |     await signIn(page);
+      115 |     await page.goto("/admin/caravanas/ride-a/passageiros");
+      116 |     const row = page.getByRole("row").filter({ hasText: "Pessoa Sintética ride-a" });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:113:84
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-tablet-768\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-tablet-768\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-tablet-768\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-tablet-768\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-tablet-768\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-375] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pessoa Sintética ride-a' }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+
+
+      111 |   try {
+      112 |     await portal.goto(`/minha-inscricao/${"a".repeat(64)}`);
+    > 113 |     await expect(portal.getByRole("heading", { name: "Pessoa Sintética ride-a" })).toBeVisible();
+          |                                                                                    ^
+      114 |     await signIn(page);
+      115 |     await page.goto("/admin/caravanas/ride-a/passageiros");
+      116 |     const row = page.getByRole("row").filter({ hasText: "Pessoa Sintética ride-a" });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:113:84
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-375\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-375\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-375\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-375\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-375\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [mobile-320] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pessoa Sintética ride-a' }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Pessoa Sintética ride-a' })
+
+
+      111 |   try {
+      112 |     await portal.goto(`/minha-inscricao/${"a".repeat(64)}`);
+    > 113 |     await expect(portal.getByRole("heading", { name: "Pessoa Sintética ride-a" })).toBeVisible();
+          |                                                                                    ^
+      114 |     await signIn(page);
+      115 |     await page.goto("/admin/caravanas/ride-a/passageiros");
+      116 |     const row = page.getByRole("row").filter({ hasText: "Pessoa Sintética ride-a" });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:113:84
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-320\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-320\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-revoking-a-shared-4c8e6--preserves-the-admin-record-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source 
+    [desktop-1440] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+    [tablet-768] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+    [mobile-375] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+    [mobile-320] › e2e\baseline.spec.ts:102:1 › revoking a shared private link hides an open guest portal and preserves the admin record 
+  11 passed (1.5m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test" exited with code 1
+Stopped test emulator started by this run (PID 15692).

@@ -30,25 +30,25 @@
       "path": "docs/versions/v1-recovery-2026-10-16/screenshots/portal-comprovante-desktop-1440.png",
       "width": 1440,
       "height": 1000,
-      "sha256": "4de0b37fc4ea054a0121986e480fb91be1b61ee23d87ff19574a7e9899181871"
+      "sha256": "44283dbdf89ef3856ed7c2e12ca8de1023c5f94b918279dd9becf8ee61a60cd8"
     },
     {
       "path": "docs/versions/v1-recovery-2026-10-16/screenshots/portal-comprovante-mobile-320.png",
       "width": 320,
       "height": 1405,
-      "sha256": "8f13537aac67fb56c67548dcd01a125279b7102b397c8ae1e72a433650239a9d"
+      "sha256": "f4ef85d2d4d76f88f1ea8926dd1ff237f8cdb3b5c080000e09cf7323c64067e0"
     },
     {
       "path": "docs/versions/v1-recovery-2026-10-16/screenshots/portal-comprovante-mobile-375.png",
       "width": 375,
       "height": 1349,
-      "sha256": "07a75ae59b6430f12c7dc70663b48040eccee23de47b032f68c44d98feacbe18"
+      "sha256": "399bbf7863ca64e7ca7e968061d0d4aba7dfd3fd399e7df187b13348924e1331"
     },
     {
       "path": "docs/versions/v1-recovery-2026-10-16/screenshots/portal-comprovante-tablet-768.png",
       "width": 768,
       "height": 1024,
-      "sha256": "ec02f5153c6c3e487b5bf2c0475f1aa2fb4e4c9bc3b666fa77cbb6af157f95dd"
+      "sha256": "2d49ea779dec8a19bd640f9ecedfd80b96e2f7583cfadd3fd584521e670b694c"
     }
   ]
 }
