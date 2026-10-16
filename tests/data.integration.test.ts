@@ -26,7 +26,7 @@ beforeAll(async () => {
     firestore: { rules: readFileSync(resolve("firestore.rules"), "utf8") },
   });
 });
-afterEach(async () => { runtime.db = null; await env.clearFirestore(); });
+afterEach(async () => { runtime.db = null; runtime.auth.currentUser.uid = "admin-a"; await env.clearFirestore(); });
 afterAll(async () => env.cleanup());
 
 async function seedTrip(extra: Record<string, unknown> = {}) {
@@ -64,6 +64,24 @@ async function seedRegistration(extra: Partial<Registration> = {}) {
 }
 
 describe("production data functions on synthetic emulator fixtures", () => {
+  it("supports imports and manual ledger writes for a membership-only owner without a legacy admin record", async () => {
+    await seedTrip();
+    await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), "memberships/member-owner/organizations/org-a"), {
+        uid: "member-owner", organizationId: "org-a", role: "tenant_owner", status: "active", createdAt: "2026-10-16", updatedAt: "2026-10-16",
+      });
+    });
+    runtime.auth.currentUser.uid = "member-owner";
+    runtime.db = env.authenticatedContext("member-owner").firestore();
+    const batchId = "7".repeat(32);
+    const rows = [{ ...passenger, line: 2, amountCents: 8500, registrationStatus: "awaiting_payment" as const, paymentStatus: "pending" as const }];
+    expect(await importLegacyRegistrations("ride-a", "org-a", rows, batchId)).toEqual({ imported: 1, skipped: 0 });
+    const id = await legacyImportDocumentId(batchId, 2);
+    const registration = await getRegistration(id);
+    expect(registration).not.toBeNull();
+    await recordPassengerPayment(registration!, { amountCents: 2500, method: "pix", paymentDate: "2026-10-16", notes: "Lançamento sintético" });
+    expect((await getRegistration(id))?.paymentTotalCents).toBe(2500);
+  });
   it("keeps legacy bearer links readable until explicitly revoked; revocation denies reads, uploads and guest reactivation", async () => {
     const registration = await seedRegistration();
     runtime.db = env.unauthenticatedContext().firestore();

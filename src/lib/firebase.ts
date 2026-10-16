@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { assertFirebaseEnvironment } from "./firebase-environment";
+import { assertDemoIdentityAllowed } from "./demo-identities";
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,6 +13,7 @@ const config = {
 };
 
 const useEmulators = import.meta.env.VITE_USE_EMULATORS === "true";
+export const assertIdentityAllowed = (email: string) => assertDemoIdentityAllowed(email, useEmulators, config.projectId, typeof window === "undefined" ? undefined : window.location.hostname);
 assertFirebaseEnvironment(typeof window === "undefined" ? undefined : window.location.hostname, config.projectId, useEmulators, import.meta.env.DEV);
 
 export const firebaseConfigured = Object.values(config).every(Boolean);

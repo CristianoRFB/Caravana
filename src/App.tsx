@@ -45,11 +45,10 @@ import {
 } from "lucide-react";
 import {
   cancelRegistration,
-  clearLegacyReservationIds,
   createCaravan,
   findCaravan,
-  getAdminOrganization,
   getCaravanById,
+  getOwnProfile,
   importLegacyRegistrations,
   loadProof,
   login,
@@ -81,6 +80,8 @@ import {
 } from "./lib/legacy-import";
 import { firebaseConfigured } from "./lib/firebase";
 import type { User } from "firebase/auth";
+import { watchTenantAccess, type TenantAccess } from "./lib/tenant-access";
+import type { TenantRole } from "./lib/memberships";
 import PublicIndex from "./PublicIndex";
 import FinancePage from "./Finance";
 import { PROOF_POLICY } from "./lib/proof-policy";
@@ -181,6 +182,7 @@ const validCpf = (value: string) => {
   return checkDigit(9) === Number(digits[9]) && checkDigit(10) === Number(digits[10]);
 };
 const OrganizationContext = createContext("");
+const TenantRoleContext = createContext<TenantRole>("staff");
 
 function Brand({ light = false }: { light?: boolean }) {
   return (
@@ -1316,7 +1318,7 @@ function MyRegistration() {
   );
 }
 
-function AdminLogin() {
+function AdminLogin({ passenger = false }: { passenger?: boolean }) {
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -1328,7 +1330,7 @@ function AdminLogin() {
     setError("");
     try {
       await login(email, password);
-      nav("/admin");
+      nav(passenger ? "/conta" : "/admin");
     } catch (e) {
       setError(errorMessage(e));
     } finally {
@@ -1348,9 +1350,9 @@ function AdminLogin() {
               <br />
               Viagens inesquecíveis.
             </h2>
-            <p>Seu espaço para cuidar de cada detalhe da caravana.</p>
+            <p>{passenger ? "Acompanhe suas inscrições e os detalhes da viagem." : "Seu espaço para cuidar de cada detalhe da caravana."}</p>
           </div>
-          <span>CARAVANA 77 · PAINEL DA EQUIPE</span>
+          <span>CARAVANA 77 · {passenger ? "ÁREA DO PASSAGEIRO" : "PAINEL DA EQUIPE"}</span>
         </div>
         <section className="login-main">
           <div className="login-box">
@@ -1358,9 +1360,9 @@ function AdminLogin() {
             <h1>
               Acesse sua
               <br />
-              área da equipe.
+              {passenger ? "conta de passageiro." : "área da equipe."}
             </h1>
-            <p>Entre com seu e-mail e senha cadastrados pela organização.</p>
+            <p>{passenger ? "Entre com seu e-mail e senha cadastrados." : "Entre com seu e-mail e senha cadastrados pela organização."}</p>
             {!firebaseConfigured && (
               <div className="error-message">
                 Configure as variáveis do Firebase para habilitar o acesso.
@@ -1390,7 +1392,7 @@ function AdminLogin() {
                 className="button button-primary button-large"
                 disabled={busy || !firebaseConfigured}
               >
-                {busy ? "Entrando…" : "Entrar no painel"}
+                {busy ? "Entrando…" : passenger ? "Entrar na conta" : "Entrar no painel"}
                 <ArrowRight size={17} />
               </button>
             </form>
@@ -1405,17 +1407,52 @@ function AdminLogin() {
   );
 }
 
+function PassengerAccount() {
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Awaited<ReturnType<typeof getOwnProfile>>>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    const stop = watchAuth((current) => {
+      const request = ++revision;
+      setUser(current); setProfile(null); setError(""); setLoading(Boolean(current));
+      if (!current) return;
+      getOwnProfile().then((value) => { if (active && request === revision) setProfile(value); })
+        .catch(() => { if (active && request === revision) setError("Não foi possível carregar seu perfil."); })
+        .finally(() => { if (active && request === revision) setLoading(false); });
+    });
+    return () => { active = false; revision++; stop(); };
+  }, []);
+  if (loading) return <Loading />;
+  if (!user) return <Navigate to="/conta/entrar" replace />;
+  return <><Topbar /><main className="center-page"><section className="empty-box">
+    <Ticket /><h1>{profile?.displayName || "Sua conta"}</h1><p>{user.email}</p>
+    {error && <p role="alert">{error}</p>}
+    <h2>Minhas inscrições</h2>
+    {profile?.registrationIds.length ? profile.registrationIds.map((id) => <p key={id}><Link className="button button-outline" to={`/minha-inscricao/${id}`}>Abrir inscrição {id.slice(0, 8).toUpperCase()}</Link></p>) : <p>Nenhuma inscrição vinculada a esta conta.</p>}
+    <button className="button button-outline" onClick={() => void logout()}>Sair da conta</button>
+  </section></main><Footer /></>;
+}
+
 function AdminGuard({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [org, setOrg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [accessError, setAccessError] = useState("");
+  const [access, setAccess] = useState<TenantAccess[]>([]);
   useEffect(() => {
     let active = true;
     let revision = 0;
+    let stopAccess: () => void = () => undefined;
     const unsubscribe = watchAuth((u) => {
       const currentRevision = ++revision;
+      stopAccess();
       setUser(u);
+      setOrg(null);
+      setAccess([]);
+      setAccessError("");
       setLoading(Boolean(u));
       if (!u) {
         setOrg(null);
@@ -1423,22 +1460,20 @@ function AdminGuard({ children }: { children: ReactNode }) {
         setLoading(false);
         return;
       }
-      getAdminOrganization(u.uid)
-        .then(async (organizationId) => {
-          if (organizationId) await clearLegacyReservationIds(organizationId);
-          return organizationId;
-        })
-        .then((organizationId) => {
+      stopAccess = watchTenantAccess(u.uid,
+        (available) => {
           if (!active || currentRevision !== revision) return;
-          setOrg(organizationId);
+          setAccess(available);
+          setOrg((selected) => available.some((item) => item.organizationId === selected) ? selected : available[0]?.organizationId || null);
           setAccessError("");
           setLoading(false);
-        })
-        .catch((e) => {
+        },
+        (e) => {
           if (!active || currentRevision !== revision) return;
           setOrg(null);
+          setAccess([]);
           setAccessError(
-            `Não foi possível concluir a atualização de segurança: ${errorMessage(e)}`,
+            `Não foi possível verificar o acesso: ${errorMessage(e)}`,
           );
           setLoading(false);
         });
@@ -1447,6 +1482,7 @@ function AdminGuard({ children }: { children: ReactNode }) {
       active = false;
       revision++;
       unsubscribe();
+      stopAccess();
     };
   }, []);
   if (loading) return <Loading text="Verificando acesso…" />;
@@ -1480,7 +1516,7 @@ function AdminGuard({ children }: { children: ReactNode }) {
       </>
     );
   return (
-    <AdminShell user={user} orgId={org}>
+    <AdminShell key={`${user.uid}:${org}:${access.find((item) => item.organizationId === org)?.role}`} user={user} orgId={org} access={access} onSelect={setOrg}>
       {children}
     </AdminShell>
   );
@@ -1489,10 +1525,14 @@ function AdminShell({
   user,
   orgId,
   children,
+  access,
+  onSelect,
 }: {
   user: User;
   orgId: string;
   children: ReactNode;
+  access: TenantAccess[];
+  onSelect: (organizationId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const nav = useNavigate();
@@ -1502,6 +1542,7 @@ function AdminShell({
   }
   return (
     <OrganizationContext.Provider value={orgId}>
+      <TenantRoleContext.Provider value={access.find((item) => item.organizationId === orgId)?.role || "staff"}>
       <div className="admin-app">
         <header className="admin-top">
           <button
@@ -1521,6 +1562,19 @@ function AdminShell({
         </header>
         <aside className={`admin-sidebar ${open ? "sidebar-open" : ""}`}>
           <span className="sidebar-label">ESPAÇO DA ORGANIZAÇÃO</span>
+          {access.length > 1 && (
+            <label className="tenant-switcher">
+              <span>Organização</span>
+              <select aria-label="Organização ativa" value={orgId} onChange={(event) => {
+                const next = event.target.value;
+                if (!access.some((item) => item.organizationId === next)) return;
+                onSelect(next);
+                nav("/admin");
+              }}>
+                {access.map((item) => <option key={item.organizationId} value={item.organizationId}>{item.organizationId}</option>)}
+              </select>
+            </label>
+          )}
           <Link to="/admin">
             <span>▦</span> Visão geral
           </Link>
@@ -1544,6 +1598,7 @@ function AdminShell({
           {children}
         </main>
       </div>
+      </TenantRoleContext.Provider>
     </OrganizationContext.Provider>
   );
 }
@@ -3522,7 +3577,8 @@ function NotFound() {
 
 function CaravanFinance() {
   const organizationId = useContext(OrganizationContext);
-  return <FinancePage organizationId={organizationId} />;
+  const role = useContext(TenantRoleContext);
+  return <FinancePage organizationId={organizationId} canEdit={role === "tenant_owner"} />;
 }
 
 export default function App() {
@@ -3542,6 +3598,8 @@ export default function App() {
       <Route path="/caravana/:slug/inscricao" element={<RegistrationPage />} />
       <Route path="/minha-inscricao/:id" element={<MyRegistration />} />
       <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/conta/entrar" element={<AdminLogin passenger />} />
+      <Route path="/conta" element={<PassengerAccount />} />
       <Route
         path="/admin"
         element={

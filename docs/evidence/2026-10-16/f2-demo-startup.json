@@ -1,0 +1,11 @@
+{
+  "command": "npm run demo",
+  "project": "demo-caravana77-test",
+  "createdSyntheticDocuments": 19,
+  "httpStatus": 200,
+  "authEndpoint": "127.0.0.1:19099",
+  "firestoreEndpoint": "127.0.0.1:18080",
+  "source": "SYNTHETIC_ONLY",
+  "normalShutdown": "q + Enter; CLI exit 0",
+  "remainingLocalListeners": 0
+}

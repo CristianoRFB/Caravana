@@ -1447,6 +1447,8 @@ button:disabled {
   place-items: center;
   padding: 8px;
 }
+.tenant-switcher { display: grid; gap: 6px; margin: 0 20px 14px; font-size: 12px; }
+.tenant-switcher select { max-width: 100%; min-width: 0; padding: 8px; border: 1px solid #dddce8; border-radius: 8px; background: white; color: #10132e; }
 .admin-sidebar {
   position: fixed;
   z-index: 11;

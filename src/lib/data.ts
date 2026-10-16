@@ -22,7 +22,7 @@ import {
   onAuthStateChanged,
   type User,
 } from "firebase/auth";
-import { auth, db, firebaseConfigured } from "./firebase";
+import { auth, db, firebaseConfigured, assertIdentityAllowed } from "./firebase";
 import {
   ageOnDate,
   type AuthorizationStatus,
@@ -35,6 +35,7 @@ import {
 } from "./types";
 import { legacyImportDocumentId, type LegacyRegistrationDraft } from "./legacy-import";
 import { validateProofFile } from "./proof-policy";
+import { isDemoIdentity } from "./demo-identities";
 
 const legacyReservationIdsCleared = new Set<string>();
 
@@ -137,6 +138,7 @@ export async function reserveSeat(
       "Esta caravana de demonstração não recebe inscrições.",
     );
   const database = db;
+  if (isDemoIdentity(form.email)) assertIdentityAllowed(form.email);
   const id =
     crypto.randomUUID().replaceAll("-", "") +
     crypto.randomUUID().replaceAll("-", "");
@@ -418,6 +420,7 @@ export async function loadProof(reg: Registration): Promise<Blob> {
   return new Blob([bytes], { type });
 }
 export async function login(email: string, password: string): Promise<User> {
+  assertIdentityAllowed(email);
   if (!auth) throw new Error("Firebase ainda não está configurado.");
   return (await signInWithEmailAndPassword(auth, email, password)).user;
 }
@@ -425,12 +428,29 @@ export async function registerAdmin(
   email: string,
   password: string,
 ): Promise<User> {
+  assertIdentityAllowed(email);
   if (!auth) throw new Error("Firebase ainda não está configurado.");
   return (await createUserWithEmailAndPassword(auth, email, password)).user;
 }
 export const logout = () => (auth ? signOut(auth) : Promise.resolve());
 export const watchAuth = (callback: (user: User | null) => void) =>
-  auth ? onAuthStateChanged(auth, callback) : () => undefined;
+  auth ? onAuthStateChanged(auth, (user) => {
+    try {
+      if (user?.email && isDemoIdentity(user.email)) assertIdentityAllowed(user.email);
+      callback(user);
+    } catch {
+      callback(null);
+      if (auth) void signOut(auth).catch(() => undefined);
+    }
+  }) : () => undefined;
+
+export async function getOwnProfile(): Promise<{ displayName: string; registrationIds: string[] } | null> {
+  if (!db || !auth?.currentUser) return null;
+  const snapshot = await getDoc(doc(db, "profiles", auth.currentUser.uid));
+  if (!snapshot.exists()) return null;
+  const data = snapshot.data();
+  return { displayName: typeof data.displayName === "string" ? data.displayName : "", registrationIds: Array.isArray(data.registrationIds) ? data.registrationIds.filter((value): value is string => typeof value === "string" && /^[a-f0-9]{64}$/.test(value)) : [] };
+}
 export async function getAdminOrganization(
   uid: string,
 ): Promise<string | null> {

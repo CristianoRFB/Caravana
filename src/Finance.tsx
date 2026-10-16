@@ -59,7 +59,7 @@ const dateText = (date: string) => {
   );
 };
 
-export default function FinancePage({ organizationId }: { organizationId: string }) {
+export default function FinancePage({ organizationId, canEdit = false }: { organizationId: string; canEdit?: boolean }) {
   const { id: routeCaravanId = "" } = useParams();
   const [caravans, setCaravans] = useState<Caravan[]>([]);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
@@ -369,9 +369,9 @@ export default function FinancePage({ organizationId }: { organizationId: string
                       <button type="button" className="button button-outline" onClick={() => setHistoryFor(registration)}>
                         <Clock3 size={15} /> Histórico
                       </button>
-                      <button type="button" className="button button-primary" onClick={() => openPayment(registration)}>
+                      {canEdit && <button type="button" className="button button-primary" onClick={() => openPayment(registration)}>
                         <Plus size={15} /> Registrar
-                      </button>
+                      </button>}
                     </div>
                   </article>
                 );
@@ -390,11 +390,11 @@ export default function FinancePage({ organizationId }: { organizationId: string
               ? "Consulte despesas históricas de todas as viagens. Para lançar uma nova, selecione uma caravana no filtro."
               : "Transporte, alimentação, pedágio, estacionamento e outros custos."}</p>
           </div>
-          <button type="button" className="button button-primary" disabled={!selectedCaravanId} onClick={() => openExpense()}>
+          {canEdit && <button type="button" className="button button-primary" disabled={!selectedCaravanId} onClick={() => openExpense()}>
             <Plus size={15} /> Nova despesa
-          </button>
+          </button>}
         </div>
-        {(selectedCaravanId || expenseBeingEdited) && <form className="finance-expense-form" onSubmit={(event) => void submitExpense(event)}>
+        {canEdit && (selectedCaravanId || expenseBeingEdited) && <form className="finance-expense-form" onSubmit={(event) => void submitExpense(event)}>
           <label className="field">
             <span>Descrição</span>
             <input required minLength={3} maxLength={120} value={expenseDescription} onChange={(event) => setExpenseDescription(event.target.value)} placeholder="Ex.: sinal do ônibus" />
@@ -437,7 +437,7 @@ export default function FinancePage({ organizationId }: { organizationId: string
                   {expense.notes && <small>{expense.notes}</small>}
                 </div>
                 <strong>{money(expense.amountCents)}</strong>
-                <button className="button button-tiny button-outline" type="button" onClick={() => openExpense(expense)}>Editar</button>
+                {canEdit && <button className="button button-tiny button-outline" type="button" onClick={() => openExpense(expense)}>Editar</button>}
               </article>
             ))}
           </div>
@@ -446,7 +446,7 @@ export default function FinancePage({ organizationId }: { organizationId: string
         )}
       </section>
 
-      {paymentFor && (
+      {canEdit && paymentFor && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !paymentBusy) setPaymentFor(null); }}>
           <section className="modal finance-modal">
             <button type="button" className="modal-close" aria-label="Fechar" onClick={() => setPaymentFor(null)}>×</button>
@@ -500,7 +500,7 @@ export default function FinancePage({ organizationId }: { organizationId: string
                       {payment.notes && <small>{payment.notes}</small>}
                       {payment.status === "voided" && <small className="finance-void-note">Corrigido: {payment.voidReason}</small>}
                     </div>
-                    {payment.status === "active" && (
+                    {canEdit && payment.status === "active" && (
                       <button type="button" className="button button-tiny button-outline" onClick={() => void correctPayment(payment)}>Corrigir</button>
                     )}
                   </article>

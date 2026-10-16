@@ -7,9 +7,18 @@ const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
 const suite = process.argv[2] || "unit";
-if (!["unit", "e2e", "migration"].includes(suite) || process.argv.length > 3) throw new Error("Choose unit, e2e or migration tests.");
-const testCommand = suite === "e2e" ? "playwright test" : suite === "migration" ? "node scripts/simulate-membership-migration.mjs --apply-synthetic" : "vitest run";
-const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "e2e" ? "firestore,auth" : "firestore", testCommand];
+const commands = {
+  unit: "vitest run",
+  security: "vitest run tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts tests/data.integration.test.ts tests/demo-identities.test.ts",
+  e2e: "playwright test",
+  "demo-e2e": "playwright test e2e/demo.spec.ts --project desktop-1440 --project mobile-320",
+  "demo-auth": "vitest run --config vitest.auth.config.ts",
+  demo: "node scripts/start-demo.mjs --serve",
+  migration: "node scripts/simulate-membership-migration.mjs --apply-synthetic",
+};
+if (!Object.hasOwn(commands, suite) || process.argv.length > 3) throw new Error("Choose a documented local suite.");
+const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo"].includes(suite);
+const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", withAuth ? "firestore,auth" : "firestore", commands[suite]];
 let exitCode = 1;
 try {
   exitCode = await new Promise((resolve, reject) => {

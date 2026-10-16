@@ -27,3 +27,9 @@ Antes de inicializar SDK, bloquear configuração Firebase real em modo DEV ou l
 ## ADR-007 — Revogação aditiva do link privado
 
 Links legados continuam válidos enquanto portalAccessRevoked não for true. A organização pode revogar explicitamente a leitura pública e o envio de comprovante sem apagar inscrição, comprovante ou histórico. Reativação reutiliza o mesmo link e avisa sobre todos os portadores antigos. Um link compartilhado é um bearer token: não oferece identidade do passageiro nem recuperação segura automática; rotação de token é melhoria separada. O portal limpa dados em erro/revogação e ignora callbacks atrasados; referrer-policy no-referrer evita enviar o token em navegação externa. Apenas Rules locais foram alteradas.
+
+## ADR-008 — Contas fixas e ciclo de verificação eficiente
+
+Instrução complementar de 2026-10-16 incorporada sem reiniciar o GOAL: contas fixas exclusivamente no Auth Emulator, perfis/memberships persistidos, seed idempotente e comando npm run demo. Segredos demonstrativos públicos em TEST_ACCOUNTS.txt; nenhum segredo real versionado. Seed possui privilégios somente para preparar fixtures locais; aplicação autentica no SDK normal e usa Rules. Não adicionar Platform Owner às contas comuns. Guard antes de SDK/rede recusa endpoints/projeto reais; aplicação recusa identidades demo fora do emulador.
+
+Após pequenas mudanças, executar suites afetadas; segurança obrigatória em auth/Rules/migração/financeiro, full gates nos checkpoints de fase. Reutilizar evidência válida e não repetir screenshots/inventários sem necessidade. Checkpoints funcionais podem receber push somente na branch autorizada, sem force/merge/main/deploy. Esta autorização substitui o antigo bloqueio de push, mantendo todas as barreiras de produção.

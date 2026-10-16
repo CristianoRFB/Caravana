@@ -1,0 +1,16 @@
+
+> caravana-77@0.1.0 build
+> tsc -b && vite build
+
+vite v6.4.3 building for production...
+transforming...
+✓ 1620 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               0.91 kB │ gzip:   0.46 kB
+dist/assets/index-DRS2Gt20.css               46.54 kB │ gzip:  11.28 kB
+dist/assets/react-vendor-Cy33O35p.js          9.06 kB │ gzip:   3.42 kB
+dist/assets/firebase-auth-BeJIilSY.js       123.69 kB │ gzip:  25.28 kB
+dist/assets/firebase-firestore-ClUDZyby.js  364.05 kB │ gzip:  90.64 kB
+dist/assets/index-DWn7gUx1.js               389.45 kB │ gzip: 116.78 kB
+✓ built in 3.48s

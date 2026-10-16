@@ -16,6 +16,14 @@ O planner TypeScript é puro, sem SDK, credenciais ou I/O. Lê um snapshot, prod
 
 Evidências em evidence/2026-10-16/f2-membership-*.json e f2-migration-*.log. O restore reproduziu SHA256 baabe2f6ab83ba2a70a9ad1cf59efcb478e75a733db44a6a326811c8e0f96a46, idêntico ao before. O ensaio não é backup do banco real nem script aprovado para a produção.
 
+## Runtime local implementado após o ensaio
+
+Rules usam memberships ativas com uid/org/role verificados. Existência de membership revogada ou inválida impede fallback legado. `staff` opera passageiros/check-in e lê financeiro; criação/correção monetária e configuração de caravana exigem owner. IDs de org/caravana são imutáveis nas atualizações. Platform Owner tem somente leitura de metadados das organizações, sem acesso privado automático e sem self-grant. Memberships/perfis/Platform Owner não podem ser concedidos pelo cliente.
+
+Resolver observa acesso e revogação, preserva fallback de admin legado somente quando não existe membership correspondente e a política permitir. A organização pode definir `legacyAdminAccessEnabled:false` e/ou `legacyAdminAccessUntil` Timestamp; nenhuma data/política real foi aplicada. Prazo de corte deve ser definido na migração autorizada (janela proposta até30 dias), após comprovar acesso do administrador. Login não dispara mais limpeza automática de campos legados.
+
+Troca de tenant/papel remonta a UI e encerra os observers; filtros, rascunhos e listas antigos não permanecem. Operações já enviadas ao servidor ainda precisam de controle explícito antes do gate F2. Dropdown é apenas seleção entre memberships observadas, nunca fonte de autoridade. Contas demonstrativas reais no Auth Emulator são descritas em TEST_ACCOUNTS.txt, sem Platform Owner ou admins legados.
+
 ## Próxima implementação local
 
 1. Rules autorizando membership ativa e impedindo autoelevação, alteração de org/UID e bypass por registro legado revogado.
@@ -25,4 +33,4 @@ Evidências em evidence/2026-10-16/f2-membership-*.json e f2-migration-*.log. O 
 
 ## Gates e bloqueios
 
-F2-MIGRATION PASS apenas para fixture sintética e planner/restore local. F2 completo IN_PROGRESS: runtime ainda usa admins, Rules ainda não fazem RBAC por membership e não há Platform Owner. Migração de produção, backup/restore real, publicação de Rules, deploy, merge e push continuam BLOCKED sem autorização específica. IDs e documentos reais do Ítalo permanecem intactos, e não se presume conhecer todo o schema real.
+F2-MIGRATION PASS apenas para fixture sintética e planner/restore local. F2 completo IN_PROGRESS: Storage, operações pendentes, backend/onboarding e UI Platform Owner ainda não concluídos. Migração de produção, backup/restore real, publicação de Rules, deploy e merge continuam BLOCKED sem autorização específica. Push de checkpoint na branch de trabalho foi autorizado pela instrução complementar. IDs e documentos reais do Ítalo permanecem intactos, e não se presume conhecer todo o schema real.

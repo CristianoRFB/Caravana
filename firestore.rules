@@ -1,13 +1,47 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function signedIn() { return request.auth != null; }
+    function signedIn() {
+      return request.auth != null && (
+        !(request.auth.token.get('email', '').lower() == 'teste@gmail.com'
+          || request.auth.token.get('email', '').lower().matches('.*[.]test$'))
+        || request.auth.token.get('aud', '') == 'demo-caravana77-test');
+    }
     function adminOrg() {
       return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
         ? get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.organizationId
         : '';
     }
-    function isAdmin(orgId) { return signedIn() && adminOrg() == orgId; }
+    function hasMembership(orgId) {
+      return signedIn() && exists(/databases/$(database)/documents/memberships/$(request.auth.uid)/organizations/$(orgId));
+    }
+    function membership(orgId) {
+      return get(/databases/$(database)/documents/memberships/$(request.auth.uid)/organizations/$(orgId)).data;
+    }
+    function activeMembership(orgId) {
+      return hasMembership(orgId)
+        && membership(orgId).uid == request.auth.uid
+        && membership(orgId).organizationId == orgId
+        && membership(orgId).status == 'active'
+        && membership(orgId).role in ['tenant_owner', 'staff'];
+    }
+    function legacyAccess(orgId) {
+      let organization = /databases/$(database)/documents/organizations/$(orgId);
+      return signedIn() && adminOrg() == orgId && !hasMembership(orgId)
+        && (!exists(organization) || (
+          (!('legacyAdminAccessEnabled' in get(organization).data) || get(organization).data.legacyAdminAccessEnabled == true)
+          && (!('legacyAdminAccessUntil' in get(organization).data) || request.time < get(organization).data.legacyAdminAccessUntil)));
+    }
+    // Legacy compatibility is explicit and can be cut off per organization only after migration.
+    // An existing revoked/invalid membership NEVER falls back to admins/{uid}.
+    function isAdmin(orgId) { return signedIn() && (activeMembership(orgId) || legacyAccess(orgId)); }
+    function isTenantOwner(orgId) {
+      return signedIn() && ((activeMembership(orgId) && membership(orgId).role == 'tenant_owner') || legacyAccess(orgId));
+    }
+    function isPlatformOwner() {
+      return signedIn() && exists(/databases/$(database)/documents/platformOwners/$(request.auth.uid))
+        && get(/databases/$(database)/documents/platformOwners/$(request.auth.uid)).data.status == 'active';
+    }
     function publicCaravan(caravanId) {
       return exists(/databases/$(database)/documents/caravans/$(caravanId))
         && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published';
@@ -18,19 +52,35 @@ service cloud.firestore {
       allow list, create, update, delete: if false;
     }
 
+    match /profiles/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
     match /organizations/{orgId} {
-      allow get: if isAdmin(orgId);
+      allow get: if isAdmin(orgId) || isPlatformOwner();
+      allow list: if isPlatformOwner();
+      allow create, update, delete: if false;
+    }
+
+    match /memberships/{uid}/organizations/{orgId} {
+      allow get, list: if signedIn() && request.auth.uid == uid;
+      allow create, update, delete: if false;
+    }
+    match /platformOwners/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
       allow list, create, update, delete: if false;
     }
 
     match /caravans/{caravanId} {
       allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId);
-      allow create: if isAdmin(request.resource.data.organizationId)
+      allow create: if isTenantOwner(request.resource.data.organizationId)
         && request.resource.data.reservedSeats == 0
         && request.resource.data.capacity is int
         && request.resource.data.capacity > 0
         && request.resource.data.capacity <= 1000;
-      allow update: if (isAdmin(resource.data.organizationId)
+      allow update: if (isTenantOwner(resource.data.organizationId)
+          && request.resource.data.organizationId == resource.data.organizationId
           && request.resource.data.capacity is int
           && request.resource.data.capacity > 0
           && request.resource.data.capacity <= 1000
@@ -51,7 +101,7 @@ service cloud.firestore {
           && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.reservationNonce == request.resource.data.lastReservationNonce
           && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.caravanId == caravanId
           && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.registrationStatus == 'awaiting_payment');
-      allow delete: if isAdmin(resource.data.organizationId);
+      allow delete: if isTenantOwner(resource.data.organizationId);
     }
 
     // This unguessable, unreadable receipt links a public nonce to the private registration ID.
@@ -145,11 +195,10 @@ service cloud.firestore {
           && (!('documentRecords' in data) || (data.documentRecords is list && data.documentRecords.size() <= 3))
           && (!('requiresMinorAuthorization' in trip.data) || trip.data.requiresMinorAuthorization != true || data.paymentStatus == 'reported' || ('birthDate' in data && 'isMinor' in data && 'authorizationStatus' in data));
       }
-      // Admins may check whether a candidate import ID already exists. Public
-      // reads still require an existing record and its high-entropy link ID.
+      // Authenticated imports may test an absent candidate ID (no document data).
+      // Existing records still require organization authority or an active bearer link.
       allow get: if (resource == null
-          && signedIn()
-          && exists(/databases/$(database)/documents/admins/$(request.auth.uid)))
+          && signedIn())
         || (resource != null
           && (isAdmin(resource.data.organizationId) || (registrationId.matches('^[a-f0-9]{64}$')
             && (!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false))));
@@ -194,7 +243,12 @@ service cloud.firestore {
         && request.resource.data.boardingPointId is string
         && request.resource.data.boardingPointName is string
         && request.resource.data.createdAt is string);
-      allow update: if isAdmin(resource.data.organizationId)
+      allow update: if (isAdmin(resource.data.organizationId)
+          && request.resource.data.organizationId == resource.data.organizationId
+          && request.resource.data.caravanId == resource.data.caravanId
+          && request.resource.data.get('id', registrationId) == resource.data.get('id', registrationId)
+          && (isTenantOwner(resource.data.organizationId)
+            || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled'])))
         || ((!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false)
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt'])
           && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
@@ -205,7 +259,7 @@ service cloud.firestore {
           && request.resource.data.proofUploadedAt <= request.time
           && existsAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current)
           && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current).data.registrationId == registrationId);
-      allow delete: if isAdmin(resource.data.organizationId);
+      allow delete: if isTenantOwner(resource.data.organizationId);
 
       match /payments/{paymentId} {
         function parentRegistration() {
@@ -227,7 +281,7 @@ service cloud.firestore {
           && request.resource.data.registrationId == registrationId
           && request.resource.data.organizationId == parentRegistration().organizationId
           && request.resource.data.caravanId == parentRegistration().caravanId
-          && isAdmin(request.resource.data.organizationId)
+          && isTenantOwner(request.resource.data.organizationId)
           && parentRegistration().registrationStatus != 'cancelled'
           && validPaymentFields(request.resource.data)
           && request.resource.data.status == 'active'
@@ -240,7 +294,7 @@ service cloud.firestore {
           && (!('amountCents' in parentRegistration())
             || getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents <= parentRegistration().amountCents);
         allow update: if resource.data.registrationId == registrationId
-          && isAdmin(resource.data.organizationId)
+          && isTenantOwner(resource.data.organizationId)
           && resource.data.status == 'active'
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'voidedAt', 'voidedBy'])
           && request.resource.data.status == 'voided'
@@ -314,12 +368,12 @@ service cloud.firestore {
         && request.resource.data.id == expenseId
         && request.resource.data.caravanId == caravanId
         && request.resource.data.organizationId == get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId
-        && isAdmin(request.resource.data.organizationId)
+        && isTenantOwner(request.resource.data.organizationId)
         && validExpense(request.resource.data)
         && request.resource.data.createdAt is string
         && request.resource.data.createdBy == request.auth.uid;
       allow update: if resource.data.caravanId == caravanId
-        && isAdmin(resource.data.organizationId)
+        && isTenantOwner(resource.data.organizationId)
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'category', 'amountCents', 'date', 'notes', 'updatedAt', 'updatedBy'])
         && validExpense(request.resource.data)
         && request.resource.data.updatedAt is timestamp

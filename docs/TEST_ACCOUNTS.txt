@@ -1,0 +1,59 @@
+CARAVANA 77 — CONTAS DEMONSTRATIVAS LOCAIS
+Atualizado em 2026-10-16. SOMENTE EMULADORES. Nenhuma destas contas deve ser usada no Firebase real.
+
+PASSAGEIRO
+E-mail: teste@gmail.com
+Senha: 123456
+Papel: passenger, perfil próprio e uma inscrição fictícia; nenhuma membership administrativa.
+Login: http://127.0.0.1:5173/conta/entrar
+Conta: http://127.0.0.1:5173/conta
+
+ADMINISTRADOR A
+E-mail: admin.teste@example.test
+Senha: 123456
+Papel: tenant_owner de demo-org-a (Organizadora Demonstrativa A).
+Login: http://127.0.0.1:5173/admin/login
+Financeiro: http://127.0.0.1:5173/admin/financeiro
+
+ADMINISTRADOR B — TESTES DE ISOLAMENTO
+E-mail: admin.b@example.test
+Senha: 123456
+Papel: tenant_owner de demo-org-b, sem acesso privado à organização A.
+Mesma rota de login administrativo. Nenhuma conta acima possui Platform Owner.
+
+MÁQUINA NOVA — WINDOWS, LINUX OU MACOS
+Pré-requisitos: Git, Node.js 24 com npm, Java 21 ou superior, portas 18080/19099/14400/14500/19150/5173 livres.
+O primeiro uso precisa de internet para baixar dependências e runtimes gratuitos dos emuladores.
+
+git clone --branch codex/caravana77-commercial-v1-20261016 https://github.com/CristianoRFB/Caravana.git Caravana77
+cd Caravana77
+npm run demo
+
+Um único comando de inicialização (npm run demo): instala dependências pelo lockfile se ausentes, inicia Auth e Firestore em loopback, cria/verifica contas e fixtures e inicia o Vite em http://127.0.0.1:5173.
+Em checkout já instalado, basta npm run demo. Para encerrar normalmente, digite q e pressione Enter no terminal do Vite; isso permite ao runner desligar os emuladores e limpar seu processo Java.
+Não é necessário login Firebase/Cloudflare nem .env com credenciais. .env.e2e versionado contém apenas configuração Firebase sintética.
+Porta ocupada: o comando falha; não se conecta a serviços existentes nem encerra processos de terceiros.
+Windows/JDK25: uma interrupção forçada com Ctrl+C pode deixar o Java do emulador ativo; o encerramento normal q+Enter foi validado e evita esse problema. Não encerre processos Java de outros trabalhos.
+
+PERSISTÊNCIA E DADOS
+O seed cria usuários no Auth Emulator por API real de cadastro/login. Cria perfis e memberships no Firestore Emulator.
+A aplicação autentica por e-mail/senha normalmente e todas as leituras/escritas da aplicação passam pelas Rules locais.
+Somente a preparação de fixtures usa o contexto privilegiado da biblioteca de testes, após validar endpoints locais exatos; isso não concede custom claims ou bypass à sessão do usuário.
+O seed é idempotente: verifica contas existentes com a senha fixa, cria documentos ausentes e preserva edições existentes. Divergência de papel/UID/status causa erro; não reativa membro revogado nem reseta senha.
+Sem export/import de emulador, os dados são recriados a cada inicialização. E-mails/senhas continuam os mesmos; UIDs são fornecidos pelo Auth local e os vínculos são gerados pelo seed. Se uma sessão antiga ficar aberta após reiniciar, saia e entre novamente.
+Não dependa dos dados de outro computador. Os arquivos versionados reproduzem o ambiente.
+São duas organizadoras, duas caravanas, três inscrições, comprovantes PDF fictícios, lançamentos de R$25 e despesas de R$10 por caravana. Não há cobrança, conta bancária, envio de e-mail ou transação financeira real.
+
+PROTEÇÕES
+Projeto exato: demo-caravana77-test. Firestore: 127.0.0.1:18080. Auth: 127.0.0.1:19099.
+Seed recusa hosts remotos e seleção de caravana-af306. Não aceita credenciais ou alvo de produção.
+O aplicativo bloqueia login/cadastro/uso de sessão dessas identidades fora do emulador local; Rules locais negam sua autoridade com audience diferente do projeto demo.
+Isso protege os fluxos deste código. Bloquear cadastro arbitrário diretamente na API pública do Auth real exigiria política no serviço real; tal alteração não foi feita nem autorizada. Não se afirma que uma conta externa já existente foi removida.
+Não há credenciais reais, tokens ou service accounts nestes arquivos. Não fazer deploy de dados/contas de demonstração.
+
+VERIFICAÇÃO PROPORCIONAL
+npm run test:demo       — login real Auth Emulator, idempotência, perfis, ausência de autoelevação e isolamento financeiro A×B.
+npm run test:demo:e2e   — login de passageiro/admin em desktop e celular (requer Chromium: npx playwright install chromium).
+npm run test:security   — regressões diretamente afetadas de Rules, operação, membership e bloqueio das identidades.
+npm test / npm run test:e2e / npm run build — gates completos de checkpoint, sem repetição automática a cada edição.
+Não execute testes simultaneamente com npm run demo, pois usam as mesmas portas isoladas. Encerre a demonstração antes de rodar testes.

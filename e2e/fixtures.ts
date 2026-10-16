@@ -4,6 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import type { Caravan, Registration } from "../src/lib/types";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
+let syntheticAdminUid: string | undefined;
 
 function assertSyntheticEndpoints() {
   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
@@ -21,6 +22,19 @@ export async function patchSyntheticTrip(fields: Partial<Caravan>) {
   } finally { await env.cleanup(); }
 }
 
+export async function patchSyntheticMembership(organizationId: "org-a" | "org-b", role: "tenant_owner" | "staff", status: "active" | "revoked" = "active") {
+  assertSyntheticEndpoints();
+  if (!syntheticAdminUid) throw new Error("Seed the synthetic account first.");
+  const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try {
+    await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), `memberships/${syntheticAdminUid}/organizations/${organizationId}`), {
+        uid: syntheticAdminUid, organizationId, role, status, createdAt: "2026-10-16", updatedAt: "2026-10-16",
+      });
+    });
+  } finally { await env.cleanup(); }
+}
+
 export async function seedSyntheticEnvironment() {
   assertSyntheticEndpoints();
   const projectId = "demo-caravana77-test";
@@ -33,6 +47,7 @@ export async function seedSyntheticEnvironment() {
   });
   if (!response.ok) throw new Error("Cannot create synthetic Auth account.");
   const { localId } = await response.json() as { localId: string };
+  syntheticAdminUid = localId;
   const trip = (id: string, organizationId: string, priceCents: number): Caravan => ({
     id, organizationId, organizerName: "Organização Sintética", name: `Caravana Sintética ${id}`, slug: `sintetica-${id}`, event: "Evento fictício",
     description: "Viagem fictícia usada exclusivamente em testes locais.", date: "2026-11-05", departureTime: "06:00", returnTime: "22:00", city: "Cidade de teste", destination: "Destino de teste", address: "Local fictício",

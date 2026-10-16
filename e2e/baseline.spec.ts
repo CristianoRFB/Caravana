@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { patchSyntheticTrip, seedSyntheticEnvironment, testAccount } from "./fixtures";
+import { patchSyntheticMembership, patchSyntheticTrip, seedSyntheticEnvironment, testAccount } from "./fixtures";
 
 let dispose: (() => Promise<void>) | undefined;
 let runtimeErrors: string[];
@@ -166,4 +166,44 @@ test("Pix configuration is conditional, empty values explain the process, and co
   await page.getByRole("button", { name: "Copiar chave" }).click();
   await expect(page.getByRole("button", { name: "Copiado!", exact: true })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("CHAVE-SINTETICA-SEM-VALOR");
+});
+
+test("switching organizations clears filters/drafts and live revocation cannot use legacy access", async ({ page }) => {
+  await patchSyntheticMembership("org-a", "tenant_owner");
+  await patchSyntheticMembership("org-b", "tenant_owner");
+  await signIn(page);
+  await page.goto("/admin/financeiro");
+  await expect(metric(page, "Recebido registrado")).toContainText("145,00");
+  await page.getByLabel("Mostrar dados de").selectOption("ride-a");
+  await page.getByLabel("Descrição", { exact: true }).fill("Rascunho sintético A");
+  const menu = page.getByRole("button", { name: "Menu", exact: true });
+  if (await menu.isVisible()) await menu.click();
+  await page.getByLabel("Organização ativa").selectOption("org-b");
+  await expect(page.locator(".admin-content")).toHaveAttribute("data-org", "org-b");
+  await expect(page).toHaveURL(/\/admin$/);
+  if (await menu.isVisible()) await menu.click();
+  await page.locator(".admin-sidebar").getByRole("link", { name: "Financeiro", exact: true }).click();
+  if (await menu.isVisible() && await page.locator(".sidebar-open").count()) await menu.click();
+  await expect(metric(page, "Recebido registrado")).toContainText("200,00");
+  await expect(page.getByLabel("Mostrar dados de")).toHaveValue("all");
+  await expect(page.locator(".finance-passenger-list")).not.toContainText("Pessoa Sintética ride-a");
+  await page.getByLabel("Mostrar dados de").selectOption("ride-b");
+  await expect(page.getByLabel("Descrição", { exact: true })).toHaveValue("");
+  await patchSyntheticMembership("org-b", "tenant_owner", "revoked");
+  await expect(page.locator(".admin-content")).toHaveAttribute("data-org", "org-a");
+  await expect(page.locator(".finance-passenger-list")).not.toContainText("Pessoa Sintética ride-b");
+  await patchSyntheticMembership("org-a", "tenant_owner", "revoked");
+  await expect(page.getByRole("heading", { name: "Conta ainda não autorizada" })).toBeVisible();
+  await expect(page.locator(".finance-summary-card")).toHaveCount(0);
+});
+
+test("staff can read scoped finance without controls to register or correct money", async ({ page }) => {
+  await patchSyntheticMembership("org-a", "staff");
+  await signIn(page);
+  await page.goto("/admin/financeiro");
+  await expect(metric(page, "Recebido registrado")).toContainText("145,00");
+  await expect(page.getByRole("button", { name: "Registrar", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Nova despesa", exact: true })).toHaveCount(0);
+  await page.getByLabel("Mostrar dados de").selectOption("ride-a");
+  await expect(page.locator(".finance-expense-form")).toHaveCount(0);
 });

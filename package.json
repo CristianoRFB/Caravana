@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode e2e --host 127.0.0.1",
+    "demo": "node scripts/start-demo.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "build:e2e": "tsc -b && vite build --mode e2e --outDir dist-e2e",
@@ -13,6 +14,9 @@
     "typecheck": "tsc -b --pretty false",
     "test": "node scripts/run-local-tests.mjs",
     "test:e2e": "node scripts/run-local-tests.mjs e2e",
+    "test:security": "node scripts/run-local-tests.mjs security",
+    "test:demo": "node scripts/run-local-tests.mjs demo-auth",
+    "test:demo:e2e": "node scripts/run-local-tests.mjs demo-e2e",
     "migration:dry-run": "node scripts/simulate-membership-migration.mjs",
     "migration:rehearse": "node scripts/run-local-tests.mjs migration",
     "test:rules": "vitest run"
