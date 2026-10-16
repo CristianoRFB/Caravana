@@ -1849,6 +1849,7 @@ td small {
 }
 .passenger-toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin: 17px 0;
 }
@@ -1868,6 +1869,7 @@ td small {
   color: #8a91a4;
 }
 .search-input input {
+  min-width: 0;
   height: 39px;
   width: 100%;
   border: 0;
@@ -1879,6 +1881,7 @@ td small {
 .passenger-toolbar select {
   width: auto;
   min-width: 165px;
+  max-width: 100%;
 }
 .row-actions {
   display: flex;

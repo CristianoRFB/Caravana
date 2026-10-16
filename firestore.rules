@@ -254,6 +254,75 @@ service cloud.firestore {
         && request.resource.data.reservedSeats == resource.data.reservedSeats - 1
         && getAfter(/databases/$(database)/documents/registrations/$(event.registrationId)).data.lastOperationalId == operationId;
     }
+    function validBoardingPoint(data) {
+      let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId)).data;
+      return data.boardingPointSnapshot is map
+        && data.boardingPointSnapshot.id == data.boardingPointId && data.boardingPointSnapshot.name == data.boardingPointName
+        && trip.boardingPoints.hasAny([data.boardingPointSnapshot]);
+    }
+    function documentPolicyDays(orgId, kind) {
+      let path = /databases/$(database)/documents/documentPolicies/$(orgId);
+      return exists(path) ? (kind == 'proofs' ? get(path).data.proofDays : get(path).data.authorizationDays) : 90;
+    }
+    function documentEvent(orgId, operationId, action) {
+      let path = /databases/$(database)/documents/documentEvents/$(operationId);
+      let event = getAfter(path).data;
+      return operationId.matches('^[a-f0-9]{32}$') && !exists(path) && event.organizationId == orgId
+        && event.action == action && event.actorUid == request.auth.uid && event.at == request.time;
+    }
+    function validDocumentExpiry(registrationId, kind, file) {
+      let parent = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
+      let event = getAfter(/databases/$(database)/documents/documentEvents/$(parent.lastDocumentOperationId)).data;
+      return isTenantOwner(file.organizationId) && file.registrationId == registrationId
+        && file.retentionDays is int && file.retentionDays >= 1 && file.retentionDays <= 3650
+        && request.time >= file.uploadedAt + duration.value(file.retentionDays, 'd')
+        && event.registrationId == registrationId && event.kind == kind && event.retentionDays == file.retentionDays && event.uploadedAt == file.uploadedAt
+        && documentEvent(file.organizationId, parent.lastDocumentOperationId, 'file_expired');
+    }
+    function validCalendarDate(iso) {
+      let date = timestamp.date(int(iso[0:4]), int(iso[5:7]), int(iso[8:10]));
+      return date.year() == int(iso[0:4]) && date.month() == int(iso[5:7]) && date.day() == int(iso[8:10]);
+    }
+    function boardingReady(data, registrationId) {
+      let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId)).data;
+      let birth = data.get('birthDate', '');
+      let eventDate = trip.get('date', '');
+      let known = birth.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && eventDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && validCalendarDate(birth) && validCalendarDate(eventDate);
+      let adult = known && (int(eventDate[0:4]) - int(birth[0:4]) > 18 || (int(eventDate[0:4]) - int(birth[0:4]) == 18 && eventDate[5:10] >= birth[5:10]));
+      let needsAuthorization = data.get('isMinor', false) == true || (trip.get('requiresMinorAuthorization', false) && !adult);
+      let file = data.get('authorizationId', '') == 'current' ? get(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data : {};
+      return data.registrationStatus == 'confirmed' && (!trip.get('requiresMinorAuthorization', false) || known)
+        && (!needsAuthorization || (data.get('authorizationStatus', '') == 'approved'
+          && (data.get('authorizationId', '') != 'current' || (file.retentionDays is int && request.time < file.uploadedAt + duration.value(file.retentionDays, 'd')))));
+    }
+    match /documentPolicies/{orgId} {
+      allow get: if true;
+      allow list, delete: if false;
+      allow create, update: if isTenantOwner(orgId)
+        && request.resource.data.keys().hasOnly(['organizationId', 'proofDays', 'authorizationDays', 'consentVersion', 'updatedAt', 'lastDocumentOperationId'])
+        && request.resource.data.organizationId == orgId && request.resource.data.consentVersion == 'operational-documents-v1'
+        && request.resource.data.proofDays is int && request.resource.data.proofDays >= 1 && request.resource.data.proofDays <= 3650
+        && request.resource.data.authorizationDays is int && request.resource.data.authorizationDays >= 1 && request.resource.data.authorizationDays <= 3650
+        && request.resource.data.updatedAt == request.time
+        && documentEvent(orgId, request.resource.data.lastDocumentOperationId, 'policy_updated');
+    }
+    match /documentEvents/{operationId} {
+      allow get: if (resource == null && signedIn()) || (resource != null && isAdmin(resource.data.organizationId));
+      allow list: if isAdmin(resource.data.organizationId);
+      allow update, delete: if false;
+      allow create: if operationId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time
+        && ((request.resource.data.action == 'policy_updated' && isTenantOwner(request.resource.data.organizationId)
+          && request.resource.data.keys().hasOnly(['action', 'organizationId', 'actorUid', 'at', 'proofDays', 'authorizationDays'])
+          && getAfter(/databases/$(database)/documents/documentPolicies/$(request.resource.data.organizationId)).data.lastDocumentOperationId == operationId
+          && getAfter(/databases/$(database)/documents/documentPolicies/$(request.resource.data.organizationId)).data.proofDays == request.resource.data.proofDays
+          && getAfter(/databases/$(database)/documents/documentPolicies/$(request.resource.data.organizationId)).data.authorizationDays == request.resource.data.authorizationDays
+          && (!exists(/databases/$(database)/documents/documentPolicies/$(request.resource.data.organizationId)) || get(/databases/$(database)/documents/documentPolicies/$(request.resource.data.organizationId)).data.lastDocumentOperationId != operationId))
+        || (request.resource.data.action in ['authorization_reviewed', 'file_expired'] && isAdmin(request.resource.data.organizationId)
+          && get(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.organizationId == request.resource.data.organizationId
+          && get(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.get('lastDocumentOperationId', '') != operationId
+          && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.lastDocumentOperationId == operationId));
+    }
     function importNormalize(value) {
       let lower = value.lower();
       return lower.matches('^[ -~]*$') ? lower.replace('[^a-z0-9]', '')
@@ -419,6 +488,36 @@ service cloud.firestore {
     }
 
     match /registrations/{registrationId} {
+      function validDocumentUpdate() {
+        let data = request.resource.data;
+        let event = getAfter(/databases/$(database)/documents/documentEvents/$(data.lastDocumentOperationId)).data;
+        let changed = data.diff(resource.data).affectedKeys();
+        return event.registrationId == registrationId && event.caravanId == resource.data.caravanId
+          && ((event.action == 'authorization_reviewed'
+            && documentEvent(resource.data.organizationId, data.lastDocumentOperationId, 'authorization_reviewed')
+            && event.keys().hasOnly(['action', 'registrationId', 'organizationId', 'caravanId', 'actorUid', 'at', 'status', 'previousStatus', 'method'])
+            && event.previousStatus == resource.data.get('authorizationStatus', 'not_sent') && event.status == data.authorizationStatus
+            && data.authorizationStatus in ['unknown', 'not_required', 'not_sent', 'pending', 'received', 'approved']
+            && resource.data.registrationStatus != 'cancelled' && (resource.data.get('checkedInAt', null) == null || data.authorizationStatus == 'approved')
+            && (event.method == (resource.data.get('authorizationId', '') == 'current' ? 'pdf' : 'paper')
+              || (event.method == 'profile' && data.authorizationStatus == (data.get('isMinor', false) ? 'not_sent' : 'not_required')))
+            && (data.authorizationStatus != 'approved' || event.method == 'paper'
+              || request.time < get(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.uploadedAt
+                + duration.value(get(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.retentionDays, 'd'))
+            && data.authorizationUpdatedAt == request.time
+            && (event.method == 'profile'
+              ? (resource.data.get('checkedInAt', null) == null && changed.hasOnly(['passengerName', 'phone', 'email', 'birthDate', 'boardingPointId', 'boardingPointName', 'boardingPointSnapshot', 'emergencyContact', 'guardianName', 'guardianPhone', 'isMinor', 'authorizationStatus', 'authorizationUpdatedAt', 'updatedAt', 'lastDocumentOperationId']))
+              : changed.hasOnly(['authorizationStatus', 'authorizationUpdatedAt', 'lastDocumentOperationId'])))
+          || (event.action == 'file_expired'
+            && event.keys().hasOnly(['action', 'registrationId', 'organizationId', 'caravanId', 'kind', 'actorUid', 'at', 'retentionDays', 'uploadedAt'])
+            && !existsAfter(/databases/$(database)/documents/registrations/$(registrationId)/$(event.kind)/current)
+            && validDocumentExpiry(registrationId, event.kind, get(/databases/$(database)/documents/registrations/$(registrationId)/$(event.kind)/current).data)
+            && ((event.kind == 'proofs' && !('proofId' in data) && !('proofRetentionDays' in data) && data.proofExpiredAt == request.time
+              && changed.hasOnly(['proofId', 'proofRetentionDays', 'proofExpiredAt', 'lastDocumentOperationId']))
+            || (event.kind == 'authorizations' && resource.data.get('checkedInAt', null) == null && !('authorizationId' in data) && !('authorizationRetentionDays' in data)
+              && data.authorizationStatus == 'not_sent' && data.authorizationExpiredAt == request.time
+              && changed.hasOnly(['authorizationId', 'authorizationRetentionDays', 'authorizationStatus', 'authorizationExpiredAt', 'lastDocumentOperationId'])))));
+      }
       function validOperation() {
         let data = request.resource.data;
         let operationId = data.get('lastOperationalId', '');
@@ -455,8 +554,7 @@ service cloud.firestore {
             && getAfter(/databases/$(database)/documents/caravans/$(data.caravanId)).data.reservedSeats == get(/databases/$(database)/documents/caravans/$(data.caravanId)).data.reservedSeats - 1)
           || (event.action in ['checked_in', 'checkin_reversed'] && event.seatDelta == 0
             && event.checkedBefore != event.checkedAfter && event.checkedAfter == (event.action == 'checked_in')
-            && (!event.checkedAfter || (resource.data.registrationStatus == 'confirmed'
-              && (resource.data.get('isMinor', false) != true || resource.data.get('authorizationStatus', '') == 'approved')))
+            && (!event.checkedAfter || boardingReady(resource.data, registrationId))
             && data.checkedInAt == (event.checkedAfter ? request.time : null) && data.checkedInBy == (event.checkedAfter ? request.auth.uid : null)
             && changed.hasOnly(['checkedInAt', 'checkedInBy', 'lastOperationalId'])));
       }
@@ -465,7 +563,7 @@ service cloud.firestore {
         let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId));
         let tripAfter = getAfter(/databases/$(database)/documents/caravans/$(data.caravanId));
         return data.keys().hasAll(['id', 'importedFromLegacy', 'importBatchId', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'registrationStatus', 'paymentStatus', 'createdAt'])
-          && data.keys().hasOnly(['id', 'importedFromLegacy', 'importBatchId', 'importOperationId', 'importIdentityKeys', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'documentRecords', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled', 'registrationStatus', 'paymentStatus', 'createdAt'])
+          && data.keys().hasOnly(['id', 'importedFromLegacy', 'importBatchId', 'importOperationId', 'importIdentityKeys', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'documentRecords', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'boardingPointSnapshot', 'emergencyContact', 'notes', 'amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled', 'registrationStatus', 'paymentStatus', 'createdAt'])
           && id.matches('^[a-f0-9]{64}$')
           && data.id == id
           && data.importedFromLegacy == true
@@ -486,6 +584,7 @@ service cloud.firestore {
           && tripAfter.data.capacity is int
           && tripAfter.data.reservedSeats <= tripAfter.data.capacity
           && data.caravanName is string
+          && (data.boardingPointId == '' || validBoardingPoint(data))
           && data.passengerName is string
           && data.passengerName.size() >= 2
           && data.passengerName.size() <= 120
@@ -537,7 +636,7 @@ service cloud.firestore {
       allow list: if isAdmin(resource.data.organizationId);
       allow create: if validLegacyImport(registrationId) || (request.resource.data.id == registrationId
         && registrationId.matches('^[a-f0-9]{64}$')
-        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'reservationRequestHash', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'reservationRequestHash', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'boardingPointSnapshot', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
         && (!('reservationRequestHash' in request.resource.data) || (request.resource.data.reservationRequestHash is string && request.resource.data.reservationRequestHash.matches('^[a-f0-9]{64}$')))
         && request.resource.data.reservationNonce is string
         && request.resource.data.reservationNonce.matches('^[a-f0-9]{64}$')
@@ -575,6 +674,7 @@ service cloud.firestore {
           || ('birthDate' in request.resource.data && 'isMinor' in request.resource.data && 'authorizationStatus' in request.resource.data))
         && request.resource.data.boardingPointId is string
         && request.resource.data.boardingPointName is string
+        && validBoardingPoint(request.resource.data)
         && request.resource.data.createdAt is string);
       allow update: if (isAdmin(resource.data.organizationId)
           && request.resource.data.organizationId == resource.data.organizationId
@@ -582,14 +682,21 @@ service cloud.firestore {
           && request.resource.data.get('id', registrationId) == resource.data.get('id', registrationId)
           && request.resource.data.get('reservationNonce', '') == resource.data.get('reservationNonce', '')
           && request.resource.data.get('reservationRequestHash', '') == resource.data.get('reservationRequestHash', '')
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['boardingPointId', 'boardingPointName', 'boardingPointSnapshot']) || validBoardingPoint(request.resource.data))
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['importedFromLegacy', 'importBatchId', 'importOperationId', 'importIdentityKeys'])
           && (resource.data.get('importedFromLegacy', false) != true || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['cpf', 'documentRecords']))
+          && ((!request.resource.data.diff(resource.data).affectedKeys().hasAny(['birthDate', 'guardianName', 'guardianPhone', 'isMinor', 'authorizationStatus', 'authorizationUpdatedAt', 'authorizationId', 'authorizationUploadedAt', 'authorizationRetentionDays', 'authorizationExpiredAt', 'proofId', 'proofRetentionDays', 'proofExpiredAt', 'lastDocumentOperationId']))
+            || ((!request.resource.data.diff(resource.data).affectedKeys().hasAny(['birthDate', 'guardianName', 'guardianPhone', 'isMinor'])
+              || request.resource.data.get('authorizationStatus', '') in ['not_sent', 'not_required'])
+              && request.resource.data.get('lastDocumentOperationId', '').matches('^[a-f0-9]{32}$')
+              && request.resource.data.get('lastDocumentOperationId', '') != resource.data.get('lastDocumentOperationId', '')
+              && validDocumentUpdate()))
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['registrationStatus', 'paymentStatus', 'approvedAt', 'approvedBy', 'rejectedAt', 'rejectedBy', 'rejectionReason', 'cancelledAt', 'cancelledBy', 'checkedInAt', 'checkedInBy', 'lastOperationalId'])
             || (request.resource.data.get('lastOperationalId', '').matches('^[a-f0-9]{32}$') && validOperation()))
           && (isTenantOwner(resource.data.organizationId)
             || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled'])))
         || ((!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false)
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt'])
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt', 'proofRetentionDays'])
           && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
           && request.resource.data.paymentStatus == 'awaiting_review'
           && request.resource.data.registrationStatus == 'awaiting_review'
@@ -597,7 +704,16 @@ service cloud.firestore {
           && request.resource.data.proofUploadedAt is timestamp
           && request.resource.data.proofUploadedAt <= request.time
           && existsAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current)
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current).data.registrationId == registrationId);
+          && request.resource.data.get('proofRetentionDays', 90) == getAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current).data.get('retentionDays', 90)
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current).data.registrationId == registrationId)
+        || (registrationId.matches('^[a-f0-9]{64}$') && resource.data.get('portalAccessRevoked', false) == false
+          && resource.data.get('isMinor', false) == true && resource.data.registrationStatus != 'cancelled'
+          && resource.data.get('authorizationStatus', 'not_sent') != 'approved'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['authorizationId', 'authorizationStatus', 'authorizationUploadedAt', 'authorizationRetentionDays'])
+          && request.resource.data.authorizationId == 'current' && request.resource.data.authorizationStatus == 'pending'
+          && request.resource.data.authorizationUploadedAt == request.time
+          && request.resource.data.authorizationRetentionDays == getAfter(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.retentionDays
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.registrationId == registrationId);
       // Preserve operation identity and history; cancellation is the controlled reversal.
       allow delete: if false;
 
@@ -659,7 +775,7 @@ service cloud.firestore {
           let updatedRegistration = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
           return proofId == 'current'
             && (!('portalAccessRevoked' in registrationData) || registrationData.portalAccessRevoked == false)
-            && request.resource.data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId', 'contentType', 'fileName', 'content', 'uploadedAt'])
+            && request.resource.data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId', 'contentType', 'fileName', 'content', 'uploadedAt', 'retentionDays'])
             && request.resource.data.registrationId == registrationId
             && request.resource.data.organizationId == registrationData.organizationId
             && request.resource.data.caravanId == registrationData.caravanId
@@ -675,15 +791,33 @@ service cloud.firestore {
               || (request.resource.data.contentType == 'image/jpeg' && request.resource.data.content.matches('^/9j/.*$')))
             && request.resource.data.uploadedAt is timestamp
             && request.resource.data.uploadedAt <= request.time
+            && request.resource.data.get('retentionDays', 90) == documentPolicyDays(registrationData.organizationId, 'proofs')
             && registrationData.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
             && updatedRegistration.proofId == proofId
             && updatedRegistration.registrationStatus == 'awaiting_review';
         }
-        allow get, list: if resource.data.registrationId == registrationId
-          && isAdmin(resource.data.organizationId);
+        allow get, list: if isAdmin(get(/databases/$(database)/documents/registrations/$(registrationId)).data.organizationId);
         allow create, update: if validProof();
-        allow delete: if resource.data.registrationId == registrationId
-          && isAdmin(resource.data.organizationId);
+        allow delete: if validDocumentExpiry(registrationId, 'proofs', resource.data);
+      }
+      match /authorizations/{fileId} {
+        function validAuthorization() {
+          let parent = get(/databases/$(database)/documents/registrations/$(registrationId)).data;
+          let after = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
+          let data = request.resource.data;
+          return fileId == 'current' && registrationId.matches('^[a-f0-9]{64}$') && parent.get('portalAccessRevoked', false) == false
+            && parent.get('isMinor', false) == true && parent.registrationStatus != 'cancelled' && parent.get('authorizationStatus', 'not_sent') != 'approved'
+            && data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId', 'contentType', 'fileName', 'content', 'uploadedAt', 'consentedAt', 'consentVersion', 'retentionDays'])
+            && data.registrationId == registrationId && data.organizationId == parent.organizationId && data.caravanId == parent.caravanId
+            && data.contentType == 'application/pdf' && data.fileName is string && data.fileName.size() > 0 && data.fileName.size() <= 120
+            && data.content is string && data.content.size() > 0 && data.content.size() <= 819200 && data.content.matches('^JVBERi0.*$')
+            && data.uploadedAt == request.time && data.consentedAt == request.time && data.consentVersion == 'operational-documents-v1'
+            && data.retentionDays is int && data.retentionDays == documentPolicyDays(parent.organizationId, 'authorizations')
+            && after.authorizationId == fileId && after.authorizationStatus == 'pending' && after.authorizationUploadedAt == request.time;
+        }
+        allow get, list: if isAdmin(get(/databases/$(database)/documents/registrations/$(registrationId)).data.organizationId);
+        allow create, update: if validAuthorization();
+        allow delete: if validDocumentExpiry(registrationId, 'authorizations', resource.data);
       }
     }
 

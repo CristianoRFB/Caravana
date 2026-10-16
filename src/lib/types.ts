@@ -121,11 +121,15 @@ export interface Registration {
   guardianName?: string;
   guardianPhone?: string;
   authorizationStatus?: AuthorizationStatus;
+  authorizationId?: string;
+  authorizationRetentionDays?: number;
+  proofRetentionDays?: number;
   phone: string;
   email: string;
   city: string;
   boardingPointId: string;
   boardingPointName: string;
+  boardingPointSnapshot?: BoardingPoint;
   emergencyContact: string;
   notes: string;
   amountCents?: number;

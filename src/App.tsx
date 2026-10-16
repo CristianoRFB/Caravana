@@ -90,6 +90,9 @@ import PlatformPage from "./Platform";
 import { SupportOwner } from "./Support";
 import OperationalHistory from "./OperationalHistory";
 import ImportHistory from "./ImportHistory";
+import MinorAuthorization from "./MinorAuthorization";
+import DocumentSettings from "./DocumentSettings";
+import { loadMinorAuthorization } from "./lib/documents";
 import { importFailureMessage, importLegacyRegistrationsDetailed, type ImportReport } from "./lib/import-operations";
 import { chooseTenant, tenantPreferenceKey } from "./lib/tenant-preference";
 import { PROOF_POLICY } from "./lib/proof-policy";
@@ -1227,6 +1230,7 @@ function MyRegistration() {
               </Notice>
             )}
           </section>
+          {reg.isMinor && reg.registrationStatus !== "cancelled" && <MinorAuthorization key={reg.id} registration={reg} />}
           <section className="portal-card payment-card">
             <div className="eyebrow eyebrow-dark">
               COMPROVANTE · {caravan?.paymentMethod || "FORMA A DEFINIR"} · CONFERÊNCIA MANUAL
@@ -1621,6 +1625,7 @@ function AdminShell({
             <span>✓</span> Check-in
           </Link>
           <Link to="/admin/suporte"><span>?</span> Suporte</Link>
+          <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
@@ -2645,6 +2650,13 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
       setProofBusy("");
     }
   }
+  async function downloadAuthorization(r: Registration) {
+    try {
+      const blob = await loadMinorAuthorization(r.id); const url = URL.createObjectURL(blob);
+      const link = document.createElement("a"); link.href = url; link.download = "autorizacao-privada.pdf"; link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (cause) { setNotice(importFailureMessage(cause)); }
+  }
   async function copyRegistrationLink(registration: Registration) {
     try {
       await navigator.clipboard.writeText(
@@ -3187,6 +3199,8 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                             <option value="received">Recebida</option>
                             <option value="approved">Aprovada</option>
                           </select>
+                          <small>Conferência manual do PDF ou documento apresentado em papel.</small>
+                          {r.authorizationId && <button className="button button-tiny button-outline" onClick={() => void downloadAuthorization(r)}>Baixar autorização</button>}
                         </div>
                       ) : (
                         <span>Não se aplica</span>
@@ -3627,6 +3641,11 @@ function CaravanFinance() {
   const role = useContext(TenantRoleContext);
   return <FinancePage organizationId={organizationId} canEdit={role === "tenant_owner"} />;
 }
+function TenantDocuments() {
+  const organizationId = useContext(OrganizationContext);
+  const role = useContext(TenantRoleContext);
+  return <DocumentSettings organizationId={organizationId} canManage={role === "tenant_owner"} />;
+}
 function TenantSupport() {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
@@ -3653,6 +3672,7 @@ export default function App() {
       <Route path="/platform/login" element={<AdminLogin platform />} />
       <Route path="/platform" element={<PlatformPage header={<Topbar admin />} />} />
       <Route path="/admin/suporte" element={<AdminGuard><TenantSupport /></AdminGuard>} />
+      <Route path="/admin/documentos" element={<AdminGuard><TenantDocuments /></AdminGuard>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
       <Route

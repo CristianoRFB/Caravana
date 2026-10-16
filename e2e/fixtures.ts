@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
 import type { Caravan, Registration } from "../src/lib/types";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
@@ -38,6 +38,23 @@ export async function inspectSyntheticBookings() {
     if (!result) throw new Error("Synthetic booking inspection did not finish.");
     return result;
   } finally { await env.cleanup(); }
+}
+export async function prepareSyntheticMinor() {
+  assertSyntheticEndpoints();
+  const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try { await env.withSecurityRulesDisabled(async (context) => {
+    await updateDoc(doc(context.firestore(), "caravans/ride-a"), { requiresMinorAuthorization: true });
+    await updateDoc(doc(context.firestore(), `registrations/${"a".repeat(64)}`), { isMinor: true, birthDate: "2010-01-01", authorizationStatus: "not_sent", guardianName: "Responsável fictício", guardianPhone: "11900000009" });
+  }); } finally { await env.cleanup(); }
+}
+export async function expireSyntheticAuthorization() {
+  assertSyntheticEndpoints();
+  const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try { await env.withSecurityRulesDisabled(async (context) => {
+    const time = Timestamp.fromMillis(Date.now() - 91 * 86400000);
+    await updateDoc(doc(context.firestore(), `registrations/${"a".repeat(64)}/authorizations/current`), { uploadedAt: time });
+    await updateDoc(doc(context.firestore(), `registrations/${"a".repeat(64)}`), { authorizationUploadedAt: time });
+  }); } finally { await env.cleanup(); }
 }
 
 export async function patchSyntheticMembership(organizationId: "org-a" | "org-b", role: "tenant_owner" | "staff", status: "active" | "revoked" = "active") {

@@ -1,0 +1,38 @@
+
+> caravana-77@0.1.0 test:storage
+> node scripts/run-local-tests.mjs storage
+
+i  emulators: Starting emulators: auth, firestore, storage
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+!  Unexpected rules runtime error: WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/C:/Users/Aluno/.cache/firebase/emulators/cloud-storage-rules-runtime-v1.1.3.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+
+i  Running script: vitest run --config vitest.storage.config.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  17:29:31
+   Duration  4.53s (tests 93%, import 5%, transform 2%)
+
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+!  Unexpected rules runtime error: Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "line" is null
+	at com.google.firebase.rules.tools.local.server.Server.processRequestsFromInputStream(Server.java:75)
+	at com.google.firebase.rules.tools.local.server.Server.start(Server.java:57)
+	at com.google.firebase.rules.tools.local.FirebaseRulesTooling.main(FirebaseRulesTooling.java:81)
+
+Stopped test emulator started by this run (PID 11792).

@@ -11,8 +11,8 @@ export interface ImportReport { imported: number; skipped: number; rejected: num
 export function importFailureMessage(cause: unknown): string {
   const message = typeof cause === "string" ? cause : cause instanceof Error ? cause.message : "Operação não confirmada.";
   const code = typeof cause === "object" && cause !== null ? String((cause as { code?: unknown }).code || "") : "";
-  if (code.includes("permission-denied") || /PERMISSION_DENIED|insufficient permissions|maximum of 1000 expressions/i.test(message)) return "Etapa não confirmada. Confira sua permissão e valide novamente a lista antes de repetir o envio.";
-  if (/unavailable|deadline-exceeded|network-request-failed/.test(code)) return "Sem confirmação da conexão. Confira o relatório e repita o envio ao restabelecer a rede.";
+  if (code.includes("permission-denied") || /PERMISSION_DENIED|insufficient permissions|maximum of 1000 expressions/i.test(message)) return "Operação não confirmada. Confira seu acesso e atualize a página antes de tentar novamente.";
+  if (/unavailable|deadline-exceeded|network-request-failed/.test(code)) return "A conexão não confirmou a operação. Atualize o estado antes de tentar novamente.";
   return message;
 }
 const CHUNK_SIZE = 2;
@@ -75,7 +75,7 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
               if ((input.paymentTotalCents || 0) !== 0) throw new Error("Importação não registra recebimentos. Use o financeiro auditado.");
               const point = trip.boardingPoints?.find((item) => item.id === input.boardingPointId);
               if (input.boardingPointId && !point) throw new Error(`Linha ${row.line}: ponto de embarque não está disponível.`);
-              documents[refs[index].id] = { ...input, ...(point ? { boardingPointName: point.name } : {}), id: refs[index].id, importedFromLegacy: true, importBatchId: batchId, importOperationId: operationId, importIdentityKeys: keys,
+              documents[refs[index].id] = { ...input, ...(point ? { boardingPointName: point.name, boardingPointSnapshot: point } : {}), id: refs[index].id, importedFromLegacy: true, importBatchId: batchId, importOperationId: operationId, importIdentityKeys: keys,
                 organizationId, caravanId, caravanName: trip.name, createdAt: new Date().toISOString() };
               keys.filter(Boolean).forEach((key) => { additions[key] = true; claims[key] = true; });
               return { line: row.line, status: "imported", reason: "Importação confirmada." };

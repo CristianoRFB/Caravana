@@ -1,7 +1,7 @@
 import { doc, getDocFromServer, serverTimestamp, type DocumentData } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { runTransaction } from "./tracked-firestore";
-import type { Registration } from "./types";
+import { ageOnDate, type Registration } from "./types";
 
 export type RegistrationAction = "review_approved" | "review_rejected" | "cancelled" | "import_rolled_back" | "checked_in" | "checkin_reversed";
 export const registrationOperationId = () => crypto.randomUUID().replaceAll("-", "");
@@ -58,6 +58,18 @@ async function operate(reg: Registration, action: RegistrationAction, reason: st
         checkedAfter = action === "checked_in";
         if (checkedAfter === checkedBefore) return;
         if (checkedAfter && (current.registrationStatus !== "confirmed" || (current.isMinor === true && current.authorizationStatus !== "approved"))) throw new Error("Confirme a inscrição e a autorização do menor antes do embarque.");
+        if (checkedAfter) {
+          const trip = await tx.get(doc(database, "caravans", current.caravanId));
+          if (!trip.exists() || trip.data().organizationId !== current.organizationId) throw new Error("Caravana não encontrada neste contexto.");
+          const age = current.birthDate && trip.data().date ? ageOnDate(current.birthDate, trip.data().date) : null;
+          if (trip.data().requiresMinorAuthorization && age === null) throw new Error("Idade não verificada. Confira nascimento e data da viagem antes do embarque.");
+          const needsAuthorization = current.isMinor === true || (trip.data().requiresMinorAuthorization && age !== null && age < 18);
+          if (needsAuthorization && current.authorizationStatus !== "approved") throw new Error("Confirme a autorização do responsável antes do embarque.");
+          if (needsAuthorization && current.authorizationId === "current") {
+            const file = await tx.get(doc(database, "registrations", reg.id, "authorizations", "current"));
+            if (!file.exists() || !Number.isInteger(file.data().retentionDays) || Date.now() >= file.data().uploadedAt.toMillis() + file.data().retentionDays * 86400000) throw new Error("Autorização indisponível ou com prazo encerrado; solicite nova conferência.");
+          }
+        }
         patch = { checkedInAt: checkedAfter ? serverTimestamp() : null, checkedInBy: checkedAfter ? actorUid : null };
       } else {
         if (current.registrationStatus === "cancelled") throw new Error("Inscrição cancelada não pode ser reaberta por uma revisão.");

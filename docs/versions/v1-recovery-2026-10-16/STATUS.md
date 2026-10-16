@@ -12,3 +12,5 @@
 | Produção/migrations reais/merge | BLOCKED | Exigem autorização específica do proprietário; push na branch de trabalho autorizado separadamente |
 
 Os números do baseline F1 não substituem as suites F2 posteriores; consulte TEST_EVIDENCE.md. Platform Owner mínimo e isolamento possuem testes próprios, mas F2 completo ainda não é declarado. Nenhuma garantia de conciliação bancária real.
+
+F3-documentos/gate: PASS no corpus local/sintético, homologação remota BLOCKED. DOCUMENTS_RETENTION.md e F3_ACCEPTANCE.md registram PDF privado/consentimento, revisão manual, retenção individual auditada, idade na data da viagem e snapshot válido do embarque.142 testes unit/Rules/integration (incluindo escala400+replay),4 Auth,6 Storage e88 E2E nas quatro larguras PASS;lint/typecheck/build E2E PASS. Primeira rodada E2E87 PASS/1 FAIL encontrou overflow768 corrigido com toolbar flexível; final88 PASS. Nenhuma escrita real, migração, deploy, Rules/índices implantados, merge ou operação financeira real. F2 continua somente local. Próxima tarefa executável F4: preservar Financeiro Geral e tornar lançamentos/correções idempotentes e auditados; depois F5–F8.

@@ -34,6 +34,7 @@ import {
 
 import { validateProofFile } from "./proof-policy";
 import { isDemoIdentity } from "./demo-identities";
+import { getDocumentPolicy, reviewAuthorization, updatePassengerWithAuthorizationReset } from "./documents";
 import { createReservationAttempt, reservationRequestHash, ReservationAttemptConflict, validReservationAttempt, type ReservationAttempt } from "./reservation-attempt";
 
 const legacyReservationIdsCleared = new Set<string>();
@@ -231,6 +232,7 @@ export async function reserveSeat(
           }
         : {}),
       boardingPointName: boardingPoint.name,
+      boardingPointSnapshot: boardingPoint,
       id,
       reservationNonce,
       reservationRequestHash: requestHash,
@@ -300,6 +302,7 @@ export async function uploadProof(
 ): Promise<void> {
   if (!db) throw new Error("Firebase não está configurado.");
   const bytes = await validateProofFile(file);
+  const policy = await getDocumentPolicy(registration.organizationId);
   let binary = "";
   for (let offset = 0; offset < bytes.length; offset += 0x8000) {
     binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
@@ -320,6 +323,7 @@ export async function uploadProof(
     contentType: file.type,
     fileName,
     content,
+    retentionDays: policy.proofDays,
     uploadedAt: serverTimestamp(),
   });
   batch.update(registrationRef, {
@@ -327,6 +331,7 @@ export async function uploadProof(
     paymentStatus: "awaiting_review",
     registrationStatus: "awaiting_review",
     proofUploadedAt: serverTimestamp(),
+    proofRetentionDays: policy.proofDays,
   });
   await batch.commit();
 }
@@ -415,11 +420,7 @@ export async function updateAuthorizationStatus(
 ): Promise<void> {
   if (!db || !auth?.currentUser)
     throw new Error("Sessão administrativa não encontrada.");
-  await setDoc(
-    doc(db, "registrations", registration.id),
-    { authorizationStatus: status, authorizationUpdatedAt: serverTimestamp() },
-    { merge: true },
-  );
+  await reviewAuthorization(registration, status);
 }
 
 export async function updatePassengerDetails(
@@ -441,11 +442,7 @@ export async function updatePassengerDetails(
 ): Promise<void> {
   if (!db || !auth?.currentUser)
     throw new Error("Sessão administrativa não encontrada.");
-  await setDoc(
-    doc(db, "registrations", registration.id),
-    { ...patch, updatedAt: serverTimestamp() },
-    { merge: true },
-  );
+  await updatePassengerWithAuthorizationReset(registration, patch);
 }
 
 export { importLegacyRegistrations } from "./import-operations";

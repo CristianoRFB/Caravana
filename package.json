@@ -22,6 +22,8 @@
     "test:booking": "node scripts/run-local-tests.mjs booking",
     "test:operations": "node scripts/run-local-tests.mjs operations",
     "test:csv": "node scripts/run-local-tests.mjs csv",
+    "test:documents": "node scripts/run-local-tests.mjs documents",
+    "test:documents:e2e": "node scripts/run-local-tests.mjs documents-e2e",
     "test:csv:security": "node scripts/run-local-tests.mjs csv-security",
     "test:csv:e2e": "node scripts/run-local-tests.mjs csv-e2e",
     "test:operations:e2e": "node scripts/run-local-tests.mjs operations-e2e",

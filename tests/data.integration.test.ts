@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, writeBatch, type Firestore } from "firebase/firestore";
 import { createReservationAttempt } from "../src/lib/reservation-attempt";
+import { updatePassengerWithAuthorizationReset } from "../src/lib/documents";
 import { assertFails } from "@firebase/rules-unit-testing";
 import { PROOF_POLICY } from "../src/lib/proof-policy";
 import { legacyImportDocumentId } from "../src/lib/legacy-import";
@@ -66,6 +67,21 @@ async function seedRegistration(extra: Partial<Registration> = {}) {
 }
 
 describe("production data functions on synthetic emulator fixtures", () => {
+  it("administrative boarding selection uses the current persisted point and rejects stale or forged updates", async () => {
+    const registration = await seedRegistration();
+    await updatePassengerWithAuthorizationReset(registration, { boardingPointId: "point-a", boardingPointName: "Stale label" });
+    expect((await getRegistration(registration.id))?.boardingPointName).toBe("Embarque de teste");
+    await assertFails(updateDoc(doc(runtime.db!, `registrations/${registration.id}`), { boardingPointId: "invented", boardingPointName: "Invented", boardingPointSnapshot: { id: "invented", name: "Invented" } }));
+    await env.withSecurityRulesDisabled(async (context) => updateDoc(doc(context.firestore(), "caravans/ride-a"), { boardingPoints: [] }));
+    await expect(updatePassengerWithAuthorizationReset(registration, { boardingPointId: "point-a" })).rejects.toThrow("Ponto de embarque indisponível");
+  });
+  it("public SDK cannot reserve an invented boarding point even with a valid receipt and atomic seat update", async () => {
+    await seedTrip(); const attempt = createReservationAttempt(); const write = writeBatch(runtime.db!);
+    write.update(doc(runtime.db!, "caravans/ride-a"), { reservedSeats: 1, lastReservationNonce: attempt.reservationNonce, updatedAt: serverTimestamp() });
+    write.set(doc(runtime.db!, `registrations/${attempt.registrationId}`), { ...passenger, boardingPointName: "Invented", boardingPointSnapshot: { id: "point-a", name: "Invented" }, id: attempt.registrationId, reservationNonce: attempt.reservationNonce, organizationId: "org-a", caravanId: "ride-a", caravanName: "Viagem sintética A", amountCents: 8500, registrationStatus: "awaiting_payment", paymentStatus: "pending", createdAt: new Date().toISOString() });
+    write.set(doc(runtime.db!, `reservationReceipts/${attempt.reservationNonce}`), { registrationId: attempt.registrationId, organizationId: "org-a", caravanId: "ride-a" });
+    await assertFails(write.commit()); expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(0);
+  });
   it("replays one concurrent booking operation without taking two seats, including after another reservation", async () => {
     const trip = await seedTrip({ capacity: 2 }); const attempt = createReservationAttempt();
     const ids = await Promise.all([reserveSeat(trip, passenger, attempt), reserveSeat(trip, passenger, attempt)]);

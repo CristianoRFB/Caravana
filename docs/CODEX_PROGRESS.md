@@ -43,3 +43,4 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F8 | P1 | TODO | Relatório de aceite | Gates e checkpoint | Sem merge/deploy/PR; pushes de checkpoints autorizados na branch de trabalho |
 
 Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançados preservados objetivamente. F1 tem baseline local PASS parcial; staging/Storage reais não homologados, CSV cross-batch será F3. F2–F8 permanecem pendentes. Cada checkpoint registra o commit por git log (evitar SHA autorreferente no próprio commit), comandos, logs, resultado e próximo passo exato.
+| F3-gate | P0 | PASS local / BLOCKED remoto | Documentos, retenção, idade/embarque e gate operacional A×B concluídos no corpus sintético |142 unit/Rules/integration +4 Auth +6 Storage +88 E2E; F3_ACCEPTANCE.md | F4 IN_PROGRESS a seguir; produção intacta |

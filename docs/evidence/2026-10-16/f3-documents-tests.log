@@ -1,0 +1,43 @@
+
+> caravana-77@0.1.0 test:documents
+> node scripts/run-local-tests.mjs documents
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/documents.integration.test.ts tests/proof-policy.test.ts tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+stderr | tests/documents.integration.test.ts > consent, authorization privacy and controlled retention > client clock and later policy shortening cannot expire an earlier file; server denies early delete
+[2026-10-16T20:23:53.856Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x51de7e42 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L807:34 for 'create' @ L807, evaluation error at L807:34 for 'update' @ L807, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L671, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L671
+
+ ❯ tests/documents.integration.test.ts (7 tests | 1 failed) 2115ms
+   ❯ consent, authorization privacy and controlled retention (7)
+     × client clock and later policy shortening cannot expire an earlier file; server denies early delete 80ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/documents.integration.test.ts > consent, authorization privacy and controlled retention > client clock and later policy shortening cannot expire an earlier file; server denies early delete
+FirebaseError: 7 PERMISSION_DENIED: 
+evaluation error at L807:34 for 'create' @ L807, evaluation error at L807:34 for 'update' @ L807, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L671, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L671
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 60 passed (61)
+   Start at  17:23:41
+   Duration  17.23s (tests 90%, import 8%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/documents.integration.test.ts tests/proof-policy.test.ts tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 16148).

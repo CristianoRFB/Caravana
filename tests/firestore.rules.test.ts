@@ -49,6 +49,7 @@ async function seed() {
       capacity: 1,
       reservedSeats: 0,
       priceCents: 8500,
+      boardingPoints: [{ id: "p1", name: "Terminal" }],
     });
     await setDoc(doc(db, "caravans/ride-b"), {
       organizationId: "org-b",
@@ -122,6 +123,7 @@ describe("Firestore security rules", () => {
           city: "São Paulo",
           boardingPointId: "p1",
           boardingPointName: "Terminal",
+          boardingPointSnapshot: { id: "p1", name: "Terminal" },
           emergencyContact: "Contato 11999999999",
           notes: "",
           amountCents: 8500,
@@ -182,6 +184,7 @@ describe("Firestore security rules", () => {
           city: "São Paulo",
           boardingPointId: "p1",
           boardingPointName: "Terminal",
+          boardingPointSnapshot: { id: "p1", name: "Terminal" },
           emergencyContact: "Contato 11999999999",
           notes: "",
           amountCents: 8500,
@@ -242,6 +245,7 @@ describe("Firestore security rules", () => {
           city: "São Paulo",
           boardingPointId: "p1",
           boardingPointName: "Terminal",
+          boardingPointSnapshot: { id: "p1", name: "Terminal" },
           emergencyContact: "Contato 11999999999",
           notes: "",
           amountCents: 8500,
