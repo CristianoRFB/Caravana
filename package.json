@@ -13,6 +13,8 @@
     "typecheck": "tsc -b --pretty false",
     "test": "node scripts/run-local-tests.mjs",
     "test:e2e": "node scripts/run-local-tests.mjs e2e",
+    "migration:dry-run": "node scripts/simulate-membership-migration.mjs",
+    "migration:rehearse": "node scripts/run-local-tests.mjs migration",
     "test:rules": "vitest run"
   },
   "dependencies": {

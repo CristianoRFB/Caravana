@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "mode": "dry-run",
+  "creates": [
+    {
+      "path": "memberships/synthetic-owner-a/organizations/synthetic-org-a",
+      "before": null,
+      "after": {
+        "uid": "synthetic-owner-a",
+        "organizationId": "synthetic-org-a",
+        "role": "tenant_owner",
+        "status": "active",
+        "createdAt": "2026-10-16T17:15:00.000Z",
+        "updatedAt": "2026-10-16T17:15:00.000Z",
+        "legacySourcePath": "admins/synthetic-owner-a"
+      }
+    },
+    {
+      "path": "memberships/synthetic-owner-b/organizations/synthetic-org-b",
+      "before": null,
+      "after": {
+        "uid": "synthetic-owner-b",
+        "organizationId": "synthetic-org-b",
+        "role": "tenant_owner",
+        "status": "active",
+        "createdAt": "2026-10-16T17:15:00.000Z",
+        "updatedAt": "2026-10-16T17:15:00.000Z",
+        "legacySourcePath": "admins/synthetic-owner-b"
+      }
+    }
+  ],
+  "skipped": [],
+  "conflicts": []
+}

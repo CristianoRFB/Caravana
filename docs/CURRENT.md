@@ -14,6 +14,8 @@ F1-E2E: 12 testes PASS em 320/375/768/1440, com totais Tudo/caravana, reload, te
 
 F1-preservação: 52 unit/Rules/integration PASS e 20 E2E compilados PASS (54,9s), nas quatro larguras. Cobertos recusa/reenvio/cancelamento, revogação/reativação de link aberto em contexto visitante separado, configuração Pix ausente/não Pix/chave vazia/cópia e prazo. Desenvolvimento sintético por padrão, guard antes do SDK e zero Firebase remoto nos navegadores. Backups e 54 arquivos originais novamente verificados, zero divergências. As cinco confirmações pré-F2 estão registradas em CLIENT_PRESERVATION_ITALO_2026-10-16.md.
 
-Próxima tarefa: F2 local, começar pelo modelo de memberships e simulador puro/dry-run aditivo com conflitos, replay e restore sintético. F1 tem cobertura local do baseline; gate de staging e Storage real não é alegado, e dedupe CSV cross-batch permanece F3. O build novo é candidato local, não foi publicado. Produção continua BLOCKED sem autorização específica.
+F2-migração: modelo de memberships e planner puro/dry-run aditivo implementados; conflitos não sobrescrevem membros existentes ou revogados. 64 testes PASS. Ensaio local criou 2 memberships e manteve 8 documentos fictícios intactos; replay criou zero, restore reproduziu o hash before. Guard nega endpoint remoto e CLI não aceita alvo real. MULTITENANT_MIGRATION.md descreve escopo e limites.
+
+Próxima tarefa: F2 local, Rules por membership ativa, compatibilidade legada explícita, roles e contexto/troca de tenant com testes A×B. F1 tem cobertura local do baseline; gate de staging e Storage real não é alegado, e dedupe CSV cross-batch permanece F3. O build novo é candidato local, não foi publicado. Produção continua BLOCKED sem autorização específica.
 
 Retomada: ler este arquivo, CODEX_PROGRESS.md, SOURCE_RECONCILIATION.md, ISSUES_AND_BLOCKERS.md e TEST_EVIDENCE.md; conferir git status e log. Continuar a primeira tarefa não PASS, sem reiniciar a auditoria.

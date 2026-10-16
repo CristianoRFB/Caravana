@@ -1,0 +1,13 @@
+{
+  "source": "SYNTHETIC_ONLY",
+  "projectId": "demo-caravana77-test",
+  "mode": "offline-dry-run",
+  "beforeSha256": "baabe2f6ab83ba2a70a9ad1cf59efcb478e75a733db44a6a326811c8e0f96a46",
+  "afterSha256": "d28bdc0511fa8e6488d6ee27051d630ba2cf944aeb59528329a46e9534c75193",
+  "originalDocuments": 8,
+  "creates": 2,
+  "conflicts": [],
+  "replayCreates": 0,
+  "productionWrites": "FORBIDDEN",
+  "originalIdsAndDocumentsPreserved": true
+}

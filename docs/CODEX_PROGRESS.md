@@ -21,7 +21,8 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | CLIENT-PRESERVATION | P0 | PASS para auditoria atual; obrigação futura | Cinco confirmações registradas antes de F2 | CLIENT_PRESERVATION_ITALO_2026-10-16.md | Nenhuma escrita real autorizada; continuar localmente |
 | F1-LOCAL-SAFETY | P0 | PASS | Guard antes do SDK, dev sintético por padrão e E2E sobre dist-e2e compilado | 8 casos de ambiente; f1-environment-unit.log 51 PASS; f1-compiled-e2e.log 12 PASS | Build real recusa loopback; nenhum bypass para produção |
 | F1-PORTAL | P0 | PASS local | Revogação aditiva, limpeza do portal, no-referrer; recusa/reenvio/cancelamento e Pix incompleto | f1-portal-unit.log 52 PASS; f1-portal-e2e-green.log 20 PASS; lint/typecheck/build PASS | Primeiros E2E falharam por seleção de heading, commit assíncrono e texto esperado; corrigidos sem skip/retry |
-| F2 | P0 | TODO | Core multi-tenant e migração sintética | A×B, RBAC, restore | Nunca migrar produção |
+| F2 | P0 | IN_PROGRESS | Modelo/migração sintética aditiva concluídos; runtime/RBAC ainda pendentes | MULTITENANT_MIGRATION.md | Nunca migrar produção |
+| F2-MIGRATION | P0 | PASS sintético | Planner sem I/O, manifesto before/after, conflitos, idempotência e restore local | f2-migration-final-tests.log 64 PASS; f2-migration-rehearsal.log aplica 2 memberships, preserva 8 docs, restore SHA256 idêntico | Runtime ainda usa admins; não alegar migração real ou RBAC concluído |
 | F3 | P0/P1 | TODO | Estados, reservas, CSV, check-in | Jornadas sintéticas | F2 dependente |
 | F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |
 | F5 | P1 | TODO | White-label e rotas | A×B e links legados | Sem DNS/domínio novo |

@@ -1,0 +1,64 @@
+{
+  "source": "SYNTHETIC_ONLY",
+  "documents": [
+    {
+      "path": "organizations/synthetic-org-a",
+      "data": {
+        "name": "Organização sintética A"
+      }
+    },
+    {
+      "path": "organizations/synthetic-org-b",
+      "data": {
+        "name": "Organização sintética B"
+      }
+    },
+    {
+      "path": "admins/synthetic-owner-a",
+      "data": {
+        "organizationId": "synthetic-org-a",
+        "role": "admin"
+      }
+    },
+    {
+      "path": "admins/synthetic-owner-b",
+      "data": {
+        "organizationId": "synthetic-org-b",
+        "role": "admin"
+      }
+    },
+    {
+      "path": "caravans/synthetic-trip-original-id",
+      "data": {
+        "organizationId": "synthetic-org-a",
+        "slug": "synthetic-original-slug",
+        "capacity": 25,
+        "reservedSeats": 1
+      }
+    },
+    {
+      "path": "registrations/synthetic-passenger-original-id",
+      "data": {
+        "organizationId": "synthetic-org-a",
+        "caravanId": "synthetic-trip-original-id",
+        "passengerName": "Pessoa fictícia",
+        "paymentTotalCents": 8500
+      }
+    },
+    {
+      "path": "registrations/synthetic-passenger-original-id/payments/synthetic-payment-original-id",
+      "data": {
+        "amountCents": 8500,
+        "status": "active",
+        "notes": "Histórico sintético preservado"
+      }
+    },
+    {
+      "path": "registrations/synthetic-passenger-original-id/proofs/current",
+      "data": {
+        "content": "JVBERi0xLjQKU1lOVEhFVElD",
+        "contentType": "application/pdf"
+      }
+    }
+  ]
+}

@@ -57,3 +57,9 @@ F1 ainda IN_PROGRESS: ciclo de revogação, recusa/reenvio e Pix incompleto. F2 
 - client-preservation-verified.json atualizado:54 arquivos originais,0 divergências,ZIP e bundle intactos. Backup de código não é backup de banco.
 
 F2 pode prosseguir localmente com simulações aditivas; autorização real permanece BLOCKED. Não alegar gate Storage/backup real ou prontidão comercial com estes resultados.
+
+## F2-migração — dry-run antes de alterações de autorização
+
+Planner TypeScript puro + fixture fixa SYNTHETIC_ONLY. f2-migration-dry-run.log: offline, sem SDK, duas propostas create de membership. f2-migration-rehearsal.log: emulador demo local vazio, duas criações transacionais, oito documentos originais preservados, replay zero creates, restore PASS e hash igual ao backup sintético. Manifestos f2-membership-before/plan/after.synthetic.json e relatórios dry-run/rehearsal.json. Nenhum export/restore real foi realizado.
+
+f2-migration-final-tests.log: nove arquivos,64 testes PASS. Inclui ausência de mutação no planner, replay, conflito com revogado/staff/UID estrangeiro, admin órfão/papel não mapeado/path duplicado, precondição alterada e CLI rejeitando endpoint remoto/porta errada/flag de produção antes de inicializar SDK ou mudar evidências. f2-migration-lint.log e f2-migration-build.log PASS. RBAC de runtime, troca de tenant e Platform Owner continuam pendentes.
