@@ -1,0 +1,30 @@
+{
+  "branches": [
+    {
+      "name": "main",
+      "commit": {
+        "sha": "fa4d1381274a56104406fc7b5895971b76044e62",
+        "url": "https://api.github.com/repos/CristianoRFB/Caravana/commits/fa4d1381274a56104406fc7b5895971b76044e62"
+      }
+    }
+  ],
+  "pulls": [],
+  "workflowRuns": [
+    {
+      "id": 37991097705,
+      "head_sha": "fa4d1381274a56104406fc7b5895971b76044e62",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/CristianoRFB/Caravana/actions/runs/37991097705",
+      "created_at": "2026-10-09T21:03:46Z"
+    },
+    {
+      "id": 35930948082,
+      "head_sha": "10f30a0c1d05605cb1cd6fba0007ee4dc35d465b",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/CristianoRFB/Caravana/actions/runs/35930948082",
+      "created_at": "2026-09-23T22:55:27Z"
+    }
+  ]
+}

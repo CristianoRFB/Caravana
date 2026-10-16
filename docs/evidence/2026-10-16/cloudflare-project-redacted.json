@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "name": "caravana-77",
+  "productionBranch": "main",
+  "gitSourceType": null,
+  "gitRepository": null,
+  "usesFunctions": false,
+  "build": {
+    "command": null,
+    "destination": null,
+    "root": null
+  },
+  "canonical": {
+    "id": "4d069e0a-344a-415a-ae41-aa314df10ace",
+    "createdAt": "2026-09-29T18:18:18.819148Z",
+    "trigger": {
+      "type": "ad_hoc",
+      "metadata": {
+        "branch": "main",
+        "commit_hash": "10f30a0c1d05605cb1cd6fba0007ee4dc35d465b",
+        "commit_message": "Add organization-wide finance dashboard",
+        "commit_dirty": true
+      }
+    },
+    "status": "success"
+  },
+  "environments": {
+    "preview": {
+      "variableNames": [],
+      "bindingTypes": []
+    },
+    "production": {
+      "variableNames": [],
+      "bindingTypes": []
+    }
+  }
+}

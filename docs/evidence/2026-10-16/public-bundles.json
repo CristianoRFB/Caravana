@@ -1,0 +1,116 @@
+{
+  "capturedAt": "2026-10-16T16:25:05.325Z",
+  "sources": [
+    {
+      "name": "production",
+      "url": "https://caravana-77.pages.dev/",
+      "status": 200,
+      "files": [
+        {
+          "path": "index.html",
+          "bytes": 861,
+          "sha256": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f"
+        },
+        {
+          "path": "assets/index-BXYRgZFm.js",
+          "bytes": 384009,
+          "sha256": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16"
+        },
+        {
+          "path": "assets/react-vendor-Cy33O35p.js",
+          "bytes": 9058,
+          "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+        },
+        {
+          "path": "assets/firebase-firestore-CZpT9MEq.js",
+          "bytes": 364045,
+          "sha256": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594"
+        },
+        {
+          "path": "assets/firebase-auth-Ctb8h5Tt.js",
+          "bytes": 123693,
+          "sha256": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58"
+        },
+        {
+          "path": "assets/index-C9drOnjs.css",
+          "bytes": 46175,
+          "sha256": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990"
+        }
+      ]
+    },
+    {
+      "name": "preview-correcao",
+      "url": "https://correcao-inscricao.caravana-77.pages.dev/",
+      "status": 200,
+      "files": [
+        {
+          "path": "index.html",
+          "bytes": 849,
+          "sha256": "77a9c949037d05da9499a6f6a470f9c8fece7d16ad9295849111148b3873880e"
+        },
+        {
+          "path": "assets/index-29c5869f860a.js",
+          "bytes": 384009,
+          "sha256": "29c5869f860a6d89acf8f9a4ad01fc5cc68d1f370f984df09eca26565c666b8b"
+        },
+        {
+          "path": "assets/react-vendor-Cy33O35p.js",
+          "bytes": 9058,
+          "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+        },
+        {
+          "path": "assets/firebase-firestore-CZpT9MEq.js",
+          "bytes": 364045,
+          "sha256": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594"
+        },
+        {
+          "path": "assets/firebase-auth-Ctb8h5Tt.js",
+          "bytes": 123693,
+          "sha256": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58"
+        },
+        {
+          "path": "assets/index-C9drOnjs.css",
+          "bytes": 46175,
+          "sha256": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990"
+        }
+      ]
+    },
+    {
+      "name": "preview-caravanasitalo",
+      "url": "https://caravanasitalo.caravana-77.pages.dev/",
+      "status": 200,
+      "files": [
+        {
+          "path": "index.html",
+          "bytes": 849,
+          "sha256": "77a9c949037d05da9499a6f6a470f9c8fece7d16ad9295849111148b3873880e"
+        },
+        {
+          "path": "assets/index-29c5869f860a.js",
+          "bytes": 384009,
+          "sha256": "29c5869f860a6d89acf8f9a4ad01fc5cc68d1f370f984df09eca26565c666b8b"
+        },
+        {
+          "path": "assets/react-vendor-Cy33O35p.js",
+          "bytes": 9058,
+          "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+        },
+        {
+          "path": "assets/firebase-firestore-CZpT9MEq.js",
+          "bytes": 364045,
+          "sha256": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594"
+        },
+        {
+          "path": "assets/firebase-auth-Ctb8h5Tt.js",
+          "bytes": 123693,
+          "sha256": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58"
+        },
+        {
+          "path": "assets/index-C9drOnjs.css",
+          "bytes": 46175,
+          "sha256": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990"
+        }
+      ]
+    }
+  ]
+}

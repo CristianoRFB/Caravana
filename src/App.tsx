@@ -28,6 +28,7 @@ import {
   CircleHelp,
   Clock3,
   Copy,
+  Download,
   FileCheck2,
   Heart,
   LockKeyhole,
@@ -38,17 +39,20 @@ import {
   ShieldCheck,
   Sparkles,
   Ticket,
+  Upload,
   Users,
   WalletCards,
   X,
 } from "lucide-react";
 import {
   cancelRegistration,
+  clearLegacyReservationIds,
   createCaravan,
   findCaravan,
   getAdminOrganization,
   getCaravanById,
   getRegistration,
+  importLegacyRegistrations,
   loadProof,
   login,
   logout,
@@ -56,19 +60,126 @@ import {
   reviewPayment,
   toggleCheckin,
   updateCaravan,
+  updateAuthorizationStatus,
+  updatePassengerDetails,
   uploadProof,
   watchAdminCaravans,
   watchAuth,
   watchRegistration,
   watchRegistrations,
 } from "./lib/data";
-import { dateLabel, money, type Caravan, type Registration } from "./lib/types";
+import {
+  ageOnDate,
+  dateLabel,
+  money,
+  type AuthorizationStatus,
+  type Caravan,
+  type Registration,
+} from "./lib/types";
+import {
+  parseLegacyRegistrationCsv,
+  type LegacyRegistrationDraft,
+} from "./lib/legacy-import";
 import { firebaseConfigured } from "./lib/firebase";
 import type { User } from "firebase/auth";
 import PublicIndex from "./PublicIndex";
+import FinancePage from "./Finance";
 
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : "Algo deu errado. Tente novamente.";
+const paymentStatusLabel = (status: Registration["paymentStatus"]) =>
+  status === "awaiting_review"
+    ? "Em análise"
+    : status === "approved"
+      ? "Aprovado"
+      : status === "rejected"
+        ? "Recusado"
+        : status === "reported"
+          ? "Pix informado · sem conciliação"
+          : "Pendente";
+const moneyOrUnknown = (amount?: number) =>
+  Number.isSafeInteger(amount) && (amount || 0) > 0
+    ? money(amount!)
+    : "Não informado";
+const authorizationLabels: Record<AuthorizationStatus, string> = {
+  unknown: "Não verificada",
+  not_required: "Não se aplica",
+  not_sent: "Não enviada",
+  pending: "Pendente",
+  received: "Recebida",
+  approved: "Aprovada",
+};
+const isAuthorizationPending = (registration: Registration) =>
+  Boolean(
+    registration.registrationStatus !== "cancelled" &&
+      (registration.authorizationStatus === "unknown" ||
+        (registration.isMinor &&
+          !["received", "approved"].includes(
+            registration.authorizationStatus || "not_sent",
+          ))),
+  );
+const paymentProcessCopy =
+  "Este site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual.";
+const resolveFaqAnswer = (
+  answer: string,
+  caravan: Caravan,
+  availableSeats: number,
+  question: string,
+) => {
+  const resolved = answer
+    .replaceAll("{{availableSeats}}", String(availableSeats))
+    .replaceAll("{{price}}", money(caravan.priceCents))
+    .replaceAll("{{date}}", dateLabel(caravan.date))
+    .replaceAll("{{departureTime}}", caravan.departureTime)
+    .replaceAll("{{returnTime}}", caravan.returnTime)
+    .replaceAll(
+      "{{paymentMethod}}",
+      caravan.paymentMethod || "fora do site, conforme as orientações da AnimeSFest",
+    )
+    .replaceAll(
+      "{{paymentDeadline}}",
+      caravan.paymentDeadline
+        ? dateLabel(caravan.paymentDeadline)
+        : "a AnimeSFest ainda não informou o prazo; aguarde antes de pagar",
+    )
+    .replaceAll(
+      "{{paymentInstructions}}",
+      caravan.paymentInstructions || paymentProcessCopy,
+    );
+  const normalizedQuestion = question
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  return !caravan.paymentInstructions &&
+    /(pagar|pagamento|comprovante|garanto minha vaga)/.test(normalizedQuestion) &&
+    !/não cobra nem recebe pagamentos/i.test(resolved)
+    ? `${resolved} ${paymentProcessCopy}`
+    : resolved;
+};
+const slugify = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+const validTime = (value: string) =>
+  /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+const validCpf = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return true;
+  if (digits.length !== 11 || /^(\d)\1{10}$/.test(digits)) return false;
+  const checkDigit = (length: number) => {
+    const sum = Array.from(digits.slice(0, length)).reduce(
+      (total, digit, index) => total + Number(digit) * (length + 1 - index),
+      0,
+    );
+    const remainder = (sum * 10) % 11;
+    return remainder === 10 ? 0 : remainder;
+  };
+  return checkDigit(9) === Number(digits[9]) && checkDigit(10) === Number(digits[10]);
+};
 const OrganizationContext = createContext("");
 
 function Brand({ light = false }: { light?: boolean }) {
@@ -220,7 +331,7 @@ function PublicLanding() {
           <div className="hero-inner">
             <div className="hero-copy">
               <div className="eyebrow">
-                <Sparkles size={15} /> SUA PRÓXIMA HISTÓRIA COMEÇA AQUI
+                <Sparkles size={15} /> {caravan.organizerName || "CARAVANA 77"}
               </div>
               <h1>
                 {caravan.name.split(" ").slice(0, 2).join(" ")}
@@ -230,6 +341,9 @@ function PublicLanding() {
                 </span>
               </h1>
               <p>{caravan.description}</p>
+              <p className="hero-route">
+                {caravan.boardingPoints[0]?.name || "Origem a confirmar"} → {caravan.city}
+              </p>
               <div className="hero-tags">
                 <span>
                   <Heart size={13} /> Anime
@@ -245,10 +359,10 @@ function PublicLanding() {
                 to={`/caravana/${caravan.slug}/inscricao`}
                 className="button button-primary button-large"
               >
-                Quero participar <ArrowRight size={18} />
+                Garantir minha vaga <ArrowRight size={18} />
               </Link>
               <div className="hero-safe">
-                <ShieldCheck size={15} /> Inscrição segura · pagamento via Pix
+                <ShieldCheck size={15} /> Ingresso + transporte ida e volta + lanche inclusos
               </div>
             </div>
             <div
@@ -275,7 +389,7 @@ function PublicLanding() {
               icon={<CalendarDays />}
               label="DATA"
               value={dateLabel(caravan.date)}
-              detail={caravan.departureTime + " · saída"}
+              detail={`Saída ${caravan.departureTime} · retorno ${caravan.returnTime}`}
             />
             <Fact
               icon={<MapPin />}
@@ -287,7 +401,7 @@ function PublicLanding() {
               icon={<Ticket />}
               label="POR PESSOA"
               value={money(caravan.priceCents)}
-              detail="ida e volta"
+              detail="ingresso, ida e volta e lanche"
             />
             <Fact
               icon={<Users />}
@@ -302,6 +416,9 @@ function PublicLanding() {
               Garantir minha vaga <ArrowRight size={16} />
             </Link>
           </div>
+        </section>
+        <section className="payment-process-section" aria-label="Como funciona o pagamento">
+          <PaymentProcessNotice />
         </section>
         <section className="content-section" id="experiencia">
           <div className="section-heading">
@@ -357,8 +474,8 @@ function PublicLanding() {
                 <div className="boarding-row" key={point.id}>
                   <span className="boarding-number">0{i + 1}</span>
                   <div>
-                    <strong>{point.name}</strong>
-                    <p>{point.address}</p>
+                <strong>{point.name}</strong>
+                {point.address && <p>{point.address}</p>}
                   </div>
                   <span className="boarding-time">
                     <Clock3 size={14} />
@@ -371,6 +488,10 @@ function PublicLanding() {
               <MapPin size={17} />
               <span>Destino</span>
               <strong>{caravan.destination}</strong>
+            </div>
+            <div className="trip-return">
+              <Clock3 size={16} />
+              Saída do evento para retorno às <strong>{caravan.returnTime}</strong>
             </div>
           </div>
           <div className="trip-side">
@@ -387,9 +508,33 @@ function PublicLanding() {
               Conheça gente nova, compartilhe expectativas e chegue pronto para
               viver tudo.
             </p>
+            {caravan.whatsapp.replace(/\D/g, "") && (
+              <a
+                className="button button-outline team-contact"
+                href={`https://wa.me/${caravan.whatsapp.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Falar com a equipe <ArrowRight size={15} />
+              </a>
+            )}
             <span className="side-note">CULTURA CONECTA PESSOAS.</span>
           </div>
         </section>
+        {caravan.rules.length > 0 && (
+          <section className="content-section trip-rules-section">
+            <div className="eyebrow eyebrow-dark">COMBINADOS DA VIAGEM</div>
+            <h2>Antes de embarcar</h2>
+            <ul className="trip-rules-list">
+              {caravan.rules.map((rule, index) => (
+                <li key={`${rule}-${index}`}>
+                  <CheckCircle2 size={18} />
+                  <span>{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         {caravan.announcements.length > 0 && (
           <section className="content-section announcement-section">
             <div className="eyebrow eyebrow-dark">RECADO DA EQUIPE</div>
@@ -417,13 +562,13 @@ function PublicLanding() {
             <p>Separamos as respostas para você embarcar tranquilo.</p>
           </div>
           <div className="faq-list">
-            {caravan.faqs.map((faq, i) => (
-              <details key={i}>
+              {caravan.faqs.map((faq, i) => (
+                <details key={i}>
                 <summary>
                   {faq.question}
                   <ChevronDown size={18} />
                 </summary>
-                <p>{faq.answer}</p>
+                  <p>{resolveFaqAnswer(faq.answer, caravan, free, faq.question)}</p>
               </details>
             ))}
           </div>
@@ -473,16 +618,46 @@ function Fact({
   );
 }
 
+function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
+  return (
+    <aside
+      className={`payment-process-notice${compact ? " payment-process-notice-compact" : ""}`}
+      role="note"
+      aria-label="Pagamento fora do site"
+    >
+      <span className="payment-process-icon">
+        <WalletCards size={21} />
+      </span>
+      <div>
+        <strong>Pagamento feito fora do site</strong>
+        <p>
+          {compact
+            ? "O site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial. Pague somente depois de receber essas orientações; depois, envie seu comprovante aqui. A equipe confere manualmente e confirma a inscrição."
+            : paymentProcessCopy}
+        </p>
+        {compact && (
+          <small>
+            Comprovante aceito: PDF, JPG ou PNG até 600 KB. Ainda sem orientação? Fale com a AnimeSFest antes de pagar.
+          </small>
+        )}
+      </div>
+    </aside>
+  );
+}
+
 function RegistrationPage() {
   const { slug = "" } = useParams();
   const nav = useNavigate();
   const [caravan, setCaravan] = useState<Caravan | null>(null);
+  const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     passengerName: "",
     cpf: "",
     birthDate: "",
+    guardianName: "",
+    guardianPhone: "",
     phone: "",
     email: "",
     city: "",
@@ -492,10 +667,36 @@ function RegistrationPage() {
     notes: "",
   });
   useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setCaravan(null);
+    setError("");
+    const timer = setTimeout(() => {
+      if (active) {
+        setError("O catálogo demorou para responder. Tente novamente.");
+        setLoading(false);
+      }
+    }, 10000);
     findCaravan(slug)
-      .then(setCaravan)
-      .catch((e) => setError(errorMessage(e)));
+      .then((value) => {
+        if (active) setCaravan(value);
+      })
+      .catch((e) => {
+        if (active) setError(errorMessage(e));
+      })
+      .finally(() => {
+        clearTimeout(timer);
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [slug]);
+  const age = ageOnDate(form.birthDate, caravan?.date || "");
+  const isMinor = Boolean(
+    caravan?.requiresMinorAuthorization && age !== null && age < 18,
+  );
   const change = (key: keyof typeof form, value: string) =>
     setForm((curr) => ({
       ...curr,
@@ -511,10 +712,18 @@ function RegistrationPage() {
     e.preventDefault();
     if (!caravan) return;
     const cpfDigits = form.cpf.replace(/\D/g, "");
-    if (cpfDigits && cpfDigits.length !== 11) {
+    if (cpfDigits && !validCpf(cpfDigits)) {
       setError(
-        "Confira o CPF: informe os 11 números ou deixe o campo em branco.",
+        "Confira o CPF ou deixe o campo em branco.",
       );
+      return;
+    }
+    if (caravan.requiresMinorAuthorization && age === null) {
+      setError("Informe uma data de nascimento válida para esta viagem.");
+      return;
+    }
+    if (isMinor && (!form.guardianName.trim() || !form.guardianPhone.trim())) {
+      setError("Para passageiro menor, informe nome e telefone do responsável.");
       return;
     }
     setError("");
@@ -528,11 +737,33 @@ function RegistrationPage() {
       setBusy(false);
     }
   }
-  if (!caravan)
+  if (loading)
     return (
       <>
         <Topbar />
         <Loading />
+      </>
+    );
+  if (error || !caravan)
+    return (
+      <>
+        <Topbar />
+        <main className="center-page">
+          <div className="empty-box">
+            <CircleHelp />
+            <h1>
+              {error
+                ? "Não foi possível carregar esta inscrição"
+                : "Caravana não encontrada"}
+            </h1>
+            <p>
+              {error || "Confira o link ou fale com a equipe organizadora."}
+            </p>
+            <Link className="button button-primary" to="/">
+              Voltar ao início
+            </Link>
+          </div>
+        </main>
       </>
     );
   return (
@@ -567,6 +798,7 @@ function RegistrationPage() {
                 <b>3</b> Revisão
               </span>
             </div>
+            <PaymentProcessNotice compact />
             <form onSubmit={submit} className="form-card">
               <div className="field-grid">
                 <Field label="Nome completo" required>
@@ -608,14 +840,45 @@ function RegistrationPage() {
                     placeholder="000.000.000-00"
                   />
                 </Field>
-                <Field label="Data de nascimento (opcional)">
+                <Field
+                  label={`Data de nascimento${caravan.requiresMinorAuthorization ? "" : " (opcional)"}`}
+                  required={Boolean(caravan.requiresMinorAuthorization)}
+                >
                   <input
                     type="date"
                     autoComplete="bday"
+                    required={Boolean(caravan.requiresMinorAuthorization)}
+                    max={caravan.date}
                     value={form.birthDate}
                     onChange={(e) => change("birthDate", e.target.value)}
                   />
                 </Field>
+                {isMinor && (
+                  <>
+                    <Field label="Nome do responsável" required>
+                      <input
+                        required
+                        autoComplete="name"
+                        value={form.guardianName}
+                        onChange={(e) => change("guardianName", e.target.value)}
+                        placeholder="Nome completo"
+                      />
+                    </Field>
+                    <Field label="Telefone do responsável" required>
+                      <input
+                        required
+                        autoComplete="tel"
+                        type="tel"
+                        value={form.guardianPhone}
+                        onChange={(e) => change("guardianPhone", e.target.value)}
+                        placeholder="(17) 99999-9999"
+                      />
+                    </Field>
+                    <Notice>
+                      Menores de idade devem apresentar autorização do responsável. As instruções serão fornecidas durante a inscrição.
+                    </Notice>
+                  </>
+                )}
                 <Field label="E-mail">
                   <input
                     autoComplete="email"
@@ -670,16 +933,22 @@ function RegistrationPage() {
               </Notice>
               <button
                 className="button button-primary button-large form-submit"
-                disabled={busy}
+                disabled={busy || caravan.reservedSeats >= caravan.capacity}
               >
-                {busy ? "Reservando…" : "Revisar e continuar"}{" "}
-                {!busy && <ArrowRight size={17} />}
+                {busy
+                  ? "Reservando…"
+                  : caravan.reservedSeats >= caravan.capacity
+                    ? "Vagas esgotadas"
+                    : "Garantir minha vaga"}{" "}
+                {!busy && caravan.reservedSeats < caravan.capacity && (
+                  <ArrowRight size={17} />
+                )}
               </button>
             </form>
           </section>
           <aside className="summary-card">
             <div className="summary-art">
-              <span>CARAVANA 77</span>
+              <span>{caravan.organizerName || "CARAVANA 77"}</span>
               <Bus size={54} />
             </div>
             <span className="summary-kicker">SUA VIAGEM</span>
@@ -696,12 +965,16 @@ function RegistrationPage() {
               <Clock3 />
               Saída às {caravan.departureTime}
             </div>
+            <div className="summary-line">
+              <Clock3 />
+              Retorno às {caravan.returnTime}
+            </div>
             <div className="summary-price">
-              <span>Valor por pessoa</span>
+              <span>Total (1 passageiro)</span>
               <strong>{money(caravan.priceCents)}</strong>
             </div>
             <div className="summary-note">
-              <LockKeyhole size={15} /> Pagamento seguro via Pix
+              <LockKeyhole size={15} /> Pagamento fora do site · comprovante conferido manualmente
             </div>
           </aside>
         </div>
@@ -741,6 +1014,8 @@ function MyRegistration() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const [linkError, setLinkError] = useState("");
   const refresh = useCallback(
     () =>
       getRegistration(id)
@@ -799,6 +1074,16 @@ function MyRegistration() {
       );
     }
   }
+  async function copyPrivateLink() {
+    setLinkError("");
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 1800);
+    } catch {
+      setLinkError("Não foi possível copiar. Salve esta página no navegador.");
+    }
+  }
   if (loading)
     return (
       <>
@@ -837,14 +1122,23 @@ function MyRegistration() {
           <span className="portal-icon">
             <Ticket />
           </span>
-          <div>
+          <div className="portal-heading-copy">
             <div className="eyebrow eyebrow-dark">
               MINHA INSCRIÇÃO · {reg.id.slice(0, 8).toUpperCase()}
             </div>
             <h1>Oi, {reg.passengerName.split(" ")[0]}!</h1>
             <p>Aqui estão os detalhes da sua próxima viagem.</p>
           </div>
+          <button
+            type="button"
+            className="button button-outline portal-share"
+            onClick={copyPrivateLink}
+          >
+            <Copy size={15} />
+            {linkCopied ? "Link copiado!" : "Copiar link privado"}
+          </button>
         </div>
+        {linkError && <div className="error-message">{linkError}</div>}
         <div className="portal-grid">
           <section className="portal-card">
             <div className="portal-status">
@@ -874,12 +1168,18 @@ function MyRegistration() {
                     (p) => p.id === reg.boardingPointId,
                   )?.time ||
                     caravan?.departureTime ||
-                    "—"}
+                  "—"}
                 </span>
               </div>
+              {caravan && (
+                <div>
+                  <Clock3 />
+                  <span>Retorno às {caravan.returnTime} · saída do evento</span>
+                </div>
+              )}
               <div>
                 <WalletCards />
-                <span>{money(reg.amountCents)} · Pix</span>
+                <span>{moneyOrUnknown(reg.amountCents)} · {caravan?.paymentMethod || "Confirmação manual"}</span>
               </div>
             </div>
             {reg.registrationStatus === "confirmed" && (
@@ -899,19 +1199,34 @@ function MyRegistration() {
                   "O comprovante foi recusado. Você pode enviar outro."}
               </div>
             )}
+            {reg.isMinor && (
+              <Notice>
+                Autorização do responsável: {authorizationLabels[reg.authorizationStatus || "not_sent"].toLowerCase()}.
+                {reg.authorizationStatus !== "approved" && " Siga as instruções da organização antes da viagem."}
+              </Notice>
+            )}
           </section>
           <section className="portal-card payment-card">
-            <div className="eyebrow eyebrow-dark">PAGAMENTO VIA PIX</div>
+            <div className="eyebrow eyebrow-dark">
+              COMPROVANTE · {caravan?.paymentMethod || "FORMA A DEFINIR"} · CONFERÊNCIA MANUAL
+            </div>
             <h2>
               {reg.paymentStatus === "approved"
                 ? "Pagamento confirmado"
                 : "Finalize sua inscrição"}
             </h2>
             <p>
-              Faça o Pix para o recebedor indicado e envie o comprovante para
-              análise.
+              {caravan?.paymentInstructions ||
+                `${paymentProcessCopy} Envie o comprovante em PDF, PNG ou JPG, até 600 KB.`}
             </p>
-            {reg.registrationStatus !== "cancelled" && (
+            {caravan?.paymentDeadline && (
+              <div className="amount-row">
+                <span>Prazo informado pela organização</span>
+                <strong>{dateLabel(caravan.paymentDeadline)}</strong>
+              </div>
+            )}
+            {reg.registrationStatus !== "cancelled" &&
+              caravan?.paymentMethod?.toLowerCase().includes("pix") && (
               <div className="pix-recipient">
                 <small>RECEBEDOR</small>
                 <strong>
@@ -935,7 +1250,7 @@ function MyRegistration() {
             {reg.registrationStatus !== "cancelled" && (
               <div className="amount-row">
                 <span>Valor exato</span>
-                <strong>{money(reg.amountCents)}</strong>
+                <strong>{moneyOrUnknown(reg.amountCents)}</strong>
               </div>
             )}
             {reg.paymentStatus !== "approved" &&
@@ -957,7 +1272,7 @@ function MyRegistration() {
                 </label>
               )}
             {reg.registrationStatus !== "cancelled" && (
-              <small className="upload-help">JPG, PNG ou PDF · até 8 MB</small>
+              <small className="upload-help">JPG, PNG ou PDF · até 600 KB</small>
             )}
             {reg.registrationStatus === "cancelled" ? (
               <Notice>
@@ -1096,16 +1411,46 @@ function AdminGuard({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [org, setOrg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  useEffect(
-    () =>
-      watchAuth(async (u) => {
-        setUser(u);
-        if (u) setOrg(await getAdminOrganization(u.uid).catch(() => null));
-        else setOrg(null);
+  const [accessError, setAccessError] = useState("");
+  useEffect(() => {
+    let active = true;
+    let revision = 0;
+    const unsubscribe = watchAuth((u) => {
+      const currentRevision = ++revision;
+      setUser(u);
+      setLoading(Boolean(u));
+      if (!u) {
+        setOrg(null);
+        setAccessError("");
         setLoading(false);
-      }),
-    [],
-  );
+        return;
+      }
+      getAdminOrganization(u.uid)
+        .then(async (organizationId) => {
+          if (organizationId) await clearLegacyReservationIds(organizationId);
+          return organizationId;
+        })
+        .then((organizationId) => {
+          if (!active || currentRevision !== revision) return;
+          setOrg(organizationId);
+          setAccessError("");
+          setLoading(false);
+        })
+        .catch((e) => {
+          if (!active || currentRevision !== revision) return;
+          setOrg(null);
+          setAccessError(
+            `Não foi possível concluir a atualização de segurança: ${errorMessage(e)}`,
+          );
+          setLoading(false);
+        });
+    });
+    return () => {
+      active = false;
+      revision++;
+      unsubscribe();
+    };
+  }, []);
   if (loading) return <Loading text="Verificando acesso…" />;
   if (!user) return <Navigate to="/admin/login" replace />;
   if (!org)
@@ -1115,14 +1460,23 @@ function AdminGuard({ children }: { children: ReactNode }) {
         <main className="center-page">
           <div className="empty-box">
             <LockKeyhole />
-            <h1>Conta ainda não autorizada</h1>
+            <h1>{accessError ? "Atualização necessária" : "Conta ainda não autorizada"}</h1>
             <p>
-              Peça à pessoa responsável para vincular seu usuário à organização
-              no Firebase.
+              {accessError ||
+                "Peça à pessoa responsável para vincular seu usuário à organização no Firebase."}
             </p>
-            <button className="button button-outline" onClick={() => logout()}>
-              Sair da conta
-            </button>
+            {accessError ? (
+              <button
+                className="button button-outline"
+                onClick={() => window.location.reload()}
+              >
+                Tentar novamente
+              </button>
+            ) : (
+              <button className="button button-outline" onClick={() => logout()}>
+                Sair da conta
+              </button>
+            )}
           </div>
         </main>
       </>
@@ -1175,6 +1529,9 @@ function AdminShell({
           <Link to="/admin/caravanas">
             <span>◫</span> Caravanas
           </Link>
+          <Link to="/admin/financeiro">
+            <span><WalletCards size={17} /></span> Financeiro
+          </Link>
           <Link to="/admin/comprovantes">
             <span>▤</span> Comprovantes
           </Link>
@@ -1197,22 +1554,30 @@ function AdminDashboard() {
   const [caravans, setCaravans] = useState<Caravan[]>([]);
   const [regs, setRegs] = useState<Registration[]>([]);
   const [selected, setSelected] = useState("");
+  const [error, setError] = useState("");
   const orgId = useContext(OrganizationContext);
   useEffect(() => {
     if (!orgId) return;
     return watchAdminCaravans(
       orgId,
       (list) => {
+        setError("");
         setCaravans(list);
         if (list[0]) setSelected((current) => current || list[0].id);
       },
-      (e) => console.error(e),
+      (e) => setError(errorMessage(e)),
     );
   }, [orgId]);
   useEffect(() => {
     if (!orgId || !selected) return;
-    return watchRegistrations(orgId, selected, setRegs, (e) =>
-      console.error(e),
+    return watchRegistrations(
+      orgId,
+      selected,
+      (items) => {
+        setError("");
+        setRegs(items);
+      },
+      (e) => setError(errorMessage(e)),
     );
   }, [orgId, selected]);
   const caravan = caravans.find((c) => c.id === selected);
@@ -1223,6 +1588,7 @@ function AdminDashboard() {
   const review = regs.filter(
     (r) => r.paymentStatus === "awaiting_review",
   ).length;
+  const minorsPending = regs.filter(isAuthorizationPending).length;
   const boarded = regs.filter((r) => Boolean(r.checkedInAt)).length;
   const stats = [
     {
@@ -1250,6 +1616,12 @@ function AdminDashboard() {
       icon: <FileCheck2 />,
       tone: "orange",
     },
+    {
+      label: "Menores sem autorização aprovada",
+      value: minorsPending,
+      icon: <ShieldCheck />,
+      tone: minorsPending ? "orange" : "green",
+    },
     { label: "Embarcados", value: boarded, icon: <Bus />, tone: "purple" },
     {
       label: "Vagas restantes",
@@ -1263,6 +1635,7 @@ function AdminDashboard() {
   ];
   return (
     <>
+      {error && <div className="error-message">{error}</div>}
       <div className="admin-title-row">
         <div>
           <div className="eyebrow eyebrow-dark">PAINEL DA ORGANIZAÇÃO</div>
@@ -1349,16 +1722,10 @@ function AdminDashboard() {
                             <small>{r.phone}</small>
                           </td>
                           <td>{r.boardingPointName}</td>
-                          <td>{money(r.amountCents)}</td>
+                          <td>{moneyOrUnknown(r.amountCents)}</td>
                           <td>
                             <span className={`pill pill-${r.paymentStatus}`}>
-                              {r.paymentStatus === "awaiting_review"
-                                ? "Em análise"
-                                : r.paymentStatus === "approved"
-                                  ? "Aprovado"
-                                  : r.paymentStatus === "rejected"
-                                    ? "Recusado"
-                                    : "Pendente"}
+                              {paymentStatusLabel(r.paymentStatus)}
                             </span>
                           </td>
                         </tr>
@@ -1389,10 +1756,16 @@ function AdminCaravans() {
   const [slug, setSlug] = useState("");
   const [date, setDate] = useState("");
   const [city, setCity] = useState("");
+  const [destination, setDestination] = useState("");
   const [price, setPrice] = useState("85");
   const [capacity, setCapacity] = useState("50");
   const [key, setKey] = useState("");
   const [receiver, setReceiver] = useState("");
+  const [organizerName, setOrganizerName] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentInstructions, setPaymentInstructions] = useState("");
+  const [paymentDeadline, setPaymentDeadline] = useState("");
+  const [requiresMinorAuthorization, setRequiresMinorAuthorization] = useState(false);
   const [event, setEvent] = useState("");
   const [description, setDescription] = useState("");
   const [departureTime, setDepartureTime] = useState("06:00");
@@ -1414,10 +1787,16 @@ function AdminCaravans() {
     setSlug("");
     setDate("");
     setCity("");
+    setDestination("");
     setPrice("85");
     setCapacity("50");
     setKey("");
     setReceiver("");
+    setOrganizerName("");
+    setPaymentMethod("");
+    setPaymentInstructions("");
+    setPaymentDeadline("");
+    setRequiresMinorAuthorization(false);
     setEvent("");
     setDescription(
       "Uma viagem organizada para curtir o evento com tranquilidade e boa companhia.",
@@ -1438,11 +1817,17 @@ function AdminCaravans() {
     setName(c.name);
     setSlug(c.slug);
     setDate(c.date);
-    setCity(c.destination || c.city);
+    setCity(c.city);
+    setDestination(c.destination);
     setPrice((c.priceCents / 100).toFixed(2));
     setCapacity(String(c.capacity));
     setKey(c.pixKey);
     setReceiver(c.pixReceiver);
+    setOrganizerName(c.organizerName || "");
+    setPaymentMethod(c.paymentMethod || "");
+    setPaymentInstructions(c.paymentInstructions || "");
+    setPaymentDeadline(c.paymentDeadline || "");
+    setRequiresMinorAuthorization(Boolean(c.requiresMinorAuthorization));
     setEvent(c.event);
     setDescription(c.description);
     setDepartureTime(c.departureTime);
@@ -1466,7 +1851,7 @@ function AdminCaravans() {
     try {
       await createCaravan(orgId, {
         name: `${c.name} (cópia)`,
-        slug: `${c.slug}-copia`,
+        slug: `${c.slug}-copia-${crypto.randomUUID().slice(0, 8)}`,
         event: c.event,
         description: c.description,
         date: c.date,
@@ -1479,6 +1864,11 @@ function AdminCaravans() {
         capacity: c.capacity,
         pixKey: c.pixKey,
         pixReceiver: c.pixReceiver,
+        organizerName: c.organizerName,
+        paymentMethod: c.paymentMethod,
+        paymentInstructions: c.paymentInstructions,
+        paymentDeadline: c.paymentDeadline,
+        requiresMinorAuthorization: c.requiresMinorAuthorization,
         whatsapp: c.whatsapp,
         status: "draft",
         boardingPoints: c.boardingPoints,
@@ -1542,11 +1932,15 @@ function AdminCaravans() {
     if (
       !boardingRows.length ||
       boardingRows.some(
-        (row) => row.length < 3 || row.slice(0, 3).some((part) => !part),
+        (row) =>
+          row.length < 3 ||
+          !row[0] ||
+          !row[2] ||
+          !validTime(row[2]),
       )
     ) {
       setError(
-        "Informe ao menos um ponto no formato: Nome | endereço | HH:MM.",
+        "Informe ao menos um ponto no formato: Nome | endereço | horário válido (HH:MM).",
       );
       return;
     }
@@ -1568,26 +1962,40 @@ function AdminCaravans() {
     }
     const existing = list.find((c) => c.id === editingId);
     const nextCapacity = Number(capacity);
+    const priceCents = Math.round(Number(price) * 100);
+    const whatsappDigits = whatsapp.replace(/\D/g, "");
     if (
       !Number.isInteger(nextCapacity) ||
-      nextCapacity < (existing?.reservedSeats || 0)
+      nextCapacity < 1 ||
+      nextCapacity < (existing?.reservedSeats || 0) ||
+      nextCapacity > 1000
     ) {
       setError(
-        `As vagas não podem ser menores que as ${existing?.reservedSeats || 0} já reservadas.`,
+        `Informe de 1 a 1.000 vagas e mantenha pelo menos as ${existing?.reservedSeats || 0} já reservadas.`,
       );
+      return;
+    }
+    if (!Number.isSafeInteger(priceCents) || priceCents <= 0) {
+      setError("Informe um preço válido maior que zero.");
+      return;
+    }
+    if (whatsappDigits && (whatsappDigits.length < 10 || whatsappDigits.length > 15)) {
+      setError("Informe o WhatsApp com código do país e DDD, entre 10 e 15 números.");
+      return;
+    }
+    const norm = slugify(slug || name);
+    if (!norm) {
+      setError("Informe um nome válido para gerar o link da caravana.");
+      return;
+    }
+    if (list.some((c) => c.slug === norm && c.id !== editingId)) {
+      setError("Este link já está sendo usado. Escolha outro slug.");
       return;
     }
     setBusy(true);
     try {
-      const norm =
-        slug ||
-        name
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
       const payload = {
+        organizerName,
         name,
         slug: norm,
         event: event || name,
@@ -1596,12 +2004,16 @@ function AdminCaravans() {
         departureTime,
         returnTime,
         city,
-        destination: city,
-        address: address || city,
-        priceCents: Math.round(Number(price) * 100),
-        capacity: Number(capacity),
+        destination: destination || city,
+        address: address || destination || city,
+        priceCents,
+        capacity: nextCapacity,
         pixKey: key,
         pixReceiver: receiver,
+        paymentMethod,
+        paymentInstructions,
+        paymentDeadline,
+        requiresMinorAuthorization,
         whatsapp,
         status: existing?.status || ("published" as const),
         boardingPoints: boardingRows.map(
@@ -1684,6 +2096,12 @@ function AdminCaravans() {
                     Passageiros <ArrowRight size={15} />
                   </Link>
                   <Link
+                    to={`/admin/caravanas/${c.id}/financeiro`}
+                    className="button button-outline"
+                  >
+                    Financeiro <WalletCards size={15} />
+                  </Link>
+                  <Link
                     to={`/admin/check-in/${c.id}`}
                     className="button button-primary"
                   >
@@ -1738,6 +2156,13 @@ function AdminCaravans() {
             </h2>
             <form onSubmit={submit}>
               <div className="field-grid">
+                <Field label="Organização responsável" full>
+                  <input
+                    value={organizerName}
+                    onChange={(e) => setOrganizerName(e.target.value)}
+                    placeholder="AnimeSFest"
+                  />
+                </Field>
                 <Field label="Nome da caravana" required full>
                   <input
                     required
@@ -1761,12 +2186,19 @@ function AdminCaravans() {
                     onChange={(e) => setDate(e.target.value)}
                   />
                 </Field>
-                <Field label="Cidade / destino" required>
+                <Field label="Cidade de destino" required>
                   <input
                     required
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="São Paulo - SP"
+                  />
+                </Field>
+                <Field label="Local do evento">
+                  <input
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                    placeholder="Centro Social Estoril"
                   />
                 </Field>
                 <Field label="Evento">
@@ -1776,11 +2208,11 @@ function AdminCaravans() {
                     placeholder="Anime Friends"
                   />
                 </Field>
-                <Field label="Endereço de destino">
+                <Field label="Endereço ou detalhes do local">
                   <input
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Distrito Anhembi"
+                    placeholder="Endereço confirmado pela organização"
                   />
                 </Field>
                 <Field label="Saída">
@@ -1813,27 +2245,61 @@ function AdminCaravans() {
                   <input
                     type="number"
                     min="1"
+                    max="1000"
                     required
                     value={capacity}
                     onChange={(e) => setCapacity(e.target.value)}
                   />
                 </Field>
-                <Field label="Recebedor Pix" required>
+                <Field label="Forma de pagamento (opcional)">
                   <input
-                    required
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    placeholder="Preencha somente após confirmação"
+                  />
+                </Field>
+                <Field label="Prazo de pagamento (opcional)">
+                  <input
+                    type="date"
+                    value={paymentDeadline}
+                    onChange={(e) => setPaymentDeadline(e.target.value)}
+                  />
+                </Field>
+                <Field label="Instruções de pagamento" full>
+                  <textarea
+                    rows={2}
+                    value={paymentInstructions}
+                    onChange={(e) => setPaymentInstructions(e.target.value)}
+                    placeholder="Informe somente as instruções confirmadas pela organização."
+                  />
+                </Field>
+                <Field label="Recebedor Pix (opcional)">
+                  <input
                     value={receiver}
                     onChange={(e) => setReceiver(e.target.value)}
                     placeholder="Nome do recebedor"
                   />
                 </Field>
-                <Field label="Chave Pix" required full>
+                <Field label="Chave Pix (opcional)">
                   <input
-                    required
                     value={key}
                     onChange={(e) => setKey(e.target.value)}
                     placeholder="Chave fornecida pela organização"
                   />
                 </Field>
+                <div className="field field-full admin-check-field">
+                  <span>Autorização para menores</span>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={requiresMinorAuthorization}
+                      onChange={(e) =>
+                        setRequiresMinorAuthorization(e.target.checked)
+                      }
+                    />
+                    Exigir nascimento e acompanhar autorização do responsável
+                  </label>
+                </div>
                 <Field label="WhatsApp de contato">
                   <input
                     value={whatsapp}
@@ -1918,6 +2384,19 @@ function AdminCaravans() {
   );
 }
 
+function downloadLegacyCsvTemplate() {
+  const csv =
+    "\uFEFFNome;Telefone;E-mail;CPF;Tipo documento 1;Número documento 1;Tipo documento 2;Número documento 2;Pagamento informado;Cidade;Ponto de embarque;Data de nascimento;Nome do responsável;Telefone do responsável;Contato de emergência;Valor combinado;Observações\r\n";
+  const url = URL.createObjectURL(
+    new Blob([csv], { type: "text/csv;charset=utf-8" }),
+  );
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "modelo-lista-anterior.csv";
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
   const { id: routeId } = useParams();
   const [regs, setRegs] = useState<Registration[]>([]);
@@ -1927,37 +2406,86 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
   const [filter, setFilter] = useState(pendingOnly ? "awaiting_review" : "all");
   const [boardingFilter, setBoardingFilter] = useState("all");
   const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
   const [proofUrl, setProofUrl] = useState("");
   const [proofBusy, setProofBusy] = useState("");
+  const [editRegistration, setEditRegistration] = useState<Registration | null>(null);
+  const [editBusy, setEditBusy] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [showImport, setShowImport] = useState(false);
+  const [historicalArchive, setHistoricalArchive] = useState(false);
+  const [importFileName, setImportFileName] = useState("");
+  const [importCsvText, setImportCsvText] = useState("");
+  const [importBatchId, setImportBatchId] = useState("");
+  const [importPreview, setImportPreview] = useState<LegacyRegistrationDraft[]>([]);
+  const [importErrors, setImportErrors] = useState<string[]>([]);
+  const [importRecordCount, setImportRecordCount] = useState(0);
+  const [importBusy, setImportBusy] = useState(false);
+  const [registrationsReady, setRegistrationsReady] = useState(false);
+  const [editForm, setEditForm] = useState({
+    passengerName: "",
+    phone: "",
+    email: "",
+    birthDate: "",
+    boardingPointId: "",
+    emergencyContact: "",
+    guardianName: "",
+    guardianPhone: "",
+  });
   const org = useContext(OrganizationContext);
+  useEffect(() => {
+    if (routeId) setSelected(routeId);
+  }, [routeId]);
   useEffect(() => {
     if (!org) return;
     return watchAdminCaravans(
       org,
       (list) => {
+        setError("");
         setCaravans(list);
         if (!selected && list[0]) setSelected(list[0].id);
       },
-      () => {},
+      (e) => setError(errorMessage(e)),
     );
   }, [org, selected]);
   useEffect(() => {
     if (!org || !selected) return;
-    return watchRegistrations(org, selected, setRegs, () => {});
+    setRegs([]);
+    setRegistrationsReady(false);
+    return watchRegistrations(
+      org,
+      selected,
+      (items) => {
+        setError("");
+        setRegs(items);
+        setRegistrationsReady(true);
+      },
+      (e) => setError(errorMessage(e)),
+    );
   }, [org, selected]);
+  useEffect(() => {
+    setImportFileName("");
+    setImportCsvText("");
+    setImportPreview([]);
+    setImportErrors([]);
+    setImportRecordCount(0);
+    setImportBatchId("");
+    setHistoricalArchive(false);
+  }, [selected]);
   const filtered = useMemo(
     () =>
       regs.filter(
         (r) =>
-          (filter === "all" ||
+            (filter === "all" ||
             r.paymentStatus === filter ||
             (filter === "confirmed" && r.registrationStatus === "confirmed") ||
             (filter === "boarded" && !!r.checkedInAt) ||
             (filter === "absent" &&
               r.registrationStatus === "confirmed" &&
-              !r.checkedInAt)) &&
+              !r.checkedInAt) ||
+            (filter === "authorization_pending" && isAuthorizationPending(r))) &&
           (boardingFilter === "all" || r.boardingPointId === boardingFilter) &&
-          `${r.passengerName} ${r.phone} ${r.id}`
+          `${r.passengerName} ${r.phone} ${r.id} ${(r.documentRecords || []).map((item) => item.value).join(" ")}`
             .toLowerCase()
             .includes(search.toLowerCase()),
       ),
@@ -2017,7 +2545,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
     }
   }
   async function showProof(r: Registration) {
-    if (!r.proofPath) return;
+    if (!r.proofId) return;
     setProofBusy(r.id);
     try {
       const blob = await loadProof(r);
@@ -2028,6 +2556,191 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
       setProofBusy("");
     }
   }
+  async function copyRegistrationLink(registration: Registration) {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.origin}/minha-inscricao/${registration.id}`,
+      );
+      setNotice(
+        `Link privado de ${registration.passengerName} copiado. Envie-o somente a essa pessoa pelo canal oficial.`,
+      );
+      setTimeout(() => setNotice(""), 4200);
+    } catch {
+      setNotice("Não foi possível copiar o link privado neste navegador.");
+      setTimeout(() => setNotice(""), 3200);
+    }
+  }
+  function prepareImportText(source: string, fileName = "texto-colado.csv") {
+    setImportFileName(fileName);
+    setImportCsvText(source);
+    setImportBatchId(crypto.randomUUID().replaceAll("-", ""));
+    setImportPreview([]);
+    setImportErrors([]);
+    setImportRecordCount(0);
+    if (new Blob([source]).size > 2 * 1024 * 1024) {
+      setImportErrors(["O texto excede o limite de 2 MB. Divida a lista em arquivos menores."]);
+      return;
+    }
+    const caravan = caravans.find((item) => item.id === selected);
+    if (!caravan) {
+      setImportErrors(["Selecione uma caravana antes de preparar a importação."]);
+      return;
+    }
+    if (!registrationsReady) {
+      setImportErrors(["Aguarde a lista atual de passageiros carregar para conferir duplicados."]);
+      return;
+    }
+    try {
+      const result = parseLegacyRegistrationCsv(
+        source,
+        caravan,
+        regs,
+        { historicalArchive },
+      );
+      setImportPreview(result.rows);
+      setImportErrors(result.errors);
+      setImportRecordCount(result.rows.length + result.errors.length);
+    } catch (e) {
+      setImportErrors([errorMessage(e)]);
+    }
+  }
+  async function prepareImport(file?: File) {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".csv")) {
+      setImportErrors(["Escolha um arquivo CSV. No Excel, salve a planilha como CSV UTF-8."]);
+      return;
+    }
+    prepareImportText(await file.text(), file.name);
+  }
+  async function submitImport() {
+    const caravan = caravans.find((item) => item.id === selected);
+    if (!caravan || !org || !importPreview.length || importErrors.length) return;
+    const available = Math.max(0, caravan.capacity - caravan.reservedSeats);
+    if (importPreview.length > available) {
+      setImportErrors([
+        `Há ${available} vagas disponíveis, mas a lista contém ${importPreview.length} pessoas. Ajuste a lista ou as vagas da caravana antes de importar.`,
+      ]);
+      return;
+    }
+    const accepted = window.confirm(
+      historicalArchive
+        ? `Importar ${importPreview.length} passageiros para ${caravan.name}? Os documentos informados serão gravados no cadastro privado da organização, cada passageiro ocupará uma vaga e “Pix informado” ficará separado de valor e comprovante conciliados. Nenhum pagamento será processado.`
+        : `Importar ${importPreview.length} passageiros para ${caravan.name}? Os dados serão gravados no Firestore da organização, cada passageiro ocupará uma vaga e ficará aguardando comprovante e conferência manual. Nenhum pagamento será processado ou aprovado pela importação.`,
+    );
+    if (!accepted) return;
+    setImportBusy(true);
+    setImportErrors([]);
+    try {
+      const imported = await importLegacyRegistrations(
+        caravan.id,
+        org,
+        importPreview,
+        importBatchId,
+      );
+      setNotice(
+        historicalArchive
+          ? `${imported.imported} passageiros importados${imported.skipped ? `; ${imported.skipped} já constavam desta importação` : ""}. Pix segue como informado, sem valor nem comprovante conciliado.`
+          : `${imported.imported} passageiros importados${imported.skipped ? `; ${imported.skipped} já constavam desta importação` : ""}. Aguardam comprovante e conferência manual.`,
+      );
+      setImportFileName("");
+      setImportCsvText("");
+      setImportBatchId("");
+      setImportPreview([]);
+      setImportRecordCount(0);
+      setShowImport(false);
+    } catch (e) {
+      setImportErrors([errorMessage(e)]);
+    } finally {
+      setImportBusy(false);
+    }
+  }
+  function editPassenger(r: Registration) {
+    setEditError("");
+    setEditRegistration(r);
+    setEditForm({
+      passengerName: r.passengerName,
+      phone: r.phone,
+      email: r.email || "",
+      birthDate: r.birthDate || "",
+      boardingPointId: r.boardingPointId,
+      emergencyContact: r.emergencyContact || "",
+      guardianName: r.guardianName || "",
+      guardianPhone: r.guardianPhone || "",
+    });
+  }
+  async function savePassenger(e: FormEvent) {
+    e.preventDefault();
+    const caravan = caravans.find((item) => item.id === selected);
+    if (!editRegistration || !caravan) return;
+    const point = caravan.boardingPoints.find(
+      (item) => item.id === editForm.boardingPointId,
+    );
+    if (!point) {
+      setEditError("Selecione um ponto de embarque válido.");
+      return;
+    }
+    const age = ageOnDate(editForm.birthDate, caravan.date);
+    if (caravan.requiresMinorAuthorization && age === null) {
+      setEditError("Informe uma data de nascimento válida para esta viagem.");
+      return;
+    }
+    const isMinor = Boolean(
+      caravan.requiresMinorAuthorization && age !== null && age < 18,
+    );
+    if (
+      isMinor &&
+      (!editForm.guardianName.trim() || !editForm.guardianPhone.trim())
+    ) {
+      setEditError("Para passageiro menor, informe nome e telefone do responsável.");
+      return;
+    }
+    setEditBusy(true);
+    setEditError("");
+    try {
+      await updatePassengerDetails(editRegistration, {
+        ...editForm,
+        passengerName: editForm.passengerName.trim(),
+        phone: editForm.phone.trim(),
+        email: editForm.email.trim(),
+        emergencyContact: editForm.emergencyContact.trim(),
+        boardingPointName: point.name,
+        isMinor,
+        authorizationStatus: isMinor
+          ? editRegistration.authorizationStatus && editRegistration.authorizationStatus !== "unknown"
+            ? editRegistration.authorizationStatus
+            : "not_sent"
+          : "not_required",
+        guardianName: isMinor ? editForm.guardianName.trim() : "",
+        guardianPhone: isMinor ? editForm.guardianPhone.trim() : "",
+      });
+      setEditRegistration(null);
+      setNotice("Dados do passageiro atualizados.");
+      setTimeout(() => setNotice(""), 2500);
+    } catch (e) {
+      setEditError(errorMessage(e));
+    } finally {
+      setEditBusy(false);
+    }
+  }
+  async function changeAuthorization(
+    registration: Registration,
+    status: AuthorizationStatus,
+  ) {
+    try {
+      await updateAuthorizationStatus(registration, status);
+      setNotice("Status da autorização atualizado.");
+      setTimeout(() => setNotice(""), 2200);
+    } catch (e) {
+      setNotice(errorMessage(e));
+    }
+  }
+  const editingCaravan = caravans.find((item) => item.id === selected);
+  const editAge = ageOnDate(editForm.birthDate, editingCaravan?.date || "");
+  const editMinor = Boolean(
+    editingCaravan?.requiresMinorAuthorization &&
+      editAge !== null &&
+      editAge < 18,
+  );
   const title = pendingOnly ? "Comprovantes" : "Passageiros";
   return (
     <>
@@ -2041,10 +2754,18 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
               : "Acompanhe inscrições e embarques em tempo real."}
           </p>
         </div>
-        <Link to="/admin/caravanas" className="button button-outline">
-          Ver caravanas <ArrowRight size={15} />
-        </Link>
+        <div className="finance-title-actions">
+          {!pendingOnly && selected && (
+            <Link to={`/admin/caravanas/${selected}/financeiro`} className="button button-primary">
+              <WalletCards size={15} /> Financeiro
+            </Link>
+          )}
+          <Link to="/admin/caravanas" className="button button-outline">
+            Ver caravanas <ArrowRight size={15} />
+          </Link>
+        </div>
       </div>
+      {error && <div className="error-message">{error}</div>}
       {caravans.length > 1 && (
         <label className="admin-selector">
           Caravana{" "}
@@ -2060,6 +2781,183 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           </select>
         </label>
       )}
+      {!pendingOnly && (
+        <section className="admin-panel legacy-import-panel">
+          <div className="panel-heading">
+            <div>
+              <h2>Lista de inscrições anteriores</h2>
+              <p>Traga passageiros de uma planilha CSV para esta caravana.</p>
+            </div>
+            <button
+              className="button button-outline"
+              type="button"
+              aria-expanded={showImport}
+              onClick={() => setShowImport((open) => !open)}
+            >
+              <Upload size={15} />
+              {showImport ? "Fechar importação" : "Importar lista"}
+            </button>
+          </div>
+          {showImport && (
+            <div className="legacy-import-body">
+              <p>
+                Baixe o modelo e importe até 400 passageiros por CSV. Para novos cadastros, nome e telefone ou e-mail são necessários para enviar o acesso privado. Em listas históricas, ative a opção abaixo para preservar documentos informados sem inferir tipo ou completar dados ausentes.
+              </p>
+              {editingCaravan && (
+                <small className="legacy-import-note">
+                  O valor atual é {money(editingCaravan.priceCents)} por pessoa. Preencha “Valor combinado” para preservar outro valor da lista antiga; não informe status de pagamento.
+                </small>
+              )}
+              {editingCaravan?.requiresMinorAuthorization && (
+                <small className="legacy-import-note">
+                  {historicalArchive
+                    ? "A lista histórica não informa nascimento; a importação deixa a idade sem verificar e não presume que a pessoa seja adulta."
+                    : "Esta caravana exige data de nascimento. Para menores de 18 anos na data da viagem, inclua também nome e telefone do responsável."}
+                </small>
+              )}
+              <label className="legacy-import-history-toggle">
+                <input
+                  type="checkbox"
+                  checked={historicalArchive}
+                  onChange={(event) => {
+                    setHistoricalArchive(event.target.checked);
+                    setImportPreview([]);
+                    setImportErrors([]);
+                    setImportFileName("");
+                    setImportCsvText("");
+                    setImportBatchId("");
+                    setImportRecordCount(0);
+                  }}
+                />
+                <span>
+                  Lista histórica sem contato · preservar pagamento informado sem conciliar valor
+                </span>
+              </label>
+              <div className="legacy-import-actions">
+                <button
+                  className="button button-outline"
+                  type="button"
+                  onClick={downloadLegacyCsvTemplate}
+                >
+                  <Download size={15} /> Baixar modelo CSV
+                </button>
+                <label className={`button button-outline legacy-file-picker${!registrationsReady || importBusy ? " is-disabled" : ""}`}>
+                  <Upload size={15} /> Escolher arquivo CSV
+                  <input
+                    type="file"
+                    accept=".csv,text/csv"
+                    disabled={!registrationsReady || importBusy}
+                    onChange={(event) => {
+                      const file = event.currentTarget.files?.[0];
+                      void prepareImport(file);
+                      event.currentTarget.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+              <label className="field field-full legacy-import-paste">
+                <span>Cole linhas CSV aqui</span>
+                <textarea
+                  rows={5}
+                  value={importCsvText}
+                  onChange={(event) => {
+                    setImportCsvText(event.target.value);
+                    setImportFileName("texto-colado.csv");
+                    setImportPreview([]);
+                    setImportErrors([]);
+                    setImportBatchId("");
+                    setImportRecordCount(0);
+                  }}
+                  placeholder="Cabeçalho e linhas separados por ponto e vírgula ou vírgula"
+                  spellCheck={false}
+                />
+                <small>O texto é validado nesta página; só será gravado no Firestore ao selecionar “Importar”.</small>
+                <button
+                  className="button button-outline"
+                  type="button"
+                  disabled={!registrationsReady || importBusy || !importCsvText.trim()}
+                  onClick={() => prepareImportText(importCsvText)}
+                >
+                  Validar texto colado
+                </button>
+              </label>
+              {!registrationsReady && (
+                <small className="legacy-import-note">Carregando a lista atual para evitar duplicados…</small>
+              )}
+              {importFileName && <small className="legacy-import-note">Arquivo: {importFileName}</small>}
+              {importRecordCount > 0 && (
+                <div className="legacy-import-summary">
+                  <strong>{importPreview.length} válidos</strong>
+                  <span>{Math.max(0, importRecordCount - importPreview.length)} com problemas</span>
+                  <span>{importPreview.length} vagas serão ocupadas</span>
+                </div>
+              )}
+              <div className="legacy-import-note legacy-import-policy">
+                {historicalArchive
+                  ? "A lista pode ficar sem telefone, e-mail, embarque ou valor quando esses dados não foram informados. Pix declarado fica identificado como não conciliado; nenhum valor ou comprovante é criado."
+                  : "A importação não registra pagamentos nem aprova ninguém. Todas as inscrições ficam aguardando comprovante e conferência manual. Cada inscrição ocupa uma vaga."}
+              </div>
+              {importPreview.length > 0 && (
+                <div className="legacy-import-preview-wrap">
+                  <table className="legacy-import-preview">
+                    <thead>
+                      <tr>
+                        <th>PASSAGEIRO</th>
+                        <th>{historicalArchive ? "DOCUMENTO" : "TELEFONE"}</th>
+                        <th>EMBARQUE</th>
+                        <th>VALOR</th>
+                        <th>SITUAÇÃO</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {importPreview.slice(0, 8).map((row) => (
+                        <tr key={`${row.line}-${row.passengerName}`}>
+                          <td>{row.passengerName}</td>
+                          <td>{historicalArchive
+                            ? row.documentRecords?.map((document) => `${document.label}: ${document.value}`).join(" · ") || "Não informado"
+                            : row.phone || "Não informado"}</td>
+                          <td>{row.boardingPointName}</td>
+                          <td>{row.amountCents ? money(row.amountCents) : "Não informado"}</td>
+                          <td>{row.paymentStatus === "reported" ? "Pix informado · sem conciliação" : "Aguardando comprovante"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {importPreview.length > 8 && (
+                    <small>Prévia de 8 passageiros; serão importados todos os {importPreview.length} válidos.</small>
+                  )}
+                </div>
+              )}
+              {importErrors.length > 0 && (
+                <div className="legacy-import-errors" role="alert">
+                  <strong>Corrija os problemas no CSV e selecione o arquivo novamente:</strong>
+                  <ul>
+                    {importErrors.slice(0, 12).map((message) => <li key={message}>{message}</li>)}
+                  </ul>
+                  {importErrors.length > 12 && <small>Mais {importErrors.length - 12} registros precisam de correção.</small>}
+                </div>
+              )}
+              {editingCaravan && importPreview.length > editingCaravan.capacity - editingCaravan.reservedSeats && (
+                <div className="error-message">
+                  Esta lista precisa de {importPreview.length} vagas, mas há apenas {Math.max(0, editingCaravan.capacity - editingCaravan.reservedSeats)} disponíveis.
+                </div>
+              )}
+              {importPreview.length > 0 && !importErrors.length && (
+                <div className="legacy-import-submit">
+                  <button
+                    className="button button-primary"
+                    type="button"
+                    disabled={importBusy || !registrationsReady || Boolean(editingCaravan && importPreview.length > editingCaravan.capacity - editingCaravan.reservedSeats)}
+                    onClick={() => void submitImport()}
+                  >
+                    {importBusy ? "Importando…" : `Importar ${importPreview.length} passageiros`}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      )}
       <div className="passenger-toolbar">
         <label className="search-input">
           <Search />
@@ -2074,7 +2972,9 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           <option value="awaiting_review">Aguardando análise</option>
           <option value="confirmed">Confirmados</option>
           <option value="pending">Aguardando pagamento</option>
+          <option value="reported">Pix informado · sem conciliação</option>
           <option value="rejected">Recusados</option>
+          <option value="authorization_pending">Menores sem autorização aprovada</option>
           <option value="boarded">Embarcados</option>
           <option value="absent">Faltantes</option>
         </select>
@@ -2117,6 +3017,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                   <th>CONTATO</th>
                   <th>EMBARQUE</th>
                   <th>STATUS</th>
+                  <th>AUTORIZAÇÃO DO RESPONSÁVEL</th>
                   <th>AÇÕES</th>
                 </tr>
               </thead>
@@ -2126,35 +3027,86 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                     <td>
                       <strong>{r.passengerName}</strong>
                       <small>{r.id.slice(0, 10).toUpperCase()}</small>
+                      {r.importedFromLegacy && (
+                        <small>Lista anterior · importada</small>
+                      )}
+                      {r.documentRecords?.map((document, index) => (
+                        <small key={`${r.id}-doc-${index}`}>
+                          {document.label}: {document.value}
+                        </small>
+                      ))}
+                      {r.birthDate && (
+                        <small>
+                          Nascimento: {r.birthDate}{r.isMinor ? " · menor na data da viagem" : ""}
+                        </small>
+                      )}
                     </td>
                     <td>
-                      {r.phone}
-                      <small>{r.email}</small>
+                      {r.phone || "Não informado"}
+                      <small>{r.email || ""}</small>
                     </td>
                     <td>{r.boardingPointName}</td>
                     <td>
                       <span className={`pill pill-${r.paymentStatus}`}>
-                        {r.paymentStatus === "awaiting_review"
-                          ? "Em análise"
-                          : r.paymentStatus === "approved"
-                            ? "Aprovado"
-                            : r.paymentStatus === "rejected"
-                              ? "Recusado"
-                              : "Pendente"}
+                        {paymentStatusLabel(r.paymentStatus)}
                       </span>
                       {r.checkedInAt && (
                         <span className="pill pill-approved">Embarcou</span>
                       )}
                     </td>
                     <td>
+                      {r.authorizationStatus === "unknown" ? (
+                        <div className="authorization-cell">
+                          <strong>Idade não verificada</strong>
+                          <small>Confirme se a autorização se aplica</small>
+                        </div>
+                      ) : r.isMinor ? (
+                        <div className="authorization-cell">
+                          <strong>{r.guardianName || "Responsável não informado"}</strong>
+                          <small>{r.guardianPhone}</small>
+                          <select
+                            aria-label={`Autorização de ${r.passengerName}`}
+                            value={r.authorizationStatus || "not_sent"}
+                            onChange={(e) =>
+                              changeAuthorization(
+                                r,
+                                e.target.value as AuthorizationStatus,
+                              )
+                            }
+                          >
+                            <option value="not_sent">Não enviada</option>
+                            <option value="pending">Pendente</option>
+                            <option value="received">Recebida</option>
+                            <option value="approved">Aprovada</option>
+                          </select>
+                        </div>
+                      ) : (
+                        <span>Não se aplica</span>
+                      )}
+                    </td>
+                    <td>
                       <div className="row-actions">
-                        {r.proofPath && (
+                        <button
+                          className="button button-tiny button-outline"
+                          onClick={() => editPassenger(r)}
+                        >
+                          Editar
+                        </button>
+                        {r.proofId && (
                           <button
                             className="button button-tiny button-outline"
                             disabled={proofBusy === r.id}
                             onClick={() => showProof(r)}
                           >
                             {proofBusy === r.id ? "Abrindo…" : "Comprovante"}
+                          </button>
+                        )}
+                        {r.importedFromLegacy && (r.phone || r.email) && (
+                          <button
+                            className="button button-tiny button-outline"
+                            onClick={() => void copyRegistrationLink(r)}
+                          >
+                            <Copy size={13} /> Link privado
                           </button>
                         )}
                         {r.paymentStatus === "awaiting_review" && (
@@ -2173,7 +3125,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                             </button>
                           </>
                         )}
-                        {r.paymentStatus === "approved" && (
+                        {r.registrationStatus === "confirmed" && (
                           <button
                             className={`button button-tiny ${r.checkedInAt ? "button-outline" : "button-green"}`}
                             onClick={() => boarding(r)}
@@ -2204,6 +3156,127 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           </div>
         )}
       </section>
+      {editRegistration && (
+        <div
+          className="modal-backdrop"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setEditRegistration(null);
+          }}
+        >
+          <section className="modal">
+            <button
+              className="modal-close"
+              type="button"
+              onClick={() => setEditRegistration(null)}
+              aria-label="Fechar"
+            >
+              <X />
+            </button>
+            <div className="eyebrow eyebrow-dark">DADOS DO PASSAGEIRO</div>
+            <h2>Editar inscrição</h2>
+            <form onSubmit={savePassenger}>
+              <div className="field-grid">
+                <Field label="Nome completo" required full>
+                  <input
+                    required
+                    value={editForm.passengerName}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, passengerName: e.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="Telefone / WhatsApp" required>
+                  <input
+                    required
+                    type="tel"
+                    value={editForm.phone}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, phone: e.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="E-mail">
+                  <input
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, email: e.target.value })
+                    }
+                  />
+                </Field>
+                <Field
+                  label={`Data de nascimento${editingCaravan?.requiresMinorAuthorization ? "" : " (opcional)"}`}
+                  required={Boolean(editingCaravan?.requiresMinorAuthorization)}
+                >
+                  <input
+                    type="date"
+                    max={editingCaravan?.date}
+                    required={Boolean(editingCaravan?.requiresMinorAuthorization)}
+                    value={editForm.birthDate}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, birthDate: e.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="Ponto de embarque" required full>
+                  <select
+                    required
+                    value={editForm.boardingPointId}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, boardingPointId: e.target.value })
+                    }
+                  >
+                    {editingCaravan?.boardingPoints.map((point) => (
+                      <option value={point.id} key={point.id}>
+                        {point.name} · {point.time}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <Field label="Contato de emergência" required full>
+                  <input
+                    required
+                    value={editForm.emergencyContact}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, emergencyContact: e.target.value })
+                    }
+                  />
+                </Field>
+                {editMinor && (
+                  <>
+                    <Field label="Nome do responsável" required>
+                      <input
+                        required
+                        value={editForm.guardianName}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, guardianName: e.target.value })
+                        }
+                      />
+                    </Field>
+                    <Field label="Telefone do responsável" required>
+                      <input
+                        required
+                        type="tel"
+                        value={editForm.guardianPhone}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, guardianPhone: e.target.value })
+                        }
+                      />
+                    </Field>
+                  </>
+                )}
+              </div>
+              {editError && <div className="error-message">{editError}</div>}
+              <button
+                className="button button-primary button-large"
+                disabled={editBusy}
+              >
+                {editBusy ? "Salvando…" : "Salvar dados"}
+              </button>
+            </form>
+          </section>
+        </div>
+      )}
       {proofUrl && (
         <div
           className="modal-backdrop"
@@ -2242,6 +3315,7 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
   const org = useContext(OrganizationContext);
   const [caravans, setCaravans] = useState<Caravan[]>([]);
   const [regs, setRegs] = useState<Registration[]>([]);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [stop, setStop] = useState("all");
   const [busy, setBusy] = useState("");
@@ -2251,16 +3325,25 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
     return watchAdminCaravans(
       org,
       (list) => {
+        setError("");
         setCaravans(list);
         if (!caravanId && list[0])
           nav(`/admin/check-in/${list[0].id}`, { replace: true });
       },
-      () => {},
+      (e) => setError(errorMessage(e)),
     );
   }, [org, caravanId, nav]);
   useEffect(() => {
     if (!org || !caravanId) return;
-    return watchRegistrations(org, caravanId, setRegs, () => {});
+    return watchRegistrations(
+      org,
+      caravanId,
+      (items) => {
+        setError("");
+        setRegs(items);
+      },
+      (e) => setError(errorMessage(e)),
+    );
   }, [org, caravanId]);
   const confirmed = regs.filter((r) => r.registrationStatus === "confirmed");
   const boarded = confirmed.filter((r) => r.checkedInAt).length;
@@ -2310,6 +3393,7 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
           </select>
         )}
       </div>
+      {error && <div className="error-message">{error}</div>}
       <div className="checkin-banner">
         <div className="checkin-meter">
           <div className="meter-circle">
@@ -2421,6 +3505,12 @@ function NotFound() {
     </>
   );
 }
+
+function CaravanFinance() {
+  const organizationId = useContext(OrganizationContext);
+  return <FinancePage organizationId={organizationId} />;
+}
+
 export default function App() {
   return (
     <Routes>
@@ -2459,6 +3549,22 @@ export default function App() {
         element={
           <AdminGuard>
             <Passengers />
+          </AdminGuard>
+        }
+      />
+      <Route
+        path="/admin/financeiro"
+        element={
+          <AdminGuard>
+            <CaravanFinance />
+          </AdminGuard>
+        }
+      />
+      <Route
+        path="/admin/caravanas/:id/financeiro"
+        element={
+          <AdminGuard>
+            <CaravanFinance />
           </AdminGuard>
         }
       />

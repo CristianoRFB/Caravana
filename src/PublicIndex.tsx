@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Bus,
   CalendarDays,
+  Clock3,
   Heart,
   MapPin,
   ShieldCheck,
@@ -12,6 +13,7 @@ import {
   Users,
 } from "lucide-react";
 import { listPublishedCaravans } from "./lib/data";
+import { firebaseConfigured } from "./lib/firebase";
 import { dateLabel, money, type Caravan } from "./lib/types";
 
 export default function PublicIndex({
@@ -125,6 +127,18 @@ export default function PublicIndex({
           </div>
           {loading ? (
             <>{loadingView}</>
+          ) : !firebaseConfigured ? (
+            <div className="empty-box index-empty">
+              <Bus />
+              <h2>Estamos preparando a agenda de viagens</h2>
+              <p>
+                As próximas caravanas aparecerão aqui assim que o catálogo
+                estiver disponível. Tente novamente mais tarde.
+              </p>
+              <Link className="button button-outline" to="/admin/login">
+                Área da equipe <ArrowRight size={15} />
+              </Link>
+            </div>
           ) : error ? (
             <div className="error-message">{error}</div>
           ) : items.length ? (
@@ -136,7 +150,7 @@ export default function PublicIndex({
                   key={c.id}
                 >
                   <div className="public-trip-art">
-                    <span>CARAVANA 77</span>
+                    <span>{c.organizerName || "CARAVANA 77"}</span>
                     <Bus />
                   </div>
                   <div className="public-trip-copy">
@@ -149,9 +163,20 @@ export default function PublicIndex({
                       </span>
                       <span>
                         <MapPin />
-                        {c.destination}
+                        {c.boardingPoints[0]?.name || "Origem a confirmar"} → {c.city}
+                      </span>
+                      <span>
+                        <Clock3 />
+                        Saída {c.departureTime} · retorno {c.returnTime}
+                      </span>
+                      <span>
+                        <Users />
+                        {Math.max(0, c.capacity - c.reservedSeats)} vagas disponíveis
                       </span>
                     </div>
+                    <p className="public-trip-includes">
+                      {c.benefits.slice(0, 3).join(" · ")}
+                    </p>
                     <div className="public-trip-bottom">
                       <strong>
                         {money(c.priceCents)} <small>/ pessoa</small>

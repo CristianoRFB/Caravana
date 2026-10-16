@@ -1,0 +1,188 @@
+[
+  {
+    "source": "dist",
+    "path": "_redirects",
+    "bytes": 20,
+    "sha256": "94F76BF42FFC51F446F54963735CAB3DA50E9DB2EB45D4934DA61E45C717D599"
+  },
+  {
+    "source": "dist",
+    "path": "index.html",
+    "bytes": 861,
+    "sha256": "525591AAAEF546B3BCE6A77B248F469E10B275DEDAD91C041778746B12EF066F"
+  },
+  {
+    "source": "dist",
+    "path": "assets\\firebase-auth-Ctb8h5Tt.js",
+    "bytes": 123693,
+    "sha256": "E72D221313E50A0A25AB6A60BCDC1FE7E7CFEFD16D4426C93EE8C90974A30F58"
+  },
+  {
+    "source": "dist",
+    "path": "assets\\firebase-firestore-CZpT9MEq.js",
+    "bytes": 364045,
+    "sha256": "3710DFA0129541C869480844CE1419589E0F9880A7D4011F0402542FCDC5A594"
+  },
+  {
+    "source": "dist",
+    "path": "assets\\index-BXYRgZFm.js",
+    "bytes": 384009,
+    "sha256": "90677DD6E290CB4BA3EF54D6ABFCDFC72AAF3B56AE85A0472012B195FEE19F16"
+  },
+  {
+    "source": "dist",
+    "path": "assets\\index-C9drOnjs.css",
+    "bytes": 46175,
+    "sha256": "37573D73C0263A404F3D8FF15CBFECB77850571D80E6E0C811AB3170E7D84990"
+  },
+  {
+    "source": "dist",
+    "path": "assets\\react-vendor-Cy33O35p.js",
+    "bytes": 9058,
+    "sha256": "1E6722A92F8F23C75B58A12BA6894DC79D26BB642F135D061C2B05B65A2600D5"
+  },
+  {
+    "source": "production",
+    "path": "index.html",
+    "bytes": 861,
+    "sha256": "525591AAAEF546B3BCE6A77B248F469E10B275DEDAD91C041778746B12EF066F"
+  },
+  {
+    "source": "production",
+    "path": "assets\\firebase-auth-Ctb8h5Tt.js",
+    "bytes": 123693,
+    "sha256": "E72D221313E50A0A25AB6A60BCDC1FE7E7CFEFD16D4426C93EE8C90974A30F58"
+  },
+  {
+    "source": "production",
+    "path": "assets\\firebase-firestore-CZpT9MEq.js",
+    "bytes": 364045,
+    "sha256": "3710DFA0129541C869480844CE1419589E0F9880A7D4011F0402542FCDC5A594"
+  },
+  {
+    "source": "production",
+    "path": "assets\\index-BXYRgZFm.js",
+    "bytes": 384009,
+    "sha256": "90677DD6E290CB4BA3EF54D6ABFCDFC72AAF3B56AE85A0472012B195FEE19F16"
+  },
+  {
+    "source": "production",
+    "path": "assets\\index-C9drOnjs.css",
+    "bytes": 46175,
+    "sha256": "37573D73C0263A404F3D8FF15CBFECB77850571D80E6E0C811AB3170E7D84990"
+  },
+  {
+    "source": "production",
+    "path": "assets\\react-vendor-Cy33O35p.js",
+    "bytes": 9058,
+    "sha256": "1E6722A92F8F23C75B58A12BA6894DC79D26BB642F135D061C2B05B65A2600D5"
+  },
+  {
+    "source": "preview-correcao",
+    "path": "index.html",
+    "bytes": 849,
+    "sha256": "77A9C949037D05DA9499A6F6A470F9C8FECE7D16AD9295849111148B3873880E"
+  },
+  {
+    "source": "preview-correcao",
+    "path": "assets\\firebase-auth-Ctb8h5Tt.js",
+    "bytes": 123693,
+    "sha256": "E72D221313E50A0A25AB6A60BCDC1FE7E7CFEFD16D4426C93EE8C90974A30F58"
+  },
+  {
+    "source": "preview-correcao",
+    "path": "assets\\firebase-firestore-CZpT9MEq.js",
+    "bytes": 364045,
+    "sha256": "3710DFA0129541C869480844CE1419589E0F9880A7D4011F0402542FCDC5A594"
+  },
+  {
+    "source": "preview-correcao",
+    "path": "assets\\index-29c5869f860a.js",
+    "bytes": 384009,
+    "sha256": "29C5869F860A6D89ACF8F9A4AD01FC5CC68D1F370F984DF09ECA26565C666B8B"
+  },
+  {
+    "source": "preview-correcao",
+    "path": "assets\\index-C9drOnjs.css",
+    "bytes": 46175,
+    "sha256": "37573D73C0263A404F3D8FF15CBFECB77850571D80E6E0C811AB3170E7D84990"
+  },
+  {
+    "source": "preview-correcao",
+    "path": "assets\\react-vendor-Cy33O35p.js",
+    "bytes": 9058,
+    "sha256": "1E6722A92F8F23C75B58A12BA6894DC79D26BB642F135D061C2B05B65A2600D5"
+  },
+  {
+    "source": "caravana-publicada-20261009-182053",
+    "path": "index.html",
+    "bytes": 861,
+    "sha256": "525591AAAEF546B3BCE6A77B248F469E10B275DEDAD91C041778746B12EF066F"
+  },
+  {
+    "source": "caravana-publicada-20261009-182053",
+    "path": "assets\\firebase-auth-Ctb8h5Tt.js",
+    "bytes": 123693,
+    "sha256": "E72D221313E50A0A25AB6A60BCDC1FE7E7CFEFD16D4426C93EE8C90974A30F58"
+  },
+  {
+    "source": "caravana-publicada-20261009-182053",
+    "path": "assets\\firebase-firestore-CZpT9MEq.js",
+    "bytes": 364045,
+    "sha256": "3710DFA0129541C869480844CE1419589E0F9880A7D4011F0402542FCDC5A594"
+  },
+  {
+    "source": "caravana-publicada-20261009-182053",
+    "path": "assets\\index-BXYRgZFm.js",
+    "bytes": 384009,
+    "sha256": "90677DD6E290CB4BA3EF54D6ABFCDFC72AAF3B56AE85A0472012B195FEE19F16"
+  },
+  {
+    "source": "caravana-publicada-20261009-182053",
+    "path": "assets\\index-C9drOnjs.css",
+    "bytes": 46175,
+    "sha256": "37573D73C0263A404F3D8FF15CBFECB77850571D80E6E0C811AB3170E7D84990"
+  },
+  {
+    "source": "caravana-publicada-20261009-182053",
+    "path": "assets\\react-vendor-Cy33O35p.js",
+    "bytes": 9058,
+    "sha256": "1E6722A92F8F23C75B58A12BA6894DC79D26BB642F135D061C2B05B65A2600D5"
+  },
+  {
+    "source": "caravana-77-producao-corrigida-20261009",
+    "path": "index.html",
+    "bytes": 849,
+    "sha256": "77A9C949037D05DA9499A6F6A470F9C8FECE7D16AD9295849111148B3873880E"
+  },
+  {
+    "source": "caravana-77-producao-corrigida-20261009",
+    "path": "assets\\firebase-auth-Ctb8h5Tt.js",
+    "bytes": 123693,
+    "sha256": "E72D221313E50A0A25AB6A60BCDC1FE7E7CFEFD16D4426C93EE8C90974A30F58"
+  },
+  {
+    "source": "caravana-77-producao-corrigida-20261009",
+    "path": "assets\\firebase-firestore-CZpT9MEq.js",
+    "bytes": 364045,
+    "sha256": "3710DFA0129541C869480844CE1419589E0F9880A7D4011F0402542FCDC5A594"
+  },
+  {
+    "source": "caravana-77-producao-corrigida-20261009",
+    "path": "assets\\index-29c5869f860a.js",
+    "bytes": 384009,
+    "sha256": "29C5869F860A6D89ACF8F9A4AD01FC5CC68D1F370F984DF09ECA26565C666B8B"
+  },
+  {
+    "source": "caravana-77-producao-corrigida-20261009",
+    "path": "assets\\index-C9drOnjs.css",
+    "bytes": 46175,
+    "sha256": "37573D73C0263A404F3D8FF15CBFECB77850571D80E6E0C811AB3170E7D84990"
+  },
+  {
+    "source": "caravana-77-producao-corrigida-20261009",
+    "path": "assets\\react-vendor-Cy33O35p.js",
+    "bytes": 9058,
+    "sha256": "1E6722A92F8F23C75B58A12BA6894DC79D26BB642F135D061C2B05B65A2600D5"
+  }
+]

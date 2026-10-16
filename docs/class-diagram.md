@@ -7,7 +7,7 @@ classDiagram
   class Caravan { +string id +string organizationId +string slug +int capacity +int reservedSeats +CaravanStatus status }
   class BoardingPoint { +string id +string name +string address +string time }
   class Registration { +string id +string caravanId +string passengerName +RegistrationStatus registrationStatus +PaymentStatus paymentStatus }
-  class PaymentProof { +string storagePath +datetime uploadedAt }
+  class PaymentProof { +string contentType +string fileName +datetime uploadedAt }
   class CheckIn { +datetime checkedInAt +string checkedInBy }
   Organization "1" --> "*" AdminUser
   Organization "1" --> "*" Caravan

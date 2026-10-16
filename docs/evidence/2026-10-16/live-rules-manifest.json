@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-10-16T16:30:00.686Z",
+  "projectId": "caravana-af306",
+  "readOnly": true,
+  "releases": [
+    {
+      "name": "projects/caravana-af306/releases/cloud.firestore",
+      "rulesetName": "projects/caravana-af306/rulesets/585cb14f-bdfe-4f58-a7fd-f760d222c4af",
+      "createTime": "2026-09-24T18:13:08.684895Z",
+      "updateTime": "2026-09-29T17:25:45.261231Z",
+      "files": [
+        {
+          "name": "firestore.rules",
+          "path": "cloud.firestore-firestore.rules",
+          "bytes": 25756,
+          "sha256": "fe5946141707e594e66911564163719474c77f7445e668aada5afaad42b22c1b",
+          "financePayments": true,
+          "financeExpenses": true,
+          "inlineProofs": true,
+          "memberships": false
+        }
+      ]
+    }
+  ]
+}

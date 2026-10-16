@@ -228,6 +228,12 @@ button:disabled {
   font-size: 11px;
   margin-top: 15px;
 }
+.hero-route {
+  margin: 15px 0 0;
+  color: #d8daf0;
+  font-size: 13px;
+  font-weight: 700;
+}
 .hero-art {
   height: 340px;
   position: relative;
@@ -647,6 +653,21 @@ button:disabled {
   color: #66d4e3;
   font-size: 11px;
 }
+.trip-return {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 15px;
+  color: #d6d8eb;
+  font-size: 12px;
+}
+.trip-return svg {
+  color: #83e1ea;
+  flex: none;
+}
+.trip-return strong {
+  color: #fff;
+}
 .trip-destination span {
   color: #9da4bf;
 }
@@ -965,6 +986,20 @@ button:disabled {
 }
 .field-full {
   grid-column: 1/-1;
+}
+.admin-check-field > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: #65708a;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.admin-check-field input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 1px 0 0;
+  flex: none;
 }
 .field > span {
   font-size: 11px;
@@ -1617,6 +1652,28 @@ td small {
   font-size: 9px;
   margin-top: 4px;
 }
+.authorization-cell {
+  display: grid;
+  gap: 4px;
+  min-width: 170px;
+}
+.authorization-cell strong {
+  color: #303a56;
+  font-size: 10px;
+}
+.authorization-cell small {
+  color: #858da1;
+  font-size: 9px;
+}
+.authorization-cell select {
+  max-width: 170px;
+  padding: 6px 8px;
+  border: 1px solid #e2e4ed;
+  border-radius: 7px;
+  background: #fff;
+  color: #59647b;
+  font-size: 10px;
+}
 .pill {
   display: inline-block;
   border-radius: 20px;
@@ -1727,6 +1784,7 @@ td small {
   display: flex;
   align-items: center;
   gap: 7px;
+  flex-wrap: wrap;
 }
 .admin-card-footer > strong {
   margin-right: auto;

@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "0141fb45-4f60-4e3c-b753-d2303d10dfd6",
+    "Environment": "Preview",
+    "Branch": "caravanasitalo",
+    "Source": "",
+    "Deployment": "https://0141fb45.caravana-77.pages.dev",
+    "Status": "6 days ago",
+    "Build": "https://dash.cloudflare.com/80a4c951d716d79fa10fffcf648d3288/pages/view/caravana-77/0141fb45-4f60-4e3c-b753-d2303d10dfd6"
+  },
+  {
+    "Id": "a2c5e89c-2eb0-483a-867e-9074d7373849",
+    "Environment": "Preview",
+    "Branch": "correcao-inscricao",
+    "Source": "",
+    "Deployment": "https://a2c5e89c.caravana-77.pages.dev",
+    "Status": "6 days ago",
+    "Build": "https://dash.cloudflare.com/80a4c951d716d79fa10fffcf648d3288/pages/view/caravana-77/a2c5e89c-2eb0-483a-867e-9074d7373849"
+  }
+]

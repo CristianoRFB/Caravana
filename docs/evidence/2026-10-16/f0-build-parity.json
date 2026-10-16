@@ -1,0 +1,38 @@
+[
+  {
+    "path": "index.html",
+    "expected": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f",
+    "actual": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f",
+    "equal": true
+  },
+  {
+    "path": "assets/index-BXYRgZFm.js",
+    "expected": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16",
+    "actual": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16",
+    "equal": true
+  },
+  {
+    "path": "assets/react-vendor-Cy33O35p.js",
+    "expected": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5",
+    "actual": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5",
+    "equal": true
+  },
+  {
+    "path": "assets/firebase-firestore-CZpT9MEq.js",
+    "expected": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594",
+    "actual": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594",
+    "equal": true
+  },
+  {
+    "path": "assets/firebase-auth-Ctb8h5Tt.js",
+    "expected": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58",
+    "actual": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58",
+    "equal": true
+  },
+  {
+    "path": "assets/index-C9drOnjs.css",
+    "expected": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990",
+    "actual": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990",
+    "equal": true
+  }
+]

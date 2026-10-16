@@ -6,7 +6,62 @@ export type RegistrationStatus =
   | "rejected"
   | "cancelled";
 export type PaymentStatus =
-  "pending" | "awaiting_review" | "approved" | "rejected";
+  | "pending"
+  | "awaiting_review"
+  | "approved"
+  | "rejected"
+  | "reported";
+export type PaymentMethod = "pix" | "transfer" | "cash" | "card" | "other";
+export type ExpenseCategory =
+  | "transporte"
+  | "alimentacao"
+  | "pedagio"
+  | "estacionamento"
+  | "outros";
+
+export interface DocumentRecord {
+  label: string;
+  value: string;
+}
+
+export interface PassengerPayment {
+  id: string;
+  registrationId: string;
+  organizationId: string;
+  caravanId: string;
+  amountCents: number;
+  method: PaymentMethod;
+  paymentDate?: string;
+  notes: string;
+  status: "active" | "voided";
+  createdAt: string;
+  createdBy: string;
+  voidedAt?: string;
+  voidedBy?: string;
+  voidReason?: string;
+}
+
+export interface CaravanExpense {
+  id: string;
+  organizationId: string;
+  caravanId: string;
+  description: string;
+  category: ExpenseCategory;
+  amountCents: number;
+  date: string;
+  notes: string;
+  createdAt: string;
+  createdBy: string;
+  updatedAt?: string;
+  updatedBy?: string;
+}
+export type AuthorizationStatus =
+  | "unknown"
+  | "not_required"
+  | "not_sent"
+  | "pending"
+  | "received"
+  | "approved";
 
 export interface BoardingPoint {
   id: string;
@@ -17,6 +72,7 @@ export interface BoardingPoint {
 export interface Caravan {
   id: string;
   organizationId: string;
+  organizerName?: string;
   name: string;
   slug: string;
   event: string;
@@ -30,6 +86,11 @@ export interface Caravan {
   priceCents: number;
   capacity: number;
   reservedSeats: number;
+  lastReservationNonce?: string;
+  requiresMinorAuthorization?: boolean;
+  paymentMethod?: string;
+  paymentInstructions?: string;
+  paymentDeadline?: string;
   pixKey: string;
   pixReceiver: string;
   whatsapp: string;
@@ -42,12 +103,19 @@ export interface Caravan {
 }
 export interface Registration {
   id: string;
+  reservationNonce?: string;
+  importedFromLegacy?: boolean;
   organizationId: string;
   caravanId: string;
   caravanName: string;
   passengerName: string;
   cpf?: string;
+  documentRecords?: DocumentRecord[];
   birthDate?: string;
+  isMinor?: boolean;
+  guardianName?: string;
+  guardianPhone?: string;
+  authorizationStatus?: AuthorizationStatus;
   phone: string;
   email: string;
   city: string;
@@ -55,77 +123,17 @@ export interface Registration {
   boardingPointName: string;
   emergencyContact: string;
   notes: string;
-  amountCents: number;
+  amountCents?: number;
+  paymentTotalCents?: number;
+  paymentReportedMethod?: "pix";
+  paymentReportedUnreconciled?: boolean;
   registrationStatus: RegistrationStatus;
   paymentStatus: PaymentStatus;
-  proofPath?: string;
+  proofId?: string;
   rejectionReason?: string;
   createdAt: string;
   checkedInAt?: string;
 }
-
-export const demoCaravan: Caravan = {
-  id: "demo-anime-friends-2026",
-  organizationId: "demo",
-  name: "Caravana Anime Friends 2026",
-  slug: "anime-friends-2026",
-  event: "Anime Friends 2026",
-  description:
-    "Uma viagem tranquila para curtir o maior encontro de cultura pop da América Latina com a galera da Caravana 77.",
-  date: "2026-07-04",
-  departureTime: "06:00",
-  returnTime: "21:30",
-  city: "São Paulo - SP",
-  destination: "Distrito Anhembi",
-  address: "Av. Olavo Fontoura, 1209 — Santana, São Paulo - SP",
-  priceCents: 8500,
-  capacity: 50,
-  reservedSeats: 0,
-  pixKey: "",
-  pixReceiver: "",
-  whatsapp: "",
-  status: "published",
-  boardingPoints: [
-    {
-      id: "tiete",
-      name: "Terminal Tietê",
-      address: "Av. Cruzeiro do Sul, 1800",
-      time: "06:00",
-    },
-    {
-      id: "jabaquara",
-      name: "Metrô Jabaquara",
-      address: "R. dos Jequitibás, s/n",
-      time: "06:45",
-    },
-  ],
-  benefits: [
-    "Transporte ida e volta",
-    "Acompanhamento da equipe",
-    "Brinde exclusivo da caravana",
-  ],
-  rules: [
-    "Chegue 15 minutos antes do horário do embarque.",
-    "Leve documento com foto e ingresso do evento.",
-  ],
-  faqs: [
-    {
-      question: "Posso levar comida?",
-      answer: "Sim. Leve lanches e bebidas não alcoólicas para o trajeto.",
-    },
-    {
-      question: "Que horas voltamos?",
-      answer:
-        "A saída do evento está prevista para 19h30, com chegada estimada às 21h30.",
-    },
-  ],
-  announcements: [
-    {
-      title: "Bem-vindo à caravana!",
-      body: "Acompanhe esta página para receber atualizações importantes sobre a viagem.",
-    },
-  ],
-};
 
 export const money = (cents: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
@@ -136,3 +144,26 @@ export const dateLabel = (iso: string) =>
     dateStyle: "long",
     timeZone: "UTC",
   }).format(new Date(`${iso}T12:00:00Z`));
+
+export function ageOnDate(birthDate: string, eventDate: string): number | null {
+  const birth = new Date(`${birthDate}T00:00:00Z`);
+  const event = new Date(`${eventDate}T00:00:00Z`);
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(birthDate) ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(eventDate) ||
+    Number.isNaN(birth.getTime()) ||
+    Number.isNaN(event.getTime()) ||
+    birth.toISOString().slice(0, 10) !== birthDate ||
+    event.toISOString().slice(0, 10) !== eventDate ||
+    event < birth
+  ) {
+    return null;
+  }
+  let age = event.getUTCFullYear() - birth.getUTCFullYear();
+  const beforeBirthday =
+    event.getUTCMonth() < birth.getUTCMonth() ||
+    (event.getUTCMonth() === birth.getUTCMonth() &&
+      event.getUTCDate() < birth.getUTCDate());
+  if (beforeBirthday) age--;
+  return age;
+}
