@@ -58,6 +58,31 @@ service cloud.firestore {
         && event.organizationId == orgId && event.actorUid == request.auth.uid
         && event.action == action && event.at == request.time;
     }
+    function supportGrant(orgId, operatorUid) {
+      return get(/databases/$(database)/documents/supportGrants/$(orgId)/operators/$(operatorUid)).data;
+    }
+    function supportEvent(orgId, eventId, operatorUid, action) {
+      let path = /databases/$(database)/documents/supportGrants/$(orgId)/audit/$(eventId);
+      let event = getAfter(path).data;
+      return eventId.matches('^[a-f0-9]{32}$') && !exists(path)
+        && event.organizationId == orgId && event.operatorUid == operatorUid
+        && event.actorUid == request.auth.uid && event.action == action && event.at == request.time;
+    }
+    function usableSupportGrant(orgId, operatorUid) {
+      let grant = supportGrant(orgId, operatorUid);
+      return grant.organizationId == orgId && grant.operatorUid == operatorUid
+        && grant.status == 'active' && grant.scope == 'caravan_configuration_read'
+        && grant.expiresAt > request.time;
+    }
+    function canSupportConfiguration(orgId) {
+      let session = get(/databases/$(database)/documents/supportSessions/$(request.auth.uid)).data;
+      return isPlatformOwner() && session.operatorUid == request.auth.uid
+        && session.organizationId == orgId && session.status == 'active'
+        && session.scope == 'caravan_configuration_read' && session.expiresAt > request.time
+        && usableSupportGrant(orgId, request.auth.uid)
+        && session.consentId == supportGrant(orgId, request.auth.uid).consentId
+        && session.expiresAt <= supportGrant(orgId, request.auth.uid).expiresAt;
+    }
 
     match /admins/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
@@ -143,8 +168,83 @@ service cloud.firestore {
           && request.resource.data.previousStatus != request.resource.data.status));
     }
 
+    match /supportGrants/{orgId}/operators/{operatorUid} {
+      function validConsent(data) {
+        return data.keys().hasOnly(['organizationId', 'operatorUid', 'status', 'scope', 'purpose', 'approvedBy', 'grantedAt', 'expiresAt', 'consentId', 'lastEventId'])
+          && data.organizationId == orgId && data.operatorUid == operatorUid
+          && data.status == 'active' && data.scope == 'caravan_configuration_read'
+          && data.purpose is string && data.purpose.size() >= 3 && data.purpose.size() <= 200
+          && data.approvedBy == request.auth.uid && data.grantedAt == request.time
+          && data.expiresAt is timestamp && data.expiresAt > request.time
+          && data.expiresAt <= request.time + duration.value(1, 'h')
+          && data.consentId == data.lastEventId
+          && exists(/databases/$(database)/documents/platformOwners/$(operatorUid))
+          && get(/databases/$(database)/documents/platformOwners/$(operatorUid)).data.status == 'active'
+          && supportEvent(orgId, data.lastEventId, operatorUid, 'support_granted');
+      }
+      allow get: if isTenantOwner(orgId) || (isPlatformOwner() && request.auth.uid == operatorUid);
+      allow list: if isTenantOwner(orgId);
+      allow create: if isTenantOwner(orgId) && validConsent(request.resource.data);
+      allow update: if isTenantOwner(orgId) && (validConsent(request.resource.data)
+        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'lastEventId'])
+          && resource.data.status == 'active' && request.resource.data.status == 'revoked'
+          && supportEvent(orgId, request.resource.data.lastEventId, operatorUid, 'support_revoked')));
+      allow delete: if false;
+    }
+    match /supportSessions/{operatorUid} {
+      function validSession(data) {
+        return data.keys().hasOnly(['organizationId', 'operatorUid', 'status', 'scope', 'purpose', 'openedAt', 'expiresAt', 'consentId', 'lastEventId'])
+          && data.operatorUid == operatorUid && data.status == 'active'
+          && data.scope == 'caravan_configuration_read' && data.openedAt == request.time
+          && usableSupportGrant(data.organizationId, operatorUid)
+          && data.consentId == supportGrant(data.organizationId, operatorUid).consentId
+          && data.purpose == supportGrant(data.organizationId, operatorUid).purpose
+          && data.expiresAt is timestamp && data.expiresAt > request.time
+          && data.expiresAt <= supportGrant(data.organizationId, operatorUid).expiresAt
+          && supportEvent(data.organizationId, data.lastEventId, operatorUid, 'support_opened');
+      }
+      allow get: if isPlatformOwner() && request.auth.uid == operatorUid;
+      allow list, delete: if false;
+      allow create: if isPlatformOwner() && request.auth.uid == operatorUid && validSession(request.resource.data);
+      allow update: if isPlatformOwner() && request.auth.uid == operatorUid && (validSession(request.resource.data)
+        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'lastEventId'])
+          && resource.data.status == 'active' && request.resource.data.status == 'closed'
+          && supportEvent(resource.data.organizationId, request.resource.data.lastEventId, operatorUid, 'support_closed')));
+    }
+    match /supportGrants/{orgId}/audit/{eventId} {
+      function matchingGrant(action) {
+        let path = /databases/$(database)/documents/supportGrants/$(orgId)/operators/$(request.resource.data.operatorUid);
+        let grant = getAfter(path).data;
+        return isTenantOwner(orgId) && grant.lastEventId == eventId
+          && (!exists(path) || get(path).data.lastEventId != eventId)
+          && grant.consentId == request.resource.data.consentId && grant.scope == request.resource.data.scope
+          && grant.purpose == request.resource.data.purpose && grant.expiresAt == request.resource.data.expiresAt
+          && ((action == 'support_granted' && grant.status == 'active' && grant.consentId == eventId)
+            || (action == 'support_revoked' && grant.status == 'revoked'));
+      }
+      function matchingSession(action) {
+        let path = /databases/$(database)/documents/supportSessions/$(request.auth.uid);
+        let session = getAfter(path).data;
+        return isPlatformOwner() && request.resource.data.operatorUid == request.auth.uid
+          && session.organizationId == orgId && session.lastEventId == eventId
+          && (!exists(path) || get(path).data.lastEventId != eventId)
+          && session.consentId == request.resource.data.consentId && session.scope == request.resource.data.scope
+          && session.purpose == request.resource.data.purpose && session.expiresAt == request.resource.data.expiresAt
+          && ((action == 'support_opened' && session.status == 'active') || (action == 'support_closed' && session.status == 'closed'));
+      }
+      allow get: if isTenantOwner(orgId) || (isPlatformOwner() && (resource == null || resource.data.operatorUid == request.auth.uid));
+      allow list: if isTenantOwner(orgId) || (isPlatformOwner() && resource.data.operatorUid == request.auth.uid);
+      allow update, delete: if false;
+      allow create: if eventId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.keys().hasOnly(['organizationId', 'operatorUid', 'actorUid', 'action', 'at', 'consentId', 'scope', 'expiresAt', 'purpose'])
+        && request.resource.data.organizationId == orgId && request.resource.data.actorUid == request.auth.uid
+        && request.resource.data.at == request.time && request.resource.data.scope == 'caravan_configuration_read'
+        && (matchingGrant(request.resource.data.action) || matchingSession(request.resource.data.action));
+    }
+
     match /caravans/{caravanId} {
-      allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId);
+      allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId)
+        || (signedIn() && canSupportConfiguration(resource.data.organizationId));
       allow create: if isTenantOwner(request.resource.data.organizationId)
         && request.resource.data.reservedSeats == 0
         && request.resource.data.capacity is int
