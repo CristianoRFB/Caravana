@@ -411,7 +411,7 @@ describe("Firestore security rules", () => {
     );
   });
 
-  it("lets staff check missing candidate import IDs without exposing absent records publicly", async () => {
+  it("lets staff and opaque guest retries check absence without exposing any existing private record", async () => {
     await seed();
     const missingId = "9".repeat(64);
     const staff = env.authenticatedContext("admin-a").firestore();
@@ -420,7 +420,8 @@ describe("Firestore security rules", () => {
       getDoc(doc(staff, `registrations/${missingId}`)),
     );
     expect(staffResult.exists()).toBe(false);
-    await assertFails(getDoc(doc(guest, `registrations/${missingId}`)));
+    expect((await getDoc(doc(guest, `registrations/${missingId}`))).exists()).toBe(false);
+    await assertFails(getDoc(doc(guest, "registrations/guessable-missing")));
   });
 
   it("keeps sequential partial payments in history, reconciles the total, and blocks overpayment", async () => {

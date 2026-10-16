@@ -16,6 +16,8 @@ const commands = {
   storage: "vitest run --config vitest.storage.config.ts",
   platform: "vitest run tests/platform.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/data.integration.test.ts",
   support: "vitest run tests/support.integration.test.ts",
+  booking: "vitest run tests/reservation-attempt.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts",
+  "booking-e2e": "playwright test e2e/reservation.spec.ts --project desktop-1440 --project mobile-320",
   "support-e2e": "playwright test e2e/support.spec.ts --project desktop-1440 --project mobile-320",
   "platform-e2e": "playwright test e2e/platform.spec.ts --project desktop-1440 --project mobile-320",
   "tenant-writes": "vitest run tests/pending-writes.test.ts tests/data.integration.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts",
@@ -24,7 +26,7 @@ const commands = {
   migration: "node scripts/simulate-membership-migration.mjs --apply-synthetic",
 };
 if (!Object.hasOwn(commands, suite) || process.argv.length > 3) throw new Error("Choose a documented local suite.");
-const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo", "tenant-e2e", "platform-e2e", "support-e2e"].includes(suite);
+const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo", "tenant-e2e", "platform-e2e", "support-e2e", "booking-e2e"].includes(suite);
 const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "storage" ? "firestore,auth,storage" : withAuth ? "firestore,auth" : "firestore", commands[suite]];
 let exitCode = 1;
 try {

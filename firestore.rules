@@ -366,17 +366,18 @@ service cloud.firestore {
           && (!('documentRecords' in data) || (data.documentRecords is list && data.documentRecords.size() <= 3))
           && (!('requiresMinorAuthorization' in trip.data) || trip.data.requiresMinorAuthorization != true || data.paymentStatus == 'reported' || ('birthDate' in data && 'isMinor' in data && 'authorizationStatus' in data));
       }
-      // Authenticated imports may test an absent candidate ID (no document data).
+      // Import candidates and opaque reservation retries may test absence (no document data).
       // Existing records still require organization authority or an active bearer link.
       allow get: if (resource == null
-          && signedIn())
+          && (signedIn() || registrationId.matches('^[a-f0-9]{64}$')))
         || (resource != null
           && (isAdmin(resource.data.organizationId) || (registrationId.matches('^[a-f0-9]{64}$')
             && (!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false))));
       allow list: if isAdmin(resource.data.organizationId);
       allow create: if validLegacyImport(registrationId) || (request.resource.data.id == registrationId
         && registrationId.matches('^[a-f0-9]{64}$')
-        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'reservationRequestHash', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
+        && (!('reservationRequestHash' in request.resource.data) || (request.resource.data.reservationRequestHash is string && request.resource.data.reservationRequestHash.matches('^[a-f0-9]{64}$')))
         && request.resource.data.reservationNonce is string
         && request.resource.data.reservationNonce.matches('^[a-f0-9]{64}$')
         && request.resource.data.reservationNonce != registrationId
@@ -418,6 +419,8 @@ service cloud.firestore {
           && request.resource.data.organizationId == resource.data.organizationId
           && request.resource.data.caravanId == resource.data.caravanId
           && request.resource.data.get('id', registrationId) == resource.data.get('id', registrationId)
+          && request.resource.data.get('reservationNonce', '') == resource.data.get('reservationNonce', '')
+          && request.resource.data.get('reservationRequestHash', '') == resource.data.get('reservationRequestHash', '')
           && (isTenantOwner(resource.data.organizationId)
             || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled'])))
         || ((!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false)
@@ -430,7 +433,8 @@ service cloud.firestore {
           && request.resource.data.proofUploadedAt <= request.time
           && existsAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current)
           && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current).data.registrationId == registrationId);
-      allow delete: if isTenantOwner(resource.data.organizationId);
+      // Preserve operation identity and history; cancellation is the controlled reversal.
+      allow delete: if false;
 
       match /payments/{paymentId} {
         function parentRegistration() {

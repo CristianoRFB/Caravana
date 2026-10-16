@@ -2,7 +2,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc, writeBatch, type Firestore } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, writeBatch, type Firestore } from "firebase/firestore";
+import { createReservationAttempt } from "../src/lib/reservation-attempt";
 import { assertFails } from "@firebase/rules-unit-testing";
 import { PROOF_POLICY } from "../src/lib/proof-policy";
 import { legacyImportDocumentId } from "../src/lib/legacy-import";
@@ -65,6 +66,44 @@ async function seedRegistration(extra: Partial<Registration> = {}) {
 }
 
 describe("production data functions on synthetic emulator fixtures", () => {
+  it("replays one concurrent booking operation without taking two seats, including after another reservation", async () => {
+    const trip = await seedTrip({ capacity: 2 }); const attempt = createReservationAttempt();
+    const ids = await Promise.all([reserveSeat(trip, passenger, attempt), reserveSeat(trip, passenger, attempt)]);
+    expect(ids).toEqual([attempt.registrationId, attempt.registrationId]);
+    await reserveSeat(trip, { ...passenger, passengerName: "Another synthetic" });
+    // The original private receipt has now been replaced; the registration remains authoritative.
+    expect(await reserveSeat(trip, passenger, attempt)).toBe(attempt.registrationId);
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(2);
+    runtime.db = env.authenticatedContext("admin-a").firestore();
+    expect((await getDocs(query(collection(runtime.db!, "registrations"), where("organizationId", "==", "org-a")))).size).toBe(2);
+  });
+  it("rejects changed payload/nonce/caravan, preserves identity and prevents client deletion of a committed operation", async () => {
+    const trip = await seedTrip(); const attempt = createReservationAttempt(); await reserveSeat(trip, passenger, attempt);
+    await expect(reserveSeat(trip, { ...passenger, passengerName: "Changed" }, attempt)).rejects.toThrow("outros dados");
+    await expect(reserveSeat(trip, passenger, { ...attempt, reservationNonce: "f".repeat(64) })).rejects.toThrow("outros dados");
+    await expect(reserveSeat({ ...trip, id: "other-trip" }, passenger, attempt)).rejects.toThrow("outros dados");
+    runtime.db = env.authenticatedContext("admin-a").firestore();
+    await assertFails(updateDoc(doc(runtime.db!, `registrations/${attempt.registrationId}`), { reservationRequestHash: "f".repeat(64) }));
+    await assertFails(updateDoc(doc(runtime.db!, `registrations/${attempt.registrationId}`), { reservationNonce: "f".repeat(64) }));
+    await assertFails(deleteDoc(doc(runtime.db!, `registrations/${attempt.registrationId}`)));
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(1);
+  });
+  it("does not reopen cancelled bookings or bypass revocation when retrying the same operation", async () => {
+    const trip = await seedTrip(); const attempt = createReservationAttempt(); await reserveSeat(trip, passenger, attempt);
+    runtime.db = env.authenticatedContext("admin-a").firestore();
+    await cancelRegistration((await getRegistration(attempt.registrationId))!);
+    runtime.db = env.unauthenticatedContext().firestore();
+    expect(await reserveSeat(trip, passenger, attempt)).toBe(attempt.registrationId);
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(0);
+    runtime.db = env.authenticatedContext("admin-a").firestore(); await setPortalAccessRevoked(attempt.registrationId, true);
+    runtime.db = env.unauthenticatedContext().firestore(); await assertFails(reserveSeat(trip, passenger, attempt));
+  });
+  it("allows opaque absent-ID retry probes but never lists registrations or reads revoked data", async () => {
+    await seedTrip();
+    expect((await getDoc(doc(runtime.db!, `registrations/${"e".repeat(64)}`))).exists()).toBe(false);
+    await assertFails(getDoc(doc(runtime.db!, "registrations/guessable-id")));
+    await assertFails(getDocs(collection(runtime.db!, "registrations")));
+  });
   it("supports imports and manual ledger writes for a membership-only owner without a legacy admin record", async () => {
     await seedTrip();
     await env.withSecurityRulesDisabled(async (context) => {

@@ -59,5 +59,6 @@ npm run test:storage    — Auth/Firestore/Storage isolados; leituras privadas A
 npm run test:tenant:operations / npm run test:tenant:e2e — operações pendentes e troca de organização.
 npm run test:platform / npm run test:platform:e2e — permissão global, onboarding por UID e auditoria. Identidade global adicional só na suite de segurança; não é criada pelo comando demo.
 npm run test:support / npm run test:support:e2e — consentimento do owner, configuração somente leitura, prazo, revogação e auditoria. A mesma identidade global é exclusiva da fixture de segurança, sem elevação de contas demo normais.
+npm run test:booking / npm run test:booking:e2e — identidade de reserva persistida, replay, concorrência, conflito, revogação e retomada na última vaga.
 npm test / npm run test:e2e / npm run build — gates completos de checkpoint, sem repetição automática a cada edição.
 Não execute testes simultaneamente com npm run demo, pois usam as mesmas portas isoladas. Encerre a demonstração antes de rodar testes.

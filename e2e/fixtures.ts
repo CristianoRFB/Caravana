@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import type { Caravan, Registration } from "../src/lib/types";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
@@ -21,6 +21,22 @@ export async function patchSyntheticTrip(fields: Partial<Caravan>) {
     await env.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), "caravans/ride-a"), fields, { merge: true });
     });
+  } finally { await env.cleanup(); }
+}
+
+export async function inspectSyntheticBookings() {
+  assertSyntheticEndpoints();
+  const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try {
+    let result: { reservedSeats: number; registrationCount: number } | undefined;
+    await env.withSecurityRulesDisabled(async (context) => {
+      const db = context.firestore();
+      const trip = await getDoc(doc(db, "caravans/ride-a"));
+      const registrations = await getDocs(query(collection(db, "registrations"), where("caravanId", "==", "ride-a")));
+      result = { reservedSeats: Number(trip.data()?.reservedSeats), registrationCount: registrations.size };
+    });
+    if (!result) throw new Error("Synthetic booking inspection did not finish.");
+    return result;
   } finally { await env.cleanup(); }
 }
 

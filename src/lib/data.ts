@@ -3,6 +3,7 @@ import {
   deleteField,
   doc,
   getDoc,
+  getDocFromServer,
   getDocs,
   onSnapshot,
   orderBy,
@@ -33,6 +34,7 @@ import {
 import { legacyImportDocumentId, type LegacyRegistrationDraft } from "./legacy-import";
 import { validateProofFile } from "./proof-policy";
 import { isDemoIdentity } from "./demo-identities";
+import { createReservationAttempt, reservationRequestHash, ReservationAttemptConflict, validReservationAttempt, type ReservationAttempt } from "./reservation-attempt";
 
 const legacyReservationIdsCleared = new Set<string>();
 
@@ -127,6 +129,7 @@ export async function reserveSeat(
     | "guardianName"
     | "guardianPhone"
   >,
+  attempt: ReservationAttempt = createReservationAttempt(),
 ): Promise<string> {
   if (!db || !firebaseConfigured)
     throw new Error("O serviço de reservas ainda não está configurado.");
@@ -136,72 +139,78 @@ export async function reserveSeat(
     );
   const database = db;
   if (isDemoIdentity(form.email)) assertIdentityAllowed(form.email);
-  const id =
-    crypto.randomUUID().replaceAll("-", "") +
-    crypto.randomUUID().replaceAll("-", "");
+  if (!validReservationAttempt(attempt)) throw new Error("Tentativa de reserva inválida.");
+  const id = attempt.registrationId;
   // The public caravan may expose this nonce; only the private receipt knows the registration ID.
-  const reservationNonce =
-    crypto.randomUUID().replaceAll("-", "") +
-    crypto.randomUUID().replaceAll("-", "");
+  const reservationNonce = attempt.reservationNonce;
+  const requestHash = await reservationRequestHash(caravan.id, form);
   const caravanRef = doc(database, "caravans", caravan.id);
   const registrationRef = doc(database, "registrations", id);
   const receiptRef = doc(database, "reservationReceipts", reservationNonce);
   const { cpf, birthDate, guardianName, guardianPhone, ...registrationDetails } = form;
-  await runTransaction(database, async (tx) => {
-    const snap = await tx.get(caravanRef);
-    if (!snap.exists())
-      throw new Error("Esta caravana não está mais disponível.");
-    const current = snap.data() as Caravan;
-    if (typeof current.organizationId !== "string" || !current.organizationId.trim() ||
-        typeof current.name !== "string" || !current.name.trim() ||
-        !Number.isSafeInteger(current.priceCents) || current.priceCents < 0 ||
-        !Number.isSafeInteger(current.capacity) || current.capacity <= 0 ||
-        !Number.isSafeInteger(current.reservedSeats) || current.reservedSeats < 0) {
-      throw new Error("Esta caravana está com dados incompletos. Fale com a organização.");
-    }
-    const availability = await tx.get(doc(database, "organizationAvailability", current.organizationId));
-    if (availability.data()?.status === "suspended") throw new Error("Novas reservas estão temporariamente suspensas pela organização.");
-    if (
-      current.status !== "published" ||
-      current.reservedSeats >= current.capacity
-    )
-      throw new Error("As vagas desta caravana foram preenchidas.");
-    const boardingPoint = (Array.isArray(current.boardingPoints) ? current.boardingPoints : []).find(
-      (point) => point.id === form.boardingPointId,
-    );
-    if (!boardingPoint || typeof boardingPoint.name !== "string" || !boardingPoint.name.trim())
-      throw new Error(
-        "Este ponto de embarque não está mais disponível. Atualize a página e tente novamente.",
-      );
-    let minorForThisTrip = false;
-    if (current.requiresMinorAuthorization) {
-      if (!birthDate) {
-        throw new Error("Informe a data de nascimento para esta viagem.");
+  const matchesAttempt = (saved: Record<string, unknown>) => saved.caravanId === caravan.id && saved.reservationNonce === reservationNonce && saved.reservationRequestHash === requestHash;
+  try {
+    await runTransaction(database, async (tx) => {
+      const existing = await tx.get(registrationRef);
+      if (existing.exists()) {
+        const saved = existing.data();
+        if (!matchesAttempt(saved)) throw new ReservationAttemptConflict(id);
+        return;
       }
-      const age = ageOnDate(birthDate, current.date);
-      if (age === null) {
-        throw new Error("Confira a data de nascimento informada.");
+      const snap = await tx.get(caravanRef);
+      if (!snap.exists())
+        throw new Error("Esta caravana não está mais disponível.");
+      const current = snap.data() as Caravan;
+      if (typeof current.organizationId !== "string" || !current.organizationId.trim() ||
+          typeof current.name !== "string" || !current.name.trim() ||
+          !Number.isSafeInteger(current.priceCents) || current.priceCents < 0 ||
+          !Number.isSafeInteger(current.capacity) || current.capacity <= 0 ||
+          !Number.isSafeInteger(current.reservedSeats) || current.reservedSeats < 0) {
+        throw new Error("Esta caravana está com dados incompletos. Fale com a organização.");
       }
-      minorForThisTrip = age < 18;
+      const availability = await tx.get(doc(database, "organizationAvailability", current.organizationId));
+      if (availability.data()?.status === "suspended") throw new Error("Novas reservas estão temporariamente suspensas pela organização.");
       if (
-        minorForThisTrip &&
-        (!form.guardianName?.trim() || !form.guardianPhone?.trim())
-      ) {
+        current.status !== "published" ||
+        current.reservedSeats >= current.capacity
+      )
+        throw new Error("As vagas desta caravana foram preenchidas.");
+      const boardingPoint = (Array.isArray(current.boardingPoints) ? current.boardingPoints : []).find(
+        (point) => point.id === form.boardingPointId,
+      );
+      if (!boardingPoint || typeof boardingPoint.name !== "string" || !boardingPoint.name.trim())
         throw new Error(
-          "Para passageiro menor, informe nome e telefone do responsável.",
+          "Este ponto de embarque não está mais disponível. Atualize a página e tente novamente.",
+        );
+      let minorForThisTrip = false;
+      if (current.requiresMinorAuthorization) {
+        if (!birthDate) {
+          throw new Error("Informe a data de nascimento para esta viagem.");
+        }
+        const age = ageOnDate(birthDate, current.date);
+        if (age === null) {
+          throw new Error("Confira a data de nascimento informada.");
+        }
+        minorForThisTrip = age < 18;
+        if (
+          minorForThisTrip &&
+          (!form.guardianName?.trim() || !form.guardianPhone?.trim())
+        ) {
+          throw new Error(
+            "Para passageiro menor, informe nome e telefone do responsável.",
+          );
+        }
+      }
+      if (current.lastReservationNonce) {
+        tx.delete(
+          doc(database, "reservationReceipts", current.lastReservationNonce),
         );
       }
-    }
-    if (current.lastReservationNonce) {
-      tx.delete(
-        doc(database, "reservationReceipts", current.lastReservationNonce),
-      );
-    }
-    tx.update(caravanRef, {
-      reservedSeats: current.reservedSeats + 1,
-      lastReservationNonce: reservationNonce,
-      lastReservationId: deleteField(),
-      updatedAt: serverTimestamp(),
+      tx.update(caravanRef, {
+        reservedSeats: current.reservedSeats + 1,
+        lastReservationNonce: reservationNonce,
+        lastReservationId: deleteField(),
+        updatedAt: serverTimestamp(),
     });
     tx.set(registrationRef, {
       ...registrationDetails,
@@ -224,6 +233,7 @@ export async function reserveSeat(
       boardingPointName: boardingPoint.name,
       id,
       reservationNonce,
+      reservationRequestHash: requestHash,
       organizationId: current.organizationId,
       caravanId: caravanRef.id,
       caravanName: current.name,
@@ -237,7 +247,16 @@ export async function reserveSeat(
       organizationId: current.organizationId,
       caravanId: caravanRef.id,
     });
-  });
+    });
+  } catch (cause) {
+    // Concurrent same-operation creates may be rejected by Rules before SDK conflict retry.
+    // A fresh server read is the only acceptable evidence that this exact request committed.
+    try {
+      const committed = await getDocFromServer(registrationRef);
+      if (committed.exists() && matchesAttempt(committed.data())) return id;
+    } catch { /* no confirmed receipt: preserve the original failure and pending attempt */ }
+    throw cause;
+  }
   return id;
 }
 export async function getRegistration(

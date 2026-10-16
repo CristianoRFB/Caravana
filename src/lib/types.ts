@@ -105,6 +105,7 @@ export interface Registration {
   id: string;
   portalAccessRevoked?: boolean;
   reservationNonce?: string;
+  reservationRequestHash?: string;
   importedFromLegacy?: boolean;
   organizationId: string;
   caravanId: string;

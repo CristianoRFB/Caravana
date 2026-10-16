@@ -89,6 +89,7 @@ import FinancePage from "./Finance";
 import PlatformPage from "./Platform";
 import { SupportOwner } from "./Support";
 import { PROOF_POLICY } from "./lib/proof-policy";
+import { completeReservationAttempt, getReservationAttempt, readReservationAttempt, ReservationAttemptConflict } from "./lib/reservation-attempt";
 
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : "Algo deu errado. Tente novamente.";
@@ -658,6 +659,9 @@ function RegistrationPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [submissionError, setSubmissionError] = useState("");
+  const [resumeId, setResumeId] = useState("");
+  const [retryAvailable, setRetryAvailable] = useState(false);
   const [form, setForm] = useState({
     passengerName: "",
     cpf: "",
@@ -685,7 +689,11 @@ function RegistrationPage() {
     }, 10000);
     findCaravan(slug)
       .then((value) => {
-        if (active) setCaravan(value);
+        if (active) {
+          setCaravan(value);
+          try { setRetryAvailable(Boolean(value && readReservationAttempt(value.id, window.sessionStorage))); }
+          catch (cause) { setSubmissionError(errorMessage(cause)); }
+        }
       })
       .catch((e) => {
         if (active) setError(errorMessage(e));
@@ -719,26 +727,31 @@ function RegistrationPage() {
     if (!caravan) return;
     const cpfDigits = form.cpf.replace(/\D/g, "");
     if (cpfDigits && !validCpf(cpfDigits)) {
-      setError(
+      setSubmissionError(
         "Confira o CPF ou deixe o campo em branco.",
       );
       return;
     }
     if (caravan.requiresMinorAuthorization && age === null) {
-      setError("Informe uma data de nascimento válida para esta viagem.");
+      setSubmissionError("Informe uma data de nascimento válida para esta viagem.");
       return;
     }
     if (isMinor && (!form.guardianName.trim() || !form.guardianPhone.trim())) {
-      setError("Para passageiro menor, informe nome e telefone do responsável.");
+      setSubmissionError("Para passageiro menor, informe nome e telefone do responsável.");
       return;
     }
-    setError("");
+    setSubmissionError(""); setResumeId("");
     setBusy(true);
     try {
-      const id = await reserveSeat(caravan, form);
+      const storage = window.sessionStorage;
+      const attempt = getReservationAttempt(caravan.id, storage);
+      setRetryAvailable(true);
+      const id = await reserveSeat(caravan, form, attempt);
+      completeReservationAttempt(caravan.id, attempt, storage);
       nav(`/minha-inscricao/${id}`);
     } catch (err) {
-      setError(errorMessage(err));
+      setSubmissionError(errorMessage(err));
+      if (err instanceof ReservationAttemptConflict) setResumeId(err.registrationId);
     } finally {
       setBusy(false);
     }
@@ -933,18 +946,18 @@ function RegistrationPage() {
                   />
                 </Field>
               </div>
-              {error && <div className="error-message">{error}</div>}
+              {submissionError && <div className="error-message" role="alert">{submissionError}{resumeId && <p><Link to={`/minha-inscricao/${resumeId}`}>Consultar inscrição existente</Link></p>}</div>}
               <Notice>
                 Seus dados são usados apenas para organizar esta viagem.
               </Notice>
               <button
                 className="button button-primary button-large form-submit"
-                disabled={busy || caravan.reservedSeats >= caravan.capacity}
+                disabled={busy || (caravan.reservedSeats >= caravan.capacity && !retryAvailable)}
               >
                 {busy
                   ? "Reservando…"
                   : caravan.reservedSeats >= caravan.capacity
-                    ? "Vagas esgotadas"
+                    ? retryAvailable ? "Verificar minha reserva" : "Vagas esgotadas"
                     : "Garantir minha vaga"}{" "}
                 {!busy && caravan.reservedSeats < caravan.capacity && (
                   <ArrowRight size={17} />
