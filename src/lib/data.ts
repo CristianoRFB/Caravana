@@ -49,19 +49,19 @@ export async function findCaravan(slug: string): Promise<Caravan | null> {
   );
   return snap.empty
     ? null
-    : ({ id: snap.docs[0].id, ...snap.docs[0].data() } as Caravan);
+    : ({ ...snap.docs[0].data(), id: snap.docs[0].id } as Caravan);
 }
 export async function listPublishedCaravans(): Promise<Caravan[]> {
   if (!db || !firebaseConfigured) return [];
   const snap = await getDocs(
     query(collection(db, "caravans"), where("status", "==", "published")),
   );
-  return snap.docs.map((item) => ({ id: item.id, ...item.data() }) as Caravan);
+  return snap.docs.map((item) => ({ ...item.data(), id: item.id }) as Caravan);
 }
 export async function getCaravanById(id: string): Promise<Caravan | null> {
   if (!db) return null;
   const snap = await getDoc(doc(db, "caravans", id));
-  return snap.exists() ? ({ id: snap.id, ...snap.data() } as Caravan) : null;
+  return snap.exists() ? ({ ...snap.data(), id: snap.id } as Caravan) : null;
 }
 export function watchAdminCaravans(
   orgId: string,
@@ -72,7 +72,7 @@ export function watchAdminCaravans(
   return onSnapshot(
     query(collection(db, "caravans"), where("organizationId", "==", orgId)),
     (snap) =>
-      callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Caravan)),
+      callback(snap.docs.map((d) => ({ ...d.data(), id: d.id }) as Caravan)),
     fail,
   );
 }
@@ -91,7 +91,7 @@ export function watchRegistrations(
     ),
     (snap) =>
       callback(
-        snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Registration),
+        snap.docs.map((d) => ({ ...d.data(), id: d.id }) as Registration),
       ),
     fail,
   );
@@ -106,7 +106,7 @@ export function watchOrganizationRegistrations(
     query(collection(db, "registrations"), where("organizationId", "==", orgId)),
     (snap) =>
       callback(
-        snap.docs.map((item) => ({ id: item.id, ...item.data() }) as Registration),
+        snap.docs.map((item) => ({ ...item.data(), id: item.id }) as Registration),
       ),
     fail,
   );
@@ -216,7 +216,7 @@ export async function reserveSeat(
       id,
       reservationNonce,
       organizationId: current.organizationId,
-      caravanId: current.id,
+      caravanId: caravanRef.id,
       caravanName: current.name,
       amountCents: current.priceCents,
       registrationStatus: "awaiting_payment",
@@ -226,7 +226,7 @@ export async function reserveSeat(
     tx.set(receiptRef, {
       registrationId: id,
       organizationId: current.organizationId,
-      caravanId: current.id,
+      caravanId: caravanRef.id,
     });
   });
   return id;
@@ -237,7 +237,7 @@ export async function getRegistration(
   if (!db) return null;
   const snap = await getDoc(doc(db, "registrations", id));
   return snap.exists()
-    ? ({ id: snap.id, ...snap.data() } as Registration)
+    ? ({ ...snap.data(), id: snap.id } as Registration)
     : null;
 }
 export function watchRegistration(
@@ -251,7 +251,7 @@ export function watchRegistration(
     (snap) =>
       callback(
         snap.exists()
-          ? ({ id: snap.id, ...snap.data() } as Registration)
+          ? ({ ...snap.data(), id: snap.id } as Registration)
           : null,
       ),
     fail,
@@ -581,7 +581,7 @@ export function watchPassengerPayments(
       orderBy("createdAt", "desc"),
     ),
     (snapshot) =>
-      callback(snapshot.docs.map((item) => ({ id: item.id, ...item.data() }) as PassengerPayment)),
+      callback(snapshot.docs.map((item) => ({ ...item.data(), id: item.id }) as PassengerPayment)),
     fail,
   );
 }
@@ -692,7 +692,7 @@ export function watchCaravanExpenses(
   return onSnapshot(
     query(collection(db, "caravans", caravanId, "expenses"), orderBy("date", "desc")),
     (snapshot) =>
-      callback(snapshot.docs.map((item) => ({ id: item.id, ...item.data() }) as CaravanExpense)),
+      callback(snapshot.docs.map((item) => ({ ...item.data(), id: item.id }) as CaravanExpense)),
     fail,
   );
 }

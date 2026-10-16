@@ -10,7 +10,13 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F0-04 | P0 | PASS | Recuperação em worktree isolada baseada em fa4d138 | SOURCE_RECONCILIATION.md; fonte TS original, sem decompilação | Checkout original intacto |
 | F0-05 | P0 | PASS para Rules; UNKNOWN para registros reais | Rules implantadas capturadas somente leitura e idênticas às recuperadas | live-rules-manifest.json; SHA256 fe594614... | Nenhuma PII consultada; não equivale a homologação |
 | F0-09 | P0 | PASS | Build reproduzível com financeiro | f0-build-parity.json: seis arquivos idênticos; 26 testes; lint/typecheck/build | Não publicar dist; nenhuma garantia de operação bancária |
-| F1 | P0 | TODO | Regressão e fix das duas referências de ID | Emuladores e fixtures sintéticas | Após rastreabilidade F0 |
+| F1 | P0 | IN_PROGRESS | Checkpoint F0 69abd6f; regressão pela função real de reserva | Fixtures sem id, id legado, concorrência, cancelamento, ledger e upload | Primeiro capturar falha do bug publicado, depois corrigir |
+| F1-ID-RED | P0 | FAIL (baseline; corrigindo) | 4 de 8 novos testes reproduzem erro real da fonte publicada | f1-before-id-fix-isolated.log; 30 PASS/4 FAIL | Undefined, id legado errado e última vaga; corrigir ambas as escritas e leitura canônica |
+| F1-TEST-ISOLATION | P0 | IN_PROGRESS | Porta 8080 ocupada; configuração de testes separada 18080, projeto demo-caravana77-test | f1-before-id-fix.log registra falha de infraestrutura; rerun isolado executou 34 testes | Nenhum processo de terceiro encerrado; serviços reais não recebem testes |
+| F1-ID-GREEN | P0 | PASS | Ambas as escritas usam caravanRef.id; leituras priorizam snapshot.id | f1-id-final-tests.log: 34 PASS; lint/typecheck/build PASS | Fonte financeira e layout preservados; fix ainda local |
+| F1-RUNNER | P0 | PASS | npm test usa projeto demo, loopback e runner com cleanup Windows restrito ao processo criado nesta execução | f1-id-final-tests.log, exit 0 e Java encerrado | Erro inicial de ExecutionPolicy corrigido sem mudar política do sistema |
+| F1-PROOFS | P0 | TODO | Unificar 600 KiB com tamanho base64 e assinatura real | Ainda não implementado | Storage legado continua fora da configuração ativa |
+| F1-CSV | P0 | TODO | Exercitar importação real sobre fixtures | Replay mesmo lote, capacity e conflitos | Nenhuma importação real |
 | F2 | P0 | TODO | Core multi-tenant e migração sintética | A×B, RBAC, restore | Nunca migrar produção |
 | F3 | P0/P1 | TODO | Estados, reservas, CSV, check-in | Jornadas sintéticas | F2 dependente |
 | F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |

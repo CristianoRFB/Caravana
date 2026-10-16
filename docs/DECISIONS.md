@@ -11,3 +11,7 @@ Worktree gerida separada, branch codex/caravana77-commercial-v1-20261016. Backup
 ## ADR-003 — Storage legado
 
 O arquivo storage.rules de main será preservado como evidência legada na recuperação, mesmo que a configuração avançada use comprovantes inline em Firestore. Não inferir migração ou ausência de objetos de Storage reais. Policy definitiva e Rules implantadas dependem de auditoria autorizada.
+
+## ADR-004 — Testes repetíveis e sem recursos reais
+
+npm test usa Firebase demo-caravana77-test, portas loopback separadas e suites sem paralelismo de arquivos. Isso impede colisão de clearFirestore e fallback para um projeto real. No Windows/JDK 25 observado, a CLI deixa Java ativo após SIGINT; o runner encerra somente processo novo, do projeto demo e do caminho de Rules da worktree, sem terminar emuladores preexistentes e sem alterar ExecutionPolicy.

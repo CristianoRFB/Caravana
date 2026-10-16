@@ -1,0 +1,83 @@
+
+> caravana-77@0.1.0 test
+> firebase emulators:exec --config firebase.test.json --project demo-caravana77-test --only firestore "vitest run"
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/data.integration.test.ts (8 tests | 4 failed) 1132ms
+   ❯ production data functions on synthetic emulator fixtures (8)
+     × books a document without a stored id and links both registration and private receipt to its reference 173ms
+     × ignores a misleading stored id in the booking transaction 83ms
+     × reads the canonical caravan document id even when legacy data contains a different id 79ms
+     × allows only one real reserveSeat call to claim the final seat 55ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/data.integration.test.ts > production data functions on synthetic emulator fixtures > books a document without a stored id and links both registration and private receipt to its reference
+FirebaseError: Function Transaction.set() called with invalid data. Unsupported field value: undefined (found in field caravanId in document registrations/e9a8394efba9448c9334c90f76ac3cdc13223aa502af42d2be68c2f28b627490)
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/data.integration.test.ts > production data functions on synthetic emulator fixtures > ignores a misleading stored id in the booking transaction
+FirebaseError: 7 PERMISSION_DENIED: 
+evaluation error at L33:24 for 'update' @ L33, evaluation error at L156:24 for 'create' @ L156, false for 'update' @ L196, evaluation error at L60:24 for 'create' @ L60, false for 'update' @ L77, false for 'create' @ L60
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/data.integration.test.ts > production data functions on synthetic emulator fixtures > reads the canonical caravan document id even when legacy data contains a different id
+AssertionError: expected 'stale-id' to be 'ride-a' // Object.is equality
+
+Expected: "ride-a"
+Received: "stale-id"
+
+ ❯ tests/data.integration.test.ts:84:50
+     82|   it("reads the canonical caravan document id even when legacy data co…
+     83|     await seedTrip({ id: "stale-id" });
+     84|     expect((await getCaravanById("ride-a"))?.id).toBe("ride-a");
+       |                                                  ^
+     85|   });
+     86|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/data.integration.test.ts > production data functions on synthetic emulator fixtures > allows only one real reserveSeat call to claim the final seat
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/data.integration.test.ts:90:68
+     88|     const trip = await seedTrip({ capacity: 1 });
+     89|     const outcomes = await Promise.allSettled([reserveSeat(trip, passe…
+     90|     expect(outcomes.filter((item) => item.status === "fulfilled")).toH…
+       |                                                                    ^
+     91|     expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?…
+     92|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  4 failed | 30 passed (34)
+   Start at  13:33:49
+   Duration  6.84s (tests 86%, import 10%, transform 3%)
+
+    Isolate  5 workers spawned · ~140ms startup each (spawn + environment, per file)
+             at least ~558ms faster with isolate: false — reuses workers across files instead of one per file
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run" exited with code 1

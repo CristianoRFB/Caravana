@@ -29,7 +29,7 @@ const nonceB = "d".repeat(64);
 
 beforeAll(async () => {
   env = await initializeTestEnvironment({
-    projectId: "caravana-rules-test",
+    projectId: "demo-caravana77-test",
     firestore: {
       rules: readFileSync(resolve(process.cwd(), "firestore.rules"), "utf8"),
     },

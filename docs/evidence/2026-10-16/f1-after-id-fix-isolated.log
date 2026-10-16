@@ -1,0 +1,63 @@
+
+> caravana-77@0.1.0 test
+> node scripts/run-local-tests.mjs
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+
+ Test Files  5 passed (5)
+      Tests  34 passed (34)
+   Start at  13:35:59
+   Duration  6.81s (tests 88%, import 8%, transform 3%)
+
+    Isolate  5 workers spawned · ~134ms startup each (spawn + environment, per file)
+             at least ~537ms faster with isolate: false — reuses workers across files instead of one per file
+
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: powershell.exe -NoProfile -NonInteractive -File C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\scripts\cleanup-test-emulator.ps1 -WorkspaceRoot C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana -StartedAfterISO 2026-10-16T16:35:54.358Z
+O arquivo C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\scripts\cleanup-test-emulator.ps1 
+
+não pode ser carregado porque a execução de scripts foi desabilitada neste sistema. Para obter mais informações, 
+
+consulte about_Execution_Policies em https://go.microsoft.com/fwlink/?LinkID=135170.
+
+    + CategoryInfo          : ErrodeSegurança: (:) [], ParentContainsErrorRecordException
+
+    + FullyQualifiedErrorId : UnauthorizedAccess
+
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at ChildProcess.exithandler (node:child_process:417:12)
+    at ChildProcess.emit (node:events:509:28)
+    at maybeClose (node:internal/child_process:1124:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:306:5) {
+  code: 1,
+  killed: false,
+  signal: null,
+  cmd: 'powershell.exe -NoProfile -NonInteractive -File C:\\Users\\Aluno\\.codex\\worktrees\\caravana77-commercial-v1-20261016\\Caravana\\scripts\\cleanup-test-emulator.ps1 -WorkspaceRoot C:\\Users\\Aluno\\.codex\\worktrees\\caravana77-commercial-v1-20261016\\Caravana -StartedAfterISO 2026-10-16T16:35:54.358Z',
+  stdout: '',
+  stderr: 'O arquivo C:\\Users\\Aluno\\.codex\\worktrees\\caravana77-commercial-v1-20261016\\Caravana\\scripts\\cleanup-test-emulator.ps1 \r\n' +
+    'não pode ser carregado porque a execução de scripts foi desabilitada neste sistema. Para obter mais informações, \r\n' +
+    'consulte about_Execution_Policies em https://go.microsoft.com/fwlink/?LinkID=135170.\r\n' +
+    '    + CategoryInfo          : ErrodeSegurança: (:) [], ParentContainsErrorRecordException\r\n' +
+    '    + FullyQualifiedErrorId : UnauthorizedAccess\r\n'
+}
+
+Node.js v24.18.0

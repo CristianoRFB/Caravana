@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc -b --pretty false",
-    "test": "firebase emulators:exec --project caravana-rules-test --only firestore \"vitest run\"",
+    "test": "node scripts/run-local-tests.mjs",
     "test:rules": "vitest run"
   },
   "dependencies": {
