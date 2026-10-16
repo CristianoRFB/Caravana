@@ -57,5 +57,6 @@ npm run test:demo:e2e   — login de passageiro/admin em desktop e celular (requ
 npm run test:security   — regressões diretamente afetadas de Rules, operação, membership e bloqueio das identidades.
 npm run test:storage    — Auth/Firestore/Storage isolados; leituras privadas A×B e negação de mutações no Storage legado.
 npm run test:tenant:operations / npm run test:tenant:e2e — operações pendentes e troca de organização.
+npm run test:platform / npm run test:platform:e2e — permissão global, onboarding por UID e auditoria. Identidade global adicional só na suite de segurança; não é criada pelo comando demo.
 npm test / npm run test:e2e / npm run build — gates completos de checkpoint, sem repetição automática a cada edição.
 Não execute testes simultaneamente com npm run demo, pois usam as mesmas portas isoladas. Encerre a demonstração antes de rodar testes.

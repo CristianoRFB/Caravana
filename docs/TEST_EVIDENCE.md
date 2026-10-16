@@ -85,3 +85,11 @@ f2-pending-operations.log FAIL de comando: chamada direta de node não herdava n
 f2-pending-e2e.log4 PASS/23,9s: desktop1440/mobile320, troca/revogação e Write POST deliberadamente retido por Playwright. Seletor permanece disabled com aviso até servidor confirmar; despesa de2 é registrada apenas em A (total12), e B mantém30. Requests externos bloqueados, zero pageerrors/Firebase remoto. Sem retry/skip ou screenshots novos. Build e2e executa tsc; f2-pending-typecheck.log e f2-storage-pending-final-lint.log PASS.
 
 Próximo módulo: Platform Owner/onboarding/auditoria. Full regression apenas no gate F2 ou antes se o risco justificar; manter testes específicos obrigatórios em auth/Rules/financeiro.
+
+## F2-Platform — mínimo auditado, sem privilégios privados implícitos
+
+f2-platform-first.log48 PASS; após reforçar a precondição de membership nova/UID/org/timestamp e adicionar bypass com membership órfã adulterada, f2-platform-final-tests.log48 PASS. São serviço real + testes de Rules originais e de memberships/booking/financeiro relacionados, não uma repetição completa. Casos: onboarding/replay/conflito, criação parcial negada, audit obrigatório e imutável, status com histórico legado preservado, reserva suspensa/reativada, projeção stale incapaz de burlar Rules, tenant owner/conta não vinculada negados mesmo com claim forjada, revogação global e impossibilidade de atribuir plano/PII em metadata.
+
+f2-platform-e2e.log4 PASS/22,5s desktop1440/mobile320: Auth Emulator real de identidade global adicional somente nesta suite, cadastro com UID de conta existente, audit e suspensão, revogação limpando painel, membership persistida consultável no login real do owner, negação ao tenant owner e financeiro indisponível ao global. Sem errors JS/Firebase remoto. Lint/typecheck PASS em f2-platform-final-*.log; compilação E2E também executa tsc e Vite.
+
+Nenhuma conta demo fixa recebeu Platform Owner. Nenhuma conta Auth real foi criada/consultada/resetada. Onboarding por UID requer conferência prévia no processo assistido; não alegar verificação automática pelo provedor. Suporte privado com consentimento/escopo/expiração ainda TODO, e gate F2 não declarado completo. Próxima regressão completa apenas na revisão de aceite F2 após esse módulo.

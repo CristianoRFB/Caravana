@@ -26,10 +26,10 @@ Troca de tenant/papel remonta a UI e encerra os observers; filtros, rascunhos e 
 
 ## Próxima implementação local
 
-1. Platform Owner mínimo, onboarding com auditoria e suporte de privilégio mínimo; autorização confiável de operações privilegiadas, sem inferir autoridade de dropdown/localStorage.
+1. Modo suporte com consentimento/escopo/expiração/auditoria. Mínimo Platform Owner de lista/status/onboarding por UID/auditoria já implementado e testado conforme PLATFORM_ADMIN.md, sem acesso privado implícito.
 2. Rever matriz de gates e regressão completa F2 após o módulo de plataforma.
 3. Storage candidato testado conforme STORAGE_PRIVACY.md; corte real exige admins migrados, inventário/tokens/IAM e backup autorizados. Compatibilidade Firestore continua explícita/temporária, com corte configurado somente na migração aprovada (proposta até30 dias). Nenhum fallback reativa membership revogada.
 
 ## Gates e bloqueios
 
-F2-MIGRATION PASS apenas para fixture sintética e planner/restore local. F2 completo IN_PROGRESS: backend/onboarding, auditoria e UI Platform Owner ainda não concluídos. Storage SDK/regras e controle de operações pendentes têm evidência local; estado/tokens do Storage real permanecem desconhecidos. Migração de produção, backup/restore real, publicação de Rules, deploy e merge continuam BLOCKED sem autorização específica. Push de checkpoint na branch de trabalho foi autorizado pela instrução complementar. IDs e documentos reais do Ítalo permanecem intactos, e não se presume conhecer todo o schema real.
+F2-MIGRATION PASS apenas para fixture sintética e planner/restore local. F2 completo IN_PROGRESS: falta suporte explícito e regressão de aceite do conjunto. Operações mínimas da plataforma são autorizadas pelas Rules e auditadas atomicamente; onboarding pressupõe UID Auth existente, sem criação/verificação automática de conta. Storage SDK/regras e controle de operações pendentes têm evidência local; estado/tokens do Storage real permanecem desconhecidos. Migração de produção, backup/restore real, publicação de Rules, deploy e merge continuam BLOCKED sem autorização específica. Push de checkpoint na branch de trabalho foi autorizado pela instrução complementar. IDs e documentos reais do Ítalo permanecem intactos, e não se presume conhecer todo o schema real.

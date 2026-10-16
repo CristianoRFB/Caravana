@@ -5,6 +5,8 @@ import type { Caravan, Registration } from "../src/lib/types";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
 let syntheticAdminUid: string | undefined;
+let platformTestUid: string | undefined;
+export const platformTestAccount = { email: "platform.safety@example.test", password: "Synthetic-Only-2026" };
 
 function assertSyntheticEndpoints() {
   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
@@ -31,6 +33,30 @@ export async function patchSyntheticMembership(organizationId: "org-a" | "org-b"
       await setDoc(doc(context.firestore(), `memberships/${syntheticAdminUid}/organizations/${organizationId}`), {
         uid: syntheticAdminUid, organizationId, role, status, createdAt: "2026-10-16", updatedAt: "2026-10-16",
       });
+    });
+  } finally { await env.cleanup(); }
+}
+
+// This additional global identity exists ONLY in the dedicated security suite, never npm run demo.
+export async function preparePlatformSecurityIdentity() {
+  assertSyntheticEndpoints();
+  if (!syntheticAdminUid) throw new Error("Seed the synthetic owner first.");
+  const response = await fetch("http://127.0.0.1:19099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=synthetic-api-key", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...platformTestAccount, returnSecureToken: true }),
+  });
+  const data = await response.json() as { localId?: string };
+  if (!response.ok || !data.localId) throw new Error("Cannot prepare isolated platform security identity.");
+  platformTestUid = data.localId;
+  await patchPlatformSecurityStatus("active");
+  return { ownerUid: syntheticAdminUid };
+}
+export async function patchPlatformSecurityStatus(status: "active" | "revoked") {
+  assertSyntheticEndpoints();
+  if (!platformTestUid) throw new Error("Prepare the isolated platform identity first.");
+  const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try {
+    await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), `platformOwners/${platformTestUid}`), { status });
     });
   } finally { await env.cleanup(); }
 }

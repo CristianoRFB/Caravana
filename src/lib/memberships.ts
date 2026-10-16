@@ -1,3 +1,5 @@
+import type { Timestamp } from "firebase/firestore";
+
 export type TenantRole = "tenant_owner" | "staff";
 export type MembershipStatus = "active" | "revoked";
 
@@ -6,8 +8,8 @@ export interface Membership {
   organizationId: string;
   role: TenantRole;
   status: MembershipStatus;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | Timestamp;
+  updatedAt: string | Timestamp;
   legacySourcePath?: string;
 }
 

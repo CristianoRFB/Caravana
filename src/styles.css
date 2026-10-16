@@ -1447,6 +1447,12 @@ button:disabled {
   place-items: center;
   padding: 8px;
 }
+.platform-page { max-width: 1200px; margin: auto; padding: 24px 16px; }
+.platform-section { margin-bottom: 24px; padding: 24px; }
+.platform-tenants { display: grid; gap: 16px; }
+.platform-tenant { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #eee; }
+.platform-tenant > div { display: grid; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 650px) { .platform-tenant { align-items: stretch; flex-direction: column; } .platform-section { padding: 16px; } }
 .tenant-switcher { display: grid; gap: 6px; margin: 0 20px 14px; font-size: 12px; }
 .tenant-switcher select { max-width: 100%; min-width: 0; padding: 8px; border: 1px solid #dddce8; border-radius: 8px; background: white; color: #10132e; }
 .admin-sidebar {

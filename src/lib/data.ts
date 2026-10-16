@@ -159,6 +159,8 @@ export async function reserveSeat(
         !Number.isSafeInteger(current.reservedSeats) || current.reservedSeats < 0) {
       throw new Error("Esta caravana está com dados incompletos. Fale com a organização.");
     }
+    const availability = await tx.get(doc(database, "organizationAvailability", current.organizationId));
+    if (availability.data()?.status === "suspended") throw new Error("Novas reservas estão temporariamente suspensas pela organização.");
     if (
       current.status !== "published" ||
       current.reservedSeats >= current.capacity

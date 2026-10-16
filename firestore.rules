@@ -44,7 +44,19 @@ service cloud.firestore {
     }
     function publicCaravan(caravanId) {
       return exists(/databases/$(database)/documents/caravans/$(caravanId))
-        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published';
+        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published'
+        && acceptsReservations(get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId);
+    }
+    function acceptsReservations(orgId) {
+      return !exists(/databases/$(database)/documents/organizations/$(orgId))
+        || get(/databases/$(database)/documents/organizations/$(orgId)).data.get('status', 'active') != 'suspended';
+    }
+    function platformOperation(orgId, operationId, action) {
+      let path = /databases/$(database)/documents/platformAudit/$(operationId);
+      let event = getAfter(path).data;
+      return isPlatformOwner() && operationId.matches('^[a-f0-9]{32}$') && !exists(path)
+        && event.organizationId == orgId && event.actorUid == request.auth.uid
+        && event.action == action && event.at == request.time;
     }
 
     match /admins/{uid} {
@@ -60,16 +72,75 @@ service cloud.firestore {
     match /organizations/{orgId} {
       allow get: if isAdmin(orgId) || isPlatformOwner();
       allow list: if isPlatformOwner();
-      allow create, update, delete: if false;
+      allow create: if request.resource.data.keys().hasOnly(['name', 'slug', 'ownerUid', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'lastPlatformOperationId'])
+        && request.resource.data.name is string && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 120
+        && request.resource.data.slug == orgId && orgId.matches('^[a-z0-9][a-z0-9-]{2,59}$')
+        && request.resource.data.ownerUid is string && request.resource.data.ownerUid.matches('^[^/]{1,128}$')
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
+        && request.resource.data.createdBy == request.auth.uid && request.resource.data.updatedBy == request.auth.uid
+        && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_created');
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy', 'lastPlatformOperationId'])
+        && resource.data.get('status', 'active') in ['active', 'suspended']
+        && request.resource.data.status in ['active', 'suspended']
+        && request.resource.data.status != resource.data.get('status', 'active')
+        && request.resource.data.updatedAt == request.time && request.resource.data.updatedBy == request.auth.uid
+        && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_status_changed');
+      allow delete: if false;
+    }
+    match /organizationAvailability/{orgId} {
+      allow get: if true;
+      allow list, delete: if false;
+      allow create, update: if isPlatformOwner()
+        && request.resource.data.keys().hasOnly(['organizationId', 'status', 'updatedAt', 'lastPlatformOperationId'])
+        && request.resource.data.organizationId == orgId && request.resource.data.updatedAt == request.time
+        && request.resource.data.status == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.status
+        && request.resource.data.lastPlatformOperationId == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId
+        && (platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_created')
+          || platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_status_changed'));
     }
 
     match /memberships/{uid}/organizations/{orgId} {
       allow get, list: if signedIn() && request.auth.uid == uid;
-      allow create, update, delete: if false;
+      allow create: if isPlatformOwner()
+        && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt'])
+        && request.resource.data.uid == uid && request.resource.data.organizationId == orgId
+        && request.resource.data.role == 'tenant_owner' && request.resource.data.status == 'active'
+        && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
+        && !exists(/databases/$(database)/documents/organizations/$(orgId))
+        && getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.ownerUid == uid
+        && platformOperation(orgId, getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId, 'tenant_created');
+      allow update, delete: if false;
     }
     match /platformOwners/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
       allow list, create, update, delete: if false;
+    }
+    match /platformAudit/{operationId} {
+      allow get, list: if isPlatformOwner() || (resource != null && isTenantOwner(resource.data.organizationId));
+      allow update, delete: if false;
+      allow create: if isPlatformOwner()
+        && request.resource.data.keys().hasOnly(['action', 'organizationId', 'actorUid', 'at', 'previousStatus', 'status', 'details'])
+        && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time
+        && request.resource.data.details is map
+        && getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.lastPlatformOperationId == operationId
+        && getAfter(/databases/$(database)/documents/organizationAvailability/$(request.resource.data.organizationId)).data.lastPlatformOperationId == operationId
+        && getAfter(/databases/$(database)/documents/organizationAvailability/$(request.resource.data.organizationId)).data.status == request.resource.data.status
+        && ((request.resource.data.action == 'tenant_created' && request.resource.data.previousStatus == 'absent' && request.resource.data.status == 'active'
+          && !exists(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId))
+          && request.resource.data.details.keys().hasOnly(['name', 'slug', 'ownerUid'])
+          && request.resource.data.details.name == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.name
+          && request.resource.data.details.slug == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.slug
+          && request.resource.data.details.ownerUid == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.ownerUid
+          && getAfter(/databases/$(database)/documents/memberships/$(request.resource.data.details.ownerUid)/organizations/$(request.resource.data.organizationId)).data.uid == request.resource.data.details.ownerUid
+          && getAfter(/databases/$(database)/documents/memberships/$(request.resource.data.details.ownerUid)/organizations/$(request.resource.data.organizationId)).data.organizationId == request.resource.data.organizationId
+          && getAfter(/databases/$(database)/documents/memberships/$(request.resource.data.details.ownerUid)/organizations/$(request.resource.data.organizationId)).data.createdAt == request.time
+          && getAfter(/databases/$(database)/documents/memberships/$(request.resource.data.details.ownerUid)/organizations/$(request.resource.data.organizationId)).data.role == 'tenant_owner'
+          && getAfter(/databases/$(database)/documents/memberships/$(request.resource.data.details.ownerUid)/organizations/$(request.resource.data.organizationId)).data.status == 'active')
+        || (request.resource.data.action == 'tenant_status_changed' && request.resource.data.details.keys().hasOnly([])
+          && request.resource.data.previousStatus == get(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.get('status', 'active')
+          && request.resource.data.status == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.status
+          && request.resource.data.previousStatus != request.resource.data.status));
     }
 
     match /caravans/{caravanId} {

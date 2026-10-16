@@ -28,12 +28,14 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F2-STORAGE | P0 | PASS para SDK/regras locais; BLOCKED corte real | Leitura membership+inscrição, A×B/staff/guest/associação/revogação, cliente sem Storage mutations | f2-storage-final.log6 PASS; STORAGE_PRIVACY.md | Exige migração aprovada antes de publicar; tokens/IAM reais desconhecidos; warning Java no shutdown registrado |
 | F2-PENDING-WRITES | P0 | PASS local | Transações, batches e set/update rastreados até ack/erro; troca aguarda conclusão | f2-pending-operations-final.log30 PASS; f2-pending-e2e.log4 PASS;lint/typecheck | Primeiro comando direto node falhou por PATH; usar scripts npm documentados |
 | F2-DEMO | P0 | PASS local | 3 contas reais no Auth Emulator; perfis/memberships e fixtures idempotentes; npm run demo | f2-demo-auth-final.log 4 PASS; f2-demo-security.log 47 PASS; f2-demo-e2e.log 4 PASS; startup/build/lint/typecheck PASS | Documentado TEST_ACCOUNTS.txt; sem Platform Owner; API do Auth real não configurada |
+| F2-PLATFORM | P0 | PASS para mínimo local | Lista/status, onboarding de UID existente, membership e disponibilidade atômicas com audit imutável, replay e revogação global | f2-platform-final-tests.log48 PASS; f2-platform-e2e.log4 PASS;lint/typecheck/build e2e | PLATFORM_ADMIN.md; convite/verificação Auth automática F6; suporte explícito ainda TODO |
+| F2-SUPPORT | P0 | TODO | Consentimento do tenant, escopo mínimo e expiração com audit | Próximo módulo | Global continua sem acesso privado; não simular suporte com flag client-side |
 | WORKFLOW-EFFICIENCY | P1 | PASS aplicado ao bloco demo | Suites específicas após mudanças; sem regenerar screenshots ou reiniciar auditoria; push na branch autorizado | Testes de risco auth/Rules incluídos; checkpoint funcional | Full gates na conclusão de fase |
 | F3 | P0/P1 | TODO | Estados, reservas, CSV, check-in | Jornadas sintéticas | F2 dependente |
 | F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |
 | F5 | P1 | TODO | White-label e rotas | A×B e links legados | Sem DNS/domínio novo |
 | F6 | P1 | TODO | Planos e onboarding assistido | Limites servidor e overrides | Sem billing/gateway |
 | F7 | P1 | TODO | CI, observabilidade e release local | E2E/docs/runbook | Publicação bloqueada por autorização |
-| F8 | P1 | TODO | Relatório de aceite | Gates e checkpoint | Sem merge/push/PR remoto ainda |
+| F8 | P1 | TODO | Relatório de aceite | Gates e checkpoint | Sem merge/deploy/PR; pushes de checkpoints autorizados na branch de trabalho |
 
 Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançados preservados objetivamente. F1 tem baseline local PASS parcial; staging/Storage reais não homologados, CSV cross-batch será F3. F2–F8 permanecem pendentes. Cada checkpoint registra o commit por git log (evitar SHA autorreferente no próprio commit), comandos, logs, resultado e próximo passo exato.

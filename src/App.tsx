@@ -86,6 +86,7 @@ import type { TenantRole } from "./lib/memberships";
 import { observePendingWrites, pendingWrites } from "./lib/pending-writes";
 import PublicIndex from "./PublicIndex";
 import FinancePage from "./Finance";
+import PlatformPage from "./Platform";
 import { PROOF_POLICY } from "./lib/proof-policy";
 
 const errorMessage = (error: unknown) =>
@@ -1320,7 +1321,7 @@ function MyRegistration() {
   );
 }
 
-function AdminLogin({ passenger = false }: { passenger?: boolean }) {
+function AdminLogin({ passenger = false, platform = false }: { passenger?: boolean; platform?: boolean }) {
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -1332,7 +1333,7 @@ function AdminLogin({ passenger = false }: { passenger?: boolean }) {
     setError("");
     try {
       await login(email, password);
-      nav(passenger ? "/conta" : "/admin");
+      nav(platform ? "/platform" : passenger ? "/conta" : "/admin");
     } catch (e) {
       setError(errorMessage(e));
     } finally {
@@ -1354,7 +1355,7 @@ function AdminLogin({ passenger = false }: { passenger?: boolean }) {
             </h2>
             <p>{passenger ? "Acompanhe suas inscrições e os detalhes da viagem." : "Seu espaço para cuidar de cada detalhe da caravana."}</p>
           </div>
-          <span>CARAVANA 77 · {passenger ? "ÁREA DO PASSAGEIRO" : "PAINEL DA EQUIPE"}</span>
+          <span>CARAVANA 77 · {platform ? "PAINEL DA PLATAFORMA" : passenger ? "ÁREA DO PASSAGEIRO" : "PAINEL DA EQUIPE"}</span>
         </div>
         <section className="login-main">
           <div className="login-box">
@@ -1362,7 +1363,7 @@ function AdminLogin({ passenger = false }: { passenger?: boolean }) {
             <h1>
               Acesse sua
               <br />
-              {passenger ? "conta de passageiro." : "área da equipe."}
+              {platform ? "plataforma." : passenger ? "conta de passageiro." : "área da equipe."}
             </h1>
             <p>{passenger ? "Entre com seu e-mail e senha cadastrados." : "Entre com seu e-mail e senha cadastrados pela organização."}</p>
             {!firebaseConfigured && (
@@ -3603,6 +3604,8 @@ export default function App() {
       <Route path="/caravana/:slug/inscricao" element={<RegistrationPage />} />
       <Route path="/minha-inscricao/:id" element={<MyRegistration />} />
       <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/platform/login" element={<AdminLogin platform />} />
+      <Route path="/platform" element={<PlatformPage header={<Topbar admin />} />} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
       <Route
