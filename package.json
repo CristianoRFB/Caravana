@@ -20,6 +20,8 @@
     "test:platform": "node scripts/run-local-tests.mjs platform",
     "test:support": "node scripts/run-local-tests.mjs support",
     "test:booking": "node scripts/run-local-tests.mjs booking",
+    "test:operations": "node scripts/run-local-tests.mjs operations",
+    "test:operations:e2e": "node scripts/run-local-tests.mjs operations-e2e",
     "test:booking:e2e": "node scripts/run-local-tests.mjs booking-e2e",
     "test:support:e2e": "node scripts/run-local-tests.mjs support-e2e",
     "test:platform:e2e": "node scripts/run-local-tests.mjs platform-e2e",

@@ -1,0 +1,133 @@
+
+> caravana-77@0.1.0 test:operations:e2e
+> node scripts/run-local-tests.mjs operations-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/baseline.spec.ts --grep "public booking|staff can read" --project desktop-1440 --project mobile-320
+[WebServer] (node:12588) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:19080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (17.2s)
+(node:9132) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [desktop-1440] › e2e\baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.8s)
+(node:10904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [mobile-320] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (14.7s)
+(node:19320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 [mobile-320] › e2e\baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.5s)
+
+
+  1) [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.success-message')
+    Timeout: 10000ms
+    - Expected substring  - 1
+    + Received string     + 2
+
+    - Inscrição cancelada e vaga liberada.
+    +
+    + Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482, evaluation error at L259:24 for 'create' @ L259, false for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482
+
+    Call log:
+      - Expect "toContainText" locator('.success-message') with timeout 10000ms
+      - waiting for locator('.success-message')
+        20 × locator resolved to <div class="success-message">…</div>
+           - unexpected value "
+    Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482, evaluation error at L259:24 for 'create' @ L259, false for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482"
+
+
+      102 |   page.once("dialog", (dialog) => dialog.accept());
+      103 |   await row.getByRole("button", { name: "Cancelar", exact: true }).click();
+    > 104 |   await expect(page.locator(".success-message")).toContainText("Inscrição cancelada e vaga liberada.");
+          |                                                  ^
+      105 |   await page.goto(portalUrl);
+      106 |   await expect(page.getByText("Esta inscrição foi cancelada.", { exact: false })).toBeVisible();
+      107 |   await expect(page.locator("input[type=file]")).toHaveCount(0);
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:104:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.success-message')
+    Timeout: 10000ms
+    - Expected substring  - 1
+    + Received string     + 2
+
+    - Inscrição cancelada e vaga liberada.
+    +
+    + Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482, evaluation error at L259:24 for 'create' @ L259, false for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482
+
+    Call log:
+      - Expect "toContainText" locator('.success-message') with timeout 10000ms
+      - waiting for locator('.success-message')
+        21 × locator resolved to <div class="success-message">…</div>
+           - unexpected value "
+    Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482, evaluation error at L259:24 for 'create' @ L259, false for 'update' @ L274, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L482"
+
+
+      102 |   page.once("dialog", (dialog) => dialog.accept());
+      103 |   await row.getByRole("button", { name: "Cancelar", exact: true }).click();
+    > 104 |   await expect(page.locator(".success-message")).toContainText("Inscrição cancelada e vaga liberada.");
+          |                                                  ^
+      105 |   await page.goto(portalUrl);
+      106 |   await expect(page.getByText("Esta inscrição foi cancelada.", { exact: false })).toBeVisible();
+      107 |   await expect(page.locator("input[type=file]")).toHaveCount(0);
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:104:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source 
+    [mobile-320] › e2e\baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source 
+  2 passed (49.3s)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/baseline.spec.ts --grep "public booking|staff can read" --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 4076).

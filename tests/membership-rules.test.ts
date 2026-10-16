@@ -89,10 +89,10 @@ describe("membership authority and cross-organization boundaries", () => {
     await assertFails(updateDoc(doc(db, "registrations/private-a"), { caravanId: "trip-b" }));
     await assertSucceeds(updateDoc(doc(db, "caravans/trip-a"), { capacity: 30 }));
   });
-  it("staff can operate check-in but cannot change fares, received totals, caravan capacity or expense writes", async () => {
+  it("staff cannot bypass audited check-in or change fares, received totals, caravan capacity or expense writes", async () => {
     await seed();
     const db = env.authenticatedContext("staff-a").firestore();
-    await assertSucceeds(updateDoc(doc(db, "registrations/private-a"), { checkedInAt: serverTimestamp() }));
+    await assertFails(updateDoc(doc(db, "registrations/private-a"), { checkedInAt: serverTimestamp() }));
     await assertFails(updateDoc(doc(db, "registrations/private-a"), { amountCents: 1 }));
     await assertFails(updateDoc(doc(db, "registrations/private-a"), { paymentTotalCents: 999999 }));
     await assertFails(updateDoc(doc(db, "caravans/trip-a"), { capacity: 50 }));

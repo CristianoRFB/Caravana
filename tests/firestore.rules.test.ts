@@ -270,7 +270,7 @@ describe("Firestore security rules", () => {
       }),
     );
     const staff = env.authenticatedContext("admin-a").firestore();
-    await assertSucceeds(
+    await assertFails(
       updateDoc(doc(staff, `registrations/${secretA}`), {
         paymentStatus: "approved",
         registrationStatus: "confirmed",

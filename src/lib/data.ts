@@ -330,75 +330,7 @@ export async function uploadProof(
   });
   await batch.commit();
 }
-export async function reviewPayment(
-  reg: Registration,
-  approve: boolean,
-  reason = "",
-): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  await setDoc(
-    doc(db, "registrations", reg.id),
-    approve
-      ? {
-          paymentStatus: "approved",
-          registrationStatus: "confirmed",
-          approvedBy: auth.currentUser.uid,
-          approvedAt: serverTimestamp(),
-        }
-      : {
-          paymentStatus: "rejected",
-          registrationStatus: "rejected",
-          rejectedBy: auth.currentUser.uid,
-          rejectedAt: serverTimestamp(),
-          rejectionReason: reason,
-        },
-    { merge: true },
-  );
-}
-export async function toggleCheckin(
-  reg: Registration,
-  checked: boolean,
-): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  await setDoc(
-    doc(db, "registrations", reg.id),
-    checked
-      ? { checkedInAt: serverTimestamp(), checkedInBy: auth.currentUser.uid }
-      : { checkedInAt: null, checkedInBy: null },
-    { merge: true },
-  );
-}
-export async function cancelRegistration(reg: Registration): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  const database = db;
-  const userId = auth.currentUser.uid;
-  await runTransaction(database, async (tx) => {
-    const regRef = doc(database, "registrations", reg.id);
-    const current = await tx.get(regRef);
-    if (!current.exists()) throw new Error("Inscrição não encontrada.");
-    if (current.data().registrationStatus === "cancelled") return;
-    const caravanRef = doc(
-      database,
-      "caravans",
-      String(current.data().caravanId),
-    );
-    const caravanSnap = await tx.get(caravanRef);
-    if (!caravanSnap.exists()) throw new Error("Caravana não encontrada.");
-    const seats = Number(caravanSnap.data().reservedSeats || 0);
-    tx.update(regRef, {
-      registrationStatus: "cancelled",
-      cancelledBy: userId,
-      cancelledAt: serverTimestamp(),
-    });
-    tx.update(caravanRef, {
-      reservedSeats: Math.max(0, seats - 1),
-      updatedAt: serverTimestamp(),
-    });
-  });
-}
+export { reviewPayment, toggleCheckin, cancelRegistration } from "./registration-operations";
 export async function createCaravan(
   orgId: string,
   payload: Omit<Caravan, "id" | "organizationId" | "reservedSeats">,

@@ -1,0 +1,35 @@
+
+> caravana-77@0.1.0 test:operations:e2e
+> node scripts/run-local-tests.mjs operations-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/operations.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:4544) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:13040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [desktop-1440] › e2e\operations.spec.ts:19:1 › audited boarding reverses, survives refresh and never carries history from tenant A to B (5.2s)
+  ok 2 [desktop-1440] › e2e\operations.spec.ts:30:1 › offline staff does not queue a fake boarding and can retry once online (1.7s)
+(node:10100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 [mobile-320] › e2e\operations.spec.ts:19:1 › audited boarding reverses, survives refresh and never carries history from tenant A to B (2.3s)
+  ok 4 [mobile-320] › e2e\operations.spec.ts:30:1 › offline staff does not queue a fake boarding and can retry once online (1.5s)
+
+  4 passed (22.7s)
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+Stopped test emulator started by this run (PID 18640).

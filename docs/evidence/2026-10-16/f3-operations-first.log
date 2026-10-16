@@ -1,0 +1,55 @@
+
+> caravana-77@0.1.0 test:booking
+> node scripts/run-local-tests.mjs booking
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/reservation-attempt.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+stderr | tests/firestore.rules.test.ts > Firestore security rules > does not let a passenger approve their own payment
+[2026-10-16T19:38:34.450Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x326dac29 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L479:24 for 'update' @ L479, false for 'update' @ L479
+
+stderr | tests/firestore.rules.test.ts > Firestore security rules > does not let a passenger approve their own payment
+[2026-10-16T19:38:34.478Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x326dac2a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L479, false for 'update' @ L479
+
+ ❯ tests/firestore.rules.test.ts (14 tests | 1 failed) 2113ms
+   ❯ Firestore security rules (14)
+     × does not let a passenger approve their own payment 78ms
+stderr | tests/membership-rules.test.ts > membership authority and cross-organization boundaries > staff can operate check-in but cannot change fares, received totals, caravan capacity or expense writes
+[2026-10-16T19:38:37.363Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x733fa8cf error. Code: 7 Message: 7 PERMISSION_DENIED: 
+Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L479, false for 'update' @ L479
+
+ ❯ tests/membership-rules.test.ts (9 tests | 1 failed) 1731ms
+   ❯ membership authority and cross-organization boundaries (9)
+     × staff can operate check-in but cannot change fares, received totals, caravan capacity or expense writes 64ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/firestore.rules.test.ts > Firestore security rules > does not let a passenger approve their own payment
+ FAIL  tests/membership-rules.test.ts > membership authority and cross-organization boundaries > staff can operate check-in but cannot change fares, received totals, caravan capacity or expense writes
+FirebaseError: 7 PERMISSION_DENIED: 
+Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L479, false for 'update' @ L479
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  2 failed | 54 passed (56)
+   Start at  16:38:26
+   Duration  13.58s (tests 90%, import 7%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/reservation-attempt.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 7560).

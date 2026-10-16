@@ -1,6 +1,15 @@
 {
   "indexes": [
     {
+      "collectionGroup": "registrationOperations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "organizationId", "order": "ASCENDING" },
+        { "fieldPath": "caravanId", "order": "ASCENDING" },
+        { "fieldPath": "at", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "caravans",
       "queryScope": "COLLECTION",
       "fields": [

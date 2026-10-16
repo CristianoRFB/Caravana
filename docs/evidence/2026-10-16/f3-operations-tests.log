@@ -1,0 +1,59 @@
+
+> caravana-77@0.1.0 test:operations
+> node scripts/run-local-tests.mjs operations
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/registration-operations.integration.test.ts (8 tests | 2 failed) 1971ms
+   ❯ audited persisted registration transitions (8)
+     × owner-a approves and checks in/reverses idempotently with immutable timestamps and audit 329ms
+     × staff-a approves and checks in/reverses idempotently with immutable timestamps and audit 247ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/registration-operations.integration.test.ts > audited persisted registration transitions > owner-a approves and checks in/reverses idempotently with immutable timestamps and audit
+ FAIL  tests/registration-operations.integration.test.ts > audited persisted registration transitions > staff-a approves and checks in/reverses idempotently with immutable timestamps and audit
+AssertionError: expected [ 'checked_in', …(2) ] to deeply equal [ 'checkin_reversed', …(2) ]
+
+- Expected
++ Received
+
+  [
+-   "checkin_reversed",
+    "checked_in",
++   "checkin_reversed",
+    "review_approved",
+  ]
+
+ ❯ tests/registration-operations.integration.test.ts:42:73
+     40|     await toggleCheckin(reg, false, op(4)); await toggleCheckin(reg, t…
+     41|     expect((await current()).checkedInAt).toBeNull();
+     42|     expect((await events()).map((event) => event.data().action).sort()…
+       |                                                                         ^
+     43|     expect((await current()).paymentTotalCents).toBe(2500);
+     44|     await assertFails(updateDoc(doc(runtime.db!, `registrationOperatio…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  2 failed | 50 passed (52)
+   Start at  16:39:50
+   Duration  13.35s (tests 91%, import 7%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 14268).

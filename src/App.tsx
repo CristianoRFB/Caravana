@@ -88,6 +88,8 @@ import PublicIndex from "./PublicIndex";
 import FinancePage from "./Finance";
 import PlatformPage from "./Platform";
 import { SupportOwner } from "./Support";
+import OperationalHistory from "./OperationalHistory";
+import { chooseTenant, tenantPreferenceKey } from "./lib/tenant-preference";
 import { PROOF_POLICY } from "./lib/proof-policy";
 import { completeReservationAttempt, getReservationAttempt, readReservationAttempt, ReservationAttemptConflict } from "./lib/reservation-attempt";
 
@@ -1481,7 +1483,9 @@ function AdminGuard({ children }: { children: ReactNode }) {
         (available) => {
           if (!active || currentRevision !== revision) return;
           setAccess(available);
-          setOrg((selected) => available.some((item) => item.organizationId === selected) ? selected : available[0]?.organizationId || null);
+          let preferred: string | null = null;
+          try { preferred = window.sessionStorage.getItem(tenantPreferenceKey(u.uid)); } catch { /* optional preference */ }
+          setOrg((selected) => chooseTenant(available, selected, preferred));
           setAccessError("");
           setLoading(false);
         },
@@ -1533,7 +1537,11 @@ function AdminGuard({ children }: { children: ReactNode }) {
       </>
     );
   return (
-    <AdminShell key={`${user.uid}:${org}:${access.find((item) => item.organizationId === org)?.role}`} user={user} orgId={org} access={access} onSelect={setOrg}>
+    <AdminShell key={`${user.uid}:${org}:${access.find((item) => item.organizationId === org)?.role}`} user={user} orgId={org} access={access} onSelect={(id) => {
+      if (!access.some((item) => item.organizationId === id)) return;
+      try { window.sessionStorage.setItem(tenantPreferenceKey(user.uid), id); } catch { /* permission never depends on storage */ }
+      setOrg(id);
+    }}>
       {children}
     </AdminShell>
   );
@@ -3454,10 +3462,11 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
     )
       return;
     setBusy(r.id);
+    setError("");
     try {
       await toggleCheckin(r, !r.checkedInAt);
     } catch (e) {
-      alert(errorMessage(e));
+      setError(`Operação não confirmada: ${errorMessage(e)} Tente novamente ao restabelecer a conexão.`);
     } finally {
       setBusy("");
     }
@@ -3483,7 +3492,7 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
           </select>
         )}
       </div>
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message" role="alert">{error}</div>}
       <div className="checkin-banner">
         <div className="checkin-meter">
           <div className="meter-circle">
@@ -3575,6 +3584,7 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
           </div>
         )}
       </div>
+      <OperationalHistory key={`${org}/${caravanId}`} organizationId={org} caravanId={caravanId} />
     </>
   );
 }
