@@ -272,7 +272,7 @@ service cloud.firestore {
             && request.resource.data.fileName.size() <= 120
             && request.resource.data.content is string
             && request.resource.data.content.size() > 0
-            && request.resource.data.content.size() <= 820000
+            && request.resource.data.content.size() <= 819200
             && ((request.resource.data.contentType == 'application/pdf' && request.resource.data.content.matches('^JVBERi0.*$'))
               || (request.resource.data.contentType == 'image/png' && request.resource.data.content.matches('^iVBORw0KGgo.*$'))
               || (request.resource.data.contentType == 'image/jpeg' && request.resource.data.content.matches('^/9j/.*$')))

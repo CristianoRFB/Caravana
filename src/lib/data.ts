@@ -34,6 +34,7 @@ import {
   type Registration,
 } from "./types";
 import { legacyImportDocumentId, type LegacyRegistrationDraft } from "./legacy-import";
+import { validateProofFile } from "./proof-policy";
 
 const legacyReservationIdsCleared = new Set<string>();
 
@@ -152,15 +153,22 @@ export async function reserveSeat(
     if (!snap.exists())
       throw new Error("Esta caravana não está mais disponível.");
     const current = snap.data() as Caravan;
+    if (typeof current.organizationId !== "string" || !current.organizationId.trim() ||
+        typeof current.name !== "string" || !current.name.trim() ||
+        !Number.isSafeInteger(current.priceCents) || current.priceCents < 0 ||
+        !Number.isSafeInteger(current.capacity) || current.capacity <= 0 ||
+        !Number.isSafeInteger(current.reservedSeats) || current.reservedSeats < 0) {
+      throw new Error("Esta caravana está com dados incompletos. Fale com a organização.");
+    }
     if (
       current.status !== "published" ||
       current.reservedSeats >= current.capacity
     )
       throw new Error("As vagas desta caravana foram preenchidas.");
-    const boardingPoint = current.boardingPoints?.find(
+    const boardingPoint = (Array.isArray(current.boardingPoints) ? current.boardingPoints : []).find(
       (point) => point.id === form.boardingPointId,
     );
-    if (!boardingPoint)
+    if (!boardingPoint || typeof boardingPoint.name !== "string" || !boardingPoint.name.trim())
       throw new Error(
         "Este ponto de embarque não está mais disponível. Atualize a página e tente novamente.",
       );
@@ -262,34 +270,7 @@ export async function uploadProof(
   file: File,
 ): Promise<void> {
   if (!db) throw new Error("Firebase não está configurado.");
-  const allowed = ["image/jpeg", "image/png", "application/pdf"];
-  if (!allowed.includes(file.type))
-    throw new Error("Envie um arquivo JPG, PNG ou PDF.");
-  if (file.size > 600 * 1024)
-    throw new Error("O comprovante deve ter no máximo 600 KB.");
-  if (file.size === 0) throw new Error("O arquivo está vazio.");
-
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  const signature = bytes.subarray(0, 8);
-  const isPdf = new TextDecoder().decode(bytes.subarray(0, 1024)).includes("%PDF-");
-  const isJpeg = signature[0] === 0xff && signature[1] === 0xd8 && signature[2] === 0xff;
-  const isPng =
-    signature[0] === 0x89 &&
-    signature[1] === 0x50 &&
-    signature[2] === 0x4e &&
-    signature[3] === 0x47 &&
-    signature[4] === 0x0d &&
-    signature[5] === 0x0a &&
-    signature[6] === 0x1a &&
-    signature[7] === 0x0a;
-  if (
-    (file.type === "application/pdf" && !isPdf) ||
-    (file.type === "image/jpeg" && !isJpeg) ||
-    (file.type === "image/png" && !isPng)
-  ) {
-    throw new Error("O conteúdo do arquivo não corresponde ao tipo informado.");
-  }
-
+  const bytes = await validateProofFile(file);
   let binary = "";
   for (let offset = 0; offset < bytes.length; offset += 0x8000) {
     binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));

@@ -84,6 +84,7 @@ import { firebaseConfigured } from "./lib/firebase";
 import type { User } from "firebase/auth";
 import PublicIndex from "./PublicIndex";
 import FinancePage from "./Finance";
+import { PROOF_POLICY } from "./lib/proof-policy";
 
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : "Algo deu errado. Tente novamente.";
@@ -637,7 +638,7 @@ function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
         </p>
         {compact && (
           <small>
-            Comprovante aceito: PDF, JPG ou PNG até 600 KB. Ainda sem orientação? Fale com a AnimeSFest antes de pagar.
+            Comprovante aceito: PDF, JPG ou PNG até {PROOF_POLICY.displayLimit}. Ainda sem orientação? Fale com a AnimeSFest antes de pagar.
           </small>
         )}
       </div>
@@ -1212,12 +1213,12 @@ function MyRegistration() {
             </div>
             <h2>
               {reg.paymentStatus === "approved"
-                ? "Pagamento confirmado"
+                ? "Comprovante aprovado"
                 : "Finalize sua inscrição"}
             </h2>
             <p>
               {caravan?.paymentInstructions ||
-                `${paymentProcessCopy} Envie o comprovante em PDF, PNG ou JPG, até 600 KB.`}
+                `${paymentProcessCopy} Envie o comprovante em PDF, PNG ou JPG, até ${PROOF_POLICY.displayLimit}.`}
             </p>
             {caravan?.paymentDeadline && (
               <div className="amount-row">
@@ -1265,14 +1266,14 @@ function MyRegistration() {
                       : "Escolher comprovante"}
                   <input
                     type="file"
-                    accept="image/jpeg,image/png,application/pdf"
+                    accept={PROOF_POLICY.accept}
                     disabled={busy}
                     onChange={(e) => sendFile(e.target.files?.[0])}
                   />
                 </label>
               )}
             {reg.registrationStatus !== "cancelled" && (
-              <small className="upload-help">JPG, PNG ou PDF · até 600 KB</small>
+              <small className="upload-help">JPG, PNG ou PDF · até {PROOF_POLICY.displayLimit}</small>
             )}
             {reg.registrationStatus === "cancelled" ? (
               <Notice>

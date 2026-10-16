@@ -15,8 +15,9 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F1-TEST-ISOLATION | P0 | IN_PROGRESS | Porta 8080 ocupada; configuração de testes separada 18080, projeto demo-caravana77-test | f1-before-id-fix.log registra falha de infraestrutura; rerun isolado executou 34 testes | Nenhum processo de terceiro encerrado; serviços reais não recebem testes |
 | F1-ID-GREEN | P0 | PASS | Ambas as escritas usam caravanRef.id; leituras priorizam snapshot.id | f1-id-final-tests.log: 34 PASS; lint/typecheck/build PASS | Fonte financeira e layout preservados; fix ainda local |
 | F1-RUNNER | P0 | PASS | npm test usa projeto demo, loopback e runner com cleanup Windows restrito ao processo criado nesta execução | f1-id-final-tests.log, exit 0 e Java encerrado | Erro inicial de ExecutionPolicy corrigido sem mudar política do sistema |
-| F1-PROOFS | P0 | TODO | Unificar 600 KiB com tamanho base64 e assinatura real | Ainda não implementado | Storage legado continua fora da configuração ativa |
-| F1-CSV | P0 | TODO | Exercitar importação real sobre fixtures | Replay mesmo lote, capacity e conflitos | Nenhuma importação real |
+| F1-PROOFS | P0 | PASS para cliente/Firestore; Storage estático | Unificar 600 KiB com tamanho base64 e assinatura | f1-policy-import-tests.log: 43 PASS; boundary614400 aceita,614401 bypass negado | Storage legado fora da configuração ativa; nenhum deploy Rules |
+| F1-CSV | P0 | PASS parcial | Função real de importação sobre fixtures | Replay mesmo lote e capacity atômica, f1-policy-import-tests.log | Dedupe entre lotes/rollback permanecem TODO F3; nenhuma importação real |
+| F1-E2E | P0 | IN_PROGRESS | Preparar ambiente totalmente sintético e navegador | Ainda sem evidência E2E | Financeiro preservado; não usar Preview ligado ao Firebase real |
 | F2 | P0 | TODO | Core multi-tenant e migração sintética | A×B, RBAC, restore | Nunca migrar produção |
 | F3 | P0/P1 | TODO | Estados, reservas, CSV, check-in | Jornadas sintéticas | F2 dependente |
 | F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |

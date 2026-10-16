@@ -15,3 +15,7 @@ O arquivo storage.rules de main será preservado como evidência legada na recup
 ## ADR-004 — Testes repetíveis e sem recursos reais
 
 npm test usa Firebase demo-caravana77-test, portas loopback separadas e suites sem paralelismo de arquivos. Isso impede colisão de clearFirestore e fallback para um projeto real. No Windows/JDK 25 observado, a CLI deixa Java ativo após SIGINT; o runner encerra somente processo novo, do projeto demo e do caminho de Rules da worktree, sem terminar emuladores preexistentes e sem alterar ExecutionPolicy.
+
+## ADR-005 — Preservar comprovantes inline e normalizar a policy
+
+O fluxo recuperado comprovadamente usa Firestore proofs/current, sem serviço Storage ativo no frontend. Preservar esse armazenamento; policy central src/lib/proof-policy.ts controla cliente/UI, testes validam os limites nas Rules. Limite binário 600*1024=614400, base64 819200. A antiga tolerância de 820000 no Firestore permitia alguns bytes extras via bypass e foi corrigida somente no candidato local. Storage legado conservado com limite equivalente, fora da configuração ativa. Nenhuma migração de arquivos/serviço/cobrança.

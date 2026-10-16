@@ -8,6 +8,8 @@ Fonte avançada recuperada do checkout original sujo; backup externo C:/xampp/77
 
 Checkpoint F0 69abd6f reproduz a produção antiga. F1-ID corrigiu as duas escritas de caravanId e assegurou IDs derivados do caminho nas leituras; 34 testes PASS, lint/typecheck/build PASS. Evidências RED antes do fix e GREEN depois em docs/evidence/2026-10-16. Runtime financeiro original e layout sem refatoração.
 
-Próxima tarefa: F1, política única de comprovantes e testes de importação histórica. O build novo é candidato local, não foi publicado. F1 ainda IN_PROGRESS (faltam demais critérios, staging/E2E e estados).
+F1-policy: política única de comprovantes com 614400 bytes (600 KiB, rótulo legado 600 KB), 819200 caracteres base64, assinaturas PDF/JPEG/PNG; Rules locais alinham o limite e o portal diferencia comprovante aprovado de pagamento bancário. 43 testes PASS, lint/typecheck/build PASS. Importação real testada somente em fixtures (replay do mesmo lote e lotação); dedupe entre lotes diferentes e rollback ainda pendentes.
+
+Próxima tarefa: F1, smoke E2E local com Auth/Firestore emulados, dados sintéticos e screenshots responsivas do Financeiro Geral. O build novo é candidato local, não foi publicado. F1 ainda IN_PROGRESS (faltam demais critérios, staging/E2E e estados).
 
 Retomada: ler este arquivo, CODEX_PROGRESS.md, SOURCE_RECONCILIATION.md, ISSUES_AND_BLOCKERS.md e TEST_EVIDENCE.md; conferir git status e log. Continuar a primeira tarefa não PASS, sem reiniciar a auditoria.

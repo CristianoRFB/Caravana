@@ -15,7 +15,7 @@ service firebase.storage {
       allow create: if registration().organizationId == orgId
         && registration().caravanId == caravanId
         && registration().registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
-        && request.resource.size <= 8 * 1024 * 1024
+        && request.resource.size <= 600 * 1024
         && request.resource.contentType.matches('^(image/jpeg|image/png|application/pdf)$');
       allow update, delete: if signedIn() && adminOrg() == orgId;
     }

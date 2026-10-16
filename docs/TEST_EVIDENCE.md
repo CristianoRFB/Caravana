@@ -26,3 +26,9 @@ Novo tests/data.integration.test.ts importa src/lib/data.ts com binding Firebase
 - Lint PASS: f1-id-final-lint.log. Typecheck PASS: f1-typecheck.log. Build PASS: f1-id-build.log. Fonte Finance.tsx, lib/finance.ts e importador preservados neste fix.
 
 Fixture demo-caravana77-test, config firebase.test.json, Firestore 127.0.0.1:18080. Uso de projeto demo segue https://firebase.google.com/docs/emulator-suite/connect_firestore. F1 completo continua IN_PROGRESS; estes testes não cobrem ainda todos os gates ou dados legados reais.
+
+## F1-policy/CSV — 43 testes PASS
+
+npm test: seis arquivos / 43 testes, exit0, f1-policy-import-tests.log. Novos casos exercitam serviço real para menor/responsável, dados persistidos inválidos sem ocupar vaga, importação repetida do mesmo batchId (sem duplicar reserva), importação acima de vagas atômica, PNG/JPEG por assinatura e PDF no limite exato de 614400 bytes. O payload de 614401 bytes é negado pelas Rules mesmo bypassando cliente. Cliente e Firestore agora usam o mesmo limite base64 (819200); Storage legado tem limite estático equivalente, sem ativar/deployar Storage.
+
+Lint/typecheck/build PASS, logs f1-policy-lint.log, f1-policy-typecheck.log e f1-policy-build.log. Validação de formato é por assinatura, não parsing completo de PDF/imagem. Nenhum objeto/documento real foi migrado. Dedupe cross-batch, token revogável, estados mais rigorosos e auditoria continuam pendentes.
