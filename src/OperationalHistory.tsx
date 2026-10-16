@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { collection, limit, onSnapshot, orderBy, query, Timestamp, where } from "firebase/firestore";
 import { db } from "./lib/firebase";
-const labels: Record<string, string> = { review_approved: "Inscrição confirmada", review_rejected: "Revisão recusada", cancelled: "Inscrição cancelada", checked_in: "Embarque registrado", checkin_reversed: "Embarque desfeito" };
+const labels: Record<string, string> = { review_approved: "Inscrição confirmada", review_rejected: "Revisão recusada", cancelled: "Inscrição cancelada", import_rolled_back: "Importação desfeita", checked_in: "Embarque registrado", checkin_reversed: "Embarque desfeito" };
 interface Event { id: string; registrationId: string; action: string; actorUid: string; at: string; reason: string; }
 export default function OperationalHistory({ organizationId, caravanId }: { organizationId: string; caravanId: string }) {
   const [events, setEvents] = useState<Event[]>([]);

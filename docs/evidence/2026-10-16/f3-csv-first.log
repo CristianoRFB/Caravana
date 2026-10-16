@@ -1,0 +1,39 @@
+
+> caravana-77@0.1.0 test:operations
+> node scripts/run-local-tests.mjs operations
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/tenant-preference.test.ts tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/firestore.rules.test.ts (14 tests | 1 failed) 1954ms
+   ❯ Firestore security rules (14)
+     × allows an organization admin to import a contactless historical Pix report without a known amount 80ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/firestore.rules.test.ts > Firestore security rules > allows an organization admin to import a contactless historical Pix report without a known amount
+FirebaseError: 7 PERMISSION_DENIED: 
+evaluation error at L356:24 for 'update' @ L356, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L533, evaluation error at L574:24 for 'update' @ L574, Property lastReservationNonce is undefined on object. for 'update' @ L356
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 54 passed (55)
+   Start at  16:55:02
+   Duration  15.52s (tests 90%, import 8%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/tenant-preference.test.ts tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 8200).

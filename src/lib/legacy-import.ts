@@ -196,7 +196,7 @@ function documentKey(value: string) {
 type PassengerIdentity = Pick<Registration, "passengerName" | "phone" | "email" | "cpf"> &
   Pick<Registration, "documentRecords">;
 
-function samePassenger(left: PassengerIdentity, right: PassengerIdentity) {
+export function samePassenger(left: PassengerIdentity, right: PassengerIdentity) {
   if (left.cpf && right.cpf && left.cpf.replace(/\D/g, "") === right.cpf.replace(/\D/g, "")) {
     return true;
   }
@@ -209,10 +209,10 @@ function samePassenger(left: PassengerIdentity, right: PassengerIdentity) {
     ...(right.cpf ? [documentKey(right.cpf)] : []),
   ].filter(Boolean);
   if (leftDocuments.some((value) => rightDocuments.includes(value))) return true;
-  const sameName = normalize(left.passengerName) === normalize(right.passengerName);
-  const leftPhone = left.phone.replace(/\D/g, "");
-  const rightPhone = right.phone.replace(/\D/g, "");
-  const sameEmail = normalize(left.email) !== "" && normalize(left.email) === normalize(right.email);
+  const sameName = normalize(left.passengerName || "") === normalize(right.passengerName || "");
+  const leftPhone = (left.phone || "").replace(/\D/g, "");
+  const rightPhone = (right.phone || "").replace(/\D/g, "");
+  const sameEmail = normalize(left.email || "") !== "" && normalize(left.email || "") === normalize(right.email || "");
   return sameName && ((leftPhone !== "" && leftPhone === rightPhone) || sameEmail);
 }
 

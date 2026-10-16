@@ -3,7 +3,7 @@ import { auth, db } from "./firebase";
 import { runTransaction } from "./tracked-firestore";
 import type { Registration } from "./types";
 
-export type RegistrationAction = "review_approved" | "review_rejected" | "cancelled" | "checked_in" | "checkin_reversed";
+export type RegistrationAction = "review_approved" | "review_rejected" | "cancelled" | "import_rolled_back" | "checked_in" | "checkin_reversed";
 export const registrationOperationId = () => crypto.randomUUID().replaceAll("-", "");
 const activeStates = ["awaiting_payment", "awaiting_review", "confirmed", "rejected"];
 class OperationConflict extends Error {}
@@ -34,8 +34,17 @@ async function operate(reg: Registration, action: RegistrationAction, reason: st
       let paymentStatus = current.paymentStatus;
       let checkedAfter = checkedBefore;
       let patch: DocumentData = {};
-      if (action === "cancelled") {
+      if (action === "cancelled" || action === "import_rolled_back") {
         if (current.registrationStatus === "cancelled") return;
+        if (action === "import_rolled_back") {
+          if (!current.importOperationId || (current.paymentTotalCents || 0) > 0 || current.proofId || checkedBefore) throw new Error("Rollback bloqueado: existe movimentação ou revisão posterior; use a operação específica.");
+          const original = await tx.get(doc(database, "importOperations", current.importOperationId));
+          if (!original.exists() || JSON.stringify(current) !== JSON.stringify(original.data().rows?.[reg.id])) {
+            // Firestore field order is not a business invariant; compare keyed values below.
+            const data = original.data()?.rows?.[reg.id];
+            if (!data || Object.keys(current).length !== Object.keys(data).length || Object.keys(current).some((key) => JSON.stringify(current[key]) !== JSON.stringify(data[key]))) throw new Error("Rollback bloqueado: cadastro foi alterado após a importação.");
+          }
+        }
         if (!activeStates.includes(current.registrationStatus)) throw new Error("Estado da inscrição requer revisão da organização.");
         const caravanRef = doc(database, "caravans", current.caravanId);
         const trip = await tx.get(caravanRef);
@@ -64,7 +73,7 @@ async function operate(reg: Registration, action: RegistrationAction, reason: st
       tx.set(audit, { registrationId: reg.id, organizationId: current.organizationId, caravanId: current.caravanId, actorUid,
         action, at: serverTimestamp(), reason: note, beforeStatus: current.registrationStatus, afterStatus: registrationStatus,
         beforePaymentStatus: current.paymentStatus, afterPaymentStatus: paymentStatus, checkedBefore, checkedAfter,
-        seatDelta: action === "cancelled" ? -1 : 0 });
+        seatDelta: action === "cancelled" || action === "import_rolled_back" ? -1 : 0 });
     });
   } catch (cause) {
     if (cause instanceof OperationConflict) throw cause;
@@ -76,3 +85,4 @@ async function operate(reg: Registration, action: RegistrationAction, reason: st
 export const reviewPayment = (reg: Registration, approve: boolean, reason = "", operationId = registrationOperationId()) => operate(reg, approve ? "review_approved" : "review_rejected", reason, operationId);
 export const toggleCheckin = (reg: Registration, checked: boolean, operationId = registrationOperationId()) => operate(reg, checked ? "checked_in" : "checkin_reversed", "", operationId);
 export const cancelRegistration = (reg: Registration, operationId = registrationOperationId()) => operate(reg, "cancelled", "", operationId);
+export const rollbackImportedRegistration = (reg: Registration, reason: string, operationId = registrationOperationId()) => operate(reg, "import_rolled_back", reason, operationId);

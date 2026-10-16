@@ -1,0 +1,48 @@
+
+> caravana-77@0.1.0 test:csv:security
+> node scripts/run-local-tests.mjs csv-security
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/import-operations.integration.test.ts --testNamePattern "direct SDK|worst-case|retry intent"
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/import-operations.integration.test.ts (12 tests | 1 failed | 8 skipped) 4167ms
+   ❯ CSV private registry, atomic chunks and controlled rollback (12)
+     × worst-case two rows with six identity aliases stay inside the Rules evaluation budget 345ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/import-operations.integration.test.ts > CSV private registry, atomic chunks and controlled rollback > worst-case two rows with six identity aliases stay inside the Rules evaluation budget
+AssertionError: [{"line":3,"status":"rejected","reason":"7 PERMISSION_DENIED: \nUnable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L538, evaluation error at L309:32 for 'create' @ L309, evaluation error at L361:24 for 'update' @ L361, evaluation error at L323:24 for 'create' @ L323, false for 'create' @ L323, false for 'update' @ L361, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L538"},{"line":4,"status":"rejected","reason":"7 PERMISSION_DENIED: \nUnable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L538, evaluation error at L309:32 for 'create' @ L309, evaluation error at L361:24 for 'update' @ L361, evaluation error at L323:24 for 'create' @ L323, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L538"}]: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tests/import-operations.integration.test.ts:61:64
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed | 8 skipped (12)
+   Start at  17:06:20
+   Duration  4.70s (tests 92%, import 5%, transform 3%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/import-operations.integration.test.ts --testNamePattern "direct SDK|worst-case|retry intent"" exited with code 1
+Stopped test emulator started by this run (PID 7836).

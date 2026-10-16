@@ -249,10 +249,95 @@ service cloud.firestore {
       let event = getAfter(/databases/$(database)/documents/registrationOperations/$(operationId)).data;
       return operationId.matches('^[a-f0-9]{32}$')
         && !exists(/databases/$(database)/documents/registrationOperations/$(operationId))
-        && event.action == 'cancelled' && event.seatDelta == -1
+        && event.action in ['cancelled', 'import_rolled_back'] && event.seatDelta == -1
         && event.caravanId == caravanId && event.organizationId == resource.data.organizationId
         && request.resource.data.reservedSeats == resource.data.reservedSeats - 1
         && getAfter(/databases/$(database)/documents/registrations/$(event.registrationId)).data.lastOperationalId == operationId;
+    }
+    function importNormalize(value) {
+      let lower = value.lower();
+      return lower.matches('^[ -~]*$') ? lower.replace('[^a-z0-9]', '')
+        : lower.replace('[áàâãä]', 'a').replace('[éèêë]', 'e').replace('[íìîï]', 'i')
+        .replace('[óòôõö]', 'o').replace('[úùûü]', 'u').replace('ç', 'c').replace('[^a-z0-9]', '');
+    }
+    function importIdentityKeys(data) {
+      let documents = data.get('documentRecords', []);
+      let name = importNormalize(data.passengerName);
+      return [data.get('cpf', '') != '' ? 'doc_' + importNormalize(data.cpf) : '',
+        documents.size() > 0 ? 'doc_' + importNormalize(documents[0].value) : '',
+        documents.size() > 1 ? 'doc_' + importNormalize(documents[1].value) : '',
+        documents.size() > 2 ? 'doc_' + importNormalize(documents[2].value) : '',
+        data.phone != '' ? 'phone_' + name + '_' + data.phone.replace('[^0-9]', '') : '',
+        data.email != '' ? 'email_' + name + '_' + importNormalize(data.email) : ''];
+    }
+    function importClaimsValid(data) {
+      let path = /databases/$(database)/documents/importRegistries/$(data.caravanId);
+      let before = exists(path) ? get(path).data.claims : {};
+      let after = getAfter(path).data.claims;
+      let keys = data.importIdentityKeys;
+      let identities = keys.toSet().difference([''].toSet());
+      return keys == importIdentityKeys(data) && identities.size() > 0
+        && before.keys().toSet().intersection(identities).size() == 0
+        && after.keys().toSet().hasAll(identities);
+    }
+    function validSeatImport(caravanId) {
+      let operationId = request.resource.data.get('lastImportOperationId', '');
+      let path = /databases/$(database)/documents/importOperations/$(operationId);
+      let event = getAfter(path).data;
+      return operationId.matches('^[a-f0-9]{32}$') && !exists(path)
+        && event.caravanId == caravanId && event.organizationId == resource.data.organizationId
+        && event.seatBefore == resource.data.reservedSeats && event.seatAfter == request.resource.data.reservedSeats
+        && event.seatAfter == event.seatBefore + event.registrationIds.size();
+    }
+    match /importRegistries/{caravanId} {
+      function validRegistry() {
+        let data = request.resource.data;
+        let before = resource == null ? {} : resource.data.claims;
+        let event = getAfter(/databases/$(database)/documents/importOperations/$(data.lastImportOperationId)).data;
+        return data.keys().hasOnly(['organizationId', 'caravanId', 'claims', 'lastImportOperationId'])
+          && data.caravanId == caravanId && data.organizationId == get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId
+          && data.claims is map && data.claims.size() <= 6000
+          && data.claims.diff(before).removedKeys().size() == 0 && data.claims.diff(before).changedKeys().size() == 0
+          && data.claims.diff(before).addedKeys() == event.claims.keys().toSet()
+          && event.claims.keys().hasOnly(data.claims.keys()) && data.claims.diff(event.claims).changedKeys().size() == 0
+          && event.caravanId == caravanId && event.organizationId == data.organizationId
+          && !exists(/databases/$(database)/documents/importOperations/$(data.lastImportOperationId));
+      }
+      allow get: if isTenantOwner(get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId);
+      allow list, delete: if false;
+      allow create, update: if isTenantOwner(request.resource.data.organizationId) && validRegistry();
+    }
+    match /importOperations/{operationId} {
+      function validRowAt(data, index) {
+        return data.registrationIds.size() <= index || (
+          !exists(/databases/$(database)/documents/registrations/$(data.registrationIds[index]))
+          && getAfter(/databases/$(database)/documents/registrations/$(data.registrationIds[index])).data == data.rows[data.registrationIds[index]]);
+      }
+      function keysAt(data, index) {
+        return data.registrationIds.size() <= index ? [].toSet() : data.rows[data.registrationIds[index]].importIdentityKeys.toSet().difference([''].toSet());
+      }
+      allow get: if (resource == null && signedIn()) || (resource != null && isTenantOwner(resource.data.organizationId));
+      allow list: if isTenantOwner(resource.data.organizationId);
+      allow update, delete: if false;
+      allow create: if isTenantOwner(request.resource.data.organizationId)
+        && operationId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.keys().hasOnly(['organizationId', 'caravanId', 'batchId', 'attemptId', 'actorUid', 'at', 'payloadHash', 'registrationIds', 'rows', 'claims', 'rowResults', 'seatBefore', 'seatAfter'])
+        && request.resource.data.batchId.matches('^[a-f0-9]{32}$') && request.resource.data.payloadHash.matches('^[a-f0-9]{64}$')
+        && request.resource.data.attemptId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time
+        && request.resource.data.registrationIds is list && request.resource.data.registrationIds.size() <= 2
+        && request.resource.data.registrationIds.toSet().size() == request.resource.data.registrationIds.size()
+        && request.resource.data.rows is map && request.resource.data.rows.keys().toSet() == request.resource.data.registrationIds.toSet()
+        && request.resource.data.claims is map && request.resource.data.claims.values().toSet().hasOnly([true])
+        && request.resource.data.claims.keys().toSet() == keysAt(request.resource.data, 0).union(keysAt(request.resource.data, 1))
+        && request.resource.data.claims.size() == keysAt(request.resource.data, 0).size() + keysAt(request.resource.data, 1).size()
+        && request.resource.data.rowResults is list && request.resource.data.rowResults.size() <= 2
+        && request.resource.data.seatBefore == get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats
+        && request.resource.data.seatAfter == request.resource.data.seatBefore + request.resource.data.registrationIds.size()
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.lastImportOperationId == operationId
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats == request.resource.data.seatAfter
+        && getAfter(/databases/$(database)/documents/importRegistries/$(request.resource.data.caravanId)).data.lastImportOperationId == operationId
+        && validRowAt(request.resource.data, 0) && validRowAt(request.resource.data, 1);
     }
     match /registrationOperations/{operationId} {
       allow get: if (resource == null && signedIn()) || (resource != null && isAdmin(resource.data.organizationId));
@@ -281,7 +366,10 @@ service cloud.firestore {
           && request.resource.data.reservedSeats is int
           && request.resource.data.reservedSeats >= 0
           && request.resource.data.reservedSeats <= request.resource.data.capacity
-          && (request.resource.data.reservedSeats >= resource.data.reservedSeats || validSeatRelease(caravanId)))
+          && (request.resource.data.reservedSeats == resource.data.reservedSeats
+            || (request.resource.data.reservedSeats < resource.data.reservedSeats && validSeatRelease(caravanId))
+            || (request.resource.data.reservedSeats > resource.data.reservedSeats && validSeatImport(caravanId)))
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['lastImportOperationId']) || validSeatImport(caravanId)))
         || (isAdmin(resource.data.organizationId)
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reservedSeats', 'lastSeatOperationId', 'updatedAt'])
           && request.resource.data.reservedSeats >= 0 && validSeatRelease(caravanId))
@@ -355,10 +443,13 @@ service cloud.firestore {
             && data.registrationStatus == 'rejected' && data.paymentStatus == 'rejected'
             && data.rejectedAt == request.time && data.rejectedBy == request.auth.uid && data.rejectionReason == event.reason
             && changed.hasOnly(['registrationStatus', 'paymentStatus', 'rejectedAt', 'rejectedBy', 'rejectionReason', 'lastOperationalId']))
-          || (event.action == 'cancelled' && event.seatDelta == -1
+          || (event.action in ['cancelled', 'import_rolled_back'] && event.seatDelta == -1
             && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected', 'confirmed']
             && data.registrationStatus == 'cancelled' && data.paymentStatus == resource.data.paymentStatus
             && data.cancelledAt == request.time && data.cancelledBy == request.auth.uid && !event.checkedAfter && data.checkedInBy == null
+            && (event.action == 'cancelled' || (isTenantOwner(resource.data.organizationId) && event.reason.size() >= 3
+              && resource.data.get('paymentTotalCents', 0) == 0 && !('proofId' in resource.data) && !event.checkedBefore
+              && resource.data == get(/databases/$(database)/documents/importOperations/$(resource.data.importOperationId)).data.rows[registrationId]))
             && changed.hasOnly(['registrationStatus', 'cancelledAt', 'cancelledBy', 'checkedInAt', 'checkedInBy', 'lastOperationalId'])
             && getAfter(/databases/$(database)/documents/caravans/$(data.caravanId)).data.lastSeatOperationId == operationId
             && getAfter(/databases/$(database)/documents/caravans/$(data.caravanId)).data.reservedSeats == get(/databases/$(database)/documents/caravans/$(data.caravanId)).data.reservedSeats - 1)
@@ -374,14 +465,18 @@ service cloud.firestore {
         let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId));
         let tripAfter = getAfter(/databases/$(database)/documents/caravans/$(data.caravanId));
         return data.keys().hasAll(['id', 'importedFromLegacy', 'importBatchId', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'registrationStatus', 'paymentStatus', 'createdAt'])
-          && data.keys().hasOnly(['id', 'importedFromLegacy', 'importBatchId', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'documentRecords', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled', 'registrationStatus', 'paymentStatus', 'createdAt'])
+          && data.keys().hasOnly(['id', 'importedFromLegacy', 'importBatchId', 'importOperationId', 'importIdentityKeys', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'documentRecords', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled', 'registrationStatus', 'paymentStatus', 'createdAt'])
           && id.matches('^[a-f0-9]{64}$')
           && data.id == id
           && data.importedFromLegacy == true
           && data.importBatchId is string
           && data.importBatchId.matches('^[a-f0-9]{32}$')
+          && data.importOperationId.matches('^[a-f0-9]{32}$') && data.importIdentityKeys is list && data.importIdentityKeys.size() == 6
+          && getAfter(/databases/$(database)/documents/importOperations/$(data.importOperationId)).data.registrationIds.hasAny([id])
+          && getAfter(/databases/$(database)/documents/importOperations/$(data.importOperationId)).data.batchId == data.importBatchId
+          && importClaimsValid(data)
           && data.organizationId is string
-          && isAdmin(data.organizationId)
+          && isTenantOwner(data.organizationId)
           && data.caravanId is string
           && exists(/databases/$(database)/documents/caravans/$(data.caravanId))
           && existsAfter(/databases/$(database)/documents/caravans/$(data.caravanId))
@@ -412,8 +507,8 @@ service cloud.firestore {
           && data.notes is string
           && data.notes.size() <= 1000
           && (!('amountCents' in data) || (data.amountCents is int && data.amountCents > 0))
-          && (!('paymentTotalCents' in data) || (data.paymentTotalCents is int && data.paymentTotalCents >= 0))
-          && data.paymentStatus in ['pending', 'approved', 'reported']
+          && (!('paymentTotalCents' in data) || data.paymentTotalCents == 0)
+          && data.paymentStatus in ['pending', 'reported']
           && ((data.paymentStatus == 'pending' && data.registrationStatus == 'awaiting_payment')
             || (data.paymentStatus == 'approved' && data.registrationStatus == 'confirmed')
             || (data.paymentStatus == 'reported' && data.registrationStatus == 'confirmed'
@@ -487,6 +582,8 @@ service cloud.firestore {
           && request.resource.data.get('id', registrationId) == resource.data.get('id', registrationId)
           && request.resource.data.get('reservationNonce', '') == resource.data.get('reservationNonce', '')
           && request.resource.data.get('reservationRequestHash', '') == resource.data.get('reservationRequestHash', '')
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['importedFromLegacy', 'importBatchId', 'importOperationId', 'importIdentityKeys'])
+          && (resource.data.get('importedFromLegacy', false) != true || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['cpf', 'documentRecords']))
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['registrationStatus', 'paymentStatus', 'approvedAt', 'approvedBy', 'rejectedAt', 'rejectedBy', 'rejectionReason', 'cancelledAt', 'cancelledBy', 'checkedInAt', 'checkedInBy', 'lastOperationalId'])
             || (request.resource.data.get('lastOperationalId', '').matches('^[a-f0-9]{32}$') && validOperation()))
           && (isTenantOwner(resource.data.organizationId)

@@ -50,7 +50,6 @@ import {
   findCaravan,
   getCaravanById,
   getOwnProfile,
-  importLegacyRegistrations,
   loadProof,
   login,
   logout,
@@ -77,6 +76,7 @@ import {
 } from "./lib/types";
 import {
   parseLegacyRegistrationCsv,
+  samePassenger,
   type LegacyRegistrationDraft,
 } from "./lib/legacy-import";
 import { firebaseConfigured } from "./lib/firebase";
@@ -89,6 +89,8 @@ import FinancePage from "./Finance";
 import PlatformPage from "./Platform";
 import { SupportOwner } from "./Support";
 import OperationalHistory from "./OperationalHistory";
+import ImportHistory from "./ImportHistory";
+import { importFailureMessage, importLegacyRegistrationsDetailed, type ImportReport } from "./lib/import-operations";
 import { chooseTenant, tenantPreferenceKey } from "./lib/tenant-preference";
 import { PROOF_POLICY } from "./lib/proof-policy";
 import { completeReservationAttempt, getReservationAttempt, readReservationAttempt, ReservationAttemptConflict } from "./lib/reservation-attempt";
@@ -2480,6 +2482,8 @@ function downloadLegacyCsvTemplate() {
 }
 
 function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
+  const canImport = useContext(TenantRoleContext) === "tenant_owner";
+  const operationPending = useSyncExternalStore(observePendingWrites, pendingWrites, pendingWrites);
   const { id: routeId } = useParams();
   const [regs, setRegs] = useState<Registration[]>([]);
   const [caravans, setCaravans] = useState<Caravan[]>([]);
@@ -2503,6 +2507,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
   const [importErrors, setImportErrors] = useState<string[]>([]);
   const [importRecordCount, setImportRecordCount] = useState(0);
   const [importBusy, setImportBusy] = useState(false);
+  const [importReport, setImportReport] = useState<ImportReport | null>(null);
   const [registrationsReady, setRegistrationsReady] = useState(false);
   const [editForm, setEditForm] = useState({
     passengerName: "",
@@ -2515,6 +2520,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
     guardianPhone: "",
   });
   const org = useContext(OrganizationContext);
+  const pendingImportCount = importPreview.filter((row) => !regs.some((existing) => samePassenger(existing, row))).length;
   useEffect(() => {
     if (routeId) setSelected(routeId);
   }, [routeId]);
@@ -2553,6 +2559,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
     setImportRecordCount(0);
     setImportBatchId("");
     setHistoricalArchive(false);
+    setImportReport(null);
   }, [selected]);
   const filtered = useMemo(
     () =>
@@ -2704,11 +2711,11 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
     }
     prepareImportText(await file.text(), file.name);
   }
-  async function submitImport() {
+  async function submitImport(retry = false) {
     const caravan = caravans.find((item) => item.id === selected);
-    if (!caravan || !org || !importPreview.length || importErrors.length) return;
+    if (!caravan || !org || !importPreview.length || (importErrors.length && !retry)) return;
     const available = Math.max(0, caravan.capacity - caravan.reservedSeats);
-    if (importPreview.length > available) {
+    if (pendingImportCount > available) {
       setImportErrors([
         `Há ${available} vagas disponíveis, mas a lista contém ${importPreview.length} pessoas. Ajuste a lista ou as vagas da caravana antes de importar.`,
       ]);
@@ -2723,17 +2730,23 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
     setImportBusy(true);
     setImportErrors([]);
     try {
-      const imported = await importLegacyRegistrations(
+      const imported = await importLegacyRegistrationsDetailed(
         caravan.id,
         org,
         importPreview,
         importBatchId,
+        retry ? crypto.randomUUID().replaceAll("-", "") : importBatchId,
       );
+      setImportReport(imported);
       setNotice(
         historicalArchive
           ? `${imported.imported} passageiros importados${imported.skipped ? `; ${imported.skipped} já constavam desta importação` : ""}. Pix segue como informado, sem valor nem comprovante conciliado.`
           : `${imported.imported} passageiros importados${imported.skipped ? `; ${imported.skipped} já constavam desta importação` : ""}. Aguardam comprovante e conferência manual.`,
       );
+      if (imported.rejected) {
+        setImportErrors([`${imported.rejected} linhas não foram confirmadas. Consulte o relatório; inscrições já aceitas estão preservadas.`]);
+        return;
+      }
       setImportFileName("");
       setImportCsvText("");
       setImportBatchId("");
@@ -2741,7 +2754,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
       setImportRecordCount(0);
       setShowImport(false);
     } catch (e) {
-      setImportErrors([errorMessage(e)]);
+      setImportErrors([importFailureMessage(e)]);
     } finally {
       setImportBusy(false);
     }
@@ -2863,6 +2876,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           Caravana{" "}
           <select
             value={selected}
+            disabled={operationPending > 0 || importBusy}
             onChange={(e) => setSelected(e.target.value)}
           >
             {caravans.map((c) => (
@@ -2873,7 +2887,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           </select>
         </label>
       )}
-      {!pendingOnly && (
+      {!pendingOnly && canImport && (
         <section className="admin-panel legacy-import-panel">
           <div className="panel-heading">
             <div>
@@ -3029,7 +3043,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                   {importErrors.length > 12 && <small>Mais {importErrors.length - 12} registros precisam de correção.</small>}
                 </div>
               )}
-              {editingCaravan && importPreview.length > editingCaravan.capacity - editingCaravan.reservedSeats && (
+              {editingCaravan && pendingImportCount > editingCaravan.capacity - editingCaravan.reservedSeats && (
                 <div className="error-message">
                   Esta lista precisa de {importPreview.length} vagas, mas há apenas {Math.max(0, editingCaravan.capacity - editingCaravan.reservedSeats)} disponíveis.
                 </div>
@@ -3039,7 +3053,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                   <button
                     className="button button-primary"
                     type="button"
-                    disabled={importBusy || !registrationsReady || Boolean(editingCaravan && importPreview.length > editingCaravan.capacity - editingCaravan.reservedSeats)}
+                    disabled={importBusy || !registrationsReady || Boolean(editingCaravan && pendingImportCount > editingCaravan.capacity - editingCaravan.reservedSeats)}
                     onClick={() => void submitImport()}
                   >
                     {importBusy ? "Importando…" : `Importar ${importPreview.length} passageiros`}
@@ -3050,6 +3064,8 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
           )}
         </section>
       )}
+      {!pendingOnly && canImport && selected && <ImportHistory key={`${org}/${selected}`} organizationId={org} caravanId={selected} />}
+      {importReport && <section className="admin-panel platform-section import-report"><h2>Relatório do envio</h2><p>{importReport.imported} importados · {importReport.skipped} já cadastrados · {importReport.rejected} não confirmados</p><details><summary>Ver resultado de cada linha</summary><ul>{importReport.rowResults.map((row) => <li key={row.line} style={{ overflowWrap: "anywhere" }}>Linha {row.line} · {row.status === "imported" ? "Importada" : row.status === "skipped" ? "Ignorada" : "Não confirmada"}: {importFailureMessage(row.reason)}</li>)}</ul></details>{importReport.rejected > 0 && <button className="button button-outline" disabled={importBusy} onClick={() => void submitImport(true)}>Repetir linhas não confirmadas</button>}</section>}
       <div className="passenger-toolbar">
         <label className="search-input">
           <Search />

@@ -374,12 +374,12 @@ describe("Firestore security rules", () => {
     await assertFails(oversized.commit());
   });
 
-  it("allows an organization admin to import a contactless historical Pix report without a known amount", async () => {
+  it("denies a direct historical import without its manifest and identity registry", async () => {
     await seed();
     const staff = env.authenticatedContext("admin-a").firestore();
     const importedId = "e".repeat(64);
     const batchId = "f".repeat(32);
-    await assertSucceeds(
+    await assertFails(
       runTransaction(staff, async (tx) => {
         const caravanRef = doc(staff, "caravans/ride-a");
         const caravan = await tx.get(caravanRef);

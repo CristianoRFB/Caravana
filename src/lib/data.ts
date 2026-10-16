@@ -31,7 +31,7 @@ import {
   type PaymentMethod,
   type Registration,
 } from "./types";
-import { legacyImportDocumentId, type LegacyRegistrationDraft } from "./legacy-import";
+
 import { validateProofFile } from "./proof-policy";
 import { isDemoIdentity } from "./demo-identities";
 import { createReservationAttempt, reservationRequestHash, ReservationAttemptConflict, validReservationAttempt, type ReservationAttempt } from "./reservation-attempt";
@@ -448,79 +448,7 @@ export async function updatePassengerDetails(
   );
 }
 
-export async function importLegacyRegistrations(
-  caravanId: string,
-  organizationId: string,
-  rows: LegacyRegistrationDraft[],
-  batchId: string,
-): Promise<{ imported: number; skipped: number }> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  if (rows.length === 0) return { imported: 0, skipped: 0 };
-  if (rows.length > 400)
-    throw new Error("Importe no máximo 400 passageiros por vez.");
-
-  const database = db;
-  if (!/^[a-f0-9]{32}$/.test(batchId))
-    throw new Error("Identificador de importação inválido. Selecione o arquivo novamente.");
-  const registrationRefs = await Promise.all(
-    rows.map(async (row) => {
-      const id = await legacyImportDocumentId(batchId, row.line);
-      return doc(database, "registrations", id);
-    }),
-  );
-  const caravanRef = doc(database, "caravans", caravanId);
-  const importedAt = new Date().toISOString();
-  let imported = 0;
-
-  await runTransaction(database, async (tx) => {
-    const snapshot = await tx.get(caravanRef);
-    const existingSnapshots = await Promise.all(
-      registrationRefs.map((reference) => tx.get(reference)),
-    );
-    if (!snapshot.exists()) throw new Error("Caravana não encontrada.");
-    const caravan = snapshot.data() as Caravan;
-    if (caravan.organizationId !== organizationId)
-      throw new Error("Esta caravana pertence a outra organização.");
-    const newRows = rows
-      .map((row, index) => ({ row, reference: registrationRefs[index], existing: existingSnapshots[index] }))
-      .filter(({ existing }) => {
-        if (!existing.exists()) return true;
-        if (existing.data().importBatchId !== batchId)
-          throw new Error("Conflito de identificador na importação. Selecione o arquivo novamente.");
-        return false;
-      });
-    const available = caravan.capacity - caravan.reservedSeats;
-    if (newRows.length > available) {
-      throw new Error(
-        `Há somente ${Math.max(0, available)} vagas disponíveis. Restam ${newRows.length} passageiros para importar.`,
-      );
-    }
-
-    imported = newRows.length;
-    if (newRows.length) {
-      tx.update(caravanRef, {
-        reservedSeats: caravan.reservedSeats + newRows.length,
-        updatedAt: serverTimestamp(),
-      });
-    }
-    newRows.forEach(({ row, reference }) => {
-      const { line, ...registration } = row;
-      void line;
-      tx.set(reference, {
-        ...registration,
-        id: reference.id,
-        importedFromLegacy: true,
-        importBatchId: batchId,
-        organizationId,
-        caravanId,
-        caravanName: caravan.name,
-        createdAt: importedAt,
-      });
-    });
-  });
-  return { imported, skipped: rows.length - imported };
-}
+export { importLegacyRegistrations } from "./import-operations";
 
 export interface PassengerPaymentInput {
   amountCents: number;

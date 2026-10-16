@@ -107,6 +107,9 @@ export interface Registration {
   reservationNonce?: string;
   reservationRequestHash?: string;
   importedFromLegacy?: boolean;
+  importBatchId?: string;
+  importOperationId?: string;
+  importIdentityKeys?: string[];
   organizationId: string;
   caravanId: string;
   caravanName: string;

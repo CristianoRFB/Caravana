@@ -1,0 +1,30 @@
+import { afterAll, beforeAll, expect, it, vi } from "vitest";
+import { readFileSync } from "node:fs";
+import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
+import { collection, doc, getDoc, getDocs, query, setDoc, where, type Firestore } from "firebase/firestore";
+import { importLegacyRegistrationsDetailed } from "../src/lib/import-operations";
+import { pendingWrites } from "../src/lib/pending-writes";
+import type { LegacyRegistrationDraft } from "../src/lib/legacy-import";
+const runtime = vi.hoisted(() => ({ db: null as Firestore | null, auth: { currentUser: { uid: "synthetic-scale-owner" } } }));
+vi.mock("../src/lib/firebase", () => runtime);
+let env: RulesTestEnvironment;
+beforeAll(async () => { env = await initializeTestEnvironment({ projectId: "demo-caravana77-test", firestore: { rules: readFileSync("firestore.rules", "utf8") } }); });
+afterAll(async () => { runtime.db = null; await env.clearFirestore(); await env.cleanup(); });
+it("F3 gate imports and replays the documented 400-row limit with bounded atomic manifests", { timeout: 120000 }, async () => {
+  await env.withSecurityRulesDisabled(async (context) => {
+    const db = context.firestore();
+    await setDoc(doc(db, "memberships/synthetic-scale-owner/organizations/scale"), { uid: "synthetic-scale-owner", organizationId: "scale", role: "tenant_owner", status: "active" });
+    await setDoc(doc(db, "caravans/synthetic-scale"), { organizationId: "scale", name: "Synthetic scale only", status: "published", reservedSeats: 0, capacity: 500, boardingPoints: [{ id: "point", name: "Synthetic point" }] });
+  });
+  runtime.db = env.authenticatedContext("synthetic-scale-owner").firestore();
+  const rows: LegacyRegistrationDraft[] = Array.from({ length: 400 }, (_, index) => ({ line: index + 2, passengerName: `Pessoa Fictícia Escala ${index}`, phone: String(11900000000 + index), email: "", city: "", boardingPointId: "point", boardingPointName: "Synthetic point", emergencyContact: "", notes: "", amountCents: 8500, paymentTotalCents: 0, registrationStatus: "awaiting_payment", paymentStatus: "pending" }));
+  const id = "a".repeat(32);
+  const result = await importLegacyRegistrationsDetailed("synthetic-scale", "scale", rows, id);
+  expect(result.rejected, JSON.stringify(result.rowResults.filter((row) => row.status === "rejected").slice(0, 1))).toBe(0);
+  expect(result.imported).toBe(400);
+  expect((await importLegacyRegistrationsDetailed("synthetic-scale", "scale", rows, id)).skipped).toBe(400);
+  expect((await getDoc(doc(runtime.db!, "caravans/synthetic-scale"))).data()?.reservedSeats).toBe(400);
+  expect((await getDocs(query(collection(runtime.db!, "registrations"), where("organizationId", "==", "scale")))).size).toBe(400);
+  expect((await getDocs(query(collection(runtime.db!, "importOperations"), where("organizationId", "==", "scale")))).size).toBe(200);
+  expect(pendingWrites()).toBe(0);
+});
