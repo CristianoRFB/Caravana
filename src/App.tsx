@@ -87,6 +87,7 @@ import { observePendingWrites, pendingWrites } from "./lib/pending-writes";
 import PublicIndex from "./PublicIndex";
 import FinancePage from "./Finance";
 import PlatformPage from "./Platform";
+import { SupportOwner } from "./Support";
 import { PROOF_POLICY } from "./lib/proof-policy";
 
 const errorMessage = (error: unknown) =>
@@ -1596,6 +1597,7 @@ function AdminShell({
           <Link to="/admin/check-in">
             <span>✓</span> Check-in
           </Link>
+          <Link to="/admin/suporte"><span>?</span> Suporte</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
@@ -3586,6 +3588,11 @@ function CaravanFinance() {
   const role = useContext(TenantRoleContext);
   return <FinancePage organizationId={organizationId} canEdit={role === "tenant_owner"} />;
 }
+function TenantSupport() {
+  const organizationId = useContext(OrganizationContext);
+  const role = useContext(TenantRoleContext);
+  return <SupportOwner organizationId={organizationId} canManage={role === "tenant_owner"} />;
+}
 
 export default function App() {
   return (
@@ -3606,6 +3613,7 @@ export default function App() {
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/platform/login" element={<AdminLogin platform />} />
       <Route path="/platform" element={<PlatformPage header={<Topbar admin />} />} />
+      <Route path="/admin/suporte" element={<AdminGuard><TenantSupport /></AdminGuard>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
       <Route

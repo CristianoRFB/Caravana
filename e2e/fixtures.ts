@@ -48,7 +48,7 @@ export async function preparePlatformSecurityIdentity() {
   if (!response.ok || !data.localId) throw new Error("Cannot prepare isolated platform security identity.");
   platformTestUid = data.localId;
   await patchPlatformSecurityStatus("active");
-  return { ownerUid: syntheticAdminUid };
+  return { ownerUid: syntheticAdminUid, operatorUid: platformTestUid };
 }
 export async function patchPlatformSecurityStatus(status: "active" | "revoked") {
   assertSyntheticEndpoints();

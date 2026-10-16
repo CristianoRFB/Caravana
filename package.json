@@ -18,6 +18,8 @@
     "test:demo": "node scripts/run-local-tests.mjs demo-auth",
     "test:storage": "node scripts/run-local-tests.mjs storage",
     "test:platform": "node scripts/run-local-tests.mjs platform",
+    "test:support": "node scripts/run-local-tests.mjs support",
+    "test:support:e2e": "node scripts/run-local-tests.mjs support-e2e",
     "test:platform:e2e": "node scripts/run-local-tests.mjs platform-e2e",
     "test:tenant:operations": "node scripts/run-local-tests.mjs tenant-writes",
     "test:tenant:e2e": "node scripts/run-local-tests.mjs tenant-e2e",

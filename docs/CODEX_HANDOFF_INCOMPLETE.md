@@ -1,5 +1,7 @@
 # CARAVANA 77 - HANDOFF CODEX
 
+> Registro histórico do WIP cf1a7c1. A retomada concluiu a implementação de suporte e iniciou o aceite F2. Estado atual em CURRENT.md, SUPPORT_ACCESS.md e CODEX_PROGRESS.md; os itens incompletos abaixo descrevem a interrupção anterior.
+
 Data: 2026-10-16
 Status: IN_PROGRESS / INCOMPLETE
 Motivo: limite de uso do Codex atingido.

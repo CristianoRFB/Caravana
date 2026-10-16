@@ -1,0 +1,89 @@
+
+> caravana-77@0.1.0 test
+> node scripts/run-local-tests.mjs
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/proof-policy.test.ts (2 tests | 1 failed) 14ms
+   ❯ proof policy (2)
+     × uses the same binary/base64 boundary in the upload policy and both rules files 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/proof-policy.test.ts > proof policy > uses the same binary/base64 boundary in the upload policy and both rules files
+AssertionError: expected 'rules_version = \'2\';\r\nservice fir…' to contain 'request.resource.size <= 600 * 1024'
+
+- Expected
++ Received
+
+- request.resource.size <= 600 * 1024
++ rules_version = '2';
++ service firebase.storage {
++   match /b/{bucket}/o {
++     function signedIn() {
++       return request.auth != null && (
++         !(request.auth.token.get('email', '').lower() == 'teste@gmail.com'
++           || request.auth.token.get('email', '').lower().matches('.*[.]test$'))
++         || request.auth.token.get('aud', '') == 'demo-caravana77-test');
++     }
++     function activeMember(orgId) {
++       let path = /databases/(default)/documents/memberships/$(request.auth.uid)/organizations/$(orgId);
++       return request.auth != null && firestore.exists(path)
++         && firestore.get(path).data.uid == request.auth.uid
++         && firestore.get(path).data.organizationId == orgId
++         && firestore.get(path).data.status == 'active'
++         && firestore.get(path).data.role in ['tenant_owner', 'staff'];
++     }
++     match /proofs/{orgId}/{caravanId}/{registrationId}/{fileName} {
++       function registration() {
++         return firestore.get(/databases/(default)/documents/registrations/$(registrationId)).data;
++       }
++       // Two distinct Firestore documents: membership and registration. Preserve existing paths/files.
++       allow get: if signedIn() && activeMember(orgId)
++         && registration().organizationId == orgId
++         && registration().caravanId == caravanId;
++       allow list: if false;
++       // The active application uploads validated proofs inline to Firestore. Do not expose
++       // an unused anonymous Storage upload or mint new file URLs from a client write.
++       // A trusted import/maintenance service would need a separate approved workflow.
++       allow create, update, delete: if false;
++     }
++   }
++ }
++
+
+ ❯ tests/proof-policy.test.ts:9:51
+      7|     expect(PROOF_POLICY.maxBase64Characters).toBe(819200);
+      8|     expect(readFileSync("firestore.rules", "utf8")).toContain(`content…
+      9|     expect(readFileSync("storage.rules", "utf8")).toContain("request.r…
+       |                                                   ^
+     10|   });
+     11|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 14 passed (15)
+      Tests  1 failed | 100 passed (101)
+   Start at  15:56:30
+   Duration  18.20s (tests 87%, import 10%, transform 2%)
+
+    Isolate  15 workers spawned · ~131ms startup each (spawn + environment, per file)
+             at least ~1.83s faster with isolate: false — reuses workers across files instead of one per file
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run" exited with code 1
+Stopped test emulator started by this run (PID 10796).
