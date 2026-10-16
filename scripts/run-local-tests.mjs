@@ -6,7 +6,9 @@ import path from "node:path";
 const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
-const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", "firestore", "vitest run"];
+const suite = process.argv[2] || "unit";
+if (!["unit", "e2e"].includes(suite) || process.argv.length > 3) throw new Error("Choose unit or e2e tests.");
+const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "e2e" ? "firestore,auth" : "firestore", suite === "e2e" ? "playwright test" : "vitest run"];
 let exitCode = 1;
 try {
   exitCode = await new Promise((resolve, reject) => {

@@ -286,7 +286,7 @@ export default function FinancePage({ organizationId }: { organizationId: string
 
   return (
     <>
-      <div className="admin-title-row">
+      <div className="admin-title-row finance-title-row">
         <div>
           <div className="eyebrow eyebrow-dark">{isGlobalFinance ? "ESPAÇO DA ORGANIZAÇÃO" : "OPERAÇÃO DA VIAGEM"}</div>
           <h1>Financeiro</h1>

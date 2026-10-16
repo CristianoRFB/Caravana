@@ -17,7 +17,8 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F1-RUNNER | P0 | PASS | npm test usa projeto demo, loopback e runner com cleanup Windows restrito ao processo criado nesta execução | f1-id-final-tests.log, exit 0 e Java encerrado | Erro inicial de ExecutionPolicy corrigido sem mudar política do sistema |
 | F1-PROOFS | P0 | PASS para cliente/Firestore; Storage estático | Unificar 600 KiB com tamanho base64 e assinatura | f1-policy-import-tests.log: 43 PASS; boundary614400 aceita,614401 bypass negado | Storage legado fora da configuração ativa; nenhum deploy Rules |
 | F1-CSV | P0 | PASS parcial | Função real de importação sobre fixtures | Replay mesmo lote e capacity atômica, f1-policy-import-tests.log | Dedupe entre lotes/rollback permanecem TODO F3; nenhuma importação real |
-| F1-E2E | P0 | IN_PROGRESS | Preparar ambiente totalmente sintético e navegador | Ainda sem evidência E2E | Financeiro preservado; não usar Preview ligado ao Firebase real |
+| F1-E2E | P0 | PASS parcial do baseline | Ambiente totalmente sintético; quatro larguras; financeiro e fluxo legado | f1-e2e-mobile-header-final.log: 12 PASS; f1-e2e-regression-unit.log: 43 PASS; lint/typecheck/build PASS | Capturas reais sintéticas; F1 completo não homologado |
+| CLIENT-PRESERVATION | P0 | PASS para auditoria atual; obrigação futura | Cinco confirmações registradas antes de F2 | CLIENT_PRESERVATION_ITALO_2026-10-16.md | Nenhuma escrita real autorizada; continuar localmente |
 | F2 | P0 | TODO | Core multi-tenant e migração sintética | A×B, RBAC, restore | Nunca migrar produção |
 | F3 | P0/P1 | TODO | Estados, reservas, CSV, check-in | Jornadas sintéticas | F2 dependente |
 | F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |

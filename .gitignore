@@ -2,6 +2,9 @@ node_modules/
 dist/
 .env*
 !.env.example
+!.env.e2e
+test-results/
+playwright-report/
 .wrangler/
 coverage/
 .firebase/

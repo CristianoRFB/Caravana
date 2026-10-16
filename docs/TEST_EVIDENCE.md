@@ -32,3 +32,16 @@ Fixture demo-caravana77-test, config firebase.test.json, Firestore 127.0.0.1:180
 npm test: seis arquivos / 43 testes, exit0, f1-policy-import-tests.log. Novos casos exercitam serviço real para menor/responsável, dados persistidos inválidos sem ocupar vaga, importação repetida do mesmo batchId (sem duplicar reserva), importação acima de vagas atômica, PNG/JPEG por assinatura e PDF no limite exato de 614400 bytes. O payload de 614401 bytes é negado pelas Rules mesmo bypassando cliente. Cliente e Firestore agora usam o mesmo limite base64 (819200); Storage legado tem limite estático equivalente, sem ativar/deployar Storage.
 
 Lint/typecheck/build PASS, logs f1-policy-lint.log, f1-policy-typecheck.log e f1-policy-build.log. Validação de formato é por assinatura, não parsing completo de PDF/imagem. Nenhum objeto/documento real foi migrado. Dedupe cross-batch, token revogável, estados mais rigorosos e auditoria continuam pendentes.
+
+## F1-E2E — baseline visual e operacional sintético
+
+Playwright 1.64.1 + Chromium1248, Auth19099/Firestore18080, demo-caravana77-test. Vite --mode e2e carrega .env.e2e sintético (sem credenciais reais). Requisições externas do navegador são bloqueadas; asserts exigem zero pageerrors e zero tentativas de Firebase remoto. Fonte: e2e/baseline.spec.ts e fixtures.ts.
+
+- Primeiro ensaio FAIL de infraestrutura: Chromium da versão exigida ausente (f1-e2e-first.log), corrigido instalando somente o runtime de testes.
+- Baseline seis testes PASS: f1-e2e-local.log; capturas revelaram overflow móvel do seletor.
+- Quatro viewports: primeira rodada 10 PASS/2 FAIL por espera incorreta do menu após login (f1-e2e-responsive.log); correção no harness aguardando sidebar anexada. Não foi ocultada falha de produto com retry/skip.
+- Rodadas finais: f1-e2e-responsive-final.log 12 PASS; após ajuste do cabeçalho, f1-e2e-mobile-header-final.log 12 PASS, 35s, exit0. Testes verificam filtro Tudo/ride-a/ride-a2, somatórios, reload, dados de outra organização ausentes e rota não autorizada bloqueada, reserva real sem id, portal, Pix sintético, PDF, revisão e check-in sem inventar recebimento.
+- Unidade/Rules/integration após integração E2E: f1-e2e-regression-unit.log 43 PASS; lint/typecheck/build PASS, f1-e2e-final-*.log.
+- Oito screenshots finais e quatro anteriores ao ajuste, em versions/v1-recovery-2026-10-16/screenshots, com SHA256/dimensões no manifesto. Dataset inteiramente sintético e fontes externas bloqueadas.
+
+F1 ainda IN_PROGRESS: ciclo de revogação, recusa/reenvio e Pix incompleto. F2 não iniciada; confirmação de preservação real registrada separadamente. Testes locais não homologam a base real do Ítalo.

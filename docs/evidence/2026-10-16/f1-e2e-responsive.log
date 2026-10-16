@@ -1,0 +1,137 @@
+
+> caravana-77@0.1.0 test:e2e
+> node scripts/run-local-tests.mjs e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test
+[WebServer] (node:11880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:2088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (4.8s)
+  ok  2 [desktop-1440] › e2e\baseline.spec.ts:58:1 › a guessed caravan path cannot expose another organization's private finance (1.5s)
+  ok  3 [desktop-1440] › e2e\baseline.spec.ts:66:1 › public booking, private proof, manual review and check-in use the recovered source (3.0s)
+(node:10620) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  4 [tablet-768] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.4s)
+  ok  5 [tablet-768] › e2e\baseline.spec.ts:58:1 › a guessed caravan path cannot expose another organization's private finance (1.4s)
+  ok  6 [tablet-768] › e2e\baseline.spec.ts:66:1 › public booking, private proof, manual review and check-in use the recovered source (2.9s)
+(node:15568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   7 [mobile-375] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (45.1s)
+(node:8504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  8 [mobile-375] › e2e\baseline.spec.ts:58:1 › a guessed caravan path cannot expose another organization's private finance (1.6s)
+  ok  9 [mobile-375] › e2e\baseline.spec.ts:66:1 › public booking, private proof, manual review and check-in use the recovered source (3.0s)
+(node:15616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  10 [mobile-320] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (45.1s)
+(node:8428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 11 [mobile-320] › e2e\baseline.spec.ts:58:1 › a guessed caravan path cannot expose another organization's private finance (1.6s)
+  ok 12 [mobile-320] › e2e\baseline.spec.ts:66:1 › public booking, private proof, manual review and check-in use the recovered source (3.5s)
+
+
+  1) [mobile-375] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+
+    Test timeout of 45000ms exceeded.
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Browser logs:
+
+    <launching> C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\Aluno\AppData\Local\Temp\playwright_chromiumdev_profile-Q06OvJ --remote-debugging-pipe --no-startup-window
+    <launched> pid=15488
+    [pid=15488][err] [1016/135054.224:INFO:CONSOLE:789] "[vite] connecting...", source: http://127.0.0.1:4177/@vite/client (789)
+    [pid=15488][err] [1016/135054.268:INFO:CONSOLE:912] "[vite] connected.", source: http://127.0.0.1:4177/@vite/client (912)
+    [pid=15488][err] [1016/135054.376:INFO:CONSOLE:22165] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://127.0.0.1:4177/node_modules/.vite/deps/react-dom_client.js?v=47213810 (22165)
+    [pid=15488] <gracefully close start>
+    Call log:
+      - waiting for locator('.admin-sidebar').getByRole('link', { name: 'Financeiro', exact: true })
+        - locator resolved to <a data-discover="true" href="/admin/financeiro">…</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying click action
+          - waiting 100ms
+        84 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - element is outside of the viewport
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      35 |   const menu = page.getByRole("button", { name: "Menu", exact: true });
+      36 |   if (await menu.isVisible()) await menu.click();
+    > 37 |   await page.locator(".admin-sidebar").getByRole("link", { name: "Financeiro", exact: true }).click();
+         |                                                                                               ^
+      38 |   await expect(page).toHaveURL(/\/admin\/financeiro$/);
+      39 |   if (await menu.isVisible() && await page.locator(".sidebar-open").count()) await menu.click();
+      40 |   await expect(metric(page, "Recebido registrado")).toContainText("145,00");
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:37:95
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [mobile-375] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+    [mobile-320] › e2e\baseline.spec.ts:33:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+  10 passed (2.1m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test" exited with code 1
+Stopped test emulator started by this run (PID 10644).

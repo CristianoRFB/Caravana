@@ -534,6 +534,14 @@
   }
 }
 @media (max-width: 650px) {
+  .finance-title-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .finance-filter {
+    min-width: 0;
+    width: 100%;
+  }
   .finance-summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 9px;

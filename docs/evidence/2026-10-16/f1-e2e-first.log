@@ -1,0 +1,184 @@
+
+> caravana-77@0.1.0 test:e2e
+> node scripts/run-local-tests.mjs e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test
+[WebServer] (node:9888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:12936) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [desktop-1440] › e2e\baseline.spec.ts:23:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (3ms)
+(node:5092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [desktop-1440] › e2e\baseline.spec.ts:46:1 › a guessed caravan path cannot expose another organization's private finance (3ms)
+(node:12192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [desktop-1440] › e2e\baseline.spec.ts:54:1 › public booking, private proof, manual review and check-in use the recovered source (3ms)
+(node:10620) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [mobile-375] › e2e\baseline.spec.ts:23:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (3ms)
+(node:9836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  5 [mobile-375] › e2e\baseline.spec.ts:46:1 › a guessed caravan path cannot expose another organization's private finance (3ms)
+(node:10420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  6 [mobile-375] › e2e\baseline.spec.ts:54:1 › public booking, private proof, manual review and check-in use the recovered source (6ms)
+
+
+  1) [desktop-1440] › e2e\baseline.spec.ts:23:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-desktop-1440\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop-1440] › e2e\baseline.spec.ts:46:1 › a guessed caravan path cannot expose another organization's private finance 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results\baseline-a-guessed-caravan-4fc4c-anization-s-private-finance-desktop-1440\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-a-guessed-caravan-4fc4c-anization-s-private-finance-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-a-guessed-caravan-4fc4c-anization-s-private-finance-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop-1440] › e2e\baseline.spec.ts:54:1 › public booking, private proof, manual review and check-in use the recovered source 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-375] › e2e\baseline.spec.ts:23:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-Financeiro-Geral--10f7f-ad-and-organization-scoping-mobile-375\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [mobile-375] › e2e\baseline.spec.ts:46:1 › a guessed caravan path cannot expose another organization's private finance 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results\baseline-a-guessed-caravan-4fc4c-anization-s-private-finance-mobile-375\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-a-guessed-caravan-4fc4c-anization-s-private-finance-mobile-375\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-a-guessed-caravan-4fc4c-anization-s-private-finance-mobile-375\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [mobile-375] › e2e\baseline.spec.ts:54:1 › public booking, private proof, manual review and check-in use the recovered source 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-375\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-375\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-public-booking-pr-bbf04-in-use-the-recovered-source-mobile-375\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [desktop-1440] › e2e\baseline.spec.ts:23:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+    [desktop-1440] › e2e\baseline.spec.ts:46:1 › a guessed caravan path cannot expose another organization's private finance 
+    [desktop-1440] › e2e\baseline.spec.ts:54:1 › public booking, private proof, manual review and check-in use the recovered source 
+    [mobile-375] › e2e\baseline.spec.ts:23:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping 
+    [mobile-375] › e2e\baseline.spec.ts:46:1 › a guessed caravan path cannot expose another organization's private finance 
+    [mobile-375] › e2e\baseline.spec.ts:54:1 › public booking, private proof, manual review and check-in use the recovered source 
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test" exited with code 1
+Stopped test emulator started by this run (PID 13884).

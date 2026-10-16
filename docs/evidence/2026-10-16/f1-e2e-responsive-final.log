@@ -1,0 +1,45 @@
+
+> caravana-77@0.1.0 test:e2e
+> node scripts/run-local-tests.mjs e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test
+[WebServer] (node:10916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:13676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (4.2s)
+  ok  2 [desktop-1440] › e2e\baseline.spec.ts:59:1 › a guessed caravan path cannot expose another organization's private finance (1.6s)
+  ok  3 [desktop-1440] › e2e\baseline.spec.ts:67:1 › public booking, private proof, manual review and check-in use the recovered source (3.2s)
+(node:11588) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  4 [tablet-768] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.0s)
+  ok  5 [tablet-768] › e2e\baseline.spec.ts:59:1 › a guessed caravan path cannot expose another organization's private finance (1.7s)
+  ok  6 [tablet-768] › e2e\baseline.spec.ts:67:1 › public booking, private proof, manual review and check-in use the recovered source (2.8s)
+(node:16220) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 [mobile-375] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.3s)
+  ok  8 [mobile-375] › e2e\baseline.spec.ts:59:1 › a guessed caravan path cannot expose another organization's private finance (1.3s)
+  ok  9 [mobile-375] › e2e\baseline.spec.ts:67:1 › public booking, private proof, manual review and check-in use the recovered source (3.0s)
+(node:1372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 10 [mobile-320] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.2s)
+  ok 11 [mobile-320] › e2e\baseline.spec.ts:59:1 › a guessed caravan path cannot expose another organization's private finance (1.2s)
+  ok 12 [mobile-320] › e2e\baseline.spec.ts:67:1 › public booking, private proof, manual review and check-in use the recovered source (3.6s)
+
+  12 passed (34.4s)
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+Stopped test emulator started by this run (PID 12248).
