@@ -64,3 +64,7 @@ npm run test:operations / npm run test:operations:e2e — estados e check-in aud
 npm run test:csv / npm run test:csv:e2e — dedupe entre lotes, snapshots/manifestos, rollback auditado, A×B e limites de capacidade. test:csv:security executa somente quatro casos de bypass/estresse/retry por filtro de nome. Escala400 pertence ao gate completo npm test.
 npm test / npm run test:e2e / npm run build — gates completos de checkpoint, sem repetição automática a cada edição.
 Não execute testes simultaneamente com npm run demo, pois usam as mesmas portas isoladas. Encerre a demonstração antes de rodar testes.
+
+npm run test:documents / npm run test:documents:e2e — consentimento/revisão/retenção e menoridade; gate F3 local concluído.
+npm run test:finance / npm run test:finance:e2e — ledger auditado, anulações/correções, tarifa, retry e regressão financeira.
+npm run finance:diagnose -- tests/fixtures/finance-diagnostic.synthetic.json — diagnóstico offline somente de JSON sintético, sem Firebase/rede/writes.

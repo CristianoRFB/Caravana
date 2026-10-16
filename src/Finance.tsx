@@ -1,3 +1,6 @@
+import FinancialHistory from "./FinancialHistory";
+import { redactedFinanceCsv } from "./lib/financial-diagnostics";
+import { inspectFinancialLedger } from "./lib/financial-inspection";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Clock3, Plus, Receipt, WalletCards } from "lucide-react";
@@ -6,6 +9,7 @@ import {
   recordPassengerPayment,
   updateCaravanExpense,
   voidPassengerPayment,
+  voidCaravanExpense,
   watchAdminCaravans,
   watchCaravanExpenses,
   watchOrganizationRegistrations,
@@ -18,6 +22,7 @@ import {
   calculateFinanceSummary,
   passengerFinancialStatus,
   validMoneyInput,
+  moneyInputValue,
 } from "./lib/finance";
 import {
   money,
@@ -27,6 +32,11 @@ import {
   type PassengerPayment,
   type Registration,
 } from "./lib/types";
+
+import { adjustRegistrationFare } from "./lib/financial-operations";
+import { getFinancialAttempt, completeFinancialAttempt } from "./lib/financial-attempt";
+import { auth } from "./lib/firebase";
+import { trackWrite } from "./lib/pending-writes";
 
 const expenseCategories: { value: ExpenseCategory; label: string }[] = [
   { value: "transporte", label: "Transporte" },
@@ -53,7 +63,7 @@ const amountText = (amount?: number) =>
     : "Não informado";
 
 const dateText = (date: string) => {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "Data não informada";
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date || "") || !Number.isFinite(Date.parse(`${date}T12:00:00Z`))) return "Data não informada";
   return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeZone: "UTC" }).format(
     new Date(`${date}T12:00:00Z`),
   );
@@ -77,6 +87,9 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
   const [paymentMethod, setPaymentMethod] = useState<PassengerPaymentInput["method"]>("pix");
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentNotes, setPaymentNotes] = useState("");
+  const [diagnostic, setDiagnostic] = useState("");
+  const [diagnosticBusy, setDiagnosticBusy] = useState(false);
+  const [expenseReason, setExpenseReason] = useState("");
   const [expenseBeingEdited, setExpenseBeingEdited] = useState<CaravanExpense | null>(null);
   const [expenseBusy, setExpenseBusy] = useState(false);
   const [expenseError, setExpenseError] = useState("");
@@ -179,6 +192,14 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
     [visibleExpenses, visibleRegistrations],
   );
 
+  async function attemptFinancial(scope: string, operation: (id: string) => Promise<void>) {
+    return trackWrite(async () => {
+      const context = JSON.stringify([auth?.currentUser?.uid, organizationId, scope]);
+      const id = getFinancialAttempt(context, sessionStorage);
+      await operation(id); completeFinancialAttempt(context, id, sessionStorage);
+    });
+  }
+
   function openPayment(registration: Registration) {
     setPaymentFor(registration);
     setPaymentError("");
@@ -199,12 +220,12 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
     setPaymentBusy(true);
     setPaymentError("");
     try {
-      await recordPassengerPayment(paymentFor, {
+      await attemptFinancial(`payment:${paymentFor.id}`, (id) => recordPassengerPayment(paymentFor, {
         amountCents,
         method: paymentMethod,
         ...(paymentDate ? { paymentDate } : {}),
         notes: paymentNotes.trim(),
-      });
+      }, id));
       setPaymentFor(null);
       setNotice("Pagamento registrado no histórico financeiro.");
       window.setTimeout(() => setNotice(""), 3000);
@@ -217,10 +238,11 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
 
   function openExpense(expense?: CaravanExpense) {
     setExpenseError("");
+    setExpenseReason("");
     setExpenseBeingEdited(expense || null);
     setExpenseDescription(expense?.description || "");
     setExpenseCategory(expense?.category || "transporte");
-    setExpenseAmount(expense ? (expense.amountCents / 100).toFixed(2).replace(".", ",") : "");
+    setExpenseAmount(expense ? moneyInputValue(expense.amountCents) : "");
     setExpenseDate(expense?.date || "");
     setExpenseNotes(expense?.notes || "");
   }
@@ -251,10 +273,10 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
         throw new Error("Selecione uma caravana no filtro para registrar a despesa.");
       }
       if (expenseBeingEdited) {
-        await updateCaravanExpense(targetCaravanId, expenseBeingEdited.id, input);
-        setNotice("Despesa atualizada.");
+        await attemptFinancial(`expense-correct:${targetCaravanId}:${expenseBeingEdited.id}`, (id) => updateCaravanExpense(targetCaravanId, expenseBeingEdited.id, input, expenseReason, id));
+        setNotice("Despesa corrigida; original anulado e preservado no histórico.");
       } else {
-        await createCaravanExpense(targetCaravanId, organizationId, input);
+        await attemptFinancial(`expense-create:${targetCaravanId}`, (id) => createCaravanExpense(targetCaravanId, organizationId, input, id));
         setNotice("Despesa registrada.");
       }
       setExpenseBeingEdited(null);
@@ -274,12 +296,43 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
     const reason = window.prompt("Motivo da correção deste lançamento:");
     if (!reason) return;
     try {
-      await voidPassengerPayment(payment.registrationId, payment.id, reason);
+      await attemptFinancial(`payment-void:${payment.registrationId}:${payment.id}`, (id) => voidPassengerPayment(payment.registrationId, payment.id, reason, id));
       setNotice("Lançamento marcado como corrigido; o histórico foi preservado.");
       window.setTimeout(() => setNotice(""), 3000);
     } catch (cause) {
       setError(errorText(cause));
     }
+  }
+
+  async function correctFare(registration: Registration) {
+    const amount = window.prompt("Valor previsto corrigido (R$). Isso não registra recebimento:", registration.amountCents ? moneyInputValue(registration.amountCents) : "");
+    if (amount === null) return;
+    const cents = validMoneyInput(amount);
+    if (cents === null) { setError("Informe um valor previsto positivo com até duas casas decimais."); return; }
+    const reason = window.prompt("Motivo da correção do valor previsto:"); if (!reason) return;
+    try { await attemptFinancial(`fare:${registration.id}`, (id) => adjustRegistrationFare(registration, cents, reason, id)); setNotice("Valor previsto corrigido com auditoria. Recebimento preservado."); }
+    catch (cause) { setError(errorText(cause)); }
+  }
+
+  async function inspectLedger() {
+    setDiagnosticBusy(true); setDiagnostic("");
+    try {
+      const findings = await inspectFinancialLedger(visibleRegistrations);
+      const legacy = findings.filter((item) => item.kind === "unitemized_total").length;
+      setDiagnostic(findings.length ? String(legacy) + " cadastro(s) com total sem lançamentos individuais; " + String(findings.length - legacy) + " outra(s) divergência(s). Nenhum valor foi alterado. Confira o histórico antes de corrigir." : "Totais e lançamentos individuais conferem no conjunto consultado. Nenhum valor foi alterado.");
+    } catch { setDiagnostic("Não foi possível concluir a conferência autorizada. Nenhum valor foi alterado."); }
+    finally { setDiagnosticBusy(false); }
+  }
+  function exportSummary() {
+    const url = URL.createObjectURL(new Blob([redactedFinanceCsv(visibleRegistrations, visibleExpenses)], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a"); link.href = url; link.download = "financeiro-resumo-sem-dados-pessoais.csv"; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function cancelExpense(expense: CaravanExpense) {
+    const reason = window.prompt("Motivo da anulação desta despesa:");
+    if (!reason) return;
+    try { await attemptFinancial(`expense-void:${expense.caravanId}:${expense.id}`, (id) => voidCaravanExpense(expense.caravanId, expense.id, reason, id)); setNotice("Despesa anulada; histórico preservado."); }
+    catch (cause) { setError(errorText(cause)); }
   }
 
   if (loading) return <div className="empty-box admin-empty">Carregando financeiro…</div>;
@@ -297,7 +350,7 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
         {isGlobalFinance ? (
           <label className="finance-filter">
             <span>Mostrar dados de</span>
-            <select value={caravanFilter} onChange={(event) => setCaravanFilter(event.target.value)}>
+            <select value={caravanFilter} disabled={diagnosticBusy} onChange={(event) => { setDiagnostic(""); setCaravanFilter(event.target.value); }}>
               <option value="all">Tudo</option>
               {caravans.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
             </select>
@@ -308,6 +361,9 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
           </Link>
         )}
       </div>
+      <p className="finance-summary-note">Valores registrados manualmente pela equipe. Comprovante aprovado e Pix informado não comprovam recebimento bancário automático.</p>
+      <div className="finance-form-actions"><button className="button button-outline" type="button" onClick={exportSummary}>Exportar resumo sem dados pessoais</button><button className="button button-outline" type="button" disabled={diagnosticBusy} onClick={() => void inspectLedger()}>{diagnosticBusy ? "Conferindo…" : "Conferir lançamentos"}</button></div>
+      {diagnostic && <p role="status">{diagnostic}</p>}
       {error && <div className="error-message" role="alert">{error}</div>}
       {notice && <div className="success-message">{notice}</div>}
       <div className="finance-process-note">
@@ -369,6 +425,7 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
                       <button type="button" className="button button-outline" onClick={() => setHistoryFor(registration)}>
                         <Clock3 size={15} /> Histórico
                       </button>
+                      {canEdit && <button type="button" className="button button-outline" onClick={() => void correctFare(registration)}>Corrigir valor previsto</button>}
                       {canEdit && <button type="button" className="button button-primary" onClick={() => openPayment(registration)}>
                         <Plus size={15} /> Registrar
                       </button>}
@@ -417,6 +474,7 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
             <span>Observação (opcional)</span>
             <input maxLength={500} value={expenseNotes} onChange={(event) => setExpenseNotes(event.target.value)} />
           </label>
+          {expenseBeingEdited && <label className="field finance-expense-notes"><span>Motivo da correção</span><input required minLength={3} maxLength={300} value={expenseReason} onChange={(event) => setExpenseReason(event.target.value)} /></label>}
           {expenseError && <div className="error-message" role="alert">{expenseError}</div>}
           <div className="finance-form-actions">
             {expenseBeingEdited && <button type="button" className="button button-outline" onClick={() => openExpense()}>Cancelar edição</button>}
@@ -434,10 +492,12 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
                   <strong>{expense.description}</strong>
                   {isAllCaravans && <small>Caravana: {caravans.find((item) => item.id === expense.caravanId)?.name || expense.caravanId}</small>}
                   <small>{expenseCategories.find((item) => item.value === expense.category)?.label || "Outros"} · {dateText(expense.date)}</small>
+                  {expense.status === "voided" && <small>Anulada: {expense.voidReason}{expense.replacementId ? " · há um lançamento substituto" : ""}</small>}
+                  {expense.replacesId && <small>Correção de lançamento anterior; vínculo preservado no histórico.</small>}
                   {expense.notes && <small>{expense.notes}</small>}
                 </div>
                 <strong>{money(expense.amountCents)}</strong>
-                {canEdit && <button className="button button-tiny button-outline" type="button" onClick={() => openExpense(expense)}>Editar</button>}
+                {canEdit && expense.status !== "voided" && <div className="finance-expense-actions"><button className="button button-tiny button-outline" type="button" onClick={() => openExpense(expense)}>Editar</button><button className="button button-tiny button-outline" type="button" onClick={() => void cancelExpense(expense)}>Anular</button></div>}
               </article>
             ))}
           </div>
@@ -446,6 +506,7 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
         )}
       </section>
 
+      {organizationId && <FinancialHistory key={`${organizationId}:${selectedCaravanId}`} organizationId={organizationId} caravanId={selectedCaravanId} />}
       {canEdit && paymentFor && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !paymentBusy) setPaymentFor(null); }}>
           <section className="modal finance-modal">

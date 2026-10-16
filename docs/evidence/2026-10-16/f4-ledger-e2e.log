@@ -1,0 +1,22 @@
+
+> caravana-77@0.1.0 test:finance:e2e
+> node scripts/run-local-tests.mjs finance-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/finance-ledger.spec.ts e2e/baseline.spec.ts --grep "finance|pending write|staff can read" --project desktop-1440 --project mobile-320
+Error: Process from config.webServer was not able to start. Exit code: 2
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/finance-ledger.spec.ts e2e/baseline.spec.ts --grep "finance|pending write|staff can read" --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 17508).

@@ -1,0 +1,54 @@
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/finance.test.ts (7 tests | 2 failed) 12ms
+   ❯ finance calculations (7)
+     × preserves every cent at the safe integer boundary without binary decimal rounding 6ms
+     × surfaces an unsafe aggregate instead of presenting a rounded or invented balance 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/finance.test.ts > finance calculations > preserves every cent at the safe integer boundary without binary decimal rounding
+AssertionError: expected 9007199254740991 to be 9007199254740990 // Object.is equality
+
+- Expected
++ Received
+
+- 9007199254740990
++ 9007199254740991
+
+ ❯ tests/finance.test.ts:131:50
+    129|   });
+    130|   it("preserves every cent at the safe integer boundary without binary…
+    131|     expect(validMoneyInput("90071992547409.90")).toBe(9007199254740990…
+       |                                                  ^
+    132|     expect(validMoneyInput("90071992547409.91")).toBe(Number.MAX_SAFE_…
+    133|     expect(validMoneyInput("90071992547409.92")).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/finance.test.ts > finance calculations > surfaces an unsafe aggregate instead of presenting a rounded or invented balance
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/finance.test.ts:139:49
+    137|   it("surfaces an unsafe aggregate instead of presenting a rounded or …
+    138|     const summary = calculateFinanceSummary([registration("a", Number.…
+    139|     expect(Number.isNaN(summary.receivedCents)).toBe(true); expect(Num…
+       |                                                 ^
+    140|     expect(money(summary.receivedCents)).toBe("Valor inválido");
+    141|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 8 passed (10)
+   Start at  17:59:56
+   Duration  517ms (transform 56%, import 17%, tests 11%, setup 8%, worker 7%)
+

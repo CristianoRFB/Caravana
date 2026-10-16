@@ -432,10 +432,10 @@ describe("Firestore security rules", () => {
     await seed();
     const staff = env.authenticatedContext("admin-a").firestore();
     const registrationRef = doc(staff, `registrations/${secretA}`);
-    await updateDoc(registrationRef, { amountCents: 8500, paymentTotalCents: 0 });
+    await env.withSecurityRulesDisabled(async (context) => { await updateDoc(doc(context.firestore(), `registrations/${secretA}`), { amountCents: 8500, paymentTotalCents: 0 }); });
 
-    const record = async (id: string, amountCents: number) =>
-      runTransaction(staff, async (tx) => {
+    const record = async (label: string, amountCents: number) =>
+      { const id = (label === "partial-a" ? "1" : label === "partial-b" ? "2" : "3").repeat(32); return runTransaction(staff, async (tx) => {
         const paymentRef = doc(staff, `registrations/${secretA}/payments/${id}`);
         const [registration, payment] = await Promise.all([
           tx.get(registrationRef),
@@ -453,10 +453,11 @@ describe("Firestore security rules", () => {
           notes: "",
           status: "active",
           createdAt: new Date().toISOString(),
-          createdBy: "admin-a",
+          createdBy: "admin-a", postedAt: serverTimestamp(), lastFinancialOperationId: id,
         });
-        tx.update(registrationRef, { paymentTotalCents: nextTotal });
-      });
+        tx.update(registrationRef, { paymentTotalCents: nextTotal, updatedAt: serverTimestamp(), lastFinancialOperationId: id });
+        tx.set(doc(staff, "financialOperations", id), { action: "payment_recorded", organizationId: "org-a", caravanId: "ride-a", registrationId: secretA, entityId: id, sourceId: "", actorUid: "admin-a", at: serverTimestamp(), payloadHash: "a".repeat(64), reason: "", beforeCents: Number(registration.data()?.paymentTotalCents || 0), afterCents: nextTotal });
+      }); };
 
     await assertFails(record("overpay", 8501));
     await assertSucceeds(record("partial-a", 5000));
@@ -473,43 +474,12 @@ describe("Firestore security rules", () => {
     await seed();
     const staff = env.authenticatedContext("admin-a").firestore();
     const paymentRef = doc(staff, `registrations/${secretA}/payments/payment-a`);
-    await assertSucceeds(
-      runTransaction(staff, async (tx) => {
-        const registrationRef = doc(staff, `registrations/${secretA}`);
-        const registration = await tx.get(registrationRef);
-        tx.set(paymentRef, {
-          id: "payment-a",
-          registrationId: secretA,
-          organizationId: "org-a",
-          caravanId: "ride-a",
-          amountCents: 2500,
-          method: "pix",
-          notes: "Pagamento parcial",
-          status: "active",
-          createdAt: new Date().toISOString(),
-          createdBy: "admin-a",
-        });
-        tx.update(registrationRef, {
-          paymentTotalCents: Number(registration.data()?.paymentTotalCents || 0) + 2500,
-        });
-      }),
-    );
-
-    const expenseRef = doc(staff, "caravans/ride-a/expenses/expense-a");
-    await assertSucceeds(
-      setDoc(expenseRef, {
-        id: "expense-a",
-        organizationId: "org-a",
-        caravanId: "ride-a",
-        description: "Sinal do ônibus",
-        category: "transporte",
-        amountCents: 10000,
-        date: "2026-01-01",
-        notes: "",
-        createdAt: new Date().toISOString(),
-        createdBy: "admin-a",
-      }),
-    );
+    await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), paymentRef.path), { registrationId: secretA, organizationId: "org-a", caravanId: "ride-a", amountCents: 2500, status: "active" });
+      await setDoc(doc(context.firestore(), "caravans/ride-a/expenses/expense-a"), { organizationId: "org-a", caravanId: "ride-a", amountCents: 10000 });
+    });
+    await assertSucceeds(getDoc(paymentRef));
+    await assertSucceeds(getDoc(doc(staff, "caravans/ride-a/expenses/expense-a")));
 
     const guest = env.unauthenticatedContext().firestore();
     await assertFails(getDoc(doc(guest, `registrations/${secretA}/payments/payment-a`)));

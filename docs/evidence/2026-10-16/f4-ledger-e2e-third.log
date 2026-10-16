@@ -1,0 +1,230 @@
+
+> caravana-77@0.1.0 test:finance:e2e
+> node scripts/run-local-tests.mjs finance-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/finance-ledger.spec.ts e2e/baseline.spec.ts --grep "finance|pending write|staff can read" --project desktop-1440 --project mobile-320
+[WebServer] (node:2852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:1612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (5.0s)
+  ok  2 [desktop-1440] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (1.7s)
+  ok  3 [desktop-1440] › e2e\baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.5s)
+  x   4 [desktop-1440] › e2e\baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement (12.1s)
+(node:2248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   5 [desktop-1440] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (12.6s)
+(node:10300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 [mobile-320] › e2e\baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.1s)
+  ok  7 [mobile-320] › e2e\baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (1.2s)
+i  firestore: Change detected, updating rules...
+  ok  8 [mobile-320] › e2e\baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.4s)
++  firestore: Rules updated.
+  x   9 [mobile-320] › e2e\baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement (12.5s)
+(node:14056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  10 [mobile-320] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (45.4s)
+
+
+  1) [desktop-1440] › e2e\baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      226 |   try {
+      227 |     await page.getByRole("button", { name: "Registrar despesa", exact: true }).click();
+    > 228 |     await expect.poll(() => held.length).toBeGreaterThan(0);
+          |                                          ^
+      229 |     const menu = page.getByRole("button", { name: "Menu", exact: true });
+      230 |     if (await menu.isVisible()) await menu.click();
+      231 |     await expect(page.getByLabel("Organização ativa")).toBeDisabled();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:228:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop-1440] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.finance-expense-row')
+    Timeout: 10000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   "Anulada",
+    -   "Correção de lançamento",
+    +   "Despesa sintética ride-aTransporte · 16 de out. de 2026Correção de lançamento anterior; vínculo preservado no histórico.Fixture sintéticaR$ 15,00EditarAnular",
+    +   "Despesa sintética ride-aTransporte · 16 de out. de 2026Anulada: Ajuste sintético documentado · há um lançamento substitutoFixture sintéticaR$ 10,00",
+      ]
+
+    Call log:
+      - Expect "toContainText" locator('.finance-expense-row') with timeout 10000ms
+      - waiting for locator('.finance-expense-row')
+        23 × locator resolved to 2 elements
+
+
+      27 |   await page.getByLabel("Valor (R$)", { exact: true }).fill("15,00"); await page.getByLabel("Motivo da correção").fill("Ajuste sintético documentado");
+      28 |   await page.getByRole("button", { name: "Salvar alteração", exact: true }).click();
+    > 29 |   await expect(rows).toHaveCount(2); await expect(rows).toContainText(["Anulada", "Correção de lançamento"]);
+         |                                                         ^
+      30 |   await expect(metric(page, "Despesas")).toContainText("15,00"); await expect(metric(page, "Recebido registrado")).toContainText("25,00");
+      31 |   const audit = page.getByRole("heading", { name: "Auditoria financeira", exact: true }).locator(".."); await expect(audit).toContainText("Despesa corrigida");
+      32 |   page.once("dialog", (dialog) => dialog.accept("Anulação sintética documentada")); await rows.getByRole("button", { name: "Anular", exact: true }).click();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\finance-ledger.spec.ts:29:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile-320] › e2e\baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      226 |   try {
+      227 |     await page.getByRole("button", { name: "Registrar despesa", exact: true }).click();
+    > 228 |     await expect.poll(() => held.length).toBeGreaterThan(0);
+          |                                          ^
+      229 |     const menu = page.getByRole("button", { name: "Menu", exact: true });
+      230 |     if (await menu.isVisible()) await menu.click();
+      231 |     await expect(page.getByLabel("Organização ativa")).toBeDisabled();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\baseline.spec.ts:228:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\baseline-a-pending-write-p-06096-ntil-server-acknowledgement-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-320] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Browser logs:
+
+    <launching> C:\Users\Aluno\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\Aluno\AppData\Local\Temp\playwright_chromiumdev_profile-1knWan --remote-debugging-pipe --no-startup-window
+    <launched> pid=14512
+    [pid=14512][err] [1016/175239.818:INFO:CONSOLE:225] "[2026-10-16T20:52:39.819Z]  @firebase/firestore: Firestore (11.10.0): WebChannelConnection RPC 'Listen' stream 0x505bfa0a transport errored. Name: undefined Message: undefined", source: http://127.0.0.1:4177/assets/firebase-firestore-CGwCytae.js (225)
+    [pid=14512][err] [1016/175239.820:INFO:CONSOLE:225] "[2026-10-16T20:52:39.820Z]  @firebase/firestore: Firestore (11.10.0): Could not reach Cloud Firestore backend. Connection failed 1 times. Most recent error: FirebaseError: [code=unavailable]: The operation could not be completed
+    [pid=14512][err] This typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.", source: http://127.0.0.1:4177/assets/firebase-firestore-CGwCytae.js (225)
+    [pid=14512] <gracefully close start>
+    Call log:
+      - waiting for locator('.finance-expense-row').getByRole('button', { name: 'Editar', exact: true })
+        - locator resolved to <button type="button" class="button button-tiny button-outline">Editar</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" class="button button-tiny button-outline">Anular</button> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button type="button" class="button button-tiny button-outline">Anular</button> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        83 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button type="button" class="button button-tiny button-outline">Anular</button> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      24 |   const downloaded = page.waitForEvent("download"); await page.getByRole("button", { name: "Exportar resumo sem dados pessoais" }).click(); expect((await downloaded).suggestedFilename()).toBe("financeiro-resumo-sem-dados-pessoais.csv");
+      25 |   await page.getByLabel("Mostrar dados de").selectOption("ride-a");
+    > 26 |   const rows = page.locator(".finance-expense-row"); await rows.getByRole("button", { name: "Editar", exact: true }).click();
+         |                                                                                                                      ^
+      27 |   await page.getByLabel("Valor (R$)", { exact: true }).fill("15,00"); await page.getByLabel("Motivo da correção").fill("Ajuste sintético documentado");
+      28 |   await page.getByRole("button", { name: "Salvar alteração", exact: true }).click();
+      29 |   await expect(rows).toHaveCount(2); await expect(rows.filter({ hasText: "Anulada:" })).toHaveCount(1); await expect(rows.filter({ hasText: "Correção de lançamento anterior" })).toHaveCount(1);
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\finance-ledger.spec.ts:26:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\finance-ledger-finance-pre-7b35e-e-audit-and-redacted-export-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [desktop-1440] › e2e\baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement 
+    [desktop-1440] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export 
+    [mobile-320] › e2e\baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement 
+    [mobile-320] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export 
+  6 passed (1.9m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/finance-ledger.spec.ts e2e/baseline.spec.ts --grep "finance|pending write|staff can read" --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 18496).

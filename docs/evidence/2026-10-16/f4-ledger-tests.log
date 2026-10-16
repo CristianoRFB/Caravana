@@ -1,0 +1,76 @@
+
+> caravana-77@0.1.0 test:finance
+> node scripts/run-local-tests.mjs finance
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/financial-operations.integration.test.ts tests/finance.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+17:46:42 [vite] (ssr) warning: The following expression is not returned because of an automatically-inserted semicolon
+436|  
+437|      const record = async (label: string, amountCents: number) =>
+438|        { const id = (label === "partial-a" ? "1" : label === "partial-b" ? "2" : "3").repeat(32); return
+   |                                                                                                         ^
+439|        runTransaction(staff, async (tx) => {
+440|          const paymentRef = doc(staff, `registrations/${secretA}/payments/${id}`);
+
+  Plugin: vite:esbuild
+  File: C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana/tests/firestore.rules.test.ts
+ ❯ tests/firestore.rules.test.ts (14 tests | 1 failed) 2126ms
+   ❯ Firestore security rules (14)
+     × keeps sequential partial payments in history, reconciles the total, and blocks overpayment 48ms
+ ❯ tests/financial-operations.integration.test.ts (8 tests | 3 failed) 3324ms
+   ❯ financial ledger actual SDK and candidate Rules (8)
+     × preserves a legacy unitemized opening total and never subtracts a void twice 221ms
+     × corrects an expense by linked void and replacement, then voids the replacement idempotently 217ms
+     × rejects direct aggregate, fare and report mutations, silent expense edits and audit forgery 107ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/financial-operations.integration.test.ts > financial ledger actual SDK and candidate Rules > preserves a legacy unitemized opening total and never subtracts a void twice
+ FAIL  tests/financial-operations.integration.test.ts > financial ledger actual SDK and candidate Rules > corrects an expense by linked void and replacement, then voids the replacement idempotently
+FirebaseError: 
+Property organizationId is undefined on object. for 'list' @ L843
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/financial-operations.integration.test.ts > financial ledger actual SDK and candidate Rules > rejects direct aggregate, fare and report mutations, silent expense edits and audit forgery
+Error: Expected request to fail, but it succeeded.
+ ❯ pr.then._a node_modules/@firebase/rules-unit-testing/src/util.ts:137:9
+ ❯ tests/financial-operations.integration.test.ts:77:115
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/firestore.rules.test.ts > Firestore security rules > keeps sequential partial payments in history, reconciles the total, and blocks overpayment
+Error: Expected request to fail, but it succeeded.
+ ❯ pr.then._a node_modules/@firebase/rules-unit-testing/src/util.ts:137:9
+ ❯ tests/firestore.rules.test.ts:463:5
+    461|       }); };
+    462|
+    463|     await assertFails(record("overpay", 8501));
+       |     ^
+    464|     await assertSucceeds(record("partial-a", 5000));
+    465|     await assertSucceeds(record("partial-b", 3500));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  4 failed | 55 passed (59)
+   Start at  17:46:35
+   Duration  16.20s (tests 91%, import 6%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/financial-operations.integration.test.ts tests/finance.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 12572).

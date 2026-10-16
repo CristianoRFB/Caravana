@@ -5,6 +5,7 @@ import {
   validMoneyInput,
 } from "../src/lib/finance";
 import type { CaravanExpense, Registration } from "../src/lib/types";
+import { money } from "../src/lib/types";
 
 function registration(
   id: string,
@@ -125,5 +126,17 @@ describe("finance calculations", () => {
     expect(validMoneyInput("-12,00")).toBeNull();
     expect(validMoneyInput("1,2,3")).toBeNull();
     expect(validMoneyInput("NaN")).toBeNull();
+  });
+  it("preserves every cent at the safe integer boundary without binary decimal rounding", () => {
+    expect(validMoneyInput("90071992547409.90")).toBe(9007199254740990);
+    expect(validMoneyInput("90071992547409.91")).toBe(Number.MAX_SAFE_INTEGER);
+    expect(validMoneyInput("90071992547409.92")).toBeNull();
+    expect(money(Number.MAX_SAFE_INTEGER)).toContain("90.071.992.547.409,91");
+    expect(money(-1)).toContain("0,01"); expect(money(-1)).toContain("-");
+  });
+  it("surfaces an unsafe aggregate instead of presenting a rounded or invented balance", () => {
+    const summary = calculateFinanceSummary([registration("a", Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER), registration("b", 1, 1)], []);
+    expect(Number.isNaN(summary.receivedCents)).toBe(true); expect(Number.isNaN(summary.expectedCents)).toBe(true);
+    expect(money(summary.receivedCents)).toBe("Valor inválido");
   });
 });

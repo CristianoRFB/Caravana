@@ -1,0 +1,9 @@
+{
+  "environment": "synthetic",
+  "registrations": [
+    { "id": "synthetic-a", "organizationId": "a", "caravanId": "same-name-a", "registrationStatus": "confirmed", "amountCents": 8500, "paymentTotalCents": 3000 },
+    { "id": "synthetic-b", "organizationId": "b", "caravanId": "same-name-b", "registrationStatus": "cancelled", "paymentTotalCents": 1000 }
+  ],
+  "payments": [{ "registrationId": "synthetic-a", "organizationId": "a", "caravanId": "same-name-a", "status": "active", "amountCents": 2500 }],
+  "expenses": [{ "amountCents": 500 }, { "amountCents": 1000, "status": "voided" }]
+}

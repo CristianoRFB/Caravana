@@ -1,0 +1,13 @@
+
+> caravana-77@0.1.0 typecheck
+> tsc -b --pretty false
+
+src/Finance.tsx(5,3): error TS2724: '"./lib/data"' has no exported member named 'createCaravanExpense'. Did you mean 'watchCaravanExpenses'?
+src/Finance.tsx(6,3): error TS2305: Module '"./lib/data"' has no exported member 'recordPassengerPayment'.
+src/Finance.tsx(7,3): error TS2724: '"./lib/data"' has no exported member named 'updateCaravanExpense'. Did you mean 'watchCaravanExpenses'?
+src/Finance.tsx(8,3): error TS2305: Module '"./lib/data"' has no exported member 'voidPassengerPayment'.
+src/Finance.tsx(9,3): error TS2305: Module '"./lib/data"' has no exported member 'voidCaravanExpense'.
+src/Finance.tsx(15,8): error TS2305: Module '"./lib/data"' has no exported member 'CaravanExpenseInput'.
+src/lib/data.ts(29,8): error TS6133: 'ExpenseCategory' is declared but its value is never read.
+src/lib/financial-operations.ts(4,1): error TS6133: 'importDigest' is declared but its value is never read.
+src/lib/financial-operations.ts(24,29): error TS2304: Cannot find name 'stableHash'.

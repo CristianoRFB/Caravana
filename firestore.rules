@@ -693,8 +693,9 @@ service cloud.firestore {
               && validDocumentUpdate()))
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['registrationStatus', 'paymentStatus', 'approvedAt', 'approvedBy', 'rejectedAt', 'rejectedBy', 'rejectionReason', 'cancelledAt', 'cancelledBy', 'checkedInAt', 'checkedInBy', 'lastOperationalId'])
             || (request.resource.data.get('lastOperationalId', '').matches('^[a-f0-9]{32}$') && validOperation()))
-          && (isTenantOwner(resource.data.organizationId)
-            || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled'])))
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['paymentReportedMethod', 'paymentReportedUnreconciled'])
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['amountCents', 'paymentTotalCents', 'lastFinancialOperationId'])
+            || (isTenantOwner(resource.data.organizationId) && (request.resource.data.diff(resource.data).affectedKeys().hasAny(['amountCents']) ? validFareUpdate() : validFinancialUpdate()))))
         || ((!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false)
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt', 'proofRetentionDays'])
           && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
@@ -717,52 +718,63 @@ service cloud.firestore {
       // Preserve operation identity and history; cancellation is the controlled reversal.
       allow delete: if false;
 
+      function validFareUpdate() {
+        let data = request.resource.data;
+        let event = getAfter(/databases/$(database)/documents/financialOperations/$(data.lastFinancialOperationId)).data;
+        return data.diff(resource.data).affectedKeys().hasOnly(['amountCents', 'updatedAt', 'lastFinancialOperationId'])
+          && data.updatedAt == request.time
+          && financialEvent(data) && event.action == 'fare_adjusted' && event.registrationId == registrationId
+          && event.entityId == registrationId && event.sourceId == '' && event.beforeCents == resource.data.get('amountCents', 0)
+          && event.afterCents == data.amountCents && money(data.amountCents)
+          && (data.amountCents == 0 || data.amountCents >= resource.data.get('paymentTotalCents', 0));
+      }
+      function validFinancialUpdate() {
+        let data = request.resource.data;
+        let event = getAfter(/databases/$(database)/documents/financialOperations/$(data.lastFinancialOperationId)).data;
+        let before = resource.data.get('paymentTotalCents', 0);
+        let original = event.action == 'payment_voided' ? get(/databases/$(database)/documents/registrations/$(registrationId)/payments/$(event.entityId)).data : {};
+        let entry = getAfter(/databases/$(database)/documents/registrations/$(registrationId)/payments/$(event.entityId)).data;
+        return data.diff(resource.data).affectedKeys().hasOnly(['paymentTotalCents', 'updatedAt', 'lastFinancialOperationId'])
+          && data.updatedAt == request.time
+          && financialEvent(data) && event.registrationId == registrationId && entry.lastFinancialOperationId == data.lastFinancialOperationId
+          && money(before) && money(data.paymentTotalCents) && event.beforeCents == before && event.afterCents == data.paymentTotalCents
+          && money(entry.amountCents) && entry.amountCents > 0
+          && (event.action == 'payment_recorded'
+            ? (!exists(/databases/$(database)/documents/registrations/$(registrationId)/payments/$(event.entityId))
+              && event.sourceId == '' && entry.status == 'active' && data.paymentTotalCents == before + entry.amountCents
+              && (resource.data.get('amountCents', 0) <= 0 || data.paymentTotalCents <= resource.data.amountCents))
+            : (event.action == 'payment_voided' && event.sourceId == event.entityId && original.status == 'active'
+              && entry.status == 'voided' && data.paymentTotalCents == before - entry.amountCents));
+      }
       match /payments/{paymentId} {
-        function parentRegistration() {
-          return get(/databases/$(database)/documents/registrations/$(registrationId)).data;
-        }
-        function validPaymentFields(data) {
-          return data.amountCents is int
-            && data.amountCents > 0
-            && data.method in ['pix', 'transfer', 'cash', 'card', 'other']
-            && data.notes is string
-            && data.notes.size() <= 500
-            && (!('paymentDate' in data) || (data.paymentDate is string && data.paymentDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')));
+        function parentRegistration() { return get(/databases/$(database)/documents/registrations/$(registrationId)).data; }
+        function linked(data, action) {
+          let event = getAfter(/databases/$(database)/documents/financialOperations/$(data.lastFinancialOperationId)).data;
+          return financialEvent(data) && event.action == action && event.entityId == paymentId
+            && event.registrationId == registrationId;
         }
         allow get, list: if isAdmin(parentRegistration().organizationId);
-        allow create: if request.resource.data.keys().hasAll(['id', 'registrationId', 'organizationId', 'caravanId', 'amountCents', 'method', 'notes', 'status', 'createdAt', 'createdBy'])
-          && request.resource.data.keys().hasOnly(['id', 'registrationId', 'organizationId', 'caravanId', 'amountCents', 'method', 'paymentDate', 'notes', 'status', 'createdAt', 'createdBy'])
-          && paymentId.matches('^[a-zA-Z0-9_-]{1,128}$')
-          && request.resource.data.id == paymentId
-          && request.resource.data.registrationId == registrationId
-          && request.resource.data.organizationId == parentRegistration().organizationId
-          && request.resource.data.caravanId == parentRegistration().caravanId
-          && isTenantOwner(request.resource.data.organizationId)
+        allow create: if isTenantOwner(parentRegistration().organizationId)
+          && request.resource.data.keys().hasAll(['id', 'registrationId', 'organizationId', 'caravanId', 'amountCents', 'method', 'notes', 'status', 'createdAt', 'createdBy', 'postedAt', 'lastFinancialOperationId'])
+          && request.resource.data.keys().hasOnly(['id', 'registrationId', 'organizationId', 'caravanId', 'amountCents', 'method', 'paymentDate', 'notes', 'status', 'createdAt', 'createdBy', 'postedAt', 'lastFinancialOperationId'])
+          && paymentId == request.resource.data.lastFinancialOperationId
+          && request.resource.data.id == paymentId && request.resource.data.registrationId == registrationId
+          && request.resource.data.organizationId == parentRegistration().organizationId && request.resource.data.caravanId == parentRegistration().caravanId
           && parentRegistration().registrationStatus != 'cancelled'
-          && validPaymentFields(request.resource.data)
-          && request.resource.data.status == 'active'
-          && request.resource.data.createdAt is string
-          && request.resource.data.createdBy == request.auth.uid
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents
-            == (('paymentTotalCents' in parentRegistration()) ? parentRegistration().paymentTotalCents : 0) + request.resource.data.amountCents
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents is int
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents >= 0
-          && (!('amountCents' in parentRegistration())
-            || getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents <= parentRegistration().amountCents);
-        allow update: if resource.data.registrationId == registrationId
-          && isTenantOwner(resource.data.organizationId)
+          && money(request.resource.data.amountCents) && request.resource.data.amountCents > 0
+          && request.resource.data.method in ['pix', 'transfer', 'cash', 'card', 'other']
+          && request.resource.data.notes is string && request.resource.data.notes.size() <= 500
+          && (!('paymentDate' in request.resource.data) || (request.resource.data.paymentDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && validCalendarDate(request.resource.data.paymentDate)))
+          && request.resource.data.status == 'active' && request.resource.data.createdAt is string
+          && request.resource.data.createdBy == request.auth.uid && request.resource.data.postedAt == request.time
+          && linked(request.resource.data, 'payment_recorded');
+        allow update: if isTenantOwner(parentRegistration().organizationId)
+          && resource.data.registrationId == registrationId && resource.data.organizationId == parentRegistration().organizationId && resource.data.caravanId == parentRegistration().caravanId
           && resource.data.status == 'active'
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'voidedAt', 'voidedBy'])
-          && request.resource.data.status == 'voided'
-          && request.resource.data.voidReason is string
-          && request.resource.data.voidReason.size() >= 3
-          && request.resource.data.voidReason.size() <= 300
-          && request.resource.data.voidedAt is timestamp
-          && request.resource.data.voidedBy == request.auth.uid
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents
-            == parentRegistration().paymentTotalCents - resource.data.amountCents
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents is int
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents >= 0;
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'voidedAt', 'voidedBy', 'lastFinancialOperationId'])
+          && request.resource.data.status == 'voided' && request.resource.data.voidedAt == request.time && request.resource.data.voidedBy == request.auth.uid
+          && request.resource.data.voidReason == getAfter(/databases/$(database)/documents/financialOperations/$(request.resource.data.lastFinancialOperationId)).data.reason
+          && linked(request.resource.data, 'payment_voided');
         allow delete: if false;
       }
 
@@ -821,37 +833,90 @@ service cloud.firestore {
       }
     }
 
+    function money(value) { return value is int && value >= 0 && value <= 9007199254740991; }
+    function financialEvent(data) {
+      let id = data.lastFinancialOperationId;
+      let event = getAfter(/databases/$(database)/documents/financialOperations/$(id)).data;
+      return id.matches('^[a-f0-9]{32}$') && !exists(/databases/$(database)/documents/financialOperations/$(id))
+        && event.organizationId == data.organizationId && event.caravanId == data.caravanId
+        && event.actorUid == request.auth.uid && event.at == request.time;
+    }
+    match /financialOperations/{operationId} {
+      function coupled(data) {
+        let payment = data.action in ['payment_recorded', 'payment_voided'];
+        let fare = data.action == 'fare_adjusted';
+        let target = fare ? getAfter(/databases/$(database)/documents/registrations/$(data.registrationId)).data : payment
+          ? getAfter(/databases/$(database)/documents/registrations/$(data.registrationId)/payments/$(data.entityId)).data
+          : getAfter(/databases/$(database)/documents/caravans/$(data.caravanId)/expenses/$(data.entityId)).data;
+        return target.lastFinancialOperationId == operationId
+          && target.organizationId == data.organizationId && target.caravanId == data.caravanId
+          && (fare ? data.entityId == data.registrationId : payment ? getAfter(/databases/$(database)/documents/registrations/$(data.registrationId)).data.lastFinancialOperationId == operationId : data.registrationId == '');
+      }
+      allow get: if (resource == null && signedIn()) || (resource != null && isAdmin(resource.data.organizationId));
+      allow list: if isAdmin(resource.data.organizationId);
+      allow create: if operationId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.keys().hasOnly(['action', 'organizationId', 'caravanId', 'registrationId', 'entityId', 'sourceId', 'actorUid', 'at', 'payloadHash', 'reason', 'beforeCents', 'afterCents'])
+        && isTenantOwner(request.resource.data.organizationId)
+        && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time
+        && request.resource.data.payloadHash.matches('^[a-f0-9]{64}$')
+        && request.resource.data.action in ['payment_recorded', 'payment_voided', 'expense_recorded', 'expense_voided', 'expense_corrected', 'fare_adjusted']
+        && money(request.resource.data.beforeCents) && money(request.resource.data.afterCents)
+        && request.resource.data.reason is string && request.resource.data.reason.size() <= 300
+        && (request.resource.data.action in ['payment_recorded', 'expense_recorded'] ? request.resource.data.reason == '' : request.resource.data.reason.size() >= 3)
+        && coupled(request.resource.data);
+      allow update, delete: if false;
+    }
     match /caravans/{caravanId}/expenses/{expenseId} {
       function validExpense(data) {
         return data.description is string
           && data.description.size() >= 3
           && data.description.size() <= 120
           && data.category in ['transporte', 'alimentacao', 'pedagio', 'estacionamento', 'outros']
-          && data.amountCents is int
+          && money(data.amountCents)
           && data.amountCents > 0
           && data.date is string
-          && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+          && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && validCalendarDate(data.date)
           && data.notes is string
           && data.notes.size() <= 500;
       }
       allow get, list: if isAdmin(
         get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId,
       );
-      allow create: if request.resource.data.keys().hasAll(['id', 'organizationId', 'caravanId', 'description', 'category', 'amountCents', 'date', 'notes', 'createdAt', 'createdBy'])
-        && request.resource.data.keys().hasOnly(['id', 'organizationId', 'caravanId', 'description', 'category', 'amountCents', 'date', 'notes', 'createdAt', 'createdBy'])
+      function expenseEvent(data, creating) {
+        let event = getAfter(/databases/$(database)/documents/financialOperations/$(data.lastFinancialOperationId)).data;
+        let original = event.action == 'expense_corrected' ? get(/databases/$(database)/documents/caravans/$(caravanId)/expenses/$(event.sourceId)).data : {};
+        let updated = event.action == 'expense_corrected' ? getAfter(/databases/$(database)/documents/caravans/$(caravanId)/expenses/$(event.sourceId)).data : {};
+        return financialEvent(data) && event.registrationId == ''
+          && (creating ? (event.entityId == expenseId && event.afterCents == data.amountCents
+            && (event.action == 'expense_recorded' ? (event.sourceId == '' && event.beforeCents == 0 && !('replacesId' in data))
+              : (event.action == 'expense_corrected' && event.sourceId == data.replacesId
+                && original.get('status', 'active') == 'active' && original.organizationId == data.organizationId && original.caravanId == caravanId
+                && event.beforeCents == original.amountCents && updated.status == 'voided' && updated.replacementId == expenseId && updated.lastFinancialOperationId == data.lastFinancialOperationId)))
+            : (event.sourceId == expenseId && event.beforeCents == resource.data.amountCents
+              && (event.action == 'expense_voided' ? (event.entityId == expenseId && event.afterCents == 0 && !('replacementId' in data))
+                : (event.action == 'expense_corrected' && data.replacementId == event.entityId
+                  && !exists(/databases/$(database)/documents/caravans/$(caravanId)/expenses/$(event.entityId))
+                  && getAfter(/databases/$(database)/documents/caravans/$(caravanId)/expenses/$(event.entityId)).data.lastFinancialOperationId == data.lastFinancialOperationId))));
+      }
+      allow create: if request.resource.data.keys().hasAll(['id', 'organizationId', 'caravanId', 'description', 'category', 'amountCents', 'date', 'notes', 'createdAt', 'createdBy', 'postedAt', 'status', 'lastFinancialOperationId'])
+        && request.resource.data.keys().hasOnly(['id', 'organizationId', 'caravanId', 'description', 'category', 'amountCents', 'date', 'notes', 'createdAt', 'createdBy', 'postedAt', 'status', 'lastFinancialOperationId', 'replacesId'])
         && request.resource.data.id == expenseId
         && request.resource.data.caravanId == caravanId
         && request.resource.data.organizationId == get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId
         && isTenantOwner(request.resource.data.organizationId)
         && validExpense(request.resource.data)
         && request.resource.data.createdAt is string
-        && request.resource.data.createdBy == request.auth.uid;
+        && request.resource.data.createdBy == request.auth.uid
+        && expenseId == request.resource.data.lastFinancialOperationId && request.resource.data.status == 'active'
+        && request.resource.data.postedAt == request.time && expenseEvent(request.resource.data, true);
       allow update: if resource.data.caravanId == caravanId
+        && resource.data.organizationId == get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId
         && isTenantOwner(resource.data.organizationId)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'category', 'amountCents', 'date', 'notes', 'updatedAt', 'updatedBy'])
-        && validExpense(request.resource.data)
-        && request.resource.data.updatedAt is timestamp
-        && request.resource.data.updatedBy == request.auth.uid;
+        && resource.data.get('status', 'active') == 'active'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'voidedAt', 'voidedBy', 'lastFinancialOperationId', 'replacementId'])
+        && request.resource.data.status == 'voided' && request.resource.data.voidedAt == request.time && request.resource.data.voidedBy == request.auth.uid
+        && request.resource.data.voidReason == getAfter(/databases/$(database)/documents/financialOperations/$(request.resource.data.lastFinancialOperationId)).data.reason
+        && expenseEvent(request.resource.data, false);
       allow delete: if false;
     }
   }

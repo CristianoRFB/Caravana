@@ -1,0 +1,15 @@
+
+> caravana-77@0.1.0 finance:diagnose
+> node scripts/diagnose-finance.mjs tests/fixtures/finance-diagnostic.synthetic.json
+
+{
+  "environment": "synthetic",
+  "readOnly": true,
+  "counts": {
+    "unitemized_total": 2,
+    "ledger_exceeds_total": 0,
+    "invalid_amount": 0,
+    "foreign_entry": 0
+  },
+  "redactedSummaryCsv": "metric,value\r\npassengerCount,1\r\npaidPassengerCount,0\r\npartialPassengerCount,1\r\npendingPassengerCount,0\r\nreportedPassengerCount,0\r\nunknownFareCount,0\r\nexpectedCents,8500\r\nreceivedCents,4000\r\nreceivableCents,5500\r\nuncertainReceivableCount,0\r\nexpenseCents,500\r\nrecordedBalanceCents,3500\r\nprojectedResultCents,8000\r\n"
+}

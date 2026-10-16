@@ -6,7 +6,6 @@ import {
   getDocFromServer,
   getDocs,
   onSnapshot,
-  orderBy,
   query,
   serverTimestamp,
   where,
@@ -26,9 +25,7 @@ import {
   type AuthorizationStatus,
   type Caravan,
   type CaravanExpense,
-  type ExpenseCategory,
   type PassengerPayment,
-  type PaymentMethod,
   type Registration,
 } from "./types";
 
@@ -447,12 +444,8 @@ export async function updatePassengerDetails(
 
 export { importLegacyRegistrations } from "./import-operations";
 
-export interface PassengerPaymentInput {
-  amountCents: number;
-  method: PaymentMethod;
-  paymentDate?: string;
-  notes: string;
-}
+export { recordPassengerPayment, voidPassengerPayment, createCaravanExpense, updateCaravanExpense, voidCaravanExpense } from "./financial-operations";
+export type { PassengerPaymentInput, CaravanExpenseInput } from "./financial-operations";
 
 export function watchPassengerPayments(
   registrationId: string,
@@ -461,111 +454,14 @@ export function watchPassengerPayments(
 ): Unsubscribe {
   if (!db) throw new Error("Firebase não está configurado.");
   return onSnapshot(
-    query(
-      collection(db, "registrations", registrationId, "payments"),
-      orderBy("createdAt", "desc"),
-    ),
+    collection(db, "registrations", registrationId, "payments"),
     (snapshot) =>
-      callback(snapshot.docs.map((item) => ({ ...item.data(), id: item.id }) as PassengerPayment)),
+      callback(snapshot.docs.map((item) => {
+        const data = item.data();
+        return { ...data, id: item.id, createdAt: data.postedAt?.toDate?.().toISOString() || String(data.createdAt || "") } as PassengerPayment;
+      }).sort((a, b) => b.createdAt.localeCompare(a.createdAt))),
     fail,
   );
-}
-
-export async function recordPassengerPayment(
-  registration: Registration,
-  input: PassengerPaymentInput,
-): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  if (!Number.isSafeInteger(input.amountCents) || input.amountCents <= 0)
-    throw new Error("Informe um valor positivo em centavos.");
-  if (!input.notes.trim() && input.notes.length > 500)
-    throw new Error("A observação pode ter no máximo 500 caracteres.");
-  if (input.notes.length > 500)
-    throw new Error("A observação pode ter no máximo 500 caracteres.");
-  if (input.paymentDate && !/^\d{4}-\d{2}-\d{2}$/.test(input.paymentDate))
-    throw new Error("A data do pagamento é inválida.");
-
-  const database = db;
-  const userId = auth.currentUser.uid;
-  const registrationRef = doc(database, "registrations", registration.id);
-  const paymentRef = doc(collection(database, "registrations", registration.id, "payments"));
-  await runTransaction(database, async (tx) => {
-    const [registrationSnapshot, existingPayment] = await Promise.all([
-      tx.get(registrationRef),
-      tx.get(paymentRef),
-    ]);
-    if (!registrationSnapshot.exists()) throw new Error("Inscrição não encontrada.");
-    if (existingPayment.exists()) throw new Error("Este pagamento já foi registrado.");
-    const current = registrationSnapshot.data();
-    if (current.registrationStatus === "cancelled")
-      throw new Error("Não é possível registrar pagamento para uma inscrição cancelada.");
-    const paid = Number(current.paymentTotalCents || 0);
-    const due = current.amountCents;
-    if (
-      Number.isSafeInteger(due) &&
-      due > 0 &&
-      paid + input.amountCents > due
-    ) {
-      throw new Error("O pagamento ultrapassa o saldo conhecido da inscrição.");
-    }
-    tx.set(paymentRef, {
-      id: paymentRef.id,
-      registrationId: registration.id,
-      organizationId: current.organizationId,
-      caravanId: current.caravanId,
-      amountCents: input.amountCents,
-      method: input.method,
-      ...(input.paymentDate ? { paymentDate: input.paymentDate } : {}),
-      notes: input.notes.trim(),
-      status: "active",
-      createdAt: new Date().toISOString(),
-      createdBy: userId,
-    });
-    tx.update(registrationRef, {
-      paymentTotalCents: paid + input.amountCents,
-      updatedAt: serverTimestamp(),
-    });
-  });
-}
-
-export async function voidPassengerPayment(
-  registrationId: string,
-  paymentId: string,
-  reason: string,
-): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  const note = reason.trim();
-  if (note.length < 3 || note.length > 300)
-    throw new Error("Explique a correção em 3 a 300 caracteres.");
-  const database = db;
-  const userId = auth.currentUser.uid;
-  const registrationRef = doc(database, "registrations", registrationId);
-  const paymentRef = doc(database, "registrations", registrationId, "payments", paymentId);
-  await runTransaction(database, async (tx) => {
-    const [registrationSnapshot, paymentSnapshot] = await Promise.all([
-      tx.get(registrationRef),
-      tx.get(paymentRef),
-    ]);
-    if (!registrationSnapshot.exists() || !paymentSnapshot.exists())
-      throw new Error("Pagamento ou inscrição não encontrado.");
-    const payment = paymentSnapshot.data();
-    if (payment.status === "voided") return;
-    const paid = Number(registrationSnapshot.data().paymentTotalCents || 0);
-    const nextPaid = paid - Number(payment.amountCents || 0);
-    if (nextPaid < 0) throw new Error("O total registrado está inconsistente.");
-    tx.update(registrationRef, {
-      paymentTotalCents: nextPaid,
-      updatedAt: serverTimestamp(),
-    });
-    tx.update(paymentRef, {
-      status: "voided",
-      voidReason: note,
-      voidedAt: serverTimestamp(),
-      voidedBy: userId,
-    });
-  });
 }
 
 export function watchCaravanExpenses(
@@ -575,69 +471,11 @@ export function watchCaravanExpenses(
 ): Unsubscribe {
   if (!db) throw new Error("Firebase não está configurado.");
   return onSnapshot(
-    query(collection(db, "caravans", caravanId, "expenses"), orderBy("date", "desc")),
+    collection(db, "caravans", caravanId, "expenses"),
     (snapshot) =>
-      callback(snapshot.docs.map((item) => ({ ...item.data(), id: item.id }) as CaravanExpense)),
+      callback(snapshot.docs.map((item) => ({ ...item.data(), id: item.id }) as CaravanExpense).sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))),
     fail,
   );
-}
-
-export interface CaravanExpenseInput {
-  description: string;
-  category: ExpenseCategory;
-  amountCents: number;
-  date: string;
-  notes: string;
-}
-
-export async function createCaravanExpense(
-  caravanId: string,
-  organizationId: string,
-  input: CaravanExpenseInput,
-): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  validateExpenseInput(input);
-  const reference = doc(collection(db, "caravans", caravanId, "expenses"));
-  const userId = auth.currentUser.uid;
-  await setDoc(reference, {
-    id: reference.id,
-    organizationId,
-    caravanId,
-    ...input,
-    description: input.description.trim(),
-    notes: input.notes.trim(),
-    createdAt: new Date().toISOString(),
-    createdBy: userId,
-  });
-}
-
-export async function updateCaravanExpense(
-  caravanId: string,
-  expenseId: string,
-  input: CaravanExpenseInput,
-): Promise<void> {
-  if (!db || !auth?.currentUser)
-    throw new Error("Sessão administrativa não encontrada.");
-  validateExpenseInput(input);
-  await updateDoc(doc(db, "caravans", caravanId, "expenses", expenseId), {
-    ...input,
-    description: input.description.trim(),
-    notes: input.notes.trim(),
-    updatedAt: serverTimestamp(),
-    updatedBy: auth.currentUser.uid,
-  });
-}
-
-function validateExpenseInput(input: CaravanExpenseInput) {
-  if (input.description.trim().length < 3 || input.description.length > 120)
-    throw new Error("A descrição deve ter entre 3 e 120 caracteres.");
-  if (!Number.isSafeInteger(input.amountCents) || input.amountCents <= 0)
-    throw new Error("Informe um valor positivo.");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date))
-    throw new Error("Informe uma data válida.");
-  if (input.notes.length > 500)
-    throw new Error("A observação pode ter no máximo 500 caracteres.");
 }
 
 export async function clearLegacyReservationIds(

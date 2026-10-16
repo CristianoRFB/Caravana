@@ -220,7 +220,7 @@ test("a pending write prevents tenant switching until server acknowledgement", a
   let hold = true;
   const held: Route[] = [];
   await page.route("http://127.0.0.1:18080/**", async (route) => {
-    if (hold && route.request().method() === "POST" && new URL(route.request().url()).pathname.includes("/Write/channel")) held.push(route);
+    if (hold && route.request().method() === "POST" && (/\/Write\/channel|:commit$/i.test(new URL(route.request().url()).pathname))) held.push(route);
     else await route.fallback();
   });
   try {

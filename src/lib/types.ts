@@ -34,6 +34,8 @@ export interface PassengerPayment {
   paymentDate?: string;
   notes: string;
   status: "active" | "voided";
+  postedAt?: { toDate(): Date };
+  lastFinancialOperationId?: string;
   createdAt: string;
   createdBy: string;
   voidedAt?: string;
@@ -42,6 +44,14 @@ export interface PassengerPayment {
 }
 
 export interface CaravanExpense {
+  status?: "active" | "voided";
+  postedAt?: { toDate(): Date };
+  lastFinancialOperationId?: string;
+  replacesId?: string;
+  replacementId?: string;
+  voidedAt?: { toDate(): Date };
+  voidedBy?: string;
+  voidReason?: string;
   id: string;
   organizationId: string;
   caravanId: string;
@@ -144,10 +154,14 @@ export interface Registration {
   checkedInAt?: string;
 }
 
-export const money = (cents: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
-    cents / 100,
-  );
+export const money = (cents: number) => {
+  if (!Number.isSafeInteger(cents)) return "Valor inválido";
+  const absolute = BigInt(cents < 0 ? -cents : cents);
+  const whole = absolute / 100n;
+  const signedWhole = cents < 0 ? whole === 0n ? -0 : -whole : whole;
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).formatToParts(signedWhole)
+    .map((part) => part.type === "fraction" ? String(absolute % 100n).padStart(2, "0") : part.value).join("");
+};
 export const dateLabel = (iso: string) =>
   new Intl.DateTimeFormat("pt-BR", {
     dateStyle: "long",

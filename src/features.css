@@ -488,6 +488,19 @@
 .finance-expense-row {
   padding: 13px 0;
 }
+.finance-expense-row > .finance-expense-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 5px;
+}
+.finance-expense-row small { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .finance-expense-row > .finance-expense-actions {
+    display: grid;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+}
 .finance-expense-icon {
   width: 36px;
   height: 36px;

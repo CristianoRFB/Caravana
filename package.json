@@ -35,7 +35,10 @@
     "test:demo:e2e": "node scripts/run-local-tests.mjs demo-e2e",
     "migration:dry-run": "node scripts/simulate-membership-migration.mjs",
     "migration:rehearse": "node scripts/run-local-tests.mjs migration",
-    "test:rules": "vitest run"
+    "test:rules": "vitest run",
+    "test:finance": "node scripts/run-local-tests.mjs finance",
+    "test:finance:e2e": "node scripts/run-local-tests.mjs finance-e2e",
+    "finance:diagnose": "node scripts/diagnose-finance.mjs"
   },
   "dependencies": {
     "firebase": "^11.10.0",

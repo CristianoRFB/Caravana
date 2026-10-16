@@ -22,6 +22,11 @@ export interface FinanceSummary {
   recordedBalanceCents: number;
   projectedResultCents: number;
 }
+function sumSafeCents(values: number[]): number {
+  let total = 0;
+  for (const value of values) { if (!Number.isSafeInteger(value) || value < 0 || !Number.isSafeInteger(total + value)) return NaN; total += value; }
+  return total;
+}
 
 export function passengerFinancialStatus(
   registration: Pick<
@@ -55,28 +60,20 @@ export function calculateFinanceSummary(
       item.paymentReportedUnreconciled &&
       (item.paymentTotalCents || 0) === 0,
   );
-  const expectedCents = expectedRows.reduce(
-    (total, item) => total + (item.amountCents || 0),
-    0,
-  );
-  const receivableCents = active.reduce((total, item) => {
+  const expectedCents = sumSafeCents(expectedRows.map((item) => item.amountCents!));
+  const receivableCents = sumSafeCents(active.map((item) => {
     if (
       !Number.isSafeInteger(item.amountCents) ||
       (item.amountCents || 0) <= 0 ||
       (item.paymentReportedUnreconciled && (item.paymentTotalCents || 0) === 0)
     ) {
-      return total;
+      return 0;
     }
-    return total + Math.max(0, item.amountCents! - (item.paymentTotalCents || 0));
-  }, 0);
-  const receivedCents = registrations.reduce(
-    (total, item) => total + Math.max(0, item.paymentTotalCents || 0),
-    0,
-  );
-  const expenseCents = expenses.reduce(
-    (total, item) => total + Math.max(0, item.amountCents || 0),
-    0,
-  );
+    const paid = item.paymentTotalCents ?? 0;
+    return Number.isSafeInteger(paid) && paid >= 0 ? Math.max(0, item.amountCents! - paid) : NaN;
+  }));
+  const receivedCents = sumSafeCents(registrations.map((item) => item.paymentTotalCents ?? 0));
+  const expenseCents = sumSafeCents(expenses.filter((item) => item.status !== "voided").map((item) => item.amountCents ?? 0));
 
   return {
     passengerCount: active.length,
@@ -100,7 +97,12 @@ export function calculateFinanceSummary(
 export function validMoneyInput(value: string): number | null {
   const trimmed = value.trim();
   if (!trimmed || !/^\d+(?:[,.]\d{1,2})?$/.test(trimmed)) return null;
-  const amount = Number(trimmed.replace(",", "."));
-  const cents = Math.round(amount * 100);
-  return Number.isSafeInteger(cents) && cents > 0 ? cents : null;
+  const [whole, fraction = ""] = trimmed.replace(",", ".").split(".");
+  const cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, "0"));
+  return cents > 0n && cents <= BigInt(Number.MAX_SAFE_INTEGER) ? Number(cents) : null;
+}
+export function moneyInputValue(cents: number): string {
+  if (!Number.isSafeInteger(cents) || cents < 0) return "";
+  const value = BigInt(cents);
+  return `${value / 100n},${String(value % 100n).padStart(2, "0")}`;
 }

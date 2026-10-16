@@ -1,0 +1,39 @@
+
+> caravana-77@0.1.0 test:finance
+> node scripts/run-local-tests.mjs finance
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/financial-diagnostics.test.ts tests/financial-operations.integration.test.ts tests/finance.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/financial-operations.integration.test.ts (8 tests | 1 failed) 5182ms
+   ❯ financial ledger actual SDK and candidate Rules (8)
+     × corrects an expense by linked void and replacement, then voids the replacement idempotently 300ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/financial-operations.integration.test.ts > financial ledger actual SDK and candidate Rules > corrects an expense by linked void and replacement, then voids the replacement idempotently
+FirebaseError: 
+Property organizationId is undefined on object. for 'list' @ L844
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 61 passed (62)
+   Start at  17:47:29
+   Duration  15.47s (tests 91%, import 7%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/financial-diagnostics.test.ts tests/financial-operations.integration.test.ts tests/finance.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 17524).
