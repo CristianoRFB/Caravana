@@ -4,6 +4,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type FormEvent,
   type ReactNode,
 } from "react";
@@ -82,6 +83,7 @@ import { firebaseConfigured } from "./lib/firebase";
 import type { User } from "firebase/auth";
 import { watchTenantAccess, type TenantAccess } from "./lib/tenant-access";
 import type { TenantRole } from "./lib/memberships";
+import { observePendingWrites, pendingWrites } from "./lib/pending-writes";
 import PublicIndex from "./PublicIndex";
 import FinancePage from "./Finance";
 import { PROOF_POLICY } from "./lib/proof-policy";
@@ -1535,6 +1537,7 @@ function AdminShell({
   onSelect: (organizationId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const pendingCount = useSyncExternalStore(observePendingWrites, pendingWrites, () => 0);
   const nav = useNavigate();
   async function exit() {
     await logout();
@@ -1565,7 +1568,8 @@ function AdminShell({
           {access.length > 1 && (
             <label className="tenant-switcher">
               <span>Organização</span>
-              <select aria-label="Organização ativa" value={orgId} onChange={(event) => {
+              <select aria-label="Organização ativa" value={orgId} disabled={pendingCount > 0} onChange={(event) => {
+                if (pendingWrites() > 0) return;
                 const next = event.target.value;
                 if (!access.some((item) => item.organizationId === next)) return;
                 onSelect(next);
@@ -1573,6 +1577,7 @@ function AdminShell({
               }}>
                 {access.map((item) => <option key={item.organizationId} value={item.organizationId}>{item.organizationId}</option>)}
               </select>
+              {pendingCount > 0 && <small role="status">Aguarde a operação concluir para trocar de organização.</small>}
             </label>
           )}
           <Link to="/admin">

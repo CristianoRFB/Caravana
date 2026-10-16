@@ -75,3 +75,13 @@ f2-migration-final-tests.log: nove arquivos,64 testes PASS. Inclui ausência de 
 - Código bloqueia contas demo em login/cadastro/sessão/reserva fora do alvo local. Rules candidatas conferem audience demo para autoridade dessas identidades. Não foi alterada política do Auth real e não se promete bloquear cadastro arbitrário feito fora do aplicativo diretamente no provedor.
 
 Próximo ciclo: testes Storage A×B e controle de writes pendentes. Reexecutar segurança afetada após alterações; suite completa no gate F2. Não reiniciar F0 nem repetir inventário/hash/screenshot sem mudança que invalide a evidência.
+
+## F2-Storage e mutações pendentes
+
+f2-storage-first.log:5 PASS; após incluir guarda de identidades demo e caso staff, f2-storage-final.log:6 PASS/exit0. Auth SDK verdadeiro + Storage SDK getBytes/getMetadata contra emuladores locais. Own A/B funcionam no caminho original; cross-tenant, guest/passenger, list, vínculo de inscrição adulterado, write/delete e revogação são negados. URLs sem token e token inventado403. Não testa token válido de produção: ver STORAGE_PRIVACY.md. Nenhum Storage habilitado em firebase.json real. Runtime Java emite NPE no shutdown após suite; registrado como limitação do runtime, sem mudança de política do sistema.
+
+f2-pending-operations.log FAIL de comando: chamada direta de node não herdava node_modules/.bin do npm. Não houve teste de produto nessa tentativa. Adicionados scripts npm específicos; f2-pending-operations-final.log30 PASS. Cobrem contador concorrente/erros e serviço real de reserva/import/financeiro/proof no Firestore Emulator, exigindo contador zerado após cada operação. Os wrappers preservam SDK/retries/transações e aguardam o ack.
+
+f2-pending-e2e.log4 PASS/23,9s: desktop1440/mobile320, troca/revogação e Write POST deliberadamente retido por Playwright. Seletor permanece disabled com aviso até servidor confirmar; despesa de2 é registrada apenas em A (total12), e B mantém30. Requests externos bloqueados, zero pageerrors/Firebase remoto. Sem retry/skip ou screenshots novos. Build e2e executa tsc; f2-pending-typecheck.log e f2-storage-pending-final-lint.log PASS.
+
+Próximo módulo: Platform Owner/onboarding/auditoria. Full regression apenas no gate F2 ou antes se o risco justificar; manter testes específicos obrigatórios em auth/Rules/financeiro.

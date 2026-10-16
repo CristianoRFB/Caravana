@@ -13,12 +13,15 @@ const commands = {
   e2e: "playwright test",
   "demo-e2e": "playwright test e2e/demo.spec.ts --project desktop-1440 --project mobile-320",
   "demo-auth": "vitest run --config vitest.auth.config.ts",
+  storage: "vitest run --config vitest.storage.config.ts",
+  "tenant-writes": "vitest run tests/pending-writes.test.ts tests/data.integration.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts",
+  "tenant-e2e": "playwright test e2e/baseline.spec.ts --grep \"switching organizations|pending write\" --project desktop-1440 --project mobile-320",
   demo: "node scripts/start-demo.mjs --serve",
   migration: "node scripts/simulate-membership-migration.mjs --apply-synthetic",
 };
 if (!Object.hasOwn(commands, suite) || process.argv.length > 3) throw new Error("Choose a documented local suite.");
-const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo"].includes(suite);
-const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", withAuth ? "firestore,auth" : "firestore", commands[suite]];
+const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo", "tenant-e2e"].includes(suite);
+const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "storage" ? "firestore,auth,storage" : withAuth ? "firestore,auth" : "firestore", commands[suite]];
 let exitCode = 1;
 try {
   exitCode = await new Promise((resolve, reject) => {

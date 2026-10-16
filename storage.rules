@@ -1,23 +1,33 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    function signedIn() { return request.auth != null; }
-    function adminOrg() {
-      return signedIn() && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
-        ? firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.organizationId
-        : '';
+    function signedIn() {
+      return request.auth != null && (
+        !(request.auth.token.get('email', '').lower() == 'teste@gmail.com'
+          || request.auth.token.get('email', '').lower().matches('.*[.]test$'))
+        || request.auth.token.get('aud', '') == 'demo-caravana77-test');
+    }
+    function activeMember(orgId) {
+      let path = /databases/(default)/documents/memberships/$(request.auth.uid)/organizations/$(orgId);
+      return request.auth != null && firestore.exists(path)
+        && firestore.get(path).data.uid == request.auth.uid
+        && firestore.get(path).data.organizationId == orgId
+        && firestore.get(path).data.status == 'active'
+        && firestore.get(path).data.role in ['tenant_owner', 'staff'];
     }
     match /proofs/{orgId}/{caravanId}/{registrationId}/{fileName} {
       function registration() {
         return firestore.get(/databases/(default)/documents/registrations/$(registrationId)).data;
       }
-      allow read: if signedIn() && adminOrg() == orgId;
-      allow create: if registration().organizationId == orgId
-        && registration().caravanId == caravanId
-        && registration().registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
-        && request.resource.size <= 600 * 1024
-        && request.resource.contentType.matches('^(image/jpeg|image/png|application/pdf)$');
-      allow update, delete: if signedIn() && adminOrg() == orgId;
+      // Two distinct Firestore documents: membership and registration. Preserve existing paths/files.
+      allow get: if signedIn() && activeMember(orgId)
+        && registration().organizationId == orgId
+        && registration().caravanId == caravanId;
+      allow list: if false;
+      // The active application uploads validated proofs inline to Firestore. Do not expose
+      // an unused anonymous Storage upload or mint new file URLs from a client write.
+      // A trusted import/maintenance service would need a separate approved workflow.
+      allow create, update, delete: if false;
     }
   }
 }

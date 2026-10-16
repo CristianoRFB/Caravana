@@ -7,6 +7,7 @@ import { assertFails } from "@firebase/rules-unit-testing";
 import { PROOF_POLICY } from "../src/lib/proof-policy";
 import { legacyImportDocumentId } from "../src/lib/legacy-import";
 import type { Caravan, Registration } from "../src/lib/types";
+import { pendingWrites } from "../src/lib/pending-writes";
 
 const runtime = vi.hoisted(() => ({
   db: null as Firestore | null,
@@ -26,7 +27,7 @@ beforeAll(async () => {
     firestore: { rules: readFileSync(resolve("firestore.rules"), "utf8") },
   });
 });
-afterEach(async () => { runtime.db = null; runtime.auth.currentUser.uid = "admin-a"; await env.clearFirestore(); });
+afterEach(async () => { expect(pendingWrites()).toBe(0); runtime.db = null; runtime.auth.currentUser.uid = "admin-a"; await env.clearFirestore(); });
 afterAll(async () => env.cleanup());
 
 async function seedTrip(extra: Record<string, unknown> = {}) {

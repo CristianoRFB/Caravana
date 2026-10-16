@@ -55,5 +55,7 @@ VERIFICAÇÃO PROPORCIONAL
 npm run test:demo       — login real Auth Emulator, idempotência, perfis, ausência de autoelevação e isolamento financeiro A×B.
 npm run test:demo:e2e   — login de passageiro/admin em desktop e celular (requer Chromium: npx playwright install chromium).
 npm run test:security   — regressões diretamente afetadas de Rules, operação, membership e bloqueio das identidades.
+npm run test:storage    — Auth/Firestore/Storage isolados; leituras privadas A×B e negação de mutações no Storage legado.
+npm run test:tenant:operations / npm run test:tenant:e2e — operações pendentes e troca de organização.
 npm test / npm run test:e2e / npm run build — gates completos de checkpoint, sem repetição automática a cada edição.
 Não execute testes simultaneamente com npm run demo, pois usam as mesmas portas isoladas. Encerre a demonstração antes de rodar testes.

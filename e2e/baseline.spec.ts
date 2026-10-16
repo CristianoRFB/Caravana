@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page, type Route } from "@playwright/test";
 import { patchSyntheticMembership, patchSyntheticTrip, seedSyntheticEnvironment, testAccount } from "./fixtures";
 
 let dispose: (() => Promise<void>) | undefined;
@@ -206,4 +206,44 @@ test("staff can read scoped finance without controls to register or correct mone
   await expect(page.getByRole("button", { name: "Nova despesa", exact: true })).toHaveCount(0);
   await page.getByLabel("Mostrar dados de").selectOption("ride-a");
   await expect(page.locator(".finance-expense-form")).toHaveCount(0);
+});
+
+test("a pending write prevents tenant switching until server acknowledgement", async ({ page }) => {
+  await patchSyntheticMembership("org-a", "tenant_owner");
+  await patchSyntheticMembership("org-b", "tenant_owner");
+  await signIn(page);
+  await page.goto("/admin/financeiro");
+  await page.getByLabel("Mostrar dados de").selectOption("ride-a");
+  await page.getByLabel("Descrição", { exact: true }).fill("Despesa sintética aguardando servidor");
+  await page.getByLabel("Valor (R$)", { exact: true }).fill("2,00");
+  await page.getByLabel("Data", { exact: true }).fill("2026-10-16");
+  let hold = true;
+  const held: Route[] = [];
+  await page.route("http://127.0.0.1:18080/**", async (route) => {
+    if (hold && route.request().method() === "POST" && new URL(route.request().url()).pathname.includes("/Write/channel")) held.push(route);
+    else await route.fallback();
+  });
+  try {
+    await page.getByRole("button", { name: "Registrar despesa", exact: true }).click();
+    await expect.poll(() => held.length).toBeGreaterThan(0);
+    const menu = page.getByRole("button", { name: "Menu", exact: true });
+    if (await menu.isVisible()) await menu.click();
+    await expect(page.getByLabel("Organização ativa")).toBeDisabled();
+    await expect(page.getByRole("status")).toContainText("Aguarde a operação concluir");
+    await expect(page.locator(".admin-content")).toHaveAttribute("data-org", "org-a");
+    hold = false;
+    await Promise.all(held.splice(0).map((route) => route.fallback()));
+    await expect(page.locator(".success-message")).toContainText("Despesa registrada.");
+    await expect(page.getByLabel("Organização ativa")).toBeEnabled();
+    await expect(metric(page, "Despesas")).toContainText("12,00");
+    await page.getByLabel("Organização ativa").selectOption("org-b");
+    await expect(page.locator(".admin-content")).toHaveAttribute("data-org", "org-b");
+    if (await menu.isVisible()) await menu.click();
+    await page.locator(".admin-sidebar").getByRole("link", { name: "Financeiro", exact: true }).click();
+    await expect(metric(page, "Despesas")).toContainText("30,00");
+    await expect(page.locator(".finance-expense-list")).not.toContainText("aguardando servidor");
+  } finally {
+    hold = false;
+    await Promise.all(held.splice(0).map((route) => route.fallback().catch(() => undefined)));
+  }
 });

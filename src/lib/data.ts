@@ -7,14 +7,11 @@ import {
   onSnapshot,
   orderBy,
   query,
-  runTransaction,
   serverTimestamp,
-  setDoc,
-  updateDoc,
   where,
-  writeBatch,
   type Unsubscribe,
 } from "firebase/firestore";
+import { runTransaction, setDoc, updateDoc, writeBatch } from "./tracked-firestore";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
