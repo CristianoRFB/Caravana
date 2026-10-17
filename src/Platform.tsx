@@ -1,3 +1,4 @@
+import CommercialPlanPanel from "./CommercialPlanPanel";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "firebase/auth";
@@ -15,6 +16,7 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
   const [tenants, setTenants] = useState<PlatformTenant[]>([]);
   const [events, setEvents] = useState<PlatformEvent[]>([]);
   const [busy, setBusy] = useState(false);
+  const [planFor, setPlanFor] = useState("");
   const [supportFor, setSupportFor] = useState("");
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -26,12 +28,12 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
     let stopAccess: () => void = () => undefined;
     const stopAuth = watchAuth((current) => {
       const request = ++revision;
-      stopAccess(); setUser(current); setAllowed(false); setLoading(Boolean(current)); setSupportFor("");
+      stopAccess(); setUser(current); setAllowed(false); setLoading(Boolean(current)); setSupportFor(""); setPlanFor("");
       setTenants([]); setEvents([]); setError(""); setNotice(""); setName(""); setSlug(""); setOwnerUid("");
       if (current) stopAccess = watchPlatformAccess(current.uid, (value) => {
         if (active && request === revision) {
           setAllowed(value); setLoading(false);
-          if (!value) { setTenants([]); setEvents([]); setName(""); setSlug(""); setOwnerUid(""); setNotice(""); setSupportFor(""); }
+          if (!value) { setTenants([]); setEvents([]); setName(""); setSlug(""); setOwnerUid(""); setNotice(""); setSupportFor(""); setPlanFor(""); }
         }
       }, () => { if (active && request === revision) { setAllowed(false); setLoading(false); setError("Não foi possível verificar a permissão da plataforma."); } });
     });
@@ -67,6 +69,7 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
     </section> : <>
       <div className="admin-title-row"><div><div className="eyebrow eyebrow-dark">ADMINISTRAÇÃO DA PLATAFORMA</div><h1>Organizadoras</h1><p>{user?.email}</p><p>Identificador de suporte: {user?.uid}</p></div><button className="button button-outline" onClick={() => void logout()}>Sair</button></div>
       {error && <div className="error-message" role="alert">{error}</div>}{notice && <div className="success-message" role="status">{notice}</div>}
+      {planFor && <CommercialPlanPanel key={planFor} organizationId={planFor} onExit={() => setPlanFor("")} />}
       {supportFor && <SupportConsole key={supportFor} organizationId={supportFor} onExit={() => setSupportFor("")} />}
       <section className="admin-panel platform-section"><h2>Cadastro assistido</h2><p>Vincule o UID de uma conta Firebase existente, conferido previamente. Este formulário cadastra a organizadora e sua membership; a criação e a verificação da conta Auth seguem o processo assistido.</p>
         <form className="field-grid" onSubmit={(event) => void create(event)}>
@@ -80,6 +83,7 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
         <div><strong>{tenant.name}</strong><small>{tenant.id}</small><span>{tenant.status === "active" ? "Ativa" : tenant.status === "suspended" ? "Suspensa para novas reservas" : "Situação legada: revisão necessária"}</span></div>
         <button className="button button-outline" disabled={busy || tenant.status === "unknown"} onClick={() => void status(tenant)}>{tenant.status === "suspended" ? "Reativar reservas" : "Suspender reservas"}</button>
         <button className="button button-outline" onClick={() => setSupportFor(tenant.id)}>Abrir suporte</button>
+        <button className="button button-outline" onClick={() => setPlanFor(tenant.id)}>Plano e limites</button>
       </article>)}</div><p>O acesso da plataforma não concede leitura de passageiros, comprovantes ou lançamentos financeiros das organizadoras.</p></section>
       <section className="admin-panel platform-section"><h2>Auditoria recente</h2><ul>{events.map((event) => <li key={event.id}>{event.action === "tenant_created" ? "Cadastro" : "Alteração de situação"} · {event.organizationId} · {event.status} · responsável {event.actorUid}</li>)}</ul>{events.length === 0 && <p>Nenhuma operação registrada.</p>}</section>
     </>}

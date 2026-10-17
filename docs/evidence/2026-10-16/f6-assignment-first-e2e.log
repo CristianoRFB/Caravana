@@ -1,0 +1,111 @@
+
+> caravana-77@0.1.0 test:commercial:e2e
+> node scripts/run-local-tests.mjs commercial-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/commercial.spec.ts e2e/platform.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:20012) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:13864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:20568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (45.2s)
+(node:14640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [desktop-1440] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.7s)
+  ok 3 [desktop-1440] › e2e\platform.spec.ts:54:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (1.6s)
+(node:20232) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (45.2s)
+(node:17104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 5 [mobile-320] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.2s)
+  ok 6 [mobile-320] › e2e\platform.spec.ts:54:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (1.4s)
+
+
+  1) [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Plano comercial', { exact: true })
+
+
+      15 | test("platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate", async ({ page }) => {
+      16 |   await login(page); const tenantA = page.locator(".platform-tenant").filter({ hasText: "Organização Sintética A" }); await tenantA.getByRole("button", { name: "Plano e limites", exact: true }).click();
+    > 17 |   await expect(page.getByText("Plano não atribuído. Nenhum limite Premium é presumido.", { exact: true })).toBeVisible(); await page.getByLabel("Plano comercial", { exact: true }).selectOption("pro"); await page.getByLabel("Motivo da atribuição/alteração").fill("Condição sintética Pro90 temporária"); await page.getByLabel("Mensalidade promocional (R$, opcional)", { exact: true }).fill("90,00"); await page.getByLabel("Fim da promoção").fill("2027-01-01T12:00"); await page.getByLabel("Motivo da promoção").fill("Promoção fictícia com prazo definido");
+         |                                                                                                                                                                                     ^
+      18 |   await page.getByRole("button", { name: "Salvar plano e limites", exact: true }).click(); await expect(page.getByRole("status")).toContainText("Nenhuma cobrança foi realizada"); await expect(page.getByText(/Pro · active · R\$.*90,00\/mês/)).toBeVisible(); await expect(page.getByRole("option", { name: /Pro · R\$.*149,00/ })).toBeAttached();
+      19 |   const panel = page.getByRole("heading", { name: "Plano e limites", exact: true }).locator("../.."); await expect(panel).toContainText("5 caravanas publicadas · 200 passageiros/caravana · 5 pessoas na equipe");
+      20 |   await page.getByLabel("Plano comercial", { exact: true }).selectOption("essencial"); await page.getByLabel("Mensalidade promocional (R$, opcional)", { exact: true }).fill(""); await page.getByLabel("Motivo da atribuição/alteração").fill("Downgrade sintético com histórico preservado"); await page.getByRole("button", { name: "Salvar plano e limites", exact: true }).click(); await expect(panel).toContainText("2 caravanas publicadas · 60 passageiros/caravana · 2 pessoas na equipe");
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\commercial.spec.ts:17:181
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Plano comercial', { exact: true })
+
+
+      15 | test("platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate", async ({ page }) => {
+      16 |   await login(page); const tenantA = page.locator(".platform-tenant").filter({ hasText: "Organização Sintética A" }); await tenantA.getByRole("button", { name: "Plano e limites", exact: true }).click();
+    > 17 |   await expect(page.getByText("Plano não atribuído. Nenhum limite Premium é presumido.", { exact: true })).toBeVisible(); await page.getByLabel("Plano comercial", { exact: true }).selectOption("pro"); await page.getByLabel("Motivo da atribuição/alteração").fill("Condição sintética Pro90 temporária"); await page.getByLabel("Mensalidade promocional (R$, opcional)", { exact: true }).fill("90,00"); await page.getByLabel("Fim da promoção").fill("2027-01-01T12:00"); await page.getByLabel("Motivo da promoção").fill("Promoção fictícia com prazo definido");
+         |                                                                                                                                                                                     ^
+      18 |   await page.getByRole("button", { name: "Salvar plano e limites", exact: true }).click(); await expect(page.getByRole("status")).toContainText("Nenhuma cobrança foi realizada"); await expect(page.getByText(/Pro · active · R\$.*90,00\/mês/)).toBeVisible(); await expect(page.getByRole("option", { name: /Pro · R\$.*149,00/ })).toBeAttached();
+      19 |   const panel = page.getByRole("heading", { name: "Plano e limites", exact: true }).locator("../.."); await expect(panel).toContainText("5 caravanas publicadas · 200 passageiros/caravana · 5 pessoas na equipe");
+      20 |   await page.getByLabel("Plano comercial", { exact: true }).selectOption("essencial"); await page.getByLabel("Mensalidade promocional (R$, opcional)", { exact: true }).fill(""); await page.getByLabel("Motivo da atribuição/alteração").fill("Downgrade sintético com histórico preservado"); await page.getByRole("button", { name: "Salvar plano e limites", exact: true }).click(); await expect(panel).toContainText("2 caravanas publicadas · 60 passageiros/caravana · 2 pessoas na equipe");
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\commercial.spec.ts:17:181
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+    [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+  4 passed (1.9m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/commercial.spec.ts e2e/platform.spec.ts --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 20116).

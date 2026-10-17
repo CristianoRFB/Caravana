@@ -149,6 +149,67 @@ service cloud.firestore {
     }
     // Historical aliases are provisioned only by an explicitly approved administrative migration.
     match /legacyTripAliases/{slug} { allow get: if true; allow list, create, update, delete: if false; }
+    function commercialPlan(planId) {
+      return planId == 'essencial' ? { 'monthlyCents': 8900, 'limits': { 'activeCaravans': 2, 'passengersPerCaravan': 60, 'internalUsers': 2 } }
+        : planId == 'pro' ? { 'monthlyCents': 14900, 'limits': { 'activeCaravans': 5, 'passengersPerCaravan': 200, 'internalUsers': 5 } }
+        : { 'monthlyCents': 21900, 'limits': { 'activeCaravans': 15, 'passengersPerCaravan': 500, 'internalUsers': 15 } };
+    }
+    match /tenantUsage/{orgId} {
+      allow get: if isTenantOwner(orgId) || isPlatformOwner();
+      // Legacy baseline is never invented/reset by the client. New onboarding/quota operations follow later.
+      allow list, create, update, delete: if false;
+    }
+    match /subscriptions/{orgId} {
+      function valid(data) {
+        let event = getAfter(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId)).data;
+        return data.keys().hasOnly(['organizationId', 'planId', 'status', 'monthlyCatalogCents', 'setupWaived', 'setupFeeCents', 'overrideMonthlyCents', 'overrideExpiresAt', 'overrideReason', 'trialEndsAt', 'revision', 'reason', 'updatedAt', 'updatedBy', 'lastCommercialOperationId'])
+          && data.organizationId == orgId && data.planId in ['essencial', 'pro', 'premium']
+          && data.monthlyCatalogCents == commercialPlan(data.planId).monthlyCents
+          && data.status in ['trial', 'active', 'past_due', 'suspended', 'cancelled', 'demo']
+          && (data.status != 'demo' || request.auth.token.get('aud', '') == 'demo-caravana77-test')
+          && data.setupWaived is bool && data.setupFeeCents == (data.setupWaived ? 0 : 10000)
+          && (data.overrideMonthlyCents == null
+            ? (data.overrideExpiresAt == null && data.overrideReason == '')
+            : (money(data.overrideMonthlyCents) && data.overrideExpiresAt is timestamp && data.overrideExpiresAt > request.time
+              && data.overrideReason is string && data.overrideReason.size() >= 3 && data.overrideReason.size() <= 300))
+          && (data.status == 'trial' ? (data.trialEndsAt is timestamp && data.trialEndsAt > request.time) : data.trialEndsAt == null)
+          && data.reason is string && data.reason.size() >= 3 && data.reason.size() <= 300
+          && data.revision is int && data.revision == (resource == null ? 1 : resource.data.revision + 1)
+          && data.updatedAt == request.time && data.updatedBy == request.auth.uid && data.lastCommercialOperationId.matches('^[a-f0-9]{32}$')
+          && !exists(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId))
+          && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
+          && event.action == 'plan_assigned' && event.subscription == data && event.previous == (resource == null ? null : resource.data)
+          && getAfter(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data.lastCommercialOperationId == data.lastCommercialOperationId
+          && get(/databases/$(database)/documents/tenantUsage/$(orgId)).data.version == 'commercial-v1';
+      }
+      allow get: if isTenantOwner(orgId) || isPlatformOwner();
+      allow list: if isPlatformOwner();
+      allow create, update: if isPlatformOwner() && valid(request.resource.data);
+      allow delete: if false;
+    }
+    match /tenantEntitlements/{orgId} {
+      function valid(data) {
+        let subscription = getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data;
+        return data.keys().hasOnly(['organizationId', 'limits', 'growthEnabled', 'growthUntil', 'updatedAt', 'lastCommercialOperationId'])
+          && data.organizationId == orgId && data.limits == commercialPlan(subscription.planId).limits
+          && data.growthEnabled == (subscription.status in ['active', 'trial', 'demo']) && data.growthUntil == subscription.trialEndsAt
+          && data.updatedAt == request.time && data.lastCommercialOperationId == subscription.lastCommercialOperationId
+          && !exists(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId));
+      }
+      allow get: if true;
+      allow list, delete: if false;
+      allow create, update: if isPlatformOwner() && valid(request.resource.data);
+    }
+    match /commercialOperations/{operationId} {
+      allow get: if (resource == null && signedIn()) || (resource != null && (isTenantOwner(resource.data.organizationId) || isPlatformOwner()));
+      allow list: if isPlatformOwner() || isTenantOwner(resource.data.organizationId);
+      allow create: if isPlatformOwner() && operationId.matches('^[a-f0-9]{32}$')
+        && request.resource.data.keys().hasOnly(['organizationId', 'actorUid', 'at', 'action', 'payloadHash', 'previous', 'subscription'])
+        && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time && request.resource.data.action == 'plan_assigned'
+        && request.resource.data.payloadHash.matches('^[a-f0-9]{64}$') && request.resource.data.subscription.lastCommercialOperationId == operationId
+        && getAfter(/databases/$(database)/documents/subscriptions/$(request.resource.data.organizationId)).data == request.resource.data.subscription;
+      allow update, delete: if false;
+    }
     match /organizations/{orgId} {
       allow get: if isAdmin(orgId) || isPlatformOwner();
       allow list: if isPlatformOwner();
