@@ -96,6 +96,59 @@ service cloud.firestore {
       allow list, create, update, delete: if false;
     }
 
+    function publicTenantSlug(slug) {
+      return slug is string && slug.matches('^[a-z0-9][a-z0-9-]{2,59}$') && !(slug in ['admin', 'platform', 'api', 'www', 'conta', 'demo']);
+    }
+    function brandWebsite(url) {
+      return url is string && (url == '' || (url.matches('^https://[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)+(/[^\\s#]*)?$')
+        && !url.matches('^https://[0-9.]+(/.*)?$') && !url.matches('^https://.*[.](local|internal|test)(/.*)?$')));
+    }
+    function brandImage(logo) {
+      return logo is string && (logo == ''
+        || (logo.size() <= 87384 && logo.matches('^(data:image/png;base64,iVBORw0KGgo|data:image/jpeg;base64,/9j/)[a-zA-Z0-9+/]*={0,2}$'))
+        || (logo.size() <= 1000 && brandWebsite(logo) && logo.matches('.*[.]([pP][nN][gG]|[jJ][pP][eE]?[gG]|[wW][eE][bB][pP])([?][^#]*)?$')));
+    }
+    match /tenantSlugs/{slug} {
+      allow get: if true;
+      allow list, update, delete: if false;
+      allow create: if publicTenantSlug(slug) && request.resource.data.keys().hasOnly(['slug', 'organizationId'])
+        && request.resource.data.slug == slug && isTenantOwner(request.resource.data.organizationId)
+        && getAfter(/databases/$(database)/documents/publicTenantSettings/$(request.resource.data.organizationId)).data.slug == slug;
+    }
+    match /publicTenantSettings/{orgId} {
+      function valid(data) {
+        return data.keys().hasOnly(['organizationId', 'slug', 'publicName', 'description', 'primaryColor', 'logo', 'website', 'contactEmail', 'whatsapp', 'operationalMessage', 'updatedAt', 'lastBrandOperationId'])
+          && data.organizationId == orgId && publicTenantSlug(data.slug)
+          && data.publicName is string && data.publicName.size() >= 2 && data.publicName.size() <= 80
+          && data.description is string && data.description.size() <= 240
+          && data.primaryColor in ['#6d4aff', '#1d4ed8', '#0f766e', '#166534', '#9f1239', '#7e22ce', '#92400e', '#334155']
+          && brandImage(data.logo) && data.website.size() <= 500 && brandWebsite(data.website)
+          && data.contactEmail is string && data.contactEmail.size() <= 120
+          && (data.contactEmail == '' || data.contactEmail.matches('^[^\\s@]+@[^\\s@]+[.][^\\s@]+$'))
+          && data.whatsapp is string && (data.whatsapp == '' || data.whatsapp.matches('^[0-9]{8,15}$'))
+          && data.operationalMessage is string && data.operationalMessage.size() <= 800
+          && data.updatedAt == request.time && data.lastBrandOperationId.matches('^[a-f0-9]{32}$')
+          && !exists(/databases/$(database)/documents/tenantBrandOperations/$(data.lastBrandOperationId))
+          && getAfter(/databases/$(database)/documents/tenantBrandOperations/$(data.lastBrandOperationId)).data.settings == data
+          && getAfter(/databases/$(database)/documents/tenantSlugs/$(data.slug)).data.organizationId == orgId;
+      }
+      allow get: if true;
+      allow list, delete: if false;
+      allow create: if isTenantOwner(orgId) && valid(request.resource.data);
+      allow update: if isTenantOwner(orgId) && request.resource.data.slug == resource.data.slug && valid(request.resource.data);
+    }
+    match /tenantBrandOperations/{operationId} {
+      allow get: if (resource == null && signedIn()) || (resource != null && isAdmin(resource.data.organizationId));
+      allow list: if isAdmin(resource.data.organizationId);
+      allow create: if isTenantOwner(request.resource.data.organizationId)
+        && request.resource.data.keys().hasOnly(['organizationId', 'actorUid', 'at', 'action', 'slug', 'settings'])
+        && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time && request.resource.data.action == 'branding_saved'
+        && request.resource.data.settings.lastBrandOperationId == operationId && request.resource.data.slug == request.resource.data.settings.slug
+        && getAfter(/databases/$(database)/documents/publicTenantSettings/$(request.resource.data.organizationId)).data == request.resource.data.settings;
+      allow update, delete: if false;
+    }
+    // Historical aliases are provisioned only by an explicitly approved administrative migration.
+    match /legacyTripAliases/{slug} { allow get: if true; allow list, create, update, delete: if false; }
     match /organizations/{orgId} {
       allow get: if isAdmin(orgId) || isPlatformOwner();
       allow list: if isPlatformOwner();

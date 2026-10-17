@@ -15,11 +15,11 @@ export function safeBrandLogo(value: string): boolean {
   return value.length <= 1000 && safeBrandWebsite(value) && /\.(?:png|jpe?g|webp)$/i.test(new URL(value).pathname);
 }
 export function validateTenantBranding(value: TenantBranding): TenantBranding {
-  const data = { ...value, publicName: value.publicName.trim(), description: value.description.trim(), contactEmail: value.contactEmail.trim(), operationalMessage: value.operationalMessage.trim() };
+  const data: TenantBranding = { organizationId: value.organizationId, slug: value.slug, publicName: value.publicName.trim(), description: value.description.trim(), primaryColor: value.primaryColor, logo: value.logo, website: value.website, contactEmail: value.contactEmail.trim(), whatsapp: value.whatsapp, operationalMessage: value.operationalMessage.trim() };
   if (!data.organizationId || !validTenantSlug(data.slug) || data.publicName.length < 2 || data.publicName.length > 80 || data.description.length > 240 || data.operationalMessage.length > 800
     || !BRAND_COLORS.some((color) => color === data.primaryColor) || !safeBrandLogo(data.logo) || data.website.length > 500 || !safeBrandWebsite(data.website)
     || (data.contactEmail && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contactEmail) || data.contactEmail.length > 120)) || (data.whatsapp && !/^\d{8,15}$/.test(data.whatsapp))) throw new Error("Confira nome, endereço público, cor, imagem e contatos da organização.");
-  return data;
+  return { ...data, website: data.website ? new URL(data.website).href : "", logo: data.logo && !data.logo.startsWith("data:") ? new URL(data.logo).href : data.logo };
 }
 export const tenantHomePath = (slug: string) => `/o/${encodeURIComponent(slug)}`;
 export const tenantCaravanPath = (tripSlug: string, tenantSlug?: string) => `${tenantSlug ? tenantHomePath(tenantSlug) : ""}/caravana/${encodeURIComponent(tripSlug)}`;

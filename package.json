@@ -38,7 +38,9 @@
     "test:rules": "vitest run",
     "test:finance": "node scripts/run-local-tests.mjs finance",
     "test:finance:e2e": "node scripts/run-local-tests.mjs finance-e2e",
-    "finance:diagnose": "node scripts/diagnose-finance.mjs"
+    "finance:diagnose": "node scripts/diagnose-finance.mjs",
+    "test:branding": "node scripts/run-local-tests.mjs branding",
+    "test:branding:e2e": "node scripts/run-local-tests.mjs branding-e2e"
   },
   "dependencies": {
     "firebase": "^11.10.0",

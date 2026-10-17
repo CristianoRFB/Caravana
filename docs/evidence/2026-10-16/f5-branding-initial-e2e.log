@@ -1,0 +1,157 @@
+
+> caravana-77@0.1.0 test:branding:e2e
+> node scripts/run-local-tests.mjs branding-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/branding.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:4160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:17444) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [desktop-1440] › e2e\branding.spec.ts:24:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias (5.5s)
+!  firestore: Fatal error occurred: 
+   Firestore Emulator has exited with code: 3221225786, 
+   stopping all running emulators
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+  x  2 [desktop-1440] › e2e\branding.spec.ts:35:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration (45.4s)
+(node:20464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [desktop-1440] › e2e\branding.spec.ts:41:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance (198ms)
+(node:19852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [mobile-320] › e2e\branding.spec.ts:24:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias (177ms)
+(node:17040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  5 [mobile-320] › e2e\branding.spec.ts:35:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration (189ms)
+(node:20316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  6 [mobile-320] › e2e\branding.spec.ts:41:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance (187ms)
+
+
+  1) [desktop-1440] › e2e\branding.spec.ts:35:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /Reservar/ })
+
+
+      35 | test("a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration", async ({ page }) => {
+      36 |   await page.goto("/o/atlas/caravana/sintetica-ride-a/inscricao"); await page.getByLabel(/Nome completo/).fill("Pessoa Marca Sintética"); await page.getByLabel(/WhatsApp/).fill("11900000002"); await page.getByLabel("Cidade", { exact: false }).fill("Cidade fictícia"); await page.getByLabel(/Ponto de embarque/).selectOption("point-a");
+    > 37 |   await page.getByRole("button", { name: /Reservar/ }).click(); await expect(page).toHaveURL(/\/o\/atlas\/minha-inscricao\/[a-f0-9]{64}$/);
+         |                                                        ^
+      38 |   const url = page.url(); await page.reload(); await expect(page.locator(".topbar .brand")).toContainText("Atlas Viagens");
+      39 |   await page.goto(url.replace("/o/atlas/", "/o/horizonte/")); await expect(page.getByRole("heading", { name: /não encontrada|não disponível|inválido/i })).toBeVisible(); await expect(page.locator(".portal-heading")).toHaveCount(0);
+      40 | });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\branding.spec.ts:37:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop-1440] › e2e\branding.spec.ts:41:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance 
+
+    TypeError: fetch failed
+    [cause]: Error: connect ECONNREFUSED 127.0.0.1:14400
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile-320] › e2e\branding.spec.ts:24:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias 
+
+    TypeError: fetch failed
+    [cause]: Error: connect ECONNREFUSED 127.0.0.1:14400
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\branding-tenant-namespaces-46293-e-explicit-historical-alias-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\branding-tenant-namespaces-46293-e-explicit-historical-alias-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\branding-tenant-namespaces-46293-e-explicit-historical-alias-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\branding-tenant-namespaces-46293-e-explicit-historical-alias-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-320] › e2e\branding.spec.ts:35:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration 
+
+    TypeError: fetch failed
+    [cause]: Error: connect ECONNREFUSED 127.0.0.1:14400
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\branding-a-scoped-reservat-2dce8-ay-that-bearer-registration-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [mobile-320] › e2e\branding.spec.ts:41:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance 
+
+    TypeError: fetch failed
+    [cause]: Error: connect ECONNREFUSED 127.0.0.1:14400
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\branding-owner-updates-pub-67a2f-ts-own-branding-and-finance-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [desktop-1440] › e2e\branding.spec.ts:35:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration 
+    [desktop-1440] › e2e\branding.spec.ts:41:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance 
+    [mobile-320] › e2e\branding.spec.ts:24:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias 
+    [mobile-320] › e2e\branding.spec.ts:35:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration 
+    [mobile-320] › e2e\branding.spec.ts:41:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance 
+  1 passed (1.2m)

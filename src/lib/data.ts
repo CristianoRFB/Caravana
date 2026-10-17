@@ -36,24 +36,34 @@ import { createReservationAttempt, reservationRequestHash, ReservationAttemptCon
 
 const legacyReservationIdsCleared = new Set<string>();
 
-export async function findCaravan(slug: string): Promise<Caravan | null> {
+export async function findCaravan(slug: string, organizationId?: string): Promise<Caravan | null> {
   if (!db || !firebaseConfigured)
     throw new Error("A agenda de viagens ainda não está disponível.");
+  if (!organizationId) {
+    const alias = await getDocFromServer(doc(db, "legacyTripAliases", slug));
+    if (alias.exists()) {
+      const target = await getCaravanById(String(alias.data().caravanId || ""));
+      if (!target || target.slug !== slug || target.organizationId !== alias.data().organizationId || target.status !== "published") throw new Error("O endereço histórico desta caravana precisa ser conferido pela organização.");
+      return target;
+    }
+  }
   const snap = await getDocs(
     query(
       collection(db, "caravans"),
       where("slug", "==", slug),
       where("status", "==", "published"),
+      ...(organizationId ? [where("organizationId", "==", organizationId)] : []),
     ),
   );
+  if (snap.size > 1) throw new Error("Há mais de uma caravana com este endereço. Use o link completo da organização.");
   return snap.empty
     ? null
     : ({ ...snap.docs[0].data(), id: snap.docs[0].id } as Caravan);
 }
-export async function listPublishedCaravans(): Promise<Caravan[]> {
+export async function listPublishedCaravans(organizationId?: string): Promise<Caravan[]> {
   if (!db || !firebaseConfigured) return [];
   const snap = await getDocs(
-    query(collection(db, "caravans"), where("status", "==", "published")),
+    query(collection(db, "caravans"), where("status", "==", "published"), ...(organizationId ? [where("organizationId", "==", organizationId)] : [])),
   );
   return snap.docs.map((item) => ({ ...item.data(), id: item.id }) as Caravan);
 }

@@ -1,3 +1,7 @@
+import TenantBrandSettings from "./TenantBrandSettings";
+import { TenantBrandScope, TenantRoute } from "./TenantBrandScope";
+import { useTenantBrand } from "./lib/tenant-brand-context";
+import { tenantCaravanPath, tenantHomePath } from "./lib/tenant-branding";
 import {
   createContext,
   useContext,
@@ -138,7 +142,9 @@ const resolveFaqAnswer = (
   caravan: Caravan,
   availableSeats: number,
   question: string,
+  organizationName = caravan.organizerName || "AnimeSFest",
 ) => {
+  const processCopy = paymentProcessCopy.replaceAll("AnimeSFest", organizationName);
   const resolved = answer
     .replaceAll("{{availableSeats}}", String(availableSeats))
     .replaceAll("{{price}}", money(caravan.priceCents))
@@ -147,17 +153,17 @@ const resolveFaqAnswer = (
     .replaceAll("{{returnTime}}", caravan.returnTime)
     .replaceAll(
       "{{paymentMethod}}",
-      caravan.paymentMethod || "fora do site, conforme as orientações da AnimeSFest",
+      caravan.paymentMethod || `fora do site, conforme as orientações de ${organizationName}`,
     )
     .replaceAll(
       "{{paymentDeadline}}",
       caravan.paymentDeadline
         ? dateLabel(caravan.paymentDeadline)
-        : "a AnimeSFest ainda não informou o prazo; aguarde antes de pagar",
+        : `${organizationName} ainda não informou o prazo; aguarde antes de pagar`,
     )
     .replaceAll(
       "{{paymentInstructions}}",
-      caravan.paymentInstructions || paymentProcessCopy,
+      caravan.paymentInstructions || processCopy,
     );
   const normalizedQuestion = question
     .toLowerCase()
@@ -166,7 +172,7 @@ const resolveFaqAnswer = (
   return !caravan.paymentInstructions &&
     /(pagar|pagamento|comprovante|garanto minha vaga)/.test(normalizedQuestion) &&
     !/não cobra nem recebe pagamentos/i.test(resolved)
-    ? `${resolved} ${paymentProcessCopy}`
+    ? `${resolved} ${processCopy}`
     : resolved;
 };
 const slugify = (value: string) =>
@@ -197,24 +203,29 @@ const OrganizationContext = createContext("");
 const TenantRoleContext = createContext<TenantRole>("staff");
 
 function Brand({ light = false }: { light?: boolean }) {
+  const tenant = useTenantBrand();
   return (
-    <Link className={`brand ${light ? "brand-light" : ""}`} to="/">
+    <Link className={`brand ${light ? "brand-light" : ""}`} to={tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : "/"}>
       <span className="brand-mark">
-        <Bus size={17} />
+        {tenant.branding?.logo ? <BrandLogo key={tenant.branding.logo} src={tenant.branding.logo} name={tenant.branding.publicName} /> : <Bus size={17} />}
       </span>
-      <span>
-        caravana<span className="brand-number">77</span>
-      </span>
+      <span>{tenant.branding?.publicName || <>caravana<span className="brand-number">77</span></>}</span>
     </Link>
   );
 }
+function BrandLogo({ src, name }: { src: string; name: string }) {
+  const [failed, setFailed] = useState(false);
+  return failed ? <Bus size={17} /> : <img src={src} alt={name} onError={() => setFailed(true)} referrerPolicy="no-referrer" />;
+}
 function Topbar({ admin = false }: { admin?: boolean }) {
+  const tenant = useTenantBrand();
   const [open, setOpen] = useState(false);
   const path = window.location.pathname;
-  const home = path === "/";
-  const trip = path.startsWith("/caravana/") && !path.includes("/inscricao");
+  const homePath = tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : "/";
+  const home = path === homePath;
+  const trip = path.includes("/caravana/") && !path.includes("/inscricao");
   const target = (anchor: string) =>
-    home ? "#eventos" : trip ? `#${anchor}` : "/#eventos";
+    home ? "#eventos" : trip ? `#${anchor}` : `${homePath}#eventos`;
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -230,7 +241,7 @@ function Topbar({ admin = false }: { admin?: boolean }) {
           {admin ? (
             <>
               <Link to="/admin/login">Área da equipe</Link>
-              <Link to="/">Site público</Link>
+              <Link to={homePath}>Site público</Link>
             </>
           ) : (
             <>
@@ -248,11 +259,13 @@ function Topbar({ admin = false }: { admin?: boolean }) {
   );
 }
 function Footer() {
+  const tenant = useTenantBrand();
   return (
     <footer className="footer">
       <Brand light />
       <span>Cultura. Viagens. Pessoas. Histórias.</span>
-      <span>© 2026 Caravana 77</span>
+      <span>© 2026 {tenant.branding?.publicName || "Caravana 77"}</span>
+      {tenant.branding?.website && <a href={tenant.branding.website} target="_blank" rel="noopener noreferrer">Site oficial</a>}
     </footer>
   );
 }
@@ -275,6 +288,7 @@ function Loading({ text = "Carregando…" }: { text?: string }) {
 
 function PublicLanding() {
   const { slug = "" } = useParams();
+  const tenant = useTenantBrand();
   const [caravan, setCaravan] = useState<Caravan | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -288,7 +302,7 @@ function PublicLanding() {
         setLoading(false);
       }
     }, 10000);
-    findCaravan(slug)
+    findCaravan(slug, tenant.organizationId || undefined)
       .then((v) => {
         if (active) setCaravan(v);
       })
@@ -303,7 +317,7 @@ function PublicLanding() {
       active = false;
       clearTimeout(timer);
     };
-  }, [slug]);
+  }, [slug, tenant.organizationId]);
   if (loading) return <Loading />;
   if (error)
     return (
@@ -336,7 +350,7 @@ function PublicLanding() {
     );
   const free = Math.max(0, caravan.capacity - caravan.reservedSeats);
   return (
-    <>
+    <TenantBrandScope organizationId={caravan.organizationId}>
       <Topbar />
       <main>
         <section className="hero">
@@ -345,7 +359,7 @@ function PublicLanding() {
           <div className="hero-inner">
             <div className="hero-copy">
               <div className="eyebrow">
-                <Sparkles size={15} /> {caravan.organizerName || "CARAVANA 77"}
+                <Sparkles size={15} /> {tenant.branding?.publicName || caravan.organizerName || "CARAVANA 77"}
               </div>
               <h1>
                 {caravan.name.split(" ").slice(0, 2).join(" ")}
@@ -370,7 +384,7 @@ function PublicLanding() {
                 </span>
               </div>
               <Link
-                to={`/caravana/${caravan.slug}/inscricao`}
+                to={`${tenantCaravanPath(caravan.slug, tenant.tenantSlug)}/inscricao`}
                 className="button button-primary button-large"
               >
                 Garantir minha vaga <ArrowRight size={18} />
@@ -424,7 +438,7 @@ function PublicLanding() {
               detail={`de ${caravan.capacity} lugares`}
             />
             <Link
-              to={`/caravana/${caravan.slug}/inscricao`}
+              to={`${tenantCaravanPath(caravan.slug, tenant.tenantSlug)}/inscricao`}
               className="button button-primary fact-cta"
             >
               Garantir minha vaga <ArrowRight size={16} />
@@ -582,7 +596,7 @@ function PublicLanding() {
                   {faq.question}
                   <ChevronDown size={18} />
                 </summary>
-                  <p>{resolveFaqAnswer(faq.answer, caravan, free, faq.question)}</p>
+                  <p>{resolveFaqAnswer(faq.answer, caravan, free, faq.question, tenant.branding?.publicName || caravan.organizerName || "AnimeSFest")}</p>
               </details>
             ))}
           </div>
@@ -598,7 +612,7 @@ function PublicLanding() {
             </h2>
           </div>
           <Link
-            to={`/caravana/${caravan.slug}/inscricao`}
+            to={`${tenantCaravanPath(caravan.slug, tenant.tenantSlug)}/inscricao`}
             className="button button-light"
           >
             Quero minha vaga <ArrowRight size={17} />
@@ -606,7 +620,7 @@ function PublicLanding() {
         </section>
       </main>
       <Footer />
-    </>
+    </TenantBrandScope>
   );
 }
 function Fact({
@@ -633,6 +647,8 @@ function Fact({
 }
 
 function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
+  const tenant = useTenantBrand();
+  const name = tenant.branding?.publicName || "AnimeSFest";
   return (
     <aside
       className={`payment-process-notice${compact ? " payment-process-notice-compact" : ""}`}
@@ -646,12 +662,15 @@ function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
         <strong>Pagamento feito fora do site</strong>
         <p>
           {compact
-            ? "O site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial. Pague somente depois de receber essas orientações; depois, envie seu comprovante aqui. A equipe confere manualmente e confirma a inscrição."
-            : paymentProcessCopy}
+            ? `O site não cobra nem recebe pagamentos. ${name} informará a forma, o destinatário e o prazo por um canal oficial. Pague somente depois de receber essas orientações; depois, envie seu comprovante aqui. A equipe confere manualmente e confirma a inscrição.`
+            : paymentProcessCopy.replaceAll("AnimeSFest", name)}
         </p>
+        {tenant.branding?.operationalMessage && <p>{tenant.branding.operationalMessage}</p>}
+        {tenant.branding?.whatsapp && <p><a href={`https://wa.me/${tenant.branding.whatsapp}`} target="_blank" rel="noopener noreferrer">Pedir orientações à organização</a></p>}
+        {tenant.branding?.contactEmail && <p><a href={`mailto:${tenant.branding.contactEmail}`}>Contato oficial por e-mail</a></p>}
         {compact && (
           <small>
-            Comprovante aceito: PDF, JPG ou PNG até {PROOF_POLICY.displayLimit}. Ainda sem orientação? Fale com a AnimeSFest antes de pagar.
+            Comprovante aceito: PDF, JPG ou PNG até {PROOF_POLICY.displayLimit}. Ainda sem orientação? Fale com {name} antes de pagar.
           </small>
         )}
       </div>
@@ -661,6 +680,7 @@ function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
 
 function RegistrationPage() {
   const { slug = "" } = useParams();
+  const tenant = useTenantBrand();
   const nav = useNavigate();
   const [caravan, setCaravan] = useState<Caravan | null>(null);
   const [loading, setLoading] = useState(true);
@@ -694,7 +714,7 @@ function RegistrationPage() {
         setLoading(false);
       }
     }, 10000);
-    findCaravan(slug)
+    findCaravan(slug, tenant.organizationId || undefined)
       .then((value) => {
         if (active) {
           setCaravan(value);
@@ -713,7 +733,7 @@ function RegistrationPage() {
       active = false;
       clearTimeout(timer);
     };
-  }, [slug]);
+  }, [slug, tenant.organizationId]);
   const age = ageOnDate(form.birthDate, caravan?.date || "");
   const isMinor = Boolean(
     caravan?.requiresMinorAuthorization && age !== null && age < 18,
@@ -755,7 +775,7 @@ function RegistrationPage() {
       setRetryAvailable(true);
       const id = await reserveSeat(caravan, form, attempt);
       completeReservationAttempt(caravan.id, attempt, storage);
-      nav(`/minha-inscricao/${id}`);
+      nav(`${tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : ""}/minha-inscricao/${id}`);
     } catch (err) {
       setSubmissionError(errorMessage(err));
       if (err instanceof ReservationAttemptConflict) setResumeId(err.registrationId);
@@ -793,10 +813,10 @@ function RegistrationPage() {
       </>
     );
   return (
-    <>
+    <TenantBrandScope organizationId={caravan.organizationId}>
       <Topbar />
       <main className="form-page">
-        <Link className="back-link" to={`/caravana/${slug}`}>
+        <Link className="back-link" to={tenantCaravanPath(slug, tenant.tenantSlug)}>
           <ArrowLeft size={16} /> Voltar para a caravana
         </Link>
         <div className="form-layout">
@@ -953,7 +973,7 @@ function RegistrationPage() {
                   />
                 </Field>
               </div>
-              {submissionError && <div className="error-message" role="alert">{submissionError}{resumeId && <p><Link to={`/minha-inscricao/${resumeId}`}>Consultar inscrição existente</Link></p>}</div>}
+              {submissionError && <div className="error-message" role="alert">{submissionError}{resumeId && <p><Link to={`${tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : ""}/minha-inscricao/${resumeId}`}>Consultar inscrição existente</Link></p>}</div>}
               <Notice>
                 Seus dados são usados apenas para organizar esta viagem.
               </Notice>
@@ -974,7 +994,7 @@ function RegistrationPage() {
           </section>
           <aside className="summary-card">
             <div className="summary-art">
-              <span>{caravan.organizerName || "CARAVANA 77"}</span>
+              <span>{tenant.branding?.publicName || caravan.organizerName || "CARAVANA 77"}</span>
               <Bus size={54} />
             </div>
             <span className="summary-kicker">SUA VIAGEM</span>
@@ -1006,7 +1026,7 @@ function RegistrationPage() {
         </div>
       </main>
       <Footer />
-    </>
+    </TenantBrandScope>
   );
 }
 function Field({
@@ -1033,6 +1053,7 @@ function Field({
 
 function MyRegistration() {
   const { id = "" } = useParams();
+  const tenant = useTenantBrand();
   const [reg, setReg] = useState<Registration | null>(null);
   const [caravan, setCaravan] = useState<Caravan | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1056,6 +1077,7 @@ function MyRegistration() {
           const currentRevision = ++revision;
           const trip = r ? await getCaravanById(r.caravanId).catch(() => null) : null;
           if (!active || currentRevision !== revision) return;
+          if (r && tenant.organizationId && r.organizationId !== tenant.organizationId) { setReg(null); setCaravan(null); setLoading(false); return; }
           setReg(r);
           setCaravan(trip);
           setLoading(false);
@@ -1069,7 +1091,7 @@ function MyRegistration() {
         },
       );
     return () => { active = false; revision++; unsubscribe(); };
-  }, [id]);
+  }, [id, tenant.organizationId]);
   async function sendFile(file?: File) {
     if (!file || !reg) return;
     setBusy(true);
@@ -1136,10 +1158,10 @@ function MyRegistration() {
     cancelled: "Cancelada",
   };
   return (
-    <>
+    <TenantBrandScope organizationId={reg.organizationId}>
       <Topbar />
       <main className="portal-page">
-        <Link className="back-link" to={`/caravana/${caravan?.slug || ""}`}>
+        <Link className="back-link" to={tenantCaravanPath(caravan?.slug || "", tenant.tenantSlug)}>
           <ArrowLeft size={16} /> Página da caravana
         </Link>
         <div className="portal-heading">
@@ -1339,7 +1361,7 @@ function MyRegistration() {
         )}
       </main>
       <Footer />
-    </>
+    </TenantBrandScope>
   );
 }
 
@@ -1575,6 +1597,7 @@ function AdminShell({
   return (
     <OrganizationContext.Provider value={orgId}>
       <TenantRoleContext.Provider value={access.find((item) => item.organizationId === orgId)?.role || "staff"}>
+      <TenantBrandScope key={orgId} organizationId={orgId}>
       <div className="admin-app">
         <header className="admin-top">
           <button
@@ -1625,6 +1648,7 @@ function AdminShell({
             <span>✓</span> Check-in
           </Link>
           <Link to="/admin/suporte"><span>?</span> Suporte</Link>
+          <Link to="/admin/identidade"><span>◈</span> Identidade pública</Link>
           <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
@@ -1634,6 +1658,7 @@ function AdminShell({
           {children}
         </main>
       </div>
+      </TenantBrandScope>
       </TenantRoleContext.Provider>
     </OrganizationContext.Provider>
   );
@@ -3641,6 +3666,11 @@ function CaravanFinance() {
   const role = useContext(TenantRoleContext);
   return <FinancePage organizationId={organizationId} canEdit={role === "tenant_owner"} />;
 }
+function TenantIdentity() {
+  const organizationId = useContext(OrganizationContext);
+  const role = useContext(TenantRoleContext);
+  return <TenantBrandSettings organizationId={organizationId} canManage={role === "tenant_owner"} />;
+}
 function TenantDocuments() {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
@@ -3665,6 +3695,10 @@ export default function App() {
           />
         }
       />
+      <Route path="/o/:tenantSlug" element={<TenantRoute><PublicIndex topbar={<Topbar />} footer={<Footer />} loadingView={<Loading />} /></TenantRoute>} />
+      <Route path="/o/:tenantSlug/caravana/:slug" element={<TenantRoute><PublicLanding /></TenantRoute>} />
+      <Route path="/o/:tenantSlug/caravana/:slug/inscricao" element={<TenantRoute><RegistrationPage /></TenantRoute>} />
+      <Route path="/o/:tenantSlug/minha-inscricao/:id" element={<TenantRoute><MyRegistration /></TenantRoute>} />
       <Route path="/caravana/:slug" element={<PublicLanding />} />
       <Route path="/caravana/:slug/inscricao" element={<RegistrationPage />} />
       <Route path="/minha-inscricao/:id" element={<MyRegistration />} />
@@ -3672,6 +3706,7 @@ export default function App() {
       <Route path="/platform/login" element={<AdminLogin platform />} />
       <Route path="/platform" element={<PlatformPage header={<Topbar admin />} />} />
       <Route path="/admin/suporte" element={<AdminGuard><TenantSupport /></AdminGuard>} />
+      <Route path="/admin/identidade" element={<AdminGuard><TenantIdentity /></AdminGuard>} />
       <Route path="/admin/documentos" element={<AdminGuard><TenantDocuments /></AdminGuard>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />

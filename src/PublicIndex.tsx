@@ -1,3 +1,5 @@
+import { useTenantBrand } from "./lib/tenant-brand-context";
+import { tenantCaravanPath } from "./lib/tenant-branding";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
@@ -25,6 +27,7 @@ export default function PublicIndex({
   footer: ReactNode;
   loadingView: ReactNode;
 }) {
+  const tenant = useTenantBrand();
   const [items, setItems] = useState<Caravan[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -38,7 +41,7 @@ export default function PublicIndex({
         setLoading(false);
       }
     }, 10000);
-    listPublishedCaravans()
+    listPublishedCaravans(tenant.organizationId || undefined)
       .then((v) => {
         if (active) setItems(v);
       })
@@ -58,7 +61,7 @@ export default function PublicIndex({
       active = false;
       clearTimeout(timer);
     };
-  }, []);
+  }, [tenant.organizationId]);
   return (
     <>
       {topbar}
@@ -74,6 +77,7 @@ export default function PublicIndex({
                 <br />
                 <span>grandes histórias.</span>
               </h1>
+              {tenant.branding?.description && <p>{tenant.branding.description}</p>}
               <p>
                 Caravanas organizadas para você chegar junto, viver o evento e
                 voltar com lembranças novas.
@@ -145,12 +149,12 @@ export default function PublicIndex({
             <div className="public-trip-grid">
               {items.map((c) => (
                 <Link
-                  to={`/caravana/${c.slug}`}
+                  to={tenantCaravanPath(c.slug, tenant.tenantSlug)}
                   className="public-trip-card"
                   key={c.id}
                 >
                   <div className="public-trip-art">
-                    <span>{c.organizerName || "CARAVANA 77"}</span>
+                    <span>{tenant.branding?.publicName || c.organizerName || "CARAVANA 77"}</span>
                     <Bus />
                   </div>
                   <div className="public-trip-copy">

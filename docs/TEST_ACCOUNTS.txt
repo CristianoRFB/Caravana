@@ -68,3 +68,5 @@ Não execute testes simultaneamente com npm run demo, pois usam as mesmas portas
 npm run test:documents / npm run test:documents:e2e — consentimento/revisão/retenção e menoridade; gate F3 local concluído.
 npm run test:finance / npm run test:finance:e2e — ledger auditado, anulações/correções, tarifa, retry e regressão financeira.
 npm run finance:diagnose -- tests/fixtures/finance-diagnostic.synthetic.json — diagnóstico offline somente de JSON sintético, sem Firebase/rede/writes.
+
+npm run test:branding / npm run test:branding:e2e — configuração pública, imagem/cores, mapping/namespace, aliases simulados e A×B.
