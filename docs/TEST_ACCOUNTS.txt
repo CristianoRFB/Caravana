@@ -70,3 +70,5 @@ npm run test:finance / npm run test:finance:e2e — ledger auditado, anulações
 npm run finance:diagnose -- tests/fixtures/finance-diagnostic.synthetic.json — diagnóstico offline somente de JSON sintético, sem Firebase/rede/writes.
 
 npm run test:branding / npm run test:branding:e2e — configuração pública, imagem/cores, mapping/namespace, aliases simulados e A×B.
+
+npm run test:branding:all —12 jornadas de marca nas quatro larguras; test:branding:visual —4 casos específicos de layout/limites do texto.

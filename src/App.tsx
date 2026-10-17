@@ -390,7 +390,7 @@ function PublicLanding() {
                 Garantir minha vaga <ArrowRight size={18} />
               </Link>
               <div className="hero-safe">
-                <ShieldCheck size={15} /> Ingresso + transporte ida e volta + lanche inclusos
+                <ShieldCheck size={15} /> {caravan.benefits.slice(0, 3).join(" · ") || "Confira os benefícios informados pela organização"}
               </div>
             </div>
             <div
@@ -429,7 +429,7 @@ function PublicLanding() {
               icon={<Ticket />}
               label="POR PESSOA"
               value={money(caravan.priceCents)}
-              detail="ingresso, ida e volta e lanche"
+              detail={caravan.benefits.slice(0, 3).join(" · ") || "Confira os benefícios da viagem"}
             />
             <Fact
               icon={<Users />}

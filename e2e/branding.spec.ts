@@ -37,6 +37,8 @@ test("tenant namespaces distinguish identical trip slugs and preserve the explic
   await expect(page.locator(".payment-process-notice")).toContainText("Atlas Viagens"); await expect(page.locator(".payment-process-notice")).not.toContainText("AnimeSFest");
   await expect(page.locator(".brand-mark img")).toHaveCount(0); // blocked external image uses the local fallback
   expect(await page.locator(".tenant-custom-brand").first().evaluate((element) => getComputedStyle(element).getPropertyValue("--tenant-primary").trim())).toBe("#0f766e");
+  expect(await page.locator(".fact").evaluateAll((facts) => facts.every((fact) => { const box = fact.getBoundingClientRect(); const content = fact.querySelector("strong")?.getBoundingClientRect(); return !content || (content.left >= box.left && content.right <= box.right + 1); }))).toBe(true);
+  expect(await page.locator(".fact strong").evaluateAll((values) => values.every((value) => value.scrollWidth <= value.clientWidth + 1))).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("atlas-public-synthetic.png"), fullPage: true });
   await page.goto("/o/horizonte/caravana/sintetica-ride-a"); await expect(page.locator(".topbar .brand")).toContainText("Horizonte Turismo"); await expect(page.locator(".payment-process-notice")).not.toContainText("Atlas Viagens");
   await page.goto("/caravana/sintetica-ride-a"); await expect(page.locator(".topbar .brand")).toContainText("Atlas Viagens");

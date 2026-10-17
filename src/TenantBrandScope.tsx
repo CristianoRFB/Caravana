@@ -2,7 +2,7 @@ import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { TenantBrandContext, useTenantBrand } from "./lib/tenant-brand-context";
 import { resolveTenantSlug, watchTenantBranding } from "./lib/tenant-branding-data";
-import type { TenantBranding } from "./lib/tenant-branding";
+import { brandAccent, type TenantBranding } from "./lib/tenant-branding";
 
 export function TenantBrandScope({ organizationId, tenantSlug = "", children }: { organizationId: string; tenantSlug?: string; children: ReactNode }) {
   const parent = useTenantBrand();
@@ -23,7 +23,7 @@ export function TenantBrandScope({ organizationId, tenantSlug = "", children }: 
   if (state.org !== organizationId || !state.ready) return <div className="loading" role="status">Carregando organização…</div>;
   if (state.error || (tenantSlug && state.branding?.slug !== tenantSlug)) return <div className="empty-box" role="alert">{state.error || "Endereço público não disponível."}</div>;
   return <TenantBrandContext.Provider value={{ organizationId, tenantSlug: tenantSlug || state.branding?.slug || "", branding: state.branding }}>
-    <div className={`tenant-surface${state.branding ? " tenant-custom-brand" : ""}`} style={{ "--tenant-primary": state.branding?.primaryColor } as CSSProperties}>{children}</div>
+    <div className={`tenant-surface${state.branding ? " tenant-custom-brand" : ""}`} style={{ "--tenant-primary": state.branding?.primaryColor, "--tenant-accent": brandAccent(state.branding?.primaryColor || "") } as CSSProperties}>{children}</div>
   </TenantBrandContext.Provider>;
 }
 export function TenantRoute({ children }: { children: ReactNode }) {

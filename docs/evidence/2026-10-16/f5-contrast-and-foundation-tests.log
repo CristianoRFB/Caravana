@@ -1,0 +1,12 @@
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+
+ Test Files  4 passed (4)
+      Tests  11 passed (11)
+   Start at  21:54:23
+   Duration  792ms (transform 47%, import 22%, tests 10%, setup 10%, worker 10%, environment 1%)
+
+    Isolate  4 workers spawned · ~135ms startup each (spawn + environment, per file)
+             at least ~404ms faster with isolate: false — reuses workers across files instead of one per file
+

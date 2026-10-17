@@ -1,4 +1,6 @@
 export const BRAND_COLORS = ["#6d4aff", "#1d4ed8", "#0f766e", "#166534", "#9f1239", "#7e22ce", "#92400e", "#334155"] as const;
+const BRAND_ACCENTS: Readonly<Record<string, string>> = Object.freeze({ "#6d4aff": "#c4b5fd", "#1d4ed8": "#93c5fd", "#0f766e": "#5eead4", "#166534": "#86efac", "#9f1239": "#fda4af", "#7e22ce": "#d8b4fe", "#92400e": "#fcd34d", "#334155": "#cbd5e1" });
+export const brandAccent = (primary: string) => BRAND_ACCENTS[primary] || "#c4b5fd";
 export interface TenantBranding {
   organizationId: string; slug: string; publicName: string; description: string;
   primaryColor: string; logo: string; website: string; contactEmail: string; whatsapp: string; operationalMessage: string;

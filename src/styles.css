@@ -428,6 +428,7 @@ button:disabled {
 }
 .fact-icon {
   color: var(--purple);
+  flex: 0 0 auto;
   display: grid;
   place-items: center;
 }
@@ -442,11 +443,13 @@ button:disabled {
   color: #858ba0;
   margin-bottom: 4px;
 }
+.fact > div { min-width: 0; }
 .fact strong {
   display: block;
   color: #202945;
   font-size: 13px;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .fact small {
   display: block;
@@ -2648,6 +2651,8 @@ td small {
   }
   .fact strong {
     max-width: 125px;
+    white-space: normal;
+    overflow-wrap: anywhere;
     overflow: hidden;
     text-overflow: ellipsis;
   }

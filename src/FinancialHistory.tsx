@@ -13,7 +13,7 @@ export default function FinancialHistory({ organizationId, caravanId }: { organi
       setError(""); setEvents(snapshot.docs.map((item) => { const data = item.data(); return { id: item.id, label: labels[data.action] || "Operação financeira", at: data.at instanceof Timestamp ? data.at.toDate().toLocaleString("pt-BR") : "Horário indisponível", actor: String(data.actorUid), reason: String(data.reason || "") }; }));
     }, () => { setEvents([]); setError("Não foi possível carregar a auditoria financeira autorizada."); });
   }, [organizationId, caravanId]);
-  return <section className="admin-panel platform-section operational-history"><h2>Auditoria financeira</h2><p>Até30 operações confirmadas pelo servidor no filtro atual. Não há integração bancária.</p>
+  return <section className="admin-panel platform-section operational-history"><h2>Auditoria financeira</h2><p>Até 30 operações confirmadas pelo servidor no filtro atual. Não há integração bancária.</p>
     {error && <p role="alert">{error}</p>}{!error && events.length === 0 && <p>Nenhuma operação auditada neste filtro; lançamentos legados continuam no histórico original.</p>}
     <ul>{events.map((event) => <li key={event.id} style={{ overflowWrap: "anywhere" }}><strong>{event.label}</strong> · {event.at} · responsável {event.actor}{event.reason && ` · ${event.reason}`}</li>)}</ul>
   </section>;
