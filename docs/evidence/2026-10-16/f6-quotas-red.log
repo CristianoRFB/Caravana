@@ -1,0 +1,89 @@
+
+> caravana-77@0.1.0 test:quotas
+> node scripts/run-local-tests.mjs quotas
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/quota-operations.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/quota-operations.integration.test.ts (4 tests | 4 failed) 3537ms
+   ❯ quota-linked caravan and internal membership operations (4)
+     × serializes the final published slot, replays creation and never reopens an archived caravan 546ms
+     × requires a plan for new growth but keeps configuration/history and decrements exact published count 151ms
+     × protects final internal slot, allows audited revoke/reactivate and never removes the last owner 85ms
+     × denies direct owner counter/status bypass and rejects B/global writes into the existing tenant 184ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > serializes the final published slot, replays creation and never reopens an archived caravan
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/quota-operations.integration.test.ts:30:69
+     28|     await seed(); const id = quotaOperationId(); const other = quotaOp…
+     29|     const results = await Promise.allSettled([createLimitedCaravan("a"…
+     30|     expect(results.filter((entry) => entry.status === "fulfilled")).to…
+       |                                                                     ^
+     31|     const accepted = results[0].status === "fulfilled" ? id : other;
+     32|     expect((await read("tenantUsage/a")).publishedCaravans).toBe(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > requires a plan for new growth but keeps configuration/history and decrements exact published count
+AssertionError: expected [Function] to throw error including 'plano' but got '7 PERMISSION_DENIED: No matching allo…'
+
+Expected: "plano"
+Received: "7 PERMISSION_DENIED: No matching allow statements"
+
+ ❯ tests/quota-operations.integration.test.ts:40:52
+     38|   it("requires a plan for new growth but keeps configuration/history a…
+     39|     await seed(); await env.withSecurityRulesDisabled(async (context) …
+     40|     await expect(createLimitedCaravan("a", payload)).rejects.toThrow("…
+       |                                                    ^
+     41|     await updateLimitedCaravan("base-a", { name: "Histórico preservado…
+     42|     expect((await read("tenantUsage/a")).publishedCaravans).toBe(0); e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+FirebaseError: 7 PERMISSION_DENIED: No matching allow statements
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+Error: Expected request to fail, but it succeeded.
+ ❯ pr.then._a node_modules/@firebase/rules-unit-testing/src/util.ts:137:9
+ ❯ tests/quota-operations.integration.test.ts:54:19
+     52|   });
+     53|   it("denies direct owner counter/status bypass and rejects B/global w…
+     54|     await seed(); await assertFails(updateDoc(doc(runtime.db!, "carava…
+       |                   ^
+     55|     await assertFails(setDoc(doc(runtime.db!, "caravans/forged"), { ..…
+     56|     runtime.db = env.authenticatedContext("owner-b").firestore(); runt…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  22:15:39
+   Duration  4.02s (tests 91%, import 6%, transform 3%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/quota-operations.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 17744).

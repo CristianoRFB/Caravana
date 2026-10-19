@@ -13,8 +13,8 @@ function counters(data: DocumentData): Counters {
   if (data.version !== "commercial-v1" || Object.values(value).some((count) => !Number.isSafeInteger(count) || count < 0) || value.activeOwners < 1 || value.activeOwners > value.activeMembers) throw new Error("O inventário comercial precisa ser conferido. Nenhum contador foi alterado.");
   return value;
 }
-function validTrip(data: DocumentData): asserts data is DocumentData & Pick<Caravan, "status" | "priceCents" | "capacity" | "reservedSeats"> {
-  if (!["draft", "published", "archived"].includes(data.status) || !Number.isSafeInteger(data.priceCents) || data.priceCents < 0 || !Number.isSafeInteger(data.capacity) || data.capacity < 1 || data.capacity > 1000 || !Number.isSafeInteger(data.reservedSeats) || data.reservedSeats < 0 || data.reservedSeats > data.capacity) throw new Error("Confira situação, preço e capacidade da caravana.");
+function validTrip(data: DocumentData): asserts data is DocumentData & Pick<Caravan, "status" | "capacity" | "reservedSeats"> {
+  if (!["draft", "published", "archived"].includes(data.status) || !Number.isSafeInteger(data.capacity) || data.capacity < 1 || data.capacity > 1000 || !Number.isSafeInteger(data.reservedSeats) || data.reservedSeats < 0 || data.reservedSeats > data.capacity) throw new Error("Confira situação e capacidade da caravana.");
 }
 async function changeCaravan(organizationId: string, caravanId: string, payload: Partial<Caravan>, creating: boolean, operationId: string) {
   return trackWrite(async () => {
@@ -39,6 +39,7 @@ async function changeCaravan(organizationId: string, caravanId: string, payload:
         const policy = policySnapshot.exists() ? policySnapshot.data() as PublicEntitlements : null;
         const data = { ...(original || {}), ...payload, organizationId: orgId, reservedSeats: original?.reservedSeats ?? 0 };
         validTrip(data);
+        if ((creating || "priceCents" in payload) && (!Number.isSafeInteger(data.priceCents) || (data.priceCents ?? -1) < 0)) throw new Error("Informe um preço válido em centavos.");
         const beforePublished = original?.status === "published"; const afterPublished = data.status === "published";
         const growth = creating || (!beforePublished && afterPublished) || (original && data.capacity > original.capacity);
         if (growth && (!quotaGrowthAllowed(policy) || data.capacity > policy!.limits.passengersPerCaravan)) throw new Error("O plano atual não permite esta criação, capacidade ou reativação. Confira os limites da organização.");
@@ -67,6 +68,7 @@ export async function saveInternalMember(organizationId: string, uid: string, ro
         const [current, usage, policySnapshot] = await Promise.all([tx.get(target), tx.get(usageRef), tx.get(doc(database, "tenantEntitlements", organizationId))]);
         if (!usage.exists()) throw new Error("A equipe precisa de inventário comercial validado antes de ser alterada.");
         const original = current.exists() ? current.data() : null;
+        if (!original && status === "revoked") throw new Error("Não há acesso existente para revogar.");
         if (original && (original.uid !== uid || original.organizationId !== organizationId || !["tenant_owner", "staff"].includes(original.role) || !["active", "revoked"].includes(original.status))) throw new Error("Membership existente precisa de revisão; nenhum dado foi substituído.");
         if (original?.role === role && original.status === status) return;
         const before = counters(usage.data()); const after = { ...before };
