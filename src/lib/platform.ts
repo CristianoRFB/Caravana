@@ -2,6 +2,7 @@ import { collection, doc, limit, onSnapshot, orderBy, query, serverTimestamp, ty
 import { auth, db } from "./firebase";
 import { runTransaction } from "./tracked-firestore";
 import { membershipPath } from "./memberships";
+import { NAMESPACE_INVENTORY_VERSION } from "./namespace-protection";
 
 export interface PlatformTenant { id: string; name: string; status: "active" | "suspended" | "unknown"; }
 export interface PlatformEvent { id: string; organizationId: string; actorUid: string; action: string; status: string; }
@@ -47,7 +48,12 @@ export async function onboardTenant(input: OnboardTenant, operationId: string): 
       return;
     }
     if ((await transaction.get(organization)).exists()) throw new Error("Já existe uma organizadora com esse identificador. Nenhum dado foi substituído.");
+    const namespace = doc(database, "tenantNamespaces", slug);
+    const [bootstrap, protectedId, publicSlug] = await Promise.all([transaction.get(doc(database, "namespaceBootstrap", "state")), transaction.get(namespace), transaction.get(doc(database, "tenantSlugs", slug))]);
+    if (!bootstrap.exists() || bootstrap.data().version !== "namespace-v1" || bootstrap.data().coverageVersion !== NAMESPACE_INVENTORY_VERSION || bootstrap.data().inventoryComplete !== true || !/^[a-f0-9]{64}$/.test(bootstrap.data().manifestHash)) throw new Error("Onboarding bloqueado: inventário de namespaces históricos ainda não validado. Nenhum dado foi criado.");
+    if (protectedId.exists() || publicSlug.exists()) throw new Error("Identificador histórico reservado ou endereço público já utilizado. Nenhum dado foi substituído.");
     const time = serverTimestamp();
+    transaction.set(namespace, { namespace: slug, organizationId: slug, state: "active", version: "namespace-v1", createdAt: time, actorUid, lastPlatformOperationId: operationId });
     transaction.set(organization, { name, slug, ownerUid, status: "active", createdAt: time, createdBy: actorUid, updatedAt: time, updatedBy: actorUid, lastPlatformOperationId: operationId });
     transaction.set(doc(database, memberPath), { uid: ownerUid, organizationId: slug, role: "tenant_owner", status: "active", createdAt: time, updatedAt: time });
     transaction.set(doc(database, "organizationAvailability", slug), { organizationId: slug, status: "active", updatedAt: time, lastPlatformOperationId: operationId });

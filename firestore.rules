@@ -60,6 +60,30 @@ service cloud.firestore {
         && event.organizationId == orgId && event.actorUid == request.auth.uid
         && event.action == action && event.at == request.time;
     }
+    function namespaceBootstrapReady() {
+      let marker = get(/databases/$(database)/documents/namespaceBootstrap/state).data;
+      return marker.version == 'namespace-v1' && marker.coverageVersion == 'tenant-references-v1'
+        && marker.inventoryComplete == true && marker.manifestHash.matches('^[a-f0-9]{64}$');
+    }
+    function newTenantNamespace(orgId, op) {
+      return namespaceBootstrapReady() && !exists(/databases/$(database)/documents/organizations/$(orgId))
+        && !exists(/databases/$(database)/documents/tenantNamespaces/$(orgId))
+        && platformOperation(orgId, op, 'tenant_created');
+    }
+    match /namespaceBootstrap/{id} {
+      allow get: if isPlatformOwner();
+      allow list, create, update, delete: if false;
+    }
+    match /tenantNamespaces/{id} {
+      allow get: if isPlatformOwner();
+      allow list, update, delete: if false;
+      allow create: if newTenantNamespace(id, request.resource.data.lastPlatformOperationId)
+        && request.resource.data.keys().hasOnly(['namespace', 'organizationId', 'state', 'version', 'createdAt', 'actorUid', 'lastPlatformOperationId'])
+        && request.resource.data.namespace == id && request.resource.data.organizationId == id
+        && request.resource.data.state == 'active' && request.resource.data.version == 'namespace-v1'
+        && request.resource.data.createdAt == request.time && request.resource.data.actorUid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/organizations/$(id)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId;
+    }
     function supportGrant(orgId, operatorUid) {
       return get(/databases/$(database)/documents/supportGrants/$(orgId)/operators/$(operatorUid)).data;
     }
@@ -112,6 +136,8 @@ service cloud.firestore {
       allow get: if true;
       allow list, update, delete: if false;
       allow create: if publicTenantSlug(slug) && request.resource.data.keys().hasOnly(['slug', 'organizationId'])
+        && (!exists(/databases/$(database)/documents/organizations/$(slug)) || slug == request.resource.data.organizationId)
+        && (!exists(/databases/$(database)/documents/tenantNamespaces/$(slug)) || get(/databases/$(database)/documents/tenantNamespaces/$(slug)).data.organizationId == request.resource.data.organizationId)
         && request.resource.data.slug == slug && isTenantOwner(request.resource.data.organizationId)
         && getAfter(/databases/$(database)/documents/publicTenantSettings/$(request.resource.data.organizationId)).data.slug == slug;
     }
@@ -313,7 +339,9 @@ service cloud.firestore {
         && request.resource.data.status == 'active'
         && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
         && request.resource.data.createdBy == request.auth.uid && request.resource.data.updatedBy == request.auth.uid
-        && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_created');
+        && newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
+        && getAfter(/databases/$(database)/documents/tenantNamespaces/$(orgId)).data.organizationId == orgId
+        && getAfter(/databases/$(database)/documents/tenantNamespaces/$(orgId)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId;
       allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy', 'lastPlatformOperationId'])
         && resource.data.get('status', 'active') in ['active', 'suspended']
         && request.resource.data.status in ['active', 'suspended']

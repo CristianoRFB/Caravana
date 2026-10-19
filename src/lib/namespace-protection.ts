@@ -1,4 +1,5 @@
-export const NAMESPACE_SOURCES = Object.freeze(["organizations", "admins", "memberships", "caravans", "registrations", "payments", "expenses", "proofs", "legacyTripAliases", "tenantSlugs", "subscriptions", "tenantUsage"] as const);
+export const NAMESPACE_INVENTORY_VERSION = "tenant-references-v1";
+export const NAMESPACE_SOURCES = Object.freeze(["organizations", "admins", "memberships", "caravans", "registrations", "payments", "expenses", "proofs", "authorizations", "storageObjects", "reservationReceipts", "legacyTripAliases", "tenantSlugs", "subscriptions", "tenantUsage", "tenantNamespaces", "organizationAvailability", "tenantEntitlements", "publicTenantSettings", "tenantBrandOperations", "commercialOperations", "registrationOperations", "financialOperations", "documentPolicies", "documentEvents", "importRegistries", "importOperations", "supportGrants", "supportSessions", "platformAudit", "tenantTeam", "tenantQuotaOperations"] as const);
 export interface ProtectedNamespace { namespace: string; organizationId: string; state: "reserved" | "active"; version: "namespace-v1" }
 export interface NamespaceInventory {
   complete: boolean; coveredSources: string[];

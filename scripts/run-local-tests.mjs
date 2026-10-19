@@ -27,6 +27,7 @@ const commands = {
   quotas: "vitest run tests/quota-attempt.test.ts tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts",
   "quota-team": "vitest run tests/quota-operations.integration.test.ts --testNamePattern \"protects final internal\" --reporter verbose",
   "quota-downgrade": "vitest run tests/import-operations.integration.test.ts --testNamePattern \"over-limit historical\"",
+  "namespace-guard": "vitest run tests/namespace-protection.test.ts tests/tenant-branding.integration.test.ts --testNamePattern \"historical namespace protection|historical organization or orphan\"",
   "quota-passenger-e2e": "playwright test e2e/reservation.spec.ts e2e/import.spec.ts --project desktop-1440 --project mobile-320",
   "quota-passenger-focus": "playwright test e2e/reservation.spec.ts --grep \"commercial passenger quota\" --project desktop-1440 --project mobile-320",
   commercial: "vitest run tests/plan-catalog.test.ts tests/commercial-baseline.test.ts tests/commercial-data.integration.test.ts tests/platform.integration.test.ts tests/membership-rules.test.ts",

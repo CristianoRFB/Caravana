@@ -3,6 +3,7 @@ import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
 import type { Caravan, Registration } from "../src/lib/types";
 import { seedSyntheticEntitlements } from "../tests/fixtures/commercial-policy";
+import { seedSyntheticNamespaceBootstrap } from "../tests/fixtures/namespace-bootstrap";
 import type { PlanId } from "../src/lib/plan-catalog";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
@@ -129,6 +130,7 @@ export async function seedSyntheticEnvironment() {
     await setDoc(doc(db, "organizations/org-a"), { name: "Organização Sintética A" });
     await setDoc(doc(db, "organizations/org-b"), { name: "Organização Sintética B" });
     await seedSyntheticEntitlements(db, "org-a", "premium"); await seedSyntheticEntitlements(db, "org-b", "premium");
+    await seedSyntheticNamespaceBootstrap(db, ["org-a", "org-b"]);
     for (const organizationId of ["org-a", "org-b"]) await setDoc(doc(db, "tenantUsage", organizationId), { organizationId, version: "commercial-v1", publishedCaravans: trips.filter((trip) => trip.organizationId === organizationId).length, activeMembers: 1, activeOwners: 1 });
     for (const [index, caravan] of trips.entries()) {
       await setDoc(doc(db, `caravans/${caravan.id}`), caravan);

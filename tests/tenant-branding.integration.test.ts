@@ -22,6 +22,15 @@ async function seed() {
   }); runtime.db = env.authenticatedContext("owner-a").firestore();
 }
 describe("public tenant branding and authoritative route mapping", () => {
+  it("cannot claim another historical organization or orphan namespace as a new public slug", async () => {
+    await seed(); await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), "organizations/historical-root"), { name: "Raiz histórica fictícia B" });
+      await setDoc(doc(context.firestore(), "tenantNamespaces/historical-orphan"), { namespace: "historical-orphan", organizationId: "b", state: "reserved", version: "namespace-v1" });
+    });
+    await expect(saveTenantBranding({ ...brand("a"), slug: "historical-root" }, brandingOperationId())).rejects.toBeDefined();
+    await expect(saveTenantBranding({ ...brand("a"), slug: "historical-orphan" }, brandingOperationId())).rejects.toBeDefined();
+    expect(await resolveTenantSlug("historical-root")).toBeNull(); expect(await resolveTenantSlug("historical-orphan")).toBeNull();
+  });
   it("validates content against a forged complete SDK audit, not merely the absence of an audit", async () => {
     await seed(); await saveTenantBranding(brand("a"));
     for (const patch of [{ primaryColor: "red;background:url(javascript:x)" }, { logo: "data:image/svg+xml,<svg/>" }, { website: "https://user:pass@example.com/x" }, { contactEmail: "a@example.com\nBcc:other@example.com" }, { passengerIds: ["secret"] }]) {

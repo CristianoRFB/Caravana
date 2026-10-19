@@ -1,5 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
+import { seedSyntheticNamespaceBootstrap } from "./fixtures/namespace-bootstrap";
 import { readFileSync } from "node:fs";
 import { assertFails, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, writeBatch, type Firestore } from "firebase/firestore";
@@ -22,6 +23,7 @@ async function seed() {
   await env.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();
     await seedSyntheticEntitlements(db, "legacy-org", "premium");
+    await seedSyntheticNamespaceBootstrap(db, ["legacy-org"]);
     await setDoc(doc(db, "platformOwners/platform-actor"), { status: "active" });
     await setDoc(doc(db, "organizations/legacy-org"), { name: "Cliente fictício legado", untouched: "original metadata" });
     await setDoc(doc(db, "admins/legacy-owner"), { organizationId: "legacy-org", role: "admin" });
@@ -33,6 +35,28 @@ async function seed() {
   runtime.db = env.authenticatedContext("platform-actor").firestore();
 }
 describe("platform operations enforce server-side authority and immutable atomic audit", () => {
+  it("blocks onboarding without a trusted complete inventory and forbids client bootstrap publication", async () => {
+    await seed(); await assertFails(setDoc(doc(runtime.db!, "namespaceBootstrap/state"), { version: "namespace-v1", inventoryComplete: true, manifestHash: "a".repeat(64) }));
+    await env.withSecurityRulesDisabled(async (context) => deleteDoc(doc(context.firestore(), "namespaceBootstrap/state")));
+    await expect(onboardTenant(input, createId)).rejects.toThrow("inventário de namespaces");
+    expect((await getDoc(doc(runtime.db!, `organizations/${input.slug}`))).exists()).toBe(false);
+  });
+  it("reserves orphan historical namespaces even when their root organization is absent", async () => {
+    await seed(); await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), "tenantNamespaces/orphan-history"), { namespace: "orphan-history", organizationId: "orphan-history", version: "namespace-v1", state: "reserved" });
+      await setDoc(doc(context.firestore(), "registrations/historical-orphan"), { organizationId: "orphan-history", passengerName: "Histórico fictício preservado", paymentTotalCents: 2500 });
+    });
+    await expect(onboardTenant({ ...input, slug: "orphan-history" }, createId)).rejects.toThrow("histórico reservado");
+    const batch = writeBatch(runtime.db!); const time = serverTimestamp(); const slug = "orphan-history";
+    batch.set(doc(runtime.db!, "organizations", slug), { name: input.name, slug, ownerUid: input.ownerUid, status: "active", createdAt: time, createdBy: "platform-actor", updatedAt: time, updatedBy: "platform-actor", lastPlatformOperationId: createId });
+    batch.set(doc(runtime.db!, "tenantNamespaces", slug), { namespace: slug, organizationId: slug, version: "namespace-v1", state: "active", createdAt: time, actorUid: "platform-actor", lastPlatformOperationId: createId });
+    batch.set(doc(runtime.db!, "memberships", input.ownerUid, "organizations", slug), { uid: input.ownerUid, organizationId: slug, role: "tenant_owner", status: "active", createdAt: time, updatedAt: time });
+    batch.set(doc(runtime.db!, "organizationAvailability", slug), { organizationId: slug, status: "active", updatedAt: time, lastPlatformOperationId: createId });
+    batch.set(doc(runtime.db!, "platformAudit", createId), { organizationId: slug, actorUid: "platform-actor", action: "tenant_created", at: time, previousStatus: "absent", status: "active", details: { name: input.name, slug, ownerUid: input.ownerUid } });
+    await assertFails(batch.commit()); await assertFails(getDoc(doc(runtime.db!, "registrations/historical-orphan")));
+    await env.withSecurityRulesDisabled(async (context) => expect((await getDoc(doc(context.firestore(), "registrations/historical-orphan"))).data()?.paymentTotalCents).toBe(2500));
+    expect((await getDoc(doc(runtime.db!, "organizations", slug))).exists()).toBe(false);
+  });
   it("creates organization, availability, owner membership and audit atomically, then safely replays", async () => {
     await seed();
     expect(await onboardTenant(input, createId)).toBe(input.slug);
