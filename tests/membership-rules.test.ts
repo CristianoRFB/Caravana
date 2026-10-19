@@ -88,7 +88,7 @@ describe("membership authority and cross-organization boundaries", () => {
     await assertFails(updateDoc(doc(db, "caravans/trip-a"), { organizationId: "b" }));
     await assertFails(updateDoc(doc(db, "registrations/private-a"), { organizationId: "b" }));
     await assertFails(updateDoc(doc(db, "registrations/private-a"), { caravanId: "trip-b" }));
-    await assertSucceeds(updateDoc(doc(db, "caravans/trip-a"), { capacity: 30 }));
+    await assertSucceeds(updateDoc(doc(db, "caravans/trip-a"), { capacity: 24 }));
   });
   it("staff cannot bypass audited check-in or change fares, received totals, caravan capacity or expense writes", async () => {
     await seed();

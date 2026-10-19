@@ -8,6 +8,7 @@ import { reviewPayment } from "../src/lib/registration-operations";
 import { importIdentityKeys } from "../src/lib/import-identity";
 import { legacyImportDocumentId, type LegacyRegistrationDraft } from "../src/lib/legacy-import";
 import { pendingWrites } from "../src/lib/pending-writes";
+import { updateLimitedCaravan } from "../src/lib/quota-operations";
 import type { Registration } from "../src/lib/types";
 const runtime = vi.hoisted(() => ({ db: null as Firestore | null, auth: { currentUser: { uid: "owner-a" } } }));
 vi.mock("../src/lib/firebase", () => runtime);
@@ -24,6 +25,7 @@ async function seed(capacity = 25) {
     for (const org of ["a", "b"]) {
       await seedSyntheticEntitlements(db, org, "premium");
       await setDoc(doc(db, `organizations/${org}`), { name: `Synthetic ${org}` });
+      await setDoc(doc(db, `tenantUsage/${org}`), { organizationId: org, version: "commercial-v1", publishedCaravans: 1, activeMembers: org === "a" ? 2 : 1, activeOwners: 1 });
       await setDoc(doc(db, `memberships/owner-${org}/organizations/${org}`), { uid: `owner-${org}`, organizationId: org, role: "tenant_owner", status: "active" });
       await setDoc(doc(db, `caravans/trip-${org}`), { organizationId: org, name: "Synthetic same name", status: "published", capacity, reservedSeats: 0, boardingPoints: [{ id: "point", name: "Current point" }] });
     }
@@ -33,6 +35,15 @@ async function seed(capacity = 25) {
 }
 async function count() { return (await getDocs(query(collection(runtime.db!, "registrations"), where("organizationId", "==", "a")))).size; }
 describe("CSV private registry, atomic chunks and controlled rollback", () => {
+  it("blocks new imports during organizational suspension while retaining replay and rollback", async () => {
+    await seed(); await importRows("trip-a", "a", [row(1)], batch(1));
+    await env.withSecurityRulesDisabled(async (context) => updateDoc(doc(context.firestore(), "organizations/a"), { status: "suspended" }));
+    expect((await importRows("trip-a", "a", [row(1)], batch(1))).skipped).toBe(1);
+    await expect(importRows("trip-a", "a", [row(2)], batch(2))).rejects.toThrow("suspensa");
+    await rollbackImportBatch("a", "trip-a", batch(1), "Rollback sintético durante suspensão");
+    expect((await getDoc(doc(runtime.db!, "caravans/trip-a"))).data()?.reservedSeats).toBe(0);
+    expect(await count()).toBe(1);
+  });
   it("applies the commercial passenger ceiling and preserves replay and controlled rollback after downgrade", async () => {
     await seed(100);
     await env.withSecurityRulesDisabled(async (context) => { await seedSyntheticEntitlements(context.firestore(), "a", "essencial"); await updateDoc(doc(context.firestore(), "caravans/trip-a"), { reservedSeats: 59 }); });
@@ -92,7 +103,7 @@ describe("CSV private registry, atomic chunks and controlled rollback", () => {
     expect(await count()).toBe(1);
     const missing = first.findIndex((item) => item.status === "rejected" || item.value.imported === 0);
     expect(missing).toBeGreaterThanOrEqual(0);
-    await updateDoc(doc(runtime.db!, "caravans/trip-a"), { capacity: 2 });
+    await updateLimitedCaravan("trip-a", { capacity: 2 });
     const selected = attempts[missing];
     expect(await importRows("trip-a", "a", selected.rows, selected.batchId, batch(8))).toMatchObject({ imported: 1, rejected: 0 });
     expect(await importRows("trip-a", "a", selected.rows, selected.batchId, batch(8))).toMatchObject({ imported: 0, skipped: 1 });

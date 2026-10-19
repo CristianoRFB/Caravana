@@ -42,6 +42,41 @@ describe("quota-linked caravan and internal membership operations", () => {
     expect((await read("tenantUsage/a")).publishedCaravans).toBe(0); expect((await read("caravans/base-a")).reservedSeats).toBe(1);
     await expect(updateLimitedCaravan("base-a", { status: "published" })).rejects.toThrow("plano");
   });
+  it("blocks growth during operational suspension even with active commercial policy, preserving replay and history", async () => {
+    await seed(); const id = quotaOperationId(); await createLimitedCaravan("a", payload, id);
+    await env.withSecurityRulesDisabled(async (context) => { await updateDoc(doc(context.firestore(), "organizations/a"), { status: "suspended" }); });
+    expect(await createLimitedCaravan("a", payload, id)).toBe(id);
+    await expect(createLimitedCaravan("a", { ...payload, status: "draft" })).rejects.toThrow("suspensa");
+    await expect(saveInternalMember("a", "another", "staff", "active", "Inclusão sintética")).rejects.toThrow("suspensa");
+    await updateLimitedCaravan(id, { name: "Histórico durante suspensão" });
+    await updateLimitedCaravan(id, { status: "archived" });
+    expect((await read(`caravans/${id}`)).name).toBe("Histórico durante suspensão");
+    expect((await read("tenantUsage/a")).publishedCaravans).toBe(1);
+  });
+  it("requires an immutable quota event for capacity growth even within the plan", async () => {
+    await seed(); await assertFails(updateDoc(doc(runtime.db!, "caravans/base-a"), { capacity: 61 }));
+    await updateLimitedCaravan("base-a", { capacity: 59 });
+    await assertFails(updateDoc(doc(runtime.db!, "caravans/base-a"), { capacity: 60 }));
+    await updateLimitedCaravan("base-a", { capacity: 60 });
+    expect((await read("caravans/base-a")).capacity).toBe(60);
+  });
+  it("denies a fully audited raw growth batch when root suspension contradicts active public projections", async () => {
+    await seed(); await updateLimitedCaravan("base-a", { capacity: 59 });
+    const makeBatch = () => {
+      const operation = quotaOperationId(); const batch = writeBatch(runtime.db!); const counts = { publishedCaravans: 1, activeMembers: 1, activeOwners: 1 };
+      batch.update(doc(runtime.db!, "caravans/base-a"), { capacity: 60, updatedAt: serverTimestamp(), lastQuotaOperationId: operation });
+      batch.set(doc(runtime.db!, "tenantQuotaOperations", operation), { organizationId: "a", entityId: "base-a", kind: "caravan", action: "caravan_updated", actorUid: "owner-a", at: serverTimestamp(), requestHash: "a".repeat(64), reason: "Capacidade sintética", before: counts, after: counts, beforeStatus: "published", afterStatus: "published", beforeRole: "", afterRole: "" });
+      return batch;
+    };
+    await makeBatch().commit();
+    await env.withSecurityRulesDisabled(async (context) => {
+      await updateDoc(doc(context.firestore(), "caravans/base-a"), { capacity: 59 });
+      await updateDoc(doc(context.firestore(), "organizations/a"), { status: "suspended" });
+      await setDoc(doc(context.firestore(), "organizationAvailability/a"), { status: "active" });
+    });
+    await assertFails(makeBatch().commit());
+    expect((await read("caravans/base-a")).capacity).toBe(59);
+  });
   it("protects final internal slot, allows audited revoke/reactivate and never removes the last owner", async () => {
     await seed(); await saveInternalMember("a", "staff-one", "staff", "active", "Convite sintético conferido");
     await expect(saveInternalMember("a", "staff-two", "staff", "active", "Outro convite sintético")).rejects.toThrow("plano");

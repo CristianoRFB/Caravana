@@ -1,0 +1,95 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/commercial.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:19532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:17100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:10816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (178ms)
+(node:3216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (180ms)
+
+
+  1) [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+
+    Error: E2E seeding is restricted to the configured local demo emulators.
+
+       at fixtures.ts:16
+
+      14 | function assertSyntheticEndpoints() {
+      15 |   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
+    > 16 |     throw new Error("E2E seeding is restricted to the configured local demo emulators.");
+         |           ^
+      17 |   }
+      18 | }
+      19 |
+        at assertSyntheticEndpoints (C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\fixtures.ts:16:11)
+        at seedSyntheticEnvironment (C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\fixtures.ts:105:3)
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\commercial.spec.ts:7:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+
+    Error: E2E seeding is restricted to the configured local demo emulators.
+
+       at fixtures.ts:16
+
+      14 | function assertSyntheticEndpoints() {
+      15 |   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
+    > 16 |     throw new Error("E2E seeding is restricted to the configured local demo emulators.");
+         |           ^
+      17 |   }
+      18 | }
+      19 |
+        at assertSyntheticEndpoints (C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\fixtures.ts:16:11)
+        at seedSyntheticEnvironment (C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\fixtures.ts:105:3)
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\commercial.spec.ts:7:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+    [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/commercial.spec.ts --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 8832).

@@ -56,3 +56,5 @@ Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançado
 | F6-namespace-runtime | P0 | PASS incremental local / BLOCKED bootstrap real | Marcador confiável obrigatório, claims aditivos acoplados ao cadastro e reserva de órfãos/novos slugs |59+56+4 testes nos conjuntos documentados; NAMESPACE_PROTECTION.md | Onboarding comercial completo, equipe/UI/demo/landing e gate F6 ainda TODO |
 
 2026-10-19 | F6 onboarding assistido | PASS local incremental | 11 documentos atômicos, plano explícito/UID conferido/sem cobrança, replay persistido e proteção histórica.15 unit/SDK/Rules+4 E2E PASS. F6 geral IN_PROGRESS; gates reais BLOCKED. Ver COMMERCIAL_ONBOARDING.md.
+
+| F6-growth-plan-ui | P0 | PASS local incremental / F6 IN_PROGRESS | Suspensão raiz, capacidade auditada, plano privado do owner, downgrade sem apagar histórico |45 testes+2 E2E finais PASS; COMMERCIAL_GROWTH_UI.md | Equipe/convites/demo/landing/gate F6 TODO; produção BLOCKED |

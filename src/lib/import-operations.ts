@@ -39,6 +39,8 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
   }
   const commercial = await getDocFromServer(doc(database, "tenantEntitlements", organizationId));
   const policy = commercial.exists() ? commercial.data() as PublicEntitlements : null;
+  const organization = await getDocFromServer(doc(database, "organizations", organizationId));
+  if (rows.length > preflightSkipped.size && organization.data()?.status === "suspended") throw new Error("A organização está suspensa para novas inscrições. O histórico foi preservado.");
   if (rows.length > preflightSkipped.size && !quotaGrowthAllowed(policy)) throw new Error("O plano atual não permite novas inscrições. O histórico foi preservado.");
   const remaining = Math.min(snapshot.data().capacity, policy?.limits.passengersPerCaravan ?? snapshot.data().reservedSeats) - snapshot.data().reservedSeats;
   if (rows.length > preflightSkipped.size && rows.length - preflightSkipped.size > remaining) throw new Error(`Há somente ${Math.max(0, remaining)} vagas disponíveis. Nenhuma linha deste envio foi importada.`);
@@ -65,7 +67,7 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
               committed = old.rowResults.map((row: ImportRowResult) => ({ ...row, status: row.status === "imported" ? "skipped" : row.status, reason: row.status === "imported" ? "Já importado neste lote." : row.reason }));
               return;
             }
-            const [tripSnapshot, registry, commercialSnapshot, ...existing] = await Promise.all([tx.get(caravanRef), tx.get(registryRef), tx.get(doc(database, "tenantEntitlements", organizationId)), ...refs.map((ref) => tx.get(ref))]);
+            const [tripSnapshot, registry, commercialSnapshot, organizationSnapshot, ...existing] = await Promise.all([tx.get(caravanRef), tx.get(registryRef), tx.get(doc(database, "tenantEntitlements", organizationId)), tx.get(doc(database, "organizations", organizationId)), ...refs.map((ref) => tx.get(ref))]);
             if (!tripSnapshot.exists()) throw new Error("Caravana não encontrada.");
             const trip = tripSnapshot.data() as Caravan;
             if (trip.organizationId !== organizationId) throw new Error("Organização divergente.");
@@ -86,7 +88,7 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
               return { line: row.line, status: "imported", reason: "Importação confirmada." };
             });
             const currentPolicy = commercialSnapshot.exists() ? commercialSnapshot.data() as PublicEntitlements : null;
-            if (Object.keys(documents).length > 0 && !quotaGrowthAllowed(currentPolicy)) throw new Error("O plano mudou durante o envio. Novas inscrições bloqueadas; etapas anteriores foram preservadas.");
+            if (Object.keys(documents).length > 0 && (!quotaGrowthAllowed(currentPolicy) || organizationSnapshot.data()?.status === "suspended")) throw new Error("O plano ou a situação da organização mudou durante o envio. Novas inscrições bloqueadas; etapas anteriores foram preservadas.");
             if (Object.keys(documents).length > Math.min(trip.capacity, currentPolicy?.limits.passengersPerCaravan ?? trip.reservedSeats) - trip.reservedSeats) {
               documents = {}; additions = {}; claims = { ...beforeClaims };
               committed = committed.map((row) => row.status === "imported" ? { ...row, status: "rejected", reason: "As vagas foram ocupadas durante o envio. Nenhuma inscrição desta etapa foi criada." } : row);

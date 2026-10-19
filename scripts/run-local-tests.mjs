@@ -16,6 +16,7 @@ const commands = {
   storage: "vitest run --config vitest.storage.config.ts",
   platform: "vitest run tests/platform.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/data.integration.test.ts",
   onboarding: "vitest run tests/onboarding-payload.test.ts tests/platform.integration.test.ts",
+  "quota-growth": "vitest run tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/import-operations.integration.test.ts tests/platform.integration.test.ts",
   support: "vitest run tests/support.integration.test.ts",
   booking: "vitest run tests/reservation-attempt.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts",
   operations: "vitest run tests/tenant-preference.test.ts tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts",
@@ -25,6 +26,7 @@ const commands = {
   "branding-all": "playwright test e2e/branding.spec.ts",
   "branding-e2e": "playwright test e2e/branding.spec.ts --project desktop-1440 --project mobile-320",
   "commercial-e2e": "playwright test e2e/commercial.spec.ts e2e/platform.spec.ts --project desktop-1440 --project mobile-320",
+  "tenant-plan-e2e": "playwright test e2e/commercial.spec.ts --project desktop-1440 --project mobile-320",
   quotas: "vitest run tests/quota-attempt.test.ts tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts",
   "quota-team": "vitest run tests/quota-operations.integration.test.ts --testNamePattern \"protects final internal\" --reporter verbose",
   "quota-downgrade": "vitest run tests/import-operations.integration.test.ts --testNamePattern \"over-limit historical\"",
@@ -48,7 +50,7 @@ const commands = {
   migration: "node scripts/simulate-membership-migration.mjs --apply-synthetic",
 };
 if (!Object.hasOwn(commands, suite) || process.argv.length > 3) throw new Error("Choose a documented local suite.");
-const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo", "tenant-e2e", "platform-e2e", "support-e2e", "booking-e2e", "operations-e2e", "csv-e2e", "documents-e2e", "finance-e2e", "branding-e2e", "branding-all", "branding-visual", "commercial-e2e", "quota-passenger-e2e", "quota-passenger-focus"].includes(suite);
+const withAuth = commands[suite].startsWith("playwright test") || ["demo-auth", "demo"].includes(suite);
 const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "storage" ? "firestore,auth,storage" : withAuth ? "firestore,auth" : "firestore", commands[suite]];
 let exitCode = 1;
 try {

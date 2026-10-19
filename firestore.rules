@@ -186,7 +186,7 @@ service cloud.firestore {
     }
     function quotaGrowth(orgId) {
       let policy = get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data;
-      return policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
+      return acceptsReservations(orgId) && policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
     }
     function quotaSeats(orgId, seats) {
       return quotaGrowth(orgId) && seats is int && seats >= 0
@@ -706,7 +706,7 @@ service cloud.firestore {
           && request.resource.data.get('creationRequestHash', '') == resource.data.get('creationRequestHash', '')
           && (!changed.hasAny(['priceCents']) || (request.resource.data.priceCents is int && request.resource.data.priceCents >= 0 && request.resource.data.priceCents <= 9007199254740991))
           && ((request.resource.data.capacity <= resource.data.capacity && !(resource.data.status != 'published' && request.resource.data.status == 'published')) || growthConfiguration())
-          && (!changed.hasAny(['status', 'lastQuotaOperationId']) || linkedQuota(resource.data.organizationId, request.resource.data.lastQuotaOperationId, 'caravan', caravanId));
+          && ((!changed.hasAny(['status', 'lastQuotaOperationId']) && request.resource.data.capacity <= resource.data.capacity) || linkedQuota(resource.data.organizationId, request.resource.data.lastQuotaOperationId, 'caravan', caravanId));
       }
       allow get: if resource == null && signedIn();
       allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId)

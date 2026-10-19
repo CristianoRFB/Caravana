@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, setDoc } from "firebase/firestore";
-import { patchPlatformSecurityStatus, platformTestAccount, preparePlatformSecurityIdentity, seedSyntheticEnvironment } from "./fixtures";
+import { patchPlatformSecurityStatus, patchSyntheticMembership, platformTestAccount, preparePlatformSecurityIdentity, seedSyntheticEnvironment, testAccount } from "./fixtures";
 let dispose: (() => Promise<void>) | undefined; let failures: string[];
 test.beforeEach(async ({ page, context }) => {
   failures = []; dispose = await seedSyntheticEnvironment(); await preparePlatformSecurityIdentity();
@@ -20,5 +20,16 @@ test("platform manually assigns temporary Pro90, keeps catalog and downgrades wi
   await page.getByRole("combobox", { name: "Plano comercial", exact: true }).selectOption("essencial"); await page.getByLabel("Mensalidade promocional (R$, opcional)", { exact: true }).fill(""); await page.getByLabel("Motivo da atribuição/alteração").fill("Downgrade sintético com histórico preservado"); await page.getByRole("button", { name: "Salvar plano e limites", exact: true }).click(); await expect(panel).toContainText("2 caravanas publicadas · 60 passageiros/caravana · 2 pessoas na equipe");
   await page.getByRole("button", { name: "Fechar plano", exact: true }).click(); const tenantB = page.locator(".platform-tenant").filter({ hasText: "Organização Sintética B" }); await tenantB.getByRole("button", { name: "Plano e limites", exact: true }).click(); await expect(page.getByText("Plano não atribuído. Nenhum limite Premium é presumido.", { exact: true })).toBeVisible();
   await patchPlatformSecurityStatus("revoked"); await expect(page.getByRole("heading", { name: "Acesso restrito à plataforma", exact: true })).toBeVisible(); await expect(page.getByRole("combobox", { name: "Plano comercial", exact: true })).toHaveCount(0);
+  await page.goto("/admin/login"); await page.getByLabel(/E-mail/).fill(testAccount.email); await page.getByLabel(/Senha/).fill(testAccount.password); await page.getByRole("button", { name: "Entrar no painel" }).click();
+  await expect(page).toHaveURL(/\/admin$/);
+  await page.goto("/admin/plano"); await expect(page.getByRole("heading", { name: "Plano e limites", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Essencial", exact: true })).toBeVisible();
+  await expect(page.getByText(/Mensalidade contratada: R\$.*89,00/)).toBeVisible();
+  await expect(page.getByRole("row", { name: "Caravanas publicadas 2 2", exact: true })).toBeVisible();
+  await expect(page.getByText(/Um limite de crescimento foi atingido/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+  await patchSyntheticMembership("org-a", "staff");
+  await expect(page.getByText("Somente responsáveis podem consultar o contrato comercial e gerenciar limites.", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Mensalidade contratada:/)).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
 });

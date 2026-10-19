@@ -1,0 +1,81 @@
+
+> caravana-77@0.1.0 test:commercial:e2e
+> node scripts/run-local-tests.mjs commercial-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/commercial.spec.ts e2e/platform.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:9900) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:20696) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [desktop-1440] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (7.4s)
+  ok 2 [desktop-1440] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.3s)
+  ok 3 [desktop-1440] › e2e\platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (1.6s)
+(node:9228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (13.2s)
+(node:11608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 5 [mobile-320] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.4s)
+  ok 6 [mobile-320] › e2e\platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (1.6s)
+
+
+  1) [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Plano e limites', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Plano e limites', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Plano e limites', exact: true })
+
+
+      22 |   await patchPlatformSecurityStatus("revoked"); await expect(page.getByRole("heading", { name: "Acesso restrito à plataforma", exact: true })).toBeVisible(); await expect(page.getByRole("combobox", { name: "Plano comercial", exact: true })).toHaveCount(0);
+      23 |   await page.goto("/admin/login"); await page.getByLabel(/E-mail/).fill(testAccount.email); await page.getByLabel(/Senha/).fill(testAccount.password); await page.getByRole("button", { name: "Entrar no painel" }).click();
+    > 24 |   await page.goto("/admin/plano"); await expect(page.getByRole("heading", { name: "Plano e limites", exact: true })).toBeVisible();
+         |                                                                                                                      ^
+      25 |   await expect(page.getByRole("heading", { name: "Essencial", exact: true })).toBeVisible();
+      26 |   await expect(page.getByText(/Mensalidade contratada: R\$.*89,00/)).toBeVisible();
+      27 |   await expect(page.getByRole("row", { name: "Caravanas publicadas 2 2", exact: true })).toBeVisible();
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\commercial.spec.ts:24:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\commercial-platform-manual-08319-ile-A-and-B-remain-separate-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [mobile-320] › e2e\commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate 
+  5 passed (42.6s)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/commercial.spec.ts e2e/platform.spec.ts --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 3848).

@@ -1,4 +1,5 @@
 import TenantBrandSettings from "./TenantBrandSettings";
+import TenantCommercial from "./TenantCommercial";
 import { TenantBrandScope, TenantRoute } from "./TenantBrandScope";
 import { useTenantBrand } from "./lib/tenant-brand-context";
 import { tenantCaravanPath, tenantHomePath } from "./lib/tenant-branding";
@@ -1650,6 +1651,7 @@ function AdminShell({
           <Link to="/admin/suporte"><span>?</span> Suporte</Link>
           <Link to="/admin/identidade"><span>◈</span> Identidade pública</Link>
           <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
+          <Link to="/admin/plano"><span>◇</span> Plano e limites</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
@@ -3676,6 +3678,11 @@ function TenantDocuments() {
   const role = useContext(TenantRoleContext);
   return <DocumentSettings organizationId={organizationId} canManage={role === "tenant_owner"} />;
 }
+function TenantPlan() {
+  const organizationId = useContext(OrganizationContext);
+  const role = useContext(TenantRoleContext);
+  return <TenantCommercial organizationId={organizationId} canManage={role === "tenant_owner"} />;
+}
 function TenantSupport() {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
@@ -3708,6 +3715,7 @@ export default function App() {
       <Route path="/admin/suporte" element={<AdminGuard><TenantSupport /></AdminGuard>} />
       <Route path="/admin/identidade" element={<AdminGuard><TenantIdentity /></AdminGuard>} />
       <Route path="/admin/documentos" element={<AdminGuard><TenantDocuments /></AdminGuard>} />
+      <Route path="/admin/plano" element={<AdminGuard><TenantPlan /></AdminGuard>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
       <Route

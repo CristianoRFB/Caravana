@@ -33,7 +33,7 @@ async function changeCaravan(organizationId: string, caravanId: string, payload:
         const original = current.exists() ? current.data() : null; const orgId = original?.organizationId || organizationId;
         if (!orgId || (organizationId && orgId !== organizationId) || (payload.organizationId && payload.organizationId !== orgId) || "reservedSeats" in payload || "id" in payload) throw new Error("Contexto da caravana inválido.");
         const usageRef = doc(database, "tenantUsage", orgId);
-        const [policySnapshot, usage] = await Promise.all([tx.get(doc(database, "tenantEntitlements", orgId)), tx.get(usageRef)]);
+        const [policySnapshot, usage, organization] = await Promise.all([tx.get(doc(database, "tenantEntitlements", orgId)), tx.get(usageRef), tx.get(doc(database, "organizations", orgId))]);
         if (!usage.exists()) throw new Error("A organização precisa de inventário comercial validado. Nenhum contador foi criado automaticamente.");
         const before = counters(usage.data()); const after = { ...before };
         const policy = policySnapshot.exists() ? policySnapshot.data() as PublicEntitlements : null;
@@ -43,6 +43,7 @@ async function changeCaravan(organizationId: string, caravanId: string, payload:
         const beforePublished = original?.status === "published"; const afterPublished = data.status === "published";
         const growth = creating || (!beforePublished && afterPublished) || (original && data.capacity > original.capacity);
         if (growth && (!quotaGrowthAllowed(policy) || data.capacity > policy!.limits.passengersPerCaravan)) throw new Error("O plano atual não permite esta criação, capacidade ou reativação. Confira os limites da organização.");
+        if (growth && organization.data()?.status === "suspended") throw new Error("A organização está suspensa para novas operações de crescimento. O histórico foi preservado.");
         after.publishedCaravans += Number(afterPublished) - Number(beforePublished);
         if (after.publishedCaravans < 0 || (after.publishedCaravans > before.publishedCaravans && after.publishedCaravans > policy!.limits.activeCaravans)) throw new Error("O limite de caravanas publicadas foi atingido ou o inventário está inconsistente.");
         tx.set(target, { ...data, ...(creating ? { createdAt: serverTimestamp(), creationRequestHash: requestHash } : {}), updatedAt: serverTimestamp(), lastQuotaOperationId: operationId });
@@ -65,7 +66,7 @@ export async function saveInternalMember(organizationId: string, uid: string, ro
     try {
       await runTransaction(database, async (tx) => {
         const prior = await tx.get(audit); if (prior.exists()) { if (!matches(prior.data())) throw new Error("Operação já utilizada com outros dados."); return; }
-        const [current, usage, policySnapshot] = await Promise.all([tx.get(target), tx.get(usageRef), tx.get(doc(database, "tenantEntitlements", organizationId))]);
+        const [current, usage, policySnapshot, organization] = await Promise.all([tx.get(target), tx.get(usageRef), tx.get(doc(database, "tenantEntitlements", organizationId)), tx.get(doc(database, "organizations", organizationId))]);
         if (!usage.exists()) throw new Error("A equipe precisa de inventário comercial validado antes de ser alterada.");
         const original = current.exists() ? current.data() : null;
         if (!original && status === "revoked") throw new Error("Não há acesso existente para revogar.");
@@ -76,6 +77,7 @@ export async function saveInternalMember(organizationId: string, uid: string, ro
         after.activeMembers += Number(willBeActive) - Number(wasActive);
         after.activeOwners += Number(willBeActive && role === "tenant_owner") - Number(wasActive && original?.role === "tenant_owner");
         const policy = policySnapshot.exists() ? policySnapshot.data() as PublicEntitlements : null;
+        if (after.activeMembers > before.activeMembers && organization.data()?.status === "suspended") throw new Error("A organização está suspensa para novos integrantes. O histórico foi preservado.");
         if (after.activeOwners < 1) throw new Error("Mantenha pelo menos um responsável ativo na organização.");
         if (after.activeMembers < after.activeOwners || after.activeMembers < 0 || (after.activeMembers > before.activeMembers && (!quotaGrowthAllowed(policy) || after.activeMembers > policy!.limits.internalUsers))) throw new Error("O plano não permite incluir mais pessoas na equipe ou o inventário está inconsistente.");
         const member = { ...(original || {}), uid, organizationId, role, status, ...(!original ? { createdAt: serverTimestamp() } : {}), updatedAt: serverTimestamp(), lastQuotaOperationId: operationId };

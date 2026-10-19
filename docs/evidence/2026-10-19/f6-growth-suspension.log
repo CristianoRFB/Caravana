@@ -1,0 +1,39 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/import-operations.integration.test.ts tests/platform.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+stderr | tests/import-operations.integration.test.ts > CSV private registry, atomic chunks and controlled rollback > retry intent keeps durable row IDs after capacity races and rejects changed payload replay
+[2026-10-19T20:41:27.083Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x690b8d88 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L723, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L723
+
+ ❯ tests/import-operations.integration.test.ts (14 tests | 1 failed) 5191ms
+   ❯ CSV private registry, atomic chunks and controlled rollback (14)
+     × retry intent keeps durable row IDs after capacity races and rejects changed payload replay 234ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/import-operations.integration.test.ts > CSV private registry, atomic chunks and controlled rollback > retry intent keeps durable row IDs after capacity races and rejects changed payload replay
+FirebaseError: 7 PERMISSION_DENIED: 
+Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L723, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L723
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 42 passed (43)
+   Start at  17:41:16
+   Duration  18.45s (tests 92%, import 5%, transform 2%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/import-operations.integration.test.ts tests/platform.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 3620).
