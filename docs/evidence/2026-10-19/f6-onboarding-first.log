@@ -1,0 +1,50 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/onboarding-payload.test.ts tests/platform.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/platform.integration.test.ts (10 tests | 1 failed) 5934ms
+   ❯ platform operations enforce server-side authority and immutable atomic audit (10)
+     × creates organization, availability, owner membership and audit atomically, then safely replays 467ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > creates organization, availability, owner membership and audit atomically, then safely replays
+AssertionError: expected { …(15) } to match object { planId: 'essencial', …(4) }
+(14 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "monthlyCents": 8900,
+    "planId": "essencial",
+    "revision": 1,
+-   "setupCents": 10000,
+    "status": "active",
+  }
+
+ ❯ tests/platform.integration.test.ts:72:78
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 13 passed (14)
+   Start at  17:36:04
+   Duration  6.81s (tests 91%, transform 5%, import 4%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/onboarding-payload.test.ts tests/platform.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 17276).

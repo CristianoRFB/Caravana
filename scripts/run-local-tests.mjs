@@ -15,6 +15,7 @@ const commands = {
   "demo-auth": "vitest run --config vitest.auth.config.ts",
   storage: "vitest run --config vitest.storage.config.ts",
   platform: "vitest run tests/platform.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/data.integration.test.ts",
+  onboarding: "vitest run tests/onboarding-payload.test.ts tests/platform.integration.test.ts",
   support: "vitest run tests/support.integration.test.ts",
   booking: "vitest run tests/reservation-attempt.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts",
   operations: "vitest run tests/tenant-preference.test.ts tests/registration-operations.integration.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts",

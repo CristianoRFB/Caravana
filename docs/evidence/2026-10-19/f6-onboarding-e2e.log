@@ -1,0 +1,109 @@
+
+> caravana-77@0.1.0 test:platform:e2e
+> node scripts/run-local-tests.mjs platform-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/platform.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:19468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:19796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [desktop-1440] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (45.1s)
+(node:11040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [desktop-1440] › e2e\platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (2.4s)
+(node:8044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [mobile-320] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (45.2s)
+(node:11872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 [mobile-320] › e2e\platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (2.0s)
+
+
+  1) [desktop-1440] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Plano inicial', { exact: true })
+
+
+      31 |   await page.getByLabel("UID do responsável existente").fill(ownerUid);
+      32 |   await page.getByLabel("Conferi o UID de uma conta existente").check();
+    > 33 |   await page.getByLabel("Plano inicial", { exact: true }).selectOption("pro");
+         |                                                           ^
+      34 |   await page.getByLabel("Nome público inicial").fill("Marca Sintética C");
+      35 |   await page.getByRole("button", { name: "Cadastrar organizadora" }).click();
+      36 |   await expect(page.getByRole("status")).toContainText("identidade e contadores");
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\platform.spec.ts:33:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Plano inicial', { exact: true })
+
+
+      31 |   await page.getByLabel("UID do responsável existente").fill(ownerUid);
+      32 |   await page.getByLabel("Conferi o UID de uma conta existente").check();
+    > 33 |   await page.getByLabel("Plano inicial", { exact: true }).selectOption("pro");
+         |                                                           ^
+      34 |   await page.getByLabel("Nome público inicial").fill("Marca Sintética C");
+      35 |   await page.getByRole("button", { name: "Cadastrar organizadora" }).click();
+      36 |   await expect(page.getByRole("status")).toContainText("identidade e contadores");
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\platform.spec.ts:33:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\platform-platform-owner-on-a3a97--loses-the-UI-on-revocation-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation 
+    [mobile-320] › e2e\platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation 
+  2 passed (1.8m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/platform.spec.ts --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 2800).

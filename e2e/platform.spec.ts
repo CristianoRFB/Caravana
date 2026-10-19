@@ -29,8 +29,11 @@ test("platform owner onboards an existing Auth user, audits status and loses the
   await page.getByLabel("Nome da organizadora").fill("Organizadora Fictícia C");
   await page.getByLabel("Identificador da organizadora").fill("synthetic-organizer-c");
   await page.getByLabel("UID do responsável existente").fill(ownerUid);
+  await page.getByLabel("Conferi o UID de uma conta existente").check();
+  await page.getByRole("combobox", { name: "Plano inicial", exact: true }).selectOption("pro");
+  await page.getByLabel("Nome público inicial").fill("Marca Sintética C");
   await page.getByRole("button", { name: "Cadastrar organizadora" }).click();
-  await expect(page.getByRole("status")).toContainText("responsável vinculado");
+  await expect(page.getByRole("status")).toContainText("identidade e contadores");
   const tenant = page.locator(".platform-tenant").filter({ hasText: "Organizadora Fictícia C" });
   await expect(tenant).toContainText("Ativa");
   page.once("dialog", (dialog) => dialog.accept());

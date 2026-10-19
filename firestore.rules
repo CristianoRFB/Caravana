@@ -138,7 +138,8 @@ service cloud.firestore {
       allow create: if publicTenantSlug(slug) && request.resource.data.keys().hasOnly(['slug', 'organizationId'])
         && (!exists(/databases/$(database)/documents/organizations/$(slug)) || slug == request.resource.data.organizationId)
         && (!exists(/databases/$(database)/documents/tenantNamespaces/$(slug)) || get(/databases/$(database)/documents/tenantNamespaces/$(slug)).data.organizationId == request.resource.data.organizationId)
-        && request.resource.data.slug == slug && isTenantOwner(request.resource.data.organizationId)
+        && request.resource.data.slug == slug
+        && (isTenantOwner(request.resource.data.organizationId) || newTenantNamespace(request.resource.data.organizationId, getAfter(/databases/$(database)/documents/publicTenantSettings/$(request.resource.data.organizationId)).data.lastBrandOperationId))
         && getAfter(/databases/$(database)/documents/publicTenantSettings/$(request.resource.data.organizationId)).data.slug == slug;
     }
     match /publicTenantSettings/{orgId} {
@@ -154,13 +155,16 @@ service cloud.firestore {
           && data.whatsapp is string && (data.whatsapp == '' || data.whatsapp.matches('^[0-9]{8,15}$'))
           && data.operationalMessage is string && data.operationalMessage.size() <= 800
           && data.updatedAt == request.time && data.lastBrandOperationId.matches('^[a-f0-9]{32}$')
-          && !exists(/databases/$(database)/documents/tenantBrandOperations/$(data.lastBrandOperationId))
-          && getAfter(/databases/$(database)/documents/tenantBrandOperations/$(data.lastBrandOperationId)).data.settings == data
+          && ((exists(/databases/$(database)/documents/organizations/$(orgId))
+              && !exists(/databases/$(database)/documents/tenantBrandOperations/$(data.lastBrandOperationId))
+              && getAfter(/databases/$(database)/documents/tenantBrandOperations/$(data.lastBrandOperationId)).data.settings == data)
+            || (!exists(/databases/$(database)/documents/organizations/$(orgId)) && newTenantNamespace(orgId, data.lastBrandOperationId)
+              && getAfter(/databases/$(database)/documents/platformAudit/$(data.lastBrandOperationId)).data.details.branding == data))
           && getAfter(/databases/$(database)/documents/tenantSlugs/$(data.slug)).data.organizationId == orgId;
       }
       allow get: if true;
       allow list, delete: if false;
-      allow create: if isTenantOwner(orgId) && valid(request.resource.data);
+      allow create: if (isTenantOwner(orgId) || newTenantNamespace(orgId, request.resource.data.lastBrandOperationId)) && valid(request.resource.data);
       allow update: if isTenantOwner(orgId) && request.resource.data.slug == resource.data.slug && valid(request.resource.data);
     }
     match /tenantBrandOperations/{operationId} {
@@ -266,11 +270,20 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.kind == 'member'
         && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.entityId == uid;
       allow delete: if false;
+      allow create: if newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
+        && request.resource.data == { 'uid': uid, 'organizationId': orgId, 'role': 'tenant_owner', 'status': 'active', 'updatedAt': request.time, 'lastPlatformOperationId': request.resource.data.lastPlatformOperationId }
+        && getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.ownerUid == uid
+        && getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId;
     }
     match /tenantUsage/{orgId} {
       allow get: if isTenantOwner(orgId) || isPlatformOwner();
       // Legacy baseline is never invented/reset by the client. New onboarding/quota operations follow later.
-      allow list, create, delete: if false;
+      allow list, delete: if false;
+      allow create: if newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
+        && request.resource.data.keys().hasOnly(['organizationId', 'version', 'publishedCaravans', 'activeMembers', 'activeOwners', 'updatedAt', 'lastPlatformOperationId'])
+        && request.resource.data.organizationId == orgId && request.resource.data.version == 'commercial-v1'
+        && request.resource.data.publishedCaravans == 0 && request.resource.data.activeMembers == 1 && request.resource.data.activeOwners == 1
+        && request.resource.data.updatedAt == request.time;
       allow update: if isTenantOwner(orgId)
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publishedCaravans', 'activeMembers', 'activeOwners', 'updatedAt', 'lastQuotaOperationId'])
         && quotaCounts(request.resource.data) != quotaCounts(resource.data)
@@ -279,6 +292,17 @@ service cloud.firestore {
           getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.entityId);
     }
     match /subscriptions/{orgId} {
+      function initial(data) {
+        return data.keys().hasOnly(['organizationId', 'planId', 'status', 'monthlyCatalogCents', 'setupWaived', 'setupFeeCents', 'overrideMonthlyCents', 'overrideExpiresAt', 'overrideReason', 'trialEndsAt', 'revision', 'reason', 'updatedAt', 'updatedBy', 'lastCommercialOperationId'])
+          && data.organizationId == orgId && data.planId in ['essencial', 'pro', 'premium']
+          && data.monthlyCatalogCents == commercialPlan(data.planId).monthlyCents && data.status == 'active'
+          && data.setupWaived is bool && data.setupFeeCents == (data.setupWaived ? 0 : 10000)
+          && data.overrideMonthlyCents == null && data.overrideExpiresAt == null && data.overrideReason == '' && data.trialEndsAt == null
+          && data.revision == 1 && data.reason == 'Implantação assistida de nova organizadora'
+          && data.updatedAt == request.time && data.updatedBy == request.auth.uid
+          && newTenantNamespace(orgId, data.lastCommercialOperationId)
+          && data == getAfter(/databases/$(database)/documents/platformAudit/$(data.lastCommercialOperationId)).data.details.subscription;
+      }
       function valid(data) {
         let event = getAfter(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId)).data;
         return data.keys().hasOnly(['organizationId', 'planId', 'status', 'monthlyCatalogCents', 'setupWaived', 'setupFeeCents', 'overrideMonthlyCents', 'overrideExpiresAt', 'overrideReason', 'trialEndsAt', 'revision', 'reason', 'updatedAt', 'updatedBy', 'lastCommercialOperationId'])
@@ -303,7 +327,8 @@ service cloud.firestore {
       }
       allow get: if isTenantOwner(orgId) || isPlatformOwner();
       allow list: if isPlatformOwner();
-      allow create, update: if isPlatformOwner() && valid(request.resource.data);
+      allow create, update: if isPlatformOwner() && exists(/databases/$(database)/documents/organizations/$(orgId)) && valid(request.resource.data);
+      allow create: if isPlatformOwner() && !exists(/databases/$(database)/documents/organizations/$(orgId)) && initial(request.resource.data);
       allow delete: if false;
     }
     match /tenantEntitlements/{orgId} {
@@ -312,8 +337,9 @@ service cloud.firestore {
         return data.keys().hasOnly(['organizationId', 'limits', 'growthEnabled', 'growthUntil', 'updatedAt', 'lastCommercialOperationId'])
           && data.organizationId == orgId && data.limits == commercialPlan(subscription.planId).limits
           && data.growthEnabled == (subscription.status in ['active', 'trial', 'demo']) && data.growthUntil == subscription.trialEndsAt
-          && data.updatedAt == request.time && data.lastCommercialOperationId == subscription.lastCommercialOperationId
-          && !exists(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId));
+          && data.updatedAt == request.time && data.updatedAt == subscription.updatedAt && data.lastCommercialOperationId == subscription.lastCommercialOperationId
+          && ((exists(/databases/$(database)/documents/organizations/$(orgId)) && !exists(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId)))
+            || (!exists(/databases/$(database)/documents/organizations/$(orgId)) && newTenantNamespace(orgId, data.lastCommercialOperationId)));
       }
       allow get: if true;
       allow list, delete: if false;
@@ -341,7 +367,10 @@ service cloud.firestore {
         && request.resource.data.createdBy == request.auth.uid && request.resource.data.updatedBy == request.auth.uid
         && newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
         && getAfter(/databases/$(database)/documents/tenantNamespaces/$(orgId)).data.organizationId == orgId
-        && getAfter(/databases/$(database)/documents/tenantNamespaces/$(orgId)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId;
+        && getAfter(/databases/$(database)/documents/tenantNamespaces/$(orgId)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId
+        && getAfter(/databases/$(database)/documents/tenantUsage/$(orgId)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId
+        && getAfter(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data.lastCommercialOperationId == request.resource.data.lastPlatformOperationId
+        && getAfter(/databases/$(database)/documents/publicTenantSettings/$(orgId)).data.lastBrandOperationId == request.resource.data.lastPlatformOperationId;
       allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy', 'lastPlatformOperationId'])
         && resource.data.get('status', 'active') in ['active', 'suspended']
         && request.resource.data.status in ['active', 'suspended']
@@ -370,13 +399,15 @@ service cloud.firestore {
         && request.resource.data.createdAt == request.time
         && linkedQuota(orgId, request.resource.data.lastQuotaOperationId, 'member', uid);
       allow create: if isPlatformOwner()
-        && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt', 'lastPlatformOperationId'])
         && request.resource.data.uid == uid && request.resource.data.organizationId == orgId
         && request.resource.data.role == 'tenant_owner' && request.resource.data.status == 'active'
         && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
         && !exists(/databases/$(database)/documents/organizations/$(orgId))
         && getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.ownerUid == uid
-        && platformOperation(orgId, getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId, 'tenant_created');
+        && request.resource.data.lastPlatformOperationId == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId
+        && getAfter(/databases/$(database)/documents/tenantTeam/$(orgId)/members/$(uid)).data == { 'uid': uid, 'organizationId': orgId, 'role': 'tenant_owner', 'status': 'active', 'updatedAt': request.time, 'lastPlatformOperationId': request.resource.data.lastPlatformOperationId }
+        && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_created');
       allow update: if isTenantOwner(orgId)
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'status', 'updatedAt', 'lastQuotaOperationId'])
         && linkedQuota(orgId, request.resource.data.lastQuotaOperationId, 'member', uid);
@@ -398,7 +429,8 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/organizationAvailability/$(request.resource.data.organizationId)).data.status == request.resource.data.status
         && ((request.resource.data.action == 'tenant_created' && request.resource.data.previousStatus == 'absent' && request.resource.data.status == 'active'
           && !exists(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId))
-          && request.resource.data.details.keys().hasOnly(['name', 'slug', 'ownerUid'])
+          && request.resource.data.details.keys().hasOnly(['name', 'slug', 'ownerUid', 'ownerUidConfirmed', 'requestHash', 'subscription', 'branding'])
+          && request.resource.data.details.ownerUidConfirmed == true && request.resource.data.details.requestHash.matches('^[a-f0-9]{64}$')
           && request.resource.data.details.name == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.name
           && request.resource.data.details.slug == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.slug
           && request.resource.data.details.ownerUid == getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.ownerUid

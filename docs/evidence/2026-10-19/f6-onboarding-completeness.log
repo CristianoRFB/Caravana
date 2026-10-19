@@ -1,0 +1,51 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/onboarding-payload.test.ts tests/platform.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/platform.integration.test.ts (11 tests | 1 failed) 6986ms
+   ❯ platform operations enforce server-side authority and immutable atomic audit (11)
+     × creates organization, availability, owner membership and audit atomically, then safely replays 491ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > creates organization, availability, owner membership and audit atomically, then safely replays
+AssertionError: expected { …(6) } to match object { limits: { …(3) }, …(1) }
+(8 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "growthEnabled": true,
+    "limits": {
+-     "internalMembers": 2,
+      "passengersPerCaravan": 60,
+-     "publishedCaravans": 2,
+    },
+  }
+
+ ❯ tests/platform.integration.test.ts:74:83
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 14 passed (15)
+   Start at  17:36:38
+   Duration  7.88s (tests 92%, transform 4%, import 4%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/onboarding-payload.test.ts tests/platform.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 12696).

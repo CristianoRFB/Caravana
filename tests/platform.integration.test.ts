@@ -3,7 +3,7 @@ import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
 import { seedSyntheticNamespaceBootstrap } from "./fixtures/namespace-bootstrap";
 import { readFileSync } from "node:fs";
 import { assertFails, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, writeBatch, type Firestore } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, Timestamp, updateDoc, writeBatch, type Firestore } from "firebase/firestore";
 import { onboardTenant, changeTenantStatus } from "../src/lib/platform";
 import { reserveSeat } from "../src/lib/data";
 import type { Caravan } from "../src/lib/types";
@@ -13,7 +13,7 @@ vi.mock("../src/lib/firebase", () => runtime);
 let env: RulesTestEnvironment;
 const createId = "1".repeat(32);
 const statusId = "2".repeat(32);
-const input = { name: "Organizadora Fictícia Nova", slug: "synthetic-new", ownerUid: "new-owner" };
+const input = { name: "Organizadora Fictícia Nova", slug: "synthetic-new", ownerUid: "new-owner", ownerUidConfirmed: true, planId: "essencial" as const, setupWaived: false };
 const passenger = { passengerName: "Pessoa Fictícia", phone: "11900000000", email: "", city: "", boardingPointId: "point", boardingPointName: "Local fictício", emergencyContact: "Contato fictício", notes: "" };
 const trip = { id: "legacy-trip", organizationId: "legacy-org", name: "Viagem fictícia legada", slug: "legacy-synthetic", status: "published", capacity: 25, reservedSeats: 0, priceCents: 8500, boardingPoints: [{ id: "point", name: "Local fictício" }] } as Caravan;
 beforeAll(async () => { env = await initializeTestEnvironment({ projectId: "demo-caravana77-test", firestore: { rules: readFileSync("firestore.rules", "utf8") } }); });
@@ -67,11 +67,45 @@ describe("platform operations enforce server-side authority and immutable atomic
     expect(membership.data()?.role).toBe("tenant_owner");
     expect(membership.data()?.createdAt.toMillis()).toBeGreaterThan(0);
     expect((await getDoc(doc(owner, `organizations/${input.slug}`))).data()?.name).toBe(input.name);
+    expect((await getDoc(doc(owner, `tenantUsage/${input.slug}`))).data()).toMatchObject({ publishedCaravans: 0, activeMembers: 1, activeOwners: 1, version: "commercial-v1" });
+    expect((await getDoc(doc(owner, `tenantTeam/${input.slug}/members/new-owner`))).data()).toMatchObject({ role: "tenant_owner", status: "active" });
+    expect((await getDoc(doc(owner, `subscriptions/${input.slug}`))).data()).toMatchObject({ planId: "essencial", status: "active", monthlyCatalogCents: 8900, setupFeeCents: 10000, revision: 1 });
     const guest = env.unauthenticatedContext().firestore();
+    expect((await getDoc(doc(guest, `tenantEntitlements/${input.slug}`))).data()).toMatchObject({ limits: { activeCaravans: 2, passengersPerCaravan: 60, internalUsers: 2 }, growthEnabled: true });
+    expect((await getDoc(doc(guest, `publicTenantSettings/${input.slug}`))).data()).toMatchObject({ publicName: input.name, contactEmail: "", whatsapp: "" });
+    expect((await getDoc(doc(guest, `tenantSlugs/${input.slug}`))).data()?.organizationId).toBe(input.slug);
+    await assertFails(getDoc(doc(guest, `subscriptions/${input.slug}`)));
     expect((await getDoc(doc(guest, `organizationAvailability/${input.slug}`))).data()?.status).toBe("active");
     await assertFails(getDocs(collection(guest, "organizationAvailability")));
     await expect(onboardTenant({ ...input, name: "Outra operação" }, createId)).rejects.toThrow("outros dados");
     await expect(onboardTenant(input, "3".repeat(32))).rejects.toThrow("Nenhum dado foi substituído");
+  });
+  it("rejects a complete-looking raw onboarding when any required companion is missing", async () => {
+    await seed(); await onboardTenant(input, createId);
+    const paths = [
+      `organizations/${input.slug}`, `tenantNamespaces/${input.slug}`, `memberships/${input.ownerUid}/organizations/${input.slug}`,
+      `tenantTeam/${input.slug}/members/${input.ownerUid}`, `tenantUsage/${input.slug}`, `subscriptions/${input.slug}`,
+      `tenantEntitlements/${input.slug}`, `publicTenantSettings/${input.slug}`, `tenantSlugs/${input.slug}`,
+      `organizationAvailability/${input.slug}`, `platformAudit/${createId}`,
+    ];
+    function fresh(value: unknown): unknown {
+      if (value instanceof Timestamp) return serverTimestamp();
+      if (Array.isArray(value)) return value.map(fresh);
+      if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, fresh(item)]));
+      return value;
+    }
+    const snapshots: Record<string, Record<string, unknown>> = {};
+    await env.withSecurityRulesDisabled(async (context) => {
+      for (const path of paths) { snapshots[path] = fresh((await getDoc(doc(context.firestore(), path))).data()) as Record<string, unknown>; await deleteDoc(doc(context.firestore(), path)); }
+    });
+    // Positive raw control proves failures below come from an omitted companion.
+    const complete = writeBatch(runtime.db!); for (const path of paths) complete.set(doc(runtime.db!, path), snapshots[path]); await complete.commit();
+    await env.withSecurityRulesDisabled(async (context) => { for (const path of paths) await deleteDoc(doc(context.firestore(), path)); });
+    for (const missing of paths.slice(1)) {
+      const batch = writeBatch(runtime.db!); for (const path of paths.filter((item) => item !== missing)) batch.set(doc(runtime.db!, path), snapshots[path]);
+      await assertFails(batch.commit());
+      expect((await getDoc(doc(runtime.db!, paths[0]))).exists(), missing).toBe(false);
+    }
   });
   it("changes status with audit and public projection while preserving legacy IDs, admins and financial history", async () => {
     await seed();

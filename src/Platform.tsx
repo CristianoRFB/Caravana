@@ -5,6 +5,11 @@ import type { User } from "firebase/auth";
 import { logout, watchAuth } from "./lib/data";
 import { SupportConsole } from "./Support";
 import { changeTenantStatus, onboardTenant, platformOperationId, watchPlatformAccess, watchPlatformAudit, watchPlatformTenants, type PlatformEvent, type PlatformTenant } from "./lib/platform";
+import { PlanCatalog, type PlanId } from "./lib/plan-catalog";
+import { BRAND_COLORS } from "./lib/tenant-branding";
+import { onboardingPayload } from "./lib/onboarding-payload";
+import { importDigest } from "./lib/import-identity";
+import { completeQuotaAttempt, getQuotaAttempt } from "./lib/quota-attempt";
 
 const message = (error: unknown) => error instanceof Error ? error.message : "Não foi possível concluir a operação.";
 export default function PlatformPage({ header }: { header: ReactNode }) {
@@ -21,7 +26,11 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [ownerUid, setOwnerUid] = useState("");
-  const [operation, setOperation] = useState(platformOperationId);
+  const [ownerUidConfirmed, setOwnerUidConfirmed] = useState(false);
+  const [planId, setPlanId] = useState<PlanId>("essencial");
+  const [setupWaived, setSetupWaived] = useState(false);
+  const [publicName, setPublicName] = useState(""); const [primaryColor, setPrimaryColor] = useState<string>(BRAND_COLORS[0]);
+  const [logo, setLogo] = useState(""); const [contactEmail, setContactEmail] = useState(""); const [whatsapp, setWhatsapp] = useState("");
   useEffect(() => {
     let active = true;
     let revision = 0;
@@ -30,6 +39,7 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
       const request = ++revision;
       stopAccess(); setUser(current); setAllowed(false); setLoading(Boolean(current)); setSupportFor(""); setPlanFor("");
       setTenants([]); setEvents([]); setError(""); setNotice(""); setName(""); setSlug(""); setOwnerUid("");
+      setOwnerUidConfirmed(false); setPlanId("essencial"); setSetupWaived(false); setPublicName(""); setPrimaryColor(BRAND_COLORS[0]); setLogo(""); setContactEmail(""); setWhatsapp("");
       if (current) stopAccess = watchPlatformAccess(current.uid, (value) => {
         if (active && request === revision) {
           setAllowed(value); setLoading(false);
@@ -48,9 +58,13 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
   async function create(event: FormEvent) {
     event.preventDefault(); setBusy(true); setError(""); setNotice("");
     try {
-      const id = await onboardTenant({ name, slug, ownerUid }, operation);
-      setNotice(`Organizadora ${id} cadastrada e responsável vinculado.`);
-      setName(""); setSlug(""); setOwnerUid(""); setOperation(platformOperationId());
+      if (!user) throw new Error("Entre com a conta da plataforma.");
+      const input = { name, slug, ownerUid, ownerUidConfirmed, planId, setupWaived, branding: { publicName: publicName || name, primaryColor, logo, contactEmail, whatsapp } };
+      const digest = await importDigest(onboardingPayload(input)); const scope = `${user.uid}:platform-onboard:${slug.trim().toLowerCase()}`;
+      const operation = getQuotaAttempt(scope, digest, window.sessionStorage);
+      const id = await onboardTenant(input, operation); completeQuotaAttempt(scope, digest, operation, window.sessionStorage);
+      setNotice(`Organizadora ${id} cadastrada com responsável, plano, identidade e contadores. Nenhuma cobrança foi realizada.`);
+      setName(""); setSlug(""); setOwnerUid(""); setOwnerUidConfirmed(false); setPublicName(""); setPrimaryColor(BRAND_COLORS[0]); setLogo(""); setContactEmail(""); setWhatsapp(""); setPlanId("essencial"); setSetupWaived(false);
     } catch (cause) { setError(message(cause)); }
     finally { setBusy(false); }
   }
@@ -71,11 +85,20 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
       {error && <div className="error-message" role="alert">{error}</div>}{notice && <div className="success-message" role="status">{notice}</div>}
       {planFor && <CommercialPlanPanel key={planFor} organizationId={planFor} onExit={() => setPlanFor("")} />}
       {supportFor && <SupportConsole key={supportFor} organizationId={supportFor} onExit={() => setSupportFor("")} />}
-      <section className="admin-panel platform-section"><h2>Cadastro assistido</h2><p>Vincule o UID de uma conta Firebase existente, conferido previamente. Este formulário cadastra a organizadora e sua membership; a criação e a verificação da conta Auth seguem o processo assistido.</p>
+      <section className="admin-panel platform-section"><h2>Cadastro assistido</h2><p>Vincule o UID de uma conta Firebase existente, conferido previamente. Organização, primeiro responsável, plano, identidade e contadores são criados juntos. A criação e a verificação da conta Auth seguem o processo assistido. Não há senha compartilhada nem cobrança automática.</p>
         <form className="field-grid" onSubmit={(event) => void create(event)}>
           <label className="field"><span>Nome da organizadora</span><input required minLength={2} maxLength={120} value={name} onChange={(event) => setName(event.target.value)} /></label>
           <label className="field"><span>Identificador da organizadora</span><input required pattern="[a-z0-9][a-z0-9-]{2,59}" value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="organizadora-exemplo" /></label>
           <label className="field field-full"><span>UID do responsável existente</span><input required maxLength={128} value={ownerUid} onChange={(event) => setOwnerUid(event.target.value)} /></label>
+          <label className="field"><span>Plano inicial</span><select value={planId} onChange={(event) => setPlanId(event.target.value as PlanId)}>{Object.values(PlanCatalog).map((plan) => <option key={plan.id} value={plan.id}>{plan.name} · R${plan.monthlyCents / 100}/mês</option>)}</select></label>
+          <p className="field-full">Limites do plano: {PlanCatalog[planId].limits.activeCaravans} caravanas publicadas, {PlanCatalog[planId].limits.passengersPerCaravan} passageiros por caravana e {PlanCatalog[planId].limits.internalUsers} integrantes ativos. A equipe começa com um responsável. O histórico permanece preservado após mudança de plano.</p>
+          <label className="field"><span>Nome público inicial</span><input maxLength={80} value={publicName} placeholder="Usar nome da organizadora" onChange={(event) => setPublicName(event.target.value)} /></label>
+          <label className="field"><span>Cor inicial</span><select value={primaryColor} onChange={(event) => setPrimaryColor(event.target.value)}>{BRAND_COLORS.map((color, index) => <option key={color} value={color}>{["Violeta", "Azul", "Turquesa", "Verde", "Rosa", "Roxo", "Âmbar", "Cinza"][index]}</option>)}</select></label>
+          <label className="field"><span>Logo inicial (URL HTTPS, opcional)</span><input type="url" maxLength={1000} value={logo} onChange={(event) => setLogo(event.target.value)} /></label>
+          <label className="field"><span>E-mail público inicial (opcional)</span><input type="email" maxLength={120} value={contactEmail} onChange={(event) => setContactEmail(event.target.value)} /></label>
+          <label className="field"><span>WhatsApp público inicial (opcional)</span><input inputMode="numeric" maxLength={15} value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} /></label>
+          <label className="field field-full"><span><input type="checkbox" checked={setupWaived} onChange={(event) => setSetupWaived(event.target.checked)} /> Isentar implantação padrão de R$100</span></label>
+          <label className="field field-full"><span><input type="checkbox" required checked={ownerUidConfirmed} onChange={(event) => setOwnerUidConfirmed(event.target.checked)} /> Conferi o UID de uma conta existente</span></label>
           <button className="button button-primary" disabled={busy}>{busy ? "Salvando…" : "Cadastrar organizadora"}</button>
         </form>
       </section>
