@@ -1,3 +1,4 @@
+import PublicSeatCount from "./PublicSeatCount";
 import { useTenantBrand } from "./lib/tenant-brand-context";
 import { tenantCaravanPath } from "./lib/tenant-branding";
 import { useEffect, useState } from "react";
@@ -175,7 +176,7 @@ export default function PublicIndex({
                       </span>
                       <span>
                         <Users />
-                        {Math.max(0, c.capacity - c.reservedSeats)} vagas disponíveis
+                        <PublicSeatCount caravan={c} />
                       </span>
                     </div>
                     <p className="public-trip-includes">

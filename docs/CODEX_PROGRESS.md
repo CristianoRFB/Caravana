@@ -61,3 +61,5 @@ Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançado
 
 | F6-team-cloud-sync | P0 | BLOCKED | Remoto65f8fac, zero commits posteriores na recuperação; convites locais indisponíveis | ls-remote/log e ausência de serviço/UI/testes de convites | Aguardar checkpoint LAB04-PC23; não reimplementar concorrente |
 | F6-demo-commercial | P1 | PASS incremental local | Duas marcas/owners/planos distintos, contratos demo e usage, fixtures aditivas |8 Auth/Rules+10 E2E1440/320, lint/typecheck/build E2E PASS; F6_DEMO.md | Vagas públicas/landing/gate F6 ainda pendentes |
+
+| F6-public-commercial-seats | P1 | PASS incremental local | Disponibilidade comercial confirmada/live no catálogo/detalhe/FAQ/formulário; rascunho e retry preservados |45 testes+26 E2E1440/320, lint/typecheck/build E2E PASS; PUBLIC_COMMERCIAL_AVAILABILITY.md | Landing e gate F6 pendentes; equipe BLOCKED de sync |

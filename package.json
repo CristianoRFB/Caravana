@@ -50,7 +50,9 @@
     "test:quota-passenger:e2e": "node scripts/run-local-tests.mjs quota-passenger-e2e",
     "test:quota-passenger:focus": "node scripts/run-local-tests.mjs quota-passenger-focus",
     "test:quota-downgrade": "node scripts/run-local-tests.mjs quota-downgrade",
-    "test:namespace-guard": "node scripts/run-local-tests.mjs namespace-guard"
+    "test:namespace-guard": "node scripts/run-local-tests.mjs namespace-guard",
+    "test:public-seats": "node scripts/run-local-tests.mjs public-availability",
+    "test:public-seats:e2e": "node scripts/run-local-tests.mjs public-availability-e2e"
   },
   "dependencies": {
     "firebase": "^11.10.0",

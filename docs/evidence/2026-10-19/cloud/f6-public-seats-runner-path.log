@@ -1,0 +1,14 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/public-availability.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts
+/bin/sh: 1: vitest: not found
+⚠  Script exited unsuccessfully (code 127)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/public-availability.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts" exited with code 127

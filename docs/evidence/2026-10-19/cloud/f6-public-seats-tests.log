@@ -1,0 +1,24 @@
+
+> caravana-77@0.1.0 test:public-seats
+> node scripts/run-local-tests.mjs public-availability
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/public-availability.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts
+
+ RUN  v5.0.1 /workspace/Caravana
+
+
+ Test Files  3 passed (3)
+      Tests  45 passed (45)
+   Start at  23:52:52
+   Duration  26.11s (tests 95%, import 3%, transform 2%)
+
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

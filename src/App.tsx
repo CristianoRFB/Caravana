@@ -1,3 +1,4 @@
+import { usePublicAvailability } from "./lib/use-public-availability";
 import TenantBrandSettings from "./TenantBrandSettings";
 import TenantCommercial from "./TenantCommercial";
 import { TenantBrandScope, TenantRoute } from "./TenantBrandScope";
@@ -141,13 +142,13 @@ const paymentProcessCopy =
 const resolveFaqAnswer = (
   answer: string,
   caravan: Caravan,
-  availableSeats: number,
+  availableSeats: number | null,
   question: string,
   organizationName = caravan.organizerName || "AnimeSFest",
 ) => {
   const processCopy = paymentProcessCopy.replaceAll("AnimeSFest", organizationName);
   const resolved = answer
-    .replaceAll("{{availableSeats}}", String(availableSeats))
+    .replaceAll("{{availableSeats}}", availableSeats === null ? "disponibilidade a confirmar" : String(availableSeats))
     .replaceAll("{{price}}", money(caravan.priceCents))
     .replaceAll("{{date}}", dateLabel(caravan.date))
     .replaceAll("{{departureTime}}", caravan.departureTime)
@@ -293,6 +294,7 @@ function PublicLanding() {
   const [caravan, setCaravan] = useState<Caravan | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const availability = usePublicAvailability(caravan);
   useEffect(() => {
     let active = true;
     const timer = setTimeout(() => {
@@ -349,7 +351,7 @@ function PublicLanding() {
         </main>
       </>
     );
-  const free = Math.max(0, caravan.capacity - caravan.reservedSeats);
+  const free = availability.availableSeats;
   return (
     <TenantBrandScope organizationId={caravan.organizationId}>
       <Topbar />
@@ -388,7 +390,7 @@ function PublicLanding() {
                 to={`${tenantCaravanPath(caravan.slug, tenant.tenantSlug)}/inscricao`}
                 className="button button-primary button-large"
               >
-                Garantir minha vaga <ArrowRight size={18} />
+                {availability.canReserve ? "Garantir minha vaga" : "Consultar disponibilidade"} <ArrowRight size={18} />
               </Link>
               <div className="hero-safe">
                 <ShieldCheck size={15} /> {caravan.benefits.slice(0, 3).join(" · ") || "Confira os benefícios informados pela organização"}
@@ -435,14 +437,14 @@ function PublicLanding() {
             <Fact
               icon={<Users />}
               label="VAGAS"
-              value={`${free} disponíveis`}
-              detail={`de ${caravan.capacity} lugares`}
+              value={availability.label}
+              detail={availability.capacityLimit === null ? "Consulte a organização" : `de ${availability.capacityLimit} lugares disponíveis para reserva`}
             />
             <Link
               to={`${tenantCaravanPath(caravan.slug, tenant.tenantSlug)}/inscricao`}
               className="button button-primary fact-cta"
             >
-              Garantir minha vaga <ArrowRight size={16} />
+              {availability.canReserve ? "Garantir minha vaga" : "Consultar disponibilidade"} <ArrowRight size={16} />
             </Link>
           </div>
         </section>
@@ -616,7 +618,7 @@ function PublicLanding() {
             to={`${tenantCaravanPath(caravan.slug, tenant.tenantSlug)}/inscricao`}
             className="button button-light"
           >
-            Quero minha vaga <ArrowRight size={17} />
+            {availability.canReserve ? "Quero minha vaga" : "Consultar disponibilidade"} <ArrowRight size={17} />
           </Link>
         </section>
       </main>
@@ -735,6 +737,7 @@ function RegistrationPage() {
       clearTimeout(timer);
     };
   }, [slug, tenant.organizationId]);
+  const availability = usePublicAvailability(caravan);
   const age = ageOnDate(form.birthDate, caravan?.date || "");
   const isMinor = Boolean(
     caravan?.requiresMinorAuthorization && age !== null && age < 18,
@@ -975,19 +978,20 @@ function RegistrationPage() {
                 </Field>
               </div>
               {submissionError && <div className="error-message" role="alert">{submissionError}{resumeId && <p><Link to={`${tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : ""}/minha-inscricao/${resumeId}`}>Consultar inscrição existente</Link></p>}</div>}
+              <p role="status">{availability.label}. A vaga é confirmada ao concluir a reserva.</p>
               <Notice>
                 Seus dados são usados apenas para organizar esta viagem.
               </Notice>
               <button
                 className="button button-primary button-large form-submit"
-                disabled={busy || (caravan.reservedSeats >= caravan.capacity && !retryAvailable)}
+                disabled={busy || (!availability.canReserve && !retryAvailable)}
               >
                 {busy
                   ? "Reservando…"
-                  : caravan.reservedSeats >= caravan.capacity
-                    ? retryAvailable ? "Verificar minha reserva" : "Vagas esgotadas"
+                  : !availability.canReserve
+                    ? retryAvailable ? "Verificar minha reserva" : availability.label
                     : "Garantir minha vaga"}{" "}
-                {!busy && caravan.reservedSeats < caravan.capacity && (
+                {!busy && availability.canReserve && (
                   <ArrowRight size={17} />
                 )}
               </button>

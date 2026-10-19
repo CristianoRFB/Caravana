@@ -80,3 +80,5 @@ npm run finance:diagnose -- tests/fixtures/finance-diagnostic.synthetic.json —
 npm run test:branding / npm run test:branding:e2e — configuração pública, imagem/cores, mapping/namespace, aliases simulados e A×B.
 
 npm run test:branding:all —12 jornadas de marca nas quatro larguras; test:branding:visual —4 casos específicos de layout/limites do texto.
+
+npm run test:public-seats / npm run test:public-seats:e2e — disponibilidade física/comercial, downgrade, suspensão/expiração ao vivo, rascunho/retry e regressões de marcas/demo/reservas.

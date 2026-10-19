@@ -62,7 +62,7 @@ test("commercial passenger quota blocks A growth while preserving its private li
   await page.goto("/caravana/sintetica-ride-a/inscricao"); await fill(page);
   await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/); const privateUrl = page.url();
   await page.goto("/caravana/sintetica-ride-a/inscricao"); await fill(page);
-  await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page.getByRole("alert")).toContainText("vagas");
+  await expect(page.getByRole("button", { name: "Vagas esgotadas", exact: true })).toBeDisabled();
   await patchSyntheticCommercial("org-a", "essencial", false); await page.goto(privateUrl); await expect(page.getByRole("heading", { name: "Oi, Pessoa!", exact: true })).toBeVisible();
   await page.goto("/caravana/sintetica-ride-b/inscricao"); await fill(page, "Pessoa sintética B independente");
   await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/);
