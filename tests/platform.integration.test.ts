@@ -1,4 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
 import { readFileSync } from "node:fs";
 import { assertFails, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc, writeBatch, type Firestore } from "firebase/firestore";
@@ -20,6 +21,7 @@ afterAll(async () => env.cleanup());
 async function seed() {
   await env.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();
+    await seedSyntheticEntitlements(db, "legacy-org", "premium");
     await setDoc(doc(db, "platformOwners/platform-actor"), { status: "active" });
     await setDoc(doc(db, "organizations/legacy-org"), { name: "Cliente fictício legado", untouched: "original metadata" });
     await setDoc(doc(db, "admins/legacy-owner"), { organizationId: "legacy-org", role: "admin" });

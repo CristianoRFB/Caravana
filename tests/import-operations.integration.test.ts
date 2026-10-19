@@ -1,4 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
 import { readFileSync } from "node:fs";
 import { assertFails, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, writeBatch, type Firestore } from "firebase/firestore";
@@ -21,6 +22,7 @@ async function seed(capacity = 25) {
   await env.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();
     for (const org of ["a", "b"]) {
+      await seedSyntheticEntitlements(db, org, "premium");
       await setDoc(doc(db, `organizations/${org}`), { name: `Synthetic ${org}` });
       await setDoc(doc(db, `memberships/owner-${org}/organizations/${org}`), { uid: `owner-${org}`, organizationId: org, role: "tenant_owner", status: "active" });
       await setDoc(doc(db, `caravans/trip-${org}`), { organizationId: org, name: "Synthetic same name", status: "published", capacity, reservedSeats: 0, boardingPoints: [{ id: "point", name: "Current point" }] });
@@ -31,6 +33,28 @@ async function seed(capacity = 25) {
 }
 async function count() { return (await getDocs(query(collection(runtime.db!, "registrations"), where("organizationId", "==", "a")))).size; }
 describe("CSV private registry, atomic chunks and controlled rollback", () => {
+  it("applies the commercial passenger ceiling and preserves replay and controlled rollback after downgrade", async () => {
+    await seed(100);
+    await env.withSecurityRulesDisabled(async (context) => { await seedSyntheticEntitlements(context.firestore(), "a", "essencial"); await updateDoc(doc(context.firestore(), "caravans/trip-a"), { reservedSeats: 59 }); });
+    await expect(importRows("trip-a", "a", [row(1), row(2)], batch(1))).rejects.toThrow("somente 1");
+    expect((await importRows("trip-a", "a", [row(1)], batch(1))).imported).toBe(1);
+    await env.withSecurityRulesDisabled(async (context) => updateDoc(doc(context.firestore(), "tenantEntitlements/a"), { growthEnabled: false }));
+    expect((await importRows("trip-a", "a", [row(1)], batch(1))).skipped).toBe(1);
+    await expect(importRows("trip-a", "a", [row(2)], batch(2))).rejects.toThrow("plano");
+    const result = await rollbackImportBatch("a", "trip-a", batch(1), "Rollback sintético após downgrade");
+    expect(result).toBeDefined(); expect((await getDoc(doc(runtime.db!, "caravans/trip-a"))).data()?.reservedSeats).toBe(59);
+    expect(await count()).toBe(1);
+  });
+  it("does not erase over-limit historical passengers on a downgrade and allows exact replay and rollback", async () => {
+    await seed(200); await env.withSecurityRulesDisabled(async (context) => updateDoc(doc(context.firestore(), "caravans/trip-a"), { reservedSeats: 99 }));
+    expect((await importRows("trip-a", "a", [row(1)], batch(1))).imported).toBe(1);
+    await env.withSecurityRulesDisabled(async (context) => seedSyntheticEntitlements(context.firestore(), "a", "essencial"));
+    expect((await importRows("trip-a", "a", [row(1)], batch(1))).skipped).toBe(1);
+    await expect(importRows("trip-a", "a", [row(2)], batch(2))).rejects.toThrow("somente 0");
+    expect((await getDoc(doc(runtime.db!, "caravans/trip-a"))).data()?.reservedSeats).toBe(100);
+    await rollbackImportBatch("a", "trip-a", batch(1), "Reversão de linha sintética acima do limite");
+    expect((await getDoc(doc(runtime.db!, "caravans/trip-a"))).data()?.reservedSeats).toBe(99); expect(await count()).toBe(1);
+  });
   it("direct SDK cannot reuse a claimed identity or fabricate a counter increment with a forged manifest", async () => {
     await seed(); await importRows("trip-a", "a", [row(1)], batch(1));
     const original = (await getDoc(doc(runtime.db!, `registrations/${await legacyImportDocumentId(batch(1), row(1).line)}`))).data()!;

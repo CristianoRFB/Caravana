@@ -46,7 +46,10 @@
     "test:commercial": "node scripts/run-local-tests.mjs commercial",
     "test:commercial:e2e": "node scripts/run-local-tests.mjs commercial-e2e",
     "test:quotas": "node scripts/run-local-tests.mjs quotas",
-    "test:quota-team": "node scripts/run-local-tests.mjs quota-team"
+    "test:quota-team": "node scripts/run-local-tests.mjs quota-team",
+    "test:quota-passenger:e2e": "node scripts/run-local-tests.mjs quota-passenger-e2e",
+    "test:quota-passenger:focus": "node scripts/run-local-tests.mjs quota-passenger-focus",
+    "test:quota-downgrade": "node scripts/run-local-tests.mjs quota-downgrade"
   },
   "dependencies": {
     "firebase": "^11.10.0",

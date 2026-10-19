@@ -33,7 +33,8 @@ import { validateProofFile } from "./proof-policy";
 import { isDemoIdentity } from "./demo-identities";
 import { getDocumentPolicy, reviewAuthorization, updatePassengerWithAuthorizationReset } from "./documents";
 import { createReservationAttempt, reservationRequestHash, ReservationAttemptConflict, validReservationAttempt, type ReservationAttempt } from "./reservation-attempt";
-import { createLimitedCaravan, updateLimitedCaravan } from "./quota-operations";
+import { createLimitedCaravan, updateLimitedCaravan, quotaGrowthAllowed } from "./quota-operations";
+import type { PublicEntitlements } from "./commercial-data";
 import { importDigest } from "./import-identity";
 import { completeQuotaAttempt, getQuotaAttempt } from "./quota-attempt";
 import { trackWrite } from "./pending-writes";
@@ -182,9 +183,12 @@ export async function reserveSeat(
       }
       const availability = await tx.get(doc(database, "organizationAvailability", current.organizationId));
       if (availability.data()?.status === "suspended") throw new Error("Novas reservas estão temporariamente suspensas pela organização.");
+      const commercial = await tx.get(doc(database, "tenantEntitlements", current.organizationId));
+      const policy = commercial.exists() ? commercial.data() as PublicEntitlements : null;
+      if (!quotaGrowthAllowed(policy)) throw new Error("Novas reservas estão indisponíveis no momento. Fale com a organização.");
       if (
         current.status !== "published" ||
-        current.reservedSeats >= current.capacity
+        current.reservedSeats >= Math.min(current.capacity, policy!.limits.passengersPerCaravan)
       )
         throw new Error("As vagas desta caravana foram preenchidas.");
       const boardingPoint = (Array.isArray(current.boardingPoints) ? current.boardingPoints : []).find(

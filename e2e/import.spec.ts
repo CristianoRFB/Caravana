@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { inspectSyntheticBookings, patchSyntheticMembership, seedSyntheticEnvironment, testAccount } from "./fixtures";
+import { inspectSyntheticBookings, patchSyntheticMembership, patchSyntheticTrip, patchSyntheticCommercial, seedSyntheticEnvironment, testAccount } from "./fixtures";
 let dispose: (() => Promise<void>) | undefined;
 let failures: string[];
 const csv = "Nome;Tipo documento 1;Número documento 1;Pagamento informado;Cidade\nPessoa Histórica Fictícia;RG informado;SYNTHETIC-1234;Pix;Cidade fictícia";
@@ -45,4 +45,15 @@ test("staff has no import or rollback controls", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Passageiros", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Importar lista" })).toHaveCount(0);
   await expect(page.locator(".import-history")).toHaveCount(0);
+});
+test("CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked", async ({ page }) => {
+  await patchSyntheticTrip({ capacity: 100, reservedSeats: 59 }); await patchSyntheticCommercial("org-a", "essencial");
+  await login(page); await page.goto("/admin/caravanas/ride-a/passageiros");
+  await historicalImport(page); await expect(page.locator(".import-report")).toContainText("1 importados");
+  expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 60, registrationCount: 2 });
+  await patchSyntheticCommercial("org-a", "essencial", false);
+  page.once("dialog", (dialog) => dialog.accept("Reversão fictícia após bloqueio de crescimento")); await page.getByRole("button", { name: "Desfazer lote" }).click();
+  await expect(page.locator(".import-history [role=status]")).toContainText("Cancelado");
+  await historicalImport(page); await expect(page.locator(".import-report")).toContainText("0 importados · 1 já cadastrados");
+  expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 59, registrationCount: 2 });
 });

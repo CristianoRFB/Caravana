@@ -1,0 +1,123 @@
+
+> caravana-77@0.1.0 test:quota-passenger:e2e
+> node scripts/run-local-tests.mjs quota-passenger-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/reservation.spec.ts e2e/import.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:14888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:6604) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\import.spec.ts:28:1 › historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated (8.6s)
+  ok  2 [desktop-1440] › e2e\import.spec.ts:43:1 › staff has no import or rollback controls (1.6s)
+  ok  3 [desktop-1440] › e2e\import.spec.ts:49:1 › CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked (2.8s)
+  ok  4 [desktop-1440] › e2e\reservation.spec.ts:24:1 › a persisted committed attempt survives reload and recovers the same final-seat registration (2.4s)
+  ok  5 [desktop-1440] › e2e\reservation.spec.ts:49:1 › field validation leaves the form editable and the same passenger can correct and submit (1.5s)
+  x   6 [desktop-1440] › e2e\reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations (12.1s)
+(node:20544) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 [mobile-320] › e2e\import.spec.ts:28:1 › historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated (5.7s)
+  ok  8 [mobile-320] › e2e\import.spec.ts:43:1 › staff has no import or rollback controls (1.2s)
+  ok  9 [mobile-320] › e2e\import.spec.ts:49:1 › CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked (4.3s)
+  ok 10 [mobile-320] › e2e\reservation.spec.ts:24:1 › a persisted committed attempt survives reload and recovers the same final-seat registration (4.8s)
+  ok 11 [mobile-320] › e2e\reservation.spec.ts:49:1 › field validation leaves the form editable and the same passenger can correct and submit (1.7s)
+  x  12 [mobile-320] › e2e\reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations (13.8s)
+
+
+  1) [desktop-1440] › e2e\reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Pessoa de retry sintético', { exact: true }).first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Pessoa de retry sintético', { exact: true }).first() with timeout 10000ms
+      - waiting for getByText('Pessoa de retry sintético', { exact: true }).first()
+
+
+      64 |   await page.goto("/caravana/sintetica-ride-a/inscricao"); await fill(page);
+      65 |   await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page.getByRole("alert")).toContainText("vagas");
+    > 66 |   await patchSyntheticCommercial("org-a", "essencial", false); await page.goto(privateUrl); await expect(page.getByText("Pessoa de retry sintético", { exact: true }).first()).toBeVisible();
+         |                                                                                                                                                                                ^
+      67 |   await page.goto("/caravana/sintetica-ride-b/inscricao"); await fill(page, "Pessoa sintética B independente");
+      68 |   await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/);
+      69 |   expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 60, registrationCount: 2 });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\reservation.spec.ts:66:176
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-desktop-1440\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-desktop-1440\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-desktop-1440\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-desktop-1440\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e\reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Pessoa de retry sintético', { exact: true }).first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Pessoa de retry sintético', { exact: true }).first() with timeout 10000ms
+      - waiting for getByText('Pessoa de retry sintético', { exact: true }).first()
+
+
+      64 |   await page.goto("/caravana/sintetica-ride-a/inscricao"); await fill(page);
+      65 |   await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page.getByRole("alert")).toContainText("vagas");
+    > 66 |   await patchSyntheticCommercial("org-a", "essencial", false); await page.goto(privateUrl); await expect(page.getByText("Pessoa de retry sintético", { exact: true }).first()).toBeVisible();
+         |                                                                                                                                                                                ^
+      67 |   await page.goto("/caravana/sintetica-ride-b/inscricao"); await fill(page, "Pessoa sintética B independente");
+      68 |   await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/);
+      69 |   expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 60, registrationCount: 2 });
+        at C:\Users\Aluno\.codex\worktrees\caravana77-commercial-v1-20261016\Caravana\e2e\reservation.spec.ts:66:176
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-mobile-320\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-mobile-320\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-mobile-320\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\reservation-commercial-pas-9a418-and-allowing-B-reservations-mobile-320\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e\reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations 
+    [mobile-320] › e2e\reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations 
+  10 passed (1.3m)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/reservation.spec.ts e2e/import.spec.ts --project desktop-1440 --project mobile-320" exited with code 1
+Stopped test emulator started by this run (PID 11952).

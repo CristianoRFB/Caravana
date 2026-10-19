@@ -1,4 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
@@ -41,6 +42,7 @@ afterAll(async () => env.cleanup());
 async function seed() {
   await env.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();
+    await seedSyntheticEntitlements(db, "org-a", "premium"); await seedSyntheticEntitlements(db, "org-b", "premium");
     await setDoc(doc(db, "caravans/ride-a"), {
       organizationId: "org-a",
       name: "Viagem A",

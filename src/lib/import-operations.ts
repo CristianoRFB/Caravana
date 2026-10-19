@@ -6,6 +6,8 @@ import { legacyImportDocumentId, samePassenger, type LegacyRegistrationDraft } f
 import { importDigest, importIdentityKeys } from "./import-identity";
 import { rollbackImportedRegistration } from "./registration-operations";
 import type { Caravan, Registration } from "./types";
+import type { PublicEntitlements } from "./commercial-data";
+import { quotaGrowthAllowed } from "./quota-operations";
 export interface ImportRowResult { line: number; status: "imported" | "skipped" | "rejected"; reason: string; }
 export interface ImportReport { imported: number; skipped: number; rejected: number; rowResults: ImportRowResult[]; }
 export function importFailureMessage(cause: unknown): string {
@@ -35,8 +37,11 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
     if (seen.some((item) => samePassenger(item, row))) preflightSkipped.add(row.line);
     else seen.push(row);
   }
-  const remaining = snapshot.data().capacity - snapshot.data().reservedSeats;
-  if (rows.length - preflightSkipped.size > remaining) throw new Error(`Há somente ${Math.max(0, remaining)} vagas disponíveis. Nenhuma linha deste envio foi importada.`);
+  const commercial = await getDocFromServer(doc(database, "tenantEntitlements", organizationId));
+  const policy = commercial.exists() ? commercial.data() as PublicEntitlements : null;
+  if (rows.length > preflightSkipped.size && !quotaGrowthAllowed(policy)) throw new Error("O plano atual não permite novas inscrições. O histórico foi preservado.");
+  const remaining = Math.min(snapshot.data().capacity, policy?.limits.passengersPerCaravan ?? snapshot.data().reservedSeats) - snapshot.data().reservedSeats;
+  if (rows.length > preflightSkipped.size && rows.length - preflightSkipped.size > remaining) throw new Error(`Há somente ${Math.max(0, remaining)} vagas disponíveis. Nenhuma linha deste envio foi importada.`);
   const results: ImportRowResult[] = [];
   for (let offset = 0; offset < rows.length;) {
     const candidate = rows.slice(offset, offset + CHUNK_SIZE);
@@ -60,7 +65,7 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
               committed = old.rowResults.map((row: ImportRowResult) => ({ ...row, status: row.status === "imported" ? "skipped" : row.status, reason: row.status === "imported" ? "Já importado neste lote." : row.reason }));
               return;
             }
-            const [tripSnapshot, registry, ...existing] = await Promise.all([tx.get(caravanRef), tx.get(registryRef), ...refs.map((ref) => tx.get(ref))]);
+            const [tripSnapshot, registry, commercialSnapshot, ...existing] = await Promise.all([tx.get(caravanRef), tx.get(registryRef), tx.get(doc(database, "tenantEntitlements", organizationId)), ...refs.map((ref) => tx.get(ref))]);
             if (!tripSnapshot.exists()) throw new Error("Caravana não encontrada.");
             const trip = tripSnapshot.data() as Caravan;
             if (trip.organizationId !== organizationId) throw new Error("Organização divergente.");
@@ -80,7 +85,9 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
               keys.filter(Boolean).forEach((key) => { additions[key] = true; claims[key] = true; });
               return { line: row.line, status: "imported", reason: "Importação confirmada." };
             });
-            if (Object.keys(documents).length > trip.capacity - trip.reservedSeats) {
+            const currentPolicy = commercialSnapshot.exists() ? commercialSnapshot.data() as PublicEntitlements : null;
+            if (Object.keys(documents).length > 0 && !quotaGrowthAllowed(currentPolicy)) throw new Error("O plano mudou durante o envio. Novas inscrições bloqueadas; etapas anteriores foram preservadas.");
+            if (Object.keys(documents).length > Math.min(trip.capacity, currentPolicy?.limits.passengersPerCaravan ?? trip.reservedSeats) - trip.reservedSeats) {
               documents = {}; additions = {}; claims = { ...beforeClaims };
               committed = committed.map((row) => row.status === "imported" ? { ...row, status: "rejected", reason: "As vagas foram ocupadas durante o envio. Nenhuma inscrição desta etapa foi criada." } : row);
             }

@@ -26,6 +26,9 @@ const commands = {
   "commercial-e2e": "playwright test e2e/commercial.spec.ts e2e/platform.spec.ts --project desktop-1440 --project mobile-320",
   quotas: "vitest run tests/quota-attempt.test.ts tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts",
   "quota-team": "vitest run tests/quota-operations.integration.test.ts --testNamePattern \"protects final internal\" --reporter verbose",
+  "quota-downgrade": "vitest run tests/import-operations.integration.test.ts --testNamePattern \"over-limit historical\"",
+  "quota-passenger-e2e": "playwright test e2e/reservation.spec.ts e2e/import.spec.ts --project desktop-1440 --project mobile-320",
+  "quota-passenger-focus": "playwright test e2e/reservation.spec.ts --grep \"commercial passenger quota\" --project desktop-1440 --project mobile-320",
   commercial: "vitest run tests/plan-catalog.test.ts tests/commercial-baseline.test.ts tests/commercial-data.integration.test.ts tests/platform.integration.test.ts tests/membership-rules.test.ts",
   branding: "vitest run tests/legacy-trip-aliases.test.ts tests/tenant-branding.test.ts tests/tenant-branding.integration.test.ts tests/platform.integration.test.ts tests/data.integration.test.ts tests/membership-rules.test.ts",
   finance: "vitest run tests/financial-attempt.test.ts tests/financial-diagnostics.test.ts tests/financial-operations.integration.test.ts tests/finance.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts tests/membership-rules.test.ts",
@@ -43,7 +46,7 @@ const commands = {
   migration: "node scripts/simulate-membership-migration.mjs --apply-synthetic",
 };
 if (!Object.hasOwn(commands, suite) || process.argv.length > 3) throw new Error("Choose a documented local suite.");
-const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo", "tenant-e2e", "platform-e2e", "support-e2e", "booking-e2e", "operations-e2e", "csv-e2e", "documents-e2e", "finance-e2e", "branding-e2e", "branding-all", "branding-visual", "commercial-e2e"].includes(suite);
+const withAuth = ["e2e", "demo-e2e", "demo-auth", "demo", "tenant-e2e", "platform-e2e", "support-e2e", "booking-e2e", "operations-e2e", "csv-e2e", "documents-e2e", "finance-e2e", "branding-e2e", "branding-all", "branding-visual", "commercial-e2e", "quota-passenger-e2e", "quota-passenger-focus"].includes(suite);
 const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "storage" ? "firestore,auth,storage" : withAuth ? "firestore,auth" : "firestore", commands[suite]];
 let exitCode = 1;
 try {

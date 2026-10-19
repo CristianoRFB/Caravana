@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, expect, it, vi } from "vitest";
+import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
 import { readFileSync } from "node:fs";
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, doc, getDoc, getDocs, query, setDoc, where, type Firestore } from "firebase/firestore";
@@ -13,6 +14,7 @@ afterAll(async () => { runtime.db = null; await env.clearFirestore(); await env.
 it("F3 gate imports and replays the documented 400-row limit with bounded atomic manifests", { timeout: 120000 }, async () => {
   await env.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();
+    await seedSyntheticEntitlements(db, "scale", "premium");
     await setDoc(doc(db, "memberships/synthetic-scale-owner/organizations/scale"), { uid: "synthetic-scale-owner", organizationId: "scale", role: "tenant_owner", status: "active" });
     await setDoc(doc(db, "caravans/synthetic-scale"), { organizationId: "scale", name: "Synthetic scale only", status: "published", reservedSeats: 0, capacity: 500, boardingPoints: [{ id: "point", name: "Synthetic point" }] });
   });

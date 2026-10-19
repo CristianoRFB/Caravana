@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { inspectSyntheticBookings, patchSyntheticTrip, seedSyntheticEnvironment } from "./fixtures";
+import { inspectSyntheticBookings, patchSyntheticTrip, patchSyntheticCommercial, seedSyntheticEnvironment } from "./fixtures";
 
 let dispose: (() => Promise<void>) | undefined;
 let failures: string[];
@@ -56,4 +56,15 @@ test("field validation leaves the form editable and the same passenger can corre
   await page.getByRole("button", { name: "Garantir minha vaga" }).click();
   await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/);
   expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 2, registrationCount: 2 });
+});
+test("commercial passenger quota blocks A growth while preserving its private link and allowing B reservations", async ({ page }) => {
+  await patchSyntheticTrip({ capacity: 100, reservedSeats: 59 }); await patchSyntheticCommercial("org-a", "essencial");
+  await page.goto("/caravana/sintetica-ride-a/inscricao"); await fill(page);
+  await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/); const privateUrl = page.url();
+  await page.goto("/caravana/sintetica-ride-a/inscricao"); await fill(page);
+  await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page.getByRole("alert")).toContainText("vagas");
+  await patchSyntheticCommercial("org-a", "essencial", false); await page.goto(privateUrl); await expect(page.getByRole("heading", { name: "Oi, Pessoa!", exact: true })).toBeVisible();
+  await page.goto("/caravana/sintetica-ride-b/inscricao"); await fill(page, "Pessoa sintética B independente");
+  await page.getByRole("button", { name: "Garantir minha vaga" }).click(); await expect(page).toHaveURL(/\/minha-inscricao\/[a-f0-9]{64}$/);
+  expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 60, registrationCount: 2 });
 });

@@ -25,3 +25,5 @@ Referência investigada: https://github.com/firebase/firebase-tools/issues/10518
 ## Proteção de namespaces (preparação)
 
 namespace-protection.ts é planner puro, sem SDK/I/O. Exige declaração explícita de cobertura de todas as fontes, reserva IDs históricos exatos, aliases e referências órfãs; conflitos/inventário incompleto produzem zero criações executáveis. Não confere sozinho a veracidade/completude de um export externo, não concede acesso e não executa bootstrap. Inventário, bootstrap e migração reais continuam BLOCKED sem autorização específica.
+
+Atualização2026-10-19: reservas/CSV agora aplicam quotas, com evidências em PASSENGER_QUOTAS.md. A pendência de integração de passageiros descrita no início deste documento foi atendida no módulo incremental seguinte; UI/equipe/onboarding/landing/gate F6 continuam pendentes.

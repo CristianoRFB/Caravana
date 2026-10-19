@@ -158,6 +158,10 @@ service cloud.firestore {
       let policy = get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data;
       return policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
     }
+    function quotaSeats(orgId, seats) {
+      return quotaGrowth(orgId) && seats is int && seats >= 0
+        && seats <= get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data.limits.passengersPerCaravan;
+    }
     function quotaCounts(data) {
       return { 'publishedCaravans': data.publishedCaravans, 'activeMembers': data.activeMembers, 'activeOwners': data.activeOwners };
     }
@@ -658,6 +662,7 @@ service cloud.firestore {
         && request.resource.data.capacity <= 1000;
       allow update: if (isTenantOwner(resource.data.organizationId)
           && ownerConfiguration()
+          && (request.resource.data.reservedSeats <= resource.data.reservedSeats || quotaSeats(resource.data.organizationId, request.resource.data.reservedSeats))
           && request.resource.data.organizationId == resource.data.organizationId
           && request.resource.data.capacity is int
           && request.resource.data.capacity > 0
@@ -676,6 +681,7 @@ service cloud.firestore {
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reservedSeats', 'lastReservationNonce', 'lastReservationId', 'updatedAt'])
           && !('lastReservationId' in request.resource.data)
           && request.resource.data.reservedSeats == resource.data.reservedSeats + 1
+          && quotaSeats(resource.data.organizationId, request.resource.data.reservedSeats)
           && request.resource.data.reservedSeats <= resource.data.capacity
           && request.resource.data.lastReservationNonce is string
           && request.resource.data.lastReservationNonce.matches('^[a-f0-9]{64}$')

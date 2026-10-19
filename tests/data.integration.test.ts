@@ -1,8 +1,9 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { seedSyntheticEntitlements } from "./fixtures/commercial-policy";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where, writeBatch, type Firestore } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, Timestamp, updateDoc, where, writeBatch, type Firestore } from "firebase/firestore";
 import { createReservationAttempt } from "../src/lib/reservation-attempt";
 import { updatePassengerWithAuthorizationReset } from "../src/lib/documents";
 import { assertFails } from "@firebase/rules-unit-testing";
@@ -40,6 +41,7 @@ async function seedTrip(extra: Record<string, unknown> = {}) {
     ...extra,
   };
   await env.withSecurityRulesDisabled(async (context) => {
+    await seedSyntheticEntitlements(context.firestore(), "org-a", "premium");
     await setDoc(doc(context.firestore(), "caravans/ride-a"), fields);
     await setDoc(doc(context.firestore(), "admins/admin-a"), { organizationId: "org-a", role: "admin" });
   });
@@ -189,6 +191,47 @@ describe("production data functions on synthetic emulator fixtures", () => {
     const outcomes = await Promise.allSettled([reserveSeat(trip, passenger), reserveSeat(trip, { ...passenger, passengerName: "Outra Pessoa Sintética" })]);
     expect(outcomes.filter((item) => item.status === "fulfilled")).toHaveLength(1);
     expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(1);
+  });
+  it("enforces the final commercial seat under concurrency and keeps replay/cancellation after growth is blocked", async () => {
+    const trip = await seedTrip({ capacity: 100, reservedSeats: 59 });
+    await env.withSecurityRulesDisabled(async (context) => seedSyntheticEntitlements(context.firestore(), "org-a", "essencial"));
+    const attempts = [createReservationAttempt(), createReservationAttempt()];
+    const outcomes = await Promise.allSettled(attempts.map((attempt) => reserveSeat(trip, passenger, attempt)));
+    expect(outcomes.filter((outcome) => outcome.status === "fulfilled")).toHaveLength(1);
+    const accepted = attempts[outcomes[0].status === "fulfilled" ? 0 : 1];
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(60);
+    await env.withSecurityRulesDisabled(async (context) => updateDoc(doc(context.firestore(), "tenantEntitlements/org-a"), { growthEnabled: false }));
+    expect(await reserveSeat(trip, passenger, accepted)).toBe(accepted.registrationId);
+    await expect(reserveSeat(trip, passenger)).rejects.toThrow("indisponíveis");
+    const registration = (await getRegistration(accepted.registrationId))!;
+    runtime.db = env.authenticatedContext("admin-a").firestore(); await cancelRegistration(registration);
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(59);
+    expect((await getRegistration(accepted.registrationId))?.registrationStatus).toBe("cancelled");
+  });
+  it("denies a direct SDK reservation above the plan while allowing an otherwise identical batch at the final seat", async () => {
+    const trip = await seedTrip({ capacity: 100, reservedSeats: 58 });
+    await env.withSecurityRulesDisabled(async (context) => seedSyntheticEntitlements(context.firestore(), "org-a", "essencial"));
+    const original = await reserveSeat(trip, passenger); const template = (await getDoc(doc(runtime.db!, "registrations", original))).data()!;
+    async function rawReservation(id: string, nonce: string, seats: number) {
+      const batch = writeBatch(runtime.db!);
+      batch.update(doc(runtime.db!, "caravans/ride-a"), { reservedSeats: seats, lastReservationNonce: nonce, updatedAt: serverTimestamp() });
+      batch.set(doc(runtime.db!, "registrations", id), { ...template, id, reservationNonce: nonce });
+      batch.set(doc(runtime.db!, "reservationReceipts", nonce), { registrationId: id, organizationId: "org-a", caravanId: "ride-a" });
+      return batch.commit();
+    }
+    await rawReservation("c".repeat(64), "d".repeat(64), 60);
+    await assertFails(rawReservation("e".repeat(64), "f".repeat(64), 61));
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(60);
+    await env.withSecurityRulesDisabled(async (context) => { await updateDoc(doc(context.firestore(), "caravans/ride-a"), { reservedSeats: 59 }); await updateDoc(doc(context.firestore(), "tenantEntitlements/org-a"), { growthUntil: Timestamp.fromMillis(1) }); });
+    await assertFails(rawReservation("e".repeat(64), "f".repeat(64), 60));
+  });
+  it("fails closed without an assigned policy and with expired growth without changing seats", async () => {
+    const trip = await seedTrip();
+    await env.withSecurityRulesDisabled(async (context) => deleteDoc(doc(context.firestore(), "tenantEntitlements/org-a")));
+    await expect(reserveSeat(trip, passenger)).rejects.toThrow("indisponíveis");
+    await env.withSecurityRulesDisabled(async (context) => { await seedSyntheticEntitlements(context.firestore(), "org-a", "essencial"); await updateDoc(doc(context.firestore(), "tenantEntitlements/org-a"), { growthUntil: Timestamp.fromMillis(1) }); });
+    await expect(reserveSeat(trip, passenger)).rejects.toThrow("indisponíveis");
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(0);
   });
 
   it("cancels twice without releasing the same seat twice or losing received amounts", async () => {

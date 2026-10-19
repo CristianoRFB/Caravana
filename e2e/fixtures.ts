@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
 import type { Caravan, Registration } from "../src/lib/types";
+import { seedSyntheticEntitlements } from "../tests/fixtures/commercial-policy";
+import type { PlanId } from "../src/lib/plan-catalog";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
 let syntheticAdminUid: string | undefined;
@@ -22,6 +24,10 @@ export async function patchSyntheticTrip(fields: Partial<Caravan>) {
       await setDoc(doc(context.firestore(), "caravans/ride-a"), fields, { merge: true });
     });
   } finally { await env.cleanup(); }
+}
+export async function patchSyntheticCommercial(organizationId: "org-a" | "org-b", planId: PlanId, growthEnabled = true) {
+  assertSyntheticEndpoints(); const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try { await env.withSecurityRulesDisabled(async (context) => { await seedSyntheticEntitlements(context.firestore(), organizationId, planId); await updateDoc(doc(context.firestore(), "tenantEntitlements", organizationId), { growthEnabled }); }); } finally { await env.cleanup(); }
 }
 
 export async function inspectSyntheticBookings() {
@@ -122,6 +128,8 @@ export async function seedSyntheticEnvironment() {
     await setDoc(doc(db, `admins/${localId}`), { organizationId: "org-a", role: "admin" });
     await setDoc(doc(db, "organizations/org-a"), { name: "Organização Sintética A" });
     await setDoc(doc(db, "organizations/org-b"), { name: "Organização Sintética B" });
+    await seedSyntheticEntitlements(db, "org-a", "premium"); await seedSyntheticEntitlements(db, "org-b", "premium");
+    for (const organizationId of ["org-a", "org-b"]) await setDoc(doc(db, "tenantUsage", organizationId), { organizationId, version: "commercial-v1", publishedCaravans: trips.filter((trip) => trip.organizationId === organizationId).length, activeMembers: 1, activeOwners: 1 });
     for (const [index, caravan] of trips.entries()) {
       await setDoc(doc(db, `caravans/${caravan.id}`), caravan);
       const id = String.fromCharCode(97 + index).repeat(64);
