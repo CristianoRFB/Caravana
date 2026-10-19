@@ -4,6 +4,7 @@ import { initializeApp, deleteApp, type FirebaseApp } from "firebase/app";
 import { connectAuthEmulator, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, connectFirestoreEmulator, doc, getDoc, getDocs, getFirestore, query, setDoc, terminate, updateDoc, where } from "firebase/firestore";
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
+import { PlanCatalog } from "../src/lib/plan-catalog";
 import { DEMO_ACCOUNTS } from "../src/lib/demo-identities";
 import { seedDemoAccounts } from "../scripts/seed-demo.mjs";
 
@@ -65,5 +66,49 @@ describe("fixed demonstration accounts with actual Auth sign-in and enforced Fir
     await expect(getDocs(collection(db, "organizations"))).rejects.toMatchObject({ code: "permission-denied" });
     await expect(updateDoc(doc(db, `profiles/${uid}`), { role: "tenant_owner" })).rejects.toMatchObject({ code: "permission-denied" });
     await expect(setDoc(doc(db, `memberships/${uid}/organizations/demo-org-a`), { uid, organizationId: "demo-org-a", role: "tenant_owner", status: "active" })).rejects.toMatchObject({ code: "permission-denied" });
+  });
+});
+
+
+describe("commercial demonstration with explicit A/B plans", () => {
+  it.each(["owner", "ownerB"] as const)("%s reads its own contract and public limits without exposing the foreign contract", async (key) => {
+    const { db, uid } = await signIn(key);
+    const suffix = key === "owner" ? "a" : "b";
+    const organizationId = `demo-org-${suffix}`;
+    const plan = PlanCatalog[key === "owner" ? "essencial" : "pro"];
+    const subscription = (await getDoc(doc(db, `subscriptions/${organizationId}`))).data();
+    expect(subscription).toMatchObject({ organizationId, planId: plan.id, status: "demo", monthlyCatalogCents: plan.monthlyCents, setupFeeCents: 0 });
+    const publicPolicy = (await getDoc(doc(db, `tenantEntitlements/${organizationId}`))).data();
+    expect(publicPolicy).toMatchObject({ organizationId, limits: plan.limits, growthEnabled: true, growthUntil: null });
+    expect(publicPolicy).not.toHaveProperty("monthlyCatalogCents");
+    expect(publicPolicy).not.toHaveProperty("updatedBy");
+    expect((await getDoc(doc(db, `tenantUsage/${organizationId}`))).data()).toMatchObject({ publishedCaravans: 1, activeMembers: 1, activeOwners: 1 });
+    expect((await getDoc(doc(db, `tenantTeam/${organizationId}/members/${uid}`))).data()).toMatchObject({ uid, role: "tenant_owner", status: "active" });
+    const foreignId = key === "owner" ? "demo-org-b" : "demo-org-a";
+    await expect(getDoc(doc(db, `subscriptions/${foreignId}`))).rejects.toMatchObject({ code: "permission-denied" });
+    await expect(updateDoc(doc(db, `tenantUsage/${organizationId}`), { publishedCaravans: 0 })).rejects.toMatchObject({ code: "permission-denied" });
+  });
+  it("preserves edited commercial status, counters and brand instead of resetting them on reseed", async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await updateDoc(doc(ctx.firestore(), "subscriptions/demo-org-a"), { status: "suspended" });
+      await updateDoc(doc(ctx.firestore(), "tenantEntitlements/demo-org-a"), { growthEnabled: false });
+      await updateDoc(doc(ctx.firestore(), "tenantUsage/demo-org-a"), { publishedCaravans: 2 });
+      await updateDoc(doc(ctx.firestore(), "publicTenantSettings/demo-org-a"), { publicName: "Marca fictícia editada" });
+    });
+    expect((await seedDemoAccounts()).created).toBe(0);
+    const { db } = await signIn("owner");
+    expect((await getDoc(doc(db, "subscriptions/demo-org-a"))).data()?.status).toBe("suspended");
+    expect((await getDoc(doc(db, "tenantEntitlements/demo-org-a"))).data()?.growthEnabled).toBe(false);
+    expect((await getDoc(doc(db, "tenantUsage/demo-org-a"))).data()?.publishedCaravans).toBe(2);
+    expect((await getDoc(doc(db, "publicTenantSettings/demo-org-a"))).data()?.publicName).toBe("Marca fictícia editada");
+  });
+  it("refuses to reactivate an existing revoked member and leaves every fixture unchanged", async () => {
+    const memberPath = `memberships/${seed.accounts.ownerB.uid}/organizations/demo-org-b`;
+    await env.withSecurityRulesDisabled(async (ctx) => { await updateDoc(doc(ctx.firestore(), memberPath), { status: "revoked" }); });
+    await expect(seedDemoAccounts()).rejects.toThrow("Demo fixture conflict");
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      expect((await getDoc(doc(ctx.firestore(), memberPath))).data()?.status).toBe("revoked");
+      expect((await getDoc(doc(ctx.firestore(), "tenantUsage/demo-org-a"))).data()?.publishedCaravans).toBe(2);
+    });
   });
 });

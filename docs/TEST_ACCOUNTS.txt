@@ -1,5 +1,5 @@
 CARAVANA 77 — CONTAS DEMONSTRATIVAS LOCAIS
-Atualizado em 2026-10-16. SOMENTE EMULADORES. Nenhuma destas contas deve ser usada no Firebase real.
+Atualizado em 2026-10-19. SOMENTE EMULADORES. Nenhuma destas contas deve ser usada no Firebase real.
 
 PASSAGEIRO
 E-mail: teste@gmail.com
@@ -14,11 +14,16 @@ Senha: 123456
 Papel: tenant_owner de demo-org-a (Organizadora Demonstrativa A).
 Login: http://127.0.0.1:5173/admin/login
 Financeiro: http://127.0.0.1:5173/admin/financeiro
+Plano: Essencial, status demo, limites 2 caravanas / 60 passageiros por caravana / 2 integrantes.
+Marca azul: http://127.0.0.1:5173/o/demo-organizadora-a
+Plano/uso: http://127.0.0.1:5173/admin/plano
 
 ADMINISTRADOR B — TESTES DE ISOLAMENTO
 E-mail: admin.b@example.test
 Senha: 123456
 Papel: tenant_owner de demo-org-b, sem acesso privado à organização A.
+Plano: Pro, status demo, limites 5 caravanas / 200 passageiros por caravana / 5 integrantes.
+Marca verde: http://127.0.0.1:5173/o/demo-organizadora-b
 Mesma rota de login administrativo. Nenhuma conta acima possui Platform Owner.
 
 MÁQUINA NOVA — WINDOWS, LINUX OU MACOS
@@ -38,10 +43,13 @@ Windows/JDK25: uma interrupção forçada com Ctrl+C pode deixar o Java do emula
 PERSISTÊNCIA E DADOS
 O seed cria usuários no Auth Emulator por API real de cadastro/login. Cria perfis e memberships no Firestore Emulator.
 A aplicação autentica por e-mail/senha normalmente e todas as leituras/escritas da aplicação passam pelas Rules locais.
+Contratos demo usam os valores do catálogo aprovado apenas para exibição; não há cobrança, trial público ou concessão global. Usage inicial por organizadora: 1 publicada, 1 integrante, 1 owner. As equipes iniciais são distintas e contêm somente seu owner; convites continuam bloqueados por sincronização do LAB04-PC23.
+Marcas, slugs, namespaces locais, disponibilidade, contratos, entitlements e diretório são preparados explicitamente. O seed não cria marcador global de inventário completo nem simula aprovação de onboarding.
 Somente a preparação de fixtures usa o contexto privilegiado da biblioteca de testes, após validar endpoints locais exatos; isso não concede custom claims ou bypass à sessão do usuário.
 O seed é idempotente: verifica contas existentes com a senha fixa, cria documentos ausentes e preserva edições existentes. Divergência de papel/UID/status causa erro; não reativa membro revogado nem reseta senha.
 Sem export/import de emulador, os dados são recriados a cada inicialização. E-mails/senhas continuam os mesmos; UIDs são fornecidos pelo Auth local e os vínculos são gerados pelo seed. Se uma sessão antiga ficar aberta após reiniciar, saia e entre novamente.
 Não dependa dos dados de outro computador. Os arquivos versionados reproduzem o ambiente.
+Contratos, contadores, suspensão e marcas editados também são preservados no reseed; conflitos de identidade/membership causam erro antes de gravar qualquer documento Firestore. Não copiar fixtures para produção.
 São duas organizadoras, duas caravanas, três inscrições, comprovantes PDF fictícios, lançamentos de R$25 e despesas de R$10 por caravana. Não há cobrança, conta bancária, envio de e-mail ou transação financeira real.
 
 PROTEÇÕES

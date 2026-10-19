@@ -1,3 +1,4 @@
+import { PlanCatalog } from "../src/lib/plan-catalog.ts";
 import { DEMO_ACCOUNTS } from "../src/lib/demo-identities.ts";
 
 export function assertDemoSeedEnvironment() {
@@ -37,6 +38,22 @@ export async function seedDemoAccounts() {
     const caravanId = `demo-ride-${suffix}`;
     add(`organizations/${organizationId}`, { name: `Organizadora Demonstrativa ${suffix.toUpperCase()}`, status: "active", synthetic: true }, ["synthetic"]);
     add(`memberships/${owner.uid}/organizations/${organizationId}`, { uid: owner.uid, organizationId, role: "tenant_owner", status: "active", createdAt: at, updatedAt: at }, ["uid", "organizationId", "role", "status"]);
+    // Explicit commercial fixtures, only behind the exact emulator guard above.
+    // Preserve every existing counter, contract and branding edit on repeat runs.
+    const plan = PlanCatalog[suffix === "a" ? "essencial" : "pro"];
+    const slug = `demo-organizadora-${suffix}`;
+    const operationId = (suffix === "a" ? "a" : "b").repeat(32);
+    add(`tenantUsage/${organizationId}`, { organizationId, version: "commercial-v1", publishedCaravans: 1, activeMembers: 1, activeOwners: 1 }, ["organizationId", "version"]);
+    add(`tenantEntitlements/${organizationId}`, { organizationId, limits: { ...plan.limits }, growthEnabled: true, growthUntil: null, updatedAt: at, lastCommercialOperationId: operationId }, ["organizationId"]);
+    add(`subscriptions/${organizationId}`, { organizationId, planId: plan.id, status: "demo", monthlyCatalogCents: plan.monthlyCents, setupWaived: true, setupFeeCents: 0,
+      overrideMonthlyCents: null, overrideExpiresAt: null, overrideReason: "", trialEndsAt: null, revision: 1, reason: "Demonstração sintética sem cobrança", updatedAt: at, updatedBy: owner.uid, lastCommercialOperationId: operationId }, ["organizationId"]);
+    add(`organizationAvailability/${organizationId}`, { organizationId, status: "active", updatedAt: at, lastPlatformOperationId: operationId }, ["organizationId"]);
+    add(`tenantTeam/${organizationId}/members/${owner.uid}`, { uid: owner.uid, organizationId, role: "tenant_owner", status: "active", updatedAt: at }, ["uid", "organizationId", "role", "status"]);
+    add(`tenantNamespaces/${organizationId}`, { namespace: organizationId, organizationId, state: "active", version: "namespace-v1" }, ["namespace", "organizationId", "version"]);
+    add(`tenantNamespaces/${slug}`, { namespace: slug, organizationId, state: "active", version: "namespace-v1" }, ["namespace", "organizationId", "version"]);
+    add(`tenantSlugs/${slug}`, { slug, organizationId }, ["slug", "organizationId"]);
+    add(`publicTenantSettings/${organizationId}`, { organizationId, slug, publicName: `Organizadora Demonstrativa ${suffix.toUpperCase()}`, description: "Viagens fictícias para explorar a Caravana 77.",
+      primaryColor: suffix === "a" ? "#1d4ed8" : "#0f766e", logo: "", website: "", contactEmail: "", whatsapp: "", operationalMessage: "DEMONSTRAÇÃO LOCAL: dados fictícios, não realize pagamentos." }, ["organizationId", "slug"]);
     add(`profiles/${owner.uid}`, { displayName: `Admin de demonstração ${suffix.toUpperCase()}`, role: "tenant_owner", synthetic: true }, ["role", "synthetic"]);
     add(`caravans/${caravanId}`, {
       id: caravanId, organizationId, organizerName: `Organizadora Demonstrativa ${suffix.toUpperCase()}`, name: `Viagem demonstrativa ${suffix.toUpperCase()}`, slug: `demonstracao-${suffix}`, event: "Evento fictício", description: "Ambiente local com dados inteiramente fictícios.",

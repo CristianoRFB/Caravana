@@ -1,0 +1,58 @@
+
+> caravana-77@0.1.0 test:demo
+> node scripts/run-local-tests.mjs demo-auth
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: downloading cloud-firestore-emulator-v1.22.0.jar...
+
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run --config vitest.auth.config.ts
+
+ RUN  v5.0.1 /workspace/Caravana
+
+ ❯ auth-tests/demo-accounts.test.ts (8 tests | 8 skipped) 20064ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  auth-tests/demo-accounts.test.ts [ auth-tests/demo-accounts.test.ts ]
+Error: Hook timed out in 20000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ auth-tests/demo-accounts.test.ts:14:1
+     12| let seed: Awaited<ReturnType<typeof seedDemoAccounts>>;
+     13| const apps: FirebaseApp[] = [];
+     14| beforeAll(async () => {
+       | ^
+     15|   if (process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") t…
+     16|   env = await initializeTestEnvironment({ projectId: "demo-caravana77-…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  auth-tests/demo-accounts.test.ts [ auth-tests/demo-accounts.test.ts ]
+TypeError: Cannot read properties of undefined (reading 'cleanup')
+ ❯ auth-tests/demo-accounts.test.ts:20:26
+     18| });
+     19| afterEach(async () => { for (const app of apps.splice(0)) { await term…
+     20| afterAll(async () => env.cleanup());
+       |                          ^
+     21|
+     22| async function signIn(key: keyof typeof DEMO_ACCOUNTS) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 skipped (8)
+   Start at  23:47:29
+   Duration  21.28s (tests 96%, import 3%, transform 1%)
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run --config vitest.auth.config.ts" exited with code 1

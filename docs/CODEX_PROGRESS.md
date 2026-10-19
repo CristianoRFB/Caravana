@@ -58,3 +58,6 @@ Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançado
 2026-10-19 | F6 onboarding assistido | PASS local incremental | 11 documentos atômicos, plano explícito/UID conferido/sem cobrança, replay persistido e proteção histórica.15 unit/SDK/Rules+4 E2E PASS. F6 geral IN_PROGRESS; gates reais BLOCKED. Ver COMMERCIAL_ONBOARDING.md.
 
 | F6-growth-plan-ui | P0 | PASS local incremental / F6 IN_PROGRESS | Suspensão raiz, capacidade auditada, plano privado do owner, downgrade sem apagar histórico |45 testes+2 E2E finais PASS; COMMERCIAL_GROWTH_UI.md | Equipe/convites/demo/landing/gate F6 TODO; produção BLOCKED |
+
+| F6-team-cloud-sync | P0 | BLOCKED | Remoto65f8fac, zero commits posteriores na recuperação; convites locais indisponíveis | ls-remote/log e ausência de serviço/UI/testes de convites | Aguardar checkpoint LAB04-PC23; não reimplementar concorrente |
+| F6-demo-commercial | P1 | PASS incremental local | Duas marcas/owners/planos distintos, contratos demo e usage, fixtures aditivas |8 Auth/Rules+10 E2E1440/320, lint/typecheck/build E2E PASS; F6_DEMO.md | Vagas públicas/landing/gate F6 ainda pendentes |
