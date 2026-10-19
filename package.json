@@ -45,7 +45,8 @@
     "test:branding:visual": "node scripts/run-local-tests.mjs branding-visual",
     "test:commercial": "node scripts/run-local-tests.mjs commercial",
     "test:commercial:e2e": "node scripts/run-local-tests.mjs commercial-e2e",
-    "test:quotas": "node scripts/run-local-tests.mjs quotas"
+    "test:quotas": "node scripts/run-local-tests.mjs quotas",
+    "test:quota-team": "node scripts/run-local-tests.mjs quota-team"
   },
   "dependencies": {
     "firebase": "^11.10.0",

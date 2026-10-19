@@ -11,7 +11,7 @@ import {
   where,
   type Unsubscribe,
 } from "firebase/firestore";
-import { runTransaction, setDoc, updateDoc, writeBatch } from "./tracked-firestore";
+import { runTransaction, updateDoc, writeBatch } from "./tracked-firestore";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -33,6 +33,10 @@ import { validateProofFile } from "./proof-policy";
 import { isDemoIdentity } from "./demo-identities";
 import { getDocumentPolicy, reviewAuthorization, updatePassengerWithAuthorizationReset } from "./documents";
 import { createReservationAttempt, reservationRequestHash, ReservationAttemptConflict, validReservationAttempt, type ReservationAttempt } from "./reservation-attempt";
+import { createLimitedCaravan, updateLimitedCaravan } from "./quota-operations";
+import { importDigest } from "./import-identity";
+import { completeQuotaAttempt, getQuotaAttempt } from "./quota-attempt";
+import { trackWrite } from "./pending-writes";
 
 const legacyReservationIdsCleared = new Set<string>();
 
@@ -343,30 +347,28 @@ export async function uploadProof(
   await batch.commit();
 }
 export { reviewPayment, toggleCheckin, cancelRegistration } from "./registration-operations";
+async function caravanCommand(scope: string, payload: unknown, operationId: string | undefined, execute: (id?: string) => Promise<unknown>): Promise<void> {
+  return trackWrite(async () => {
+    if (operationId || typeof window === "undefined") { await execute(operationId); return; }
+    if (!auth?.currentUser) throw new Error("Entre com a conta da organização.");
+    const actorScope = `${auth.currentUser.uid}:${scope}`; const digest = await importDigest(payload);
+    const id = getQuotaAttempt(actorScope, digest, window.sessionStorage);
+    await execute(id); completeQuotaAttempt(actorScope, digest, id, window.sessionStorage);
+  });
+}
 export async function createCaravan(
   orgId: string,
   payload: Omit<Caravan, "id" | "organizationId" | "reservedSeats">,
+  operationId?: string,
 ): Promise<void> {
-  if (!db) throw new Error("Firebase não está configurado.");
-  const caravanRef = doc(collection(db, "caravans"));
-  await setDoc(caravanRef, {
-    ...payload,
-    organizationId: orgId,
-    reservedSeats: 0,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
+  await caravanCommand(`${orgId}:caravan:new`, payload, operationId, (id) => createLimitedCaravan(orgId, payload, id));
 }
 export async function updateCaravan(
   id: string,
   patch: Partial<Caravan>,
+  operationId?: string,
 ): Promise<void> {
-  if (!db) throw new Error("Firebase não está configurado.");
-  await setDoc(
-    doc(db, "caravans", id),
-    { ...patch, updatedAt: serverTimestamp() },
-    { merge: true },
-  );
+  await caravanCommand(`caravan:${id}`, patch, operationId, (op) => updateLimitedCaravan(id, patch, op));
 }
 export async function loadProof(reg: Registration): Promise<Blob> {
   if (!db || !reg.proofId)

@@ -1,0 +1,123 @@
+
+> caravana-77@0.1.0 test:quotas
+> node scripts/run-local-tests.mjs quotas
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/quota-operations.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:30.299Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff8c error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:32.334Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff8d error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:34.360Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff8e error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:36.372Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff8f error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:38.867Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff90 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:41.934Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff91 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:52:46.579Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x5eecff92 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+ ❯ tests/quota-operations.integration.test.ts (4 tests | 4 failed) 39328ms
+   ❯ quota-linked caravan and internal membership operations (4)
+     × serializes the final published slot, replays creation and never reopens an archived caravan 792ms
+     × requires a plan for new growth but keeps configuration/history and decrements exact published count 163ms
+     × protects final internal slot, allows audited revoke/reactivate and never removes the last owner 13061ms
+     × denies direct owner counter/status bypass and rejects B/global writes into the existing tenant 22017ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > serializes the final published slot, replays creation and never reopens an archived caravan
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/quota-operations.integration.test.ts:30:69
+     28|     await seed(); const id = quotaOperationId(); const other = quotaOp…
+     29|     const results = await Promise.allSettled([createLimitedCaravan("a"…
+     30|     expect(results.filter((entry) => entry.status === "fulfilled")).to…
+       |                                                                     ^
+     31|     const accepted = results[0].status === "fulfilled" ? id : other;
+     32|     expect((await read("tenantUsage/a")).publishedCaravans).toBe(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > requires a plan for new growth but keeps configuration/history and decrements exact published count
+AssertionError: expected [Function] to throw error including 'plano' but got '7 PERMISSION_DENIED: \nevaluation err…'
+
+- Expected
++ Received
+
+- plano
++ 7 PERMISSION_DENIED: 
++ evaluation error at L631:27 for 'get' @ L631, Null value error. for 'get' @ L631
+
+ ❯ tests/quota-operations.integration.test.ts:40:52
+     38|   it("requires a plan for new growth but keeps configuration/history a…
+     39|     await seed(); await env.withSecurityRulesDisabled(async (context) …
+     40|     await expect(createLimitedCaravan("a", payload)).rejects.toThrow("…
+       |                                                    ^
+     41|     await updateLimitedCaravan("base-a", { name: "Histórico preservado…
+     42|     expect((await read("tenantUsage/a")).publishedCaravans).toBe(0); e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+FirebaseError: 10 ABORTED: Transaction lock timeout.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+Error: {"error":{"code":409,"message":"Transaction lock timeout.","status":"ABORTED"}}
+ ❯ RulesTestEnvironmentImpl.clearFirestore node_modules/@firebase/rules-unit-testing/src/impl/test_environment.ts:119:13
+ ❯ tests/quota-operations.integration.test.ts:12:58
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/quota-operations.integration.test.ts:53:3
+     51|     await saveInternalMember("a", "staff-two", "staff", "active", "Nov…
+     52|   });
+     53|   it("denies direct owner counter/status bypass and rejects B/global w…
+       |   ^
+     54|     await seed(); await assertFails(updateDoc(doc(runtime.db!, "carava…
+     55|     await assertFails(setDoc(doc(runtime.db!, "caravans/forged"), { ..…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  16:52:07
+   Duration  42.44s (tests 94%, import 6%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/quota-operations.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 10972).

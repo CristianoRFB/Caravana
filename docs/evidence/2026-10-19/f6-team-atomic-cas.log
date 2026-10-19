@@ -1,0 +1,90 @@
+
+> caravana-77@0.1.0 test:quota-team
+> node scripts/run-local-tests.mjs quota-team
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/quota-operations.integration.test.ts --testNamePattern "protects final internal" --reporter verbose
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ↓ tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > serializes the final published slot, replays creation and never reopens an archived caravan
+ ↓ tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > requires a plan for new growth but keeps configuration/history and decrements exact published count
+stdout | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+team: seeded
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:09.473Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948e5 error. Code: 2 Message: 2 UNKNOWN: Application error processing RPC
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:11.492Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948e6 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:13.511Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948e7 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:15.548Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948e8 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:17.587Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948e9 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:20.982Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948ea error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+[2026-10-19T20:07:25.751Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x35c948eb error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+ × tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner 20024ms
+   → Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   → expected 2 to be +0 // Object.is equality
+ ↓ tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+ ↓ tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/quota-operations.integration.test.ts:45:3
+     43|     await expect(updateLimitedCaravan("base-a", { status: "published" …
+     44|   });
+     45|   it("protects final internal slot, allows audited revoke/reactivate a…
+       |   ^
+     46|     await seed(); console.info("team: seeded"); await saveInternalMemb…
+     47|     await expect(saveInternalMember("a", "staff-two", "staff", "active…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tests/quota-operations.integration.test.ts:12:49
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  17:07:05
+   Duration  23.32s (tests 99%, import 1%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/quota-operations.integration.test.ts --testNamePattern "protects final internal" --reporter verbose" exited with code 1
+Stopped test emulator started by this run (PID 13904).

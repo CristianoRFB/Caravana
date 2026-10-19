@@ -154,10 +154,99 @@ service cloud.firestore {
         : planId == 'pro' ? { 'monthlyCents': 14900, 'limits': { 'activeCaravans': 5, 'passengersPerCaravan': 200, 'internalUsers': 5 } }
         : { 'monthlyCents': 21900, 'limits': { 'activeCaravans': 15, 'passengersPerCaravan': 500, 'internalUsers': 15 } };
     }
+    function quotaGrowth(orgId) {
+      let policy = get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data;
+      return policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
+    }
+    function quotaCounts(data) {
+      return { 'publishedCaravans': data.publishedCaravans, 'activeMembers': data.activeMembers, 'activeOwners': data.activeOwners };
+    }
+    function quotaBase(event, op) {
+      let before = get(/databases/$(database)/documents/tenantUsage/$(event.organizationId)).data;
+      let after = getAfter(/databases/$(database)/documents/tenantUsage/$(event.organizationId)).data;
+      return event.keys().hasOnly(['organizationId', 'entityId', 'kind', 'action', 'actorUid', 'at', 'requestHash', 'reason', 'before', 'after', 'beforeStatus', 'afterStatus', 'beforeRole', 'afterRole'])
+        && op.matches('^[a-f0-9]{32}$') && event.actorUid == request.auth.uid && event.at == request.time
+        && event.requestHash.matches('^[a-f0-9]{64}$') && event.reason is string && event.reason.size() >= 3 && event.reason.size() <= 300
+        && before.organizationId == event.organizationId && after.organizationId == event.organizationId
+        && before.version == 'commercial-v1' && after.version == before.version
+        && event.before == quotaCounts(before) && event.after == quotaCounts(after)
+        && after.publishedCaravans is int && after.publishedCaravans >= 0
+        && after.activeMembers is int && after.activeOwners is int && after.activeOwners >= 1 && after.activeMembers >= after.activeOwners
+        && ((event.before == event.after && after == before) || (event.before != event.after && after.lastQuotaOperationId == op && after.updatedAt == request.time));
+    }
+    function quotaCaravan(event, op) {
+      let path = /databases/$(database)/documents/caravans/$(event.entityId);
+      let oldStatus = exists(path) ? get(path).data.status : 'absent';
+      let after = getAfter(path).data;
+      return event.kind == 'caravan' && event.beforeStatus == oldStatus && event.afterStatus == after.status
+        && event.beforeRole == '' && event.afterRole == ''
+        && after.organizationId == event.organizationId && after.lastQuotaOperationId == op && after.updatedAt == request.time
+        && (event.action == 'caravan_created' ? (!exists(path) && event.entityId == op && after.creationRequestHash == event.requestHash) : (event.action == 'caravan_updated' && exists(path) && get(path).data.organizationId == event.organizationId))
+        && event.after.activeMembers == event.before.activeMembers && event.after.activeOwners == event.before.activeOwners
+        && event.after.publishedCaravans == event.before.publishedCaravans + (after.status == 'published' ? 1 : 0) - (oldStatus == 'published' ? 1 : 0)
+        && (event.after.publishedCaravans <= event.before.publishedCaravans || (quotaGrowth(event.organizationId)
+          && event.after.publishedCaravans <= get(/databases/$(database)/documents/tenantEntitlements/$(event.organizationId)).data.limits.activeCaravans));
+    }
+    function quotaDelta(before, after, wasIncluded, isIncluded) {
+      return (wasIncluded == isIncluded && after == before)
+        || (!wasIncluded && isIncluded && after == before + 1)
+        || (wasIncluded && !isIncluded && after == before - 1);
+    }
+    function quotaMember(event, op) {
+      let path = /databases/$(database)/documents/memberships/$(event.entityId)/organizations/$(event.organizationId);
+      let oldStatus = exists(path) ? get(path).data.status : 'absent';
+      let oldRole = exists(path) ? get(path).data.role : '';
+      let after = getAfter(path).data;
+      return event.kind == 'member' && event.action == 'member_saved'
+        && event.beforeStatus == oldStatus && event.beforeRole == oldRole && event.afterStatus == after.status && event.afterRole == after.role
+        && (exists(path) || after.status == 'active') && after.role in ['tenant_owner', 'staff'] && after.status in ['active', 'revoked']
+        && after.uid == event.entityId && after.organizationId == event.organizationId && after.updatedAt == request.time && after.lastQuotaOperationId == op
+        && event.after.publishedCaravans == event.before.publishedCaravans
+        && quotaDelta(event.before.activeMembers, event.after.activeMembers, oldStatus == 'active', after.status == 'active')
+        && quotaDelta(event.before.activeOwners, event.after.activeOwners, oldStatus == 'active' && oldRole == 'tenant_owner', after.status == 'active' && after.role == 'tenant_owner')
+        && (event.after.activeMembers <= event.before.activeMembers || (quotaGrowth(event.organizationId)
+          && event.after.activeMembers <= get(/databases/$(database)/documents/tenantEntitlements/$(event.organizationId)).data.limits.internalUsers));
+    }
+    function linkedQuota(orgId, op, kind, entityId) {
+      let path = /databases/$(database)/documents/tenantQuotaOperations/$(op);
+      let event = getAfter(path).data;
+      return !exists(path) && event.organizationId == orgId && event.kind == kind && event.entityId == entityId
+        && quotaBase(event, op) && ((kind == 'caravan' && quotaCaravan(event, op)) || (kind == 'member' && quotaMember(event, op)));
+    }
+    function quotaDirectory(event, op) {
+      return getAfter(/databases/$(database)/documents/tenantTeam/$(event.organizationId)/members/$(event.entityId)).data
+        == { 'uid': event.entityId, 'organizationId': event.organizationId, 'role': event.afterRole, 'status': event.afterStatus, 'updatedAt': request.time, 'lastQuotaOperationId': op };
+    }
+    match /tenantQuotaOperations/{op} {
+      allow get: if (resource == null && signedIn()) || (resource != null && isTenantOwner(resource.data.organizationId));
+      allow list: if isTenantOwner(resource.data.organizationId);
+      allow create: if isTenantOwner(request.resource.data.organizationId) && quotaBase(request.resource.data, op)
+        && ((request.resource.data.kind == 'caravan' && quotaCaravan(request.resource.data, op)) || (request.resource.data.kind == 'member' && quotaMember(request.resource.data, op) && quotaDirectory(request.resource.data, op)));
+      allow update, delete: if false;
+    }
+    match /tenantTeam/{orgId}/members/{uid} {
+      allow get, list: if isTenantOwner(orgId);
+      allow create, update: if isTenantOwner(orgId)
+        && request.resource.data == { 'uid': uid, 'organizationId': orgId,
+          'role': getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.role,
+          'status': getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.status,
+          'updatedAt': request.time, 'lastQuotaOperationId': getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.lastQuotaOperationId }
+        && !exists(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId))
+        && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.organizationId == orgId
+        && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.kind == 'member'
+        && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.entityId == uid;
+      allow delete: if false;
+    }
     match /tenantUsage/{orgId} {
       allow get: if isTenantOwner(orgId) || isPlatformOwner();
       // Legacy baseline is never invented/reset by the client. New onboarding/quota operations follow later.
-      allow list, create, update, delete: if false;
+      allow list, create, delete: if false;
+      allow update: if isTenantOwner(orgId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publishedCaravans', 'activeMembers', 'activeOwners', 'updatedAt', 'lastQuotaOperationId'])
+        && quotaCounts(request.resource.data) != quotaCounts(resource.data)
+        && linkedQuota(orgId, request.resource.data.lastQuotaOperationId,
+          getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.kind,
+          getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.entityId);
     }
     match /subscriptions/{orgId} {
       function valid(data) {
@@ -242,7 +331,12 @@ service cloud.firestore {
     }
 
     match /memberships/{uid}/organizations/{orgId} {
-      allow get, list: if signedIn() && request.auth.uid == uid;
+      allow get: if (signedIn() && request.auth.uid == uid) || isTenantOwner(orgId);
+      allow list: if signedIn() && request.auth.uid == uid;
+      allow create: if isTenantOwner(orgId)
+        && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt', 'lastQuotaOperationId'])
+        && request.resource.data.createdAt == request.time
+        && linkedQuota(orgId, request.resource.data.lastQuotaOperationId, 'member', uid);
       allow create: if isPlatformOwner()
         && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt'])
         && request.resource.data.uid == uid && request.resource.data.organizationId == orgId
@@ -251,7 +345,10 @@ service cloud.firestore {
         && !exists(/databases/$(database)/documents/organizations/$(orgId))
         && getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.ownerUid == uid
         && platformOperation(orgId, getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId, 'tenant_created');
-      allow update, delete: if false;
+      allow update: if isTenantOwner(orgId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'status', 'updatedAt', 'lastQuotaOperationId'])
+        && linkedQuota(orgId, request.resource.data.lastQuotaOperationId, 'member', uid);
+      allow delete: if false;
     }
     match /platformOwners/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
@@ -534,14 +631,33 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.lastOperationalId == operationId;
     }
     match /caravans/{caravanId} {
+      function growthConfiguration() {
+        let data = request.resource.data;
+        return quotaGrowth(data.organizationId)
+          && data.capacity <= get(/databases/$(database)/documents/tenantEntitlements/$(data.organizationId)).data.limits.passengersPerCaravan;
+      }
+      function ownerConfiguration() {
+        let changed = request.resource.data.diff(resource.data).affectedKeys();
+        return request.resource.data.status in ['draft', 'published', 'archived']
+          && request.resource.data.get('creationRequestHash', '') == resource.data.get('creationRequestHash', '')
+          && (!changed.hasAny(['priceCents']) || (request.resource.data.priceCents is int && request.resource.data.priceCents >= 0 && request.resource.data.priceCents <= 9007199254740991))
+          && ((request.resource.data.capacity <= resource.data.capacity && !(resource.data.status != 'published' && request.resource.data.status == 'published')) || growthConfiguration())
+          && (!changed.hasAny(['status', 'lastQuotaOperationId']) || linkedQuota(resource.data.organizationId, request.resource.data.lastQuotaOperationId, 'caravan', caravanId));
+      }
+      allow get: if resource == null && signedIn();
       allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId)
         || (signedIn() && canSupportConfiguration(resource.data.organizationId));
       allow create: if isTenantOwner(request.resource.data.organizationId)
+        && request.resource.data.status in ['draft', 'published', 'archived']
+        && request.resource.data.priceCents is int && request.resource.data.priceCents >= 0 && request.resource.data.priceCents <= 9007199254740991
+        && growthConfiguration()
+        && linkedQuota(request.resource.data.organizationId, request.resource.data.lastQuotaOperationId, 'caravan', caravanId)
         && request.resource.data.reservedSeats == 0
         && request.resource.data.capacity is int
         && request.resource.data.capacity > 0
         && request.resource.data.capacity <= 1000;
       allow update: if (isTenantOwner(resource.data.organizationId)
+          && ownerConfiguration()
           && request.resource.data.organizationId == resource.data.organizationId
           && request.resource.data.capacity is int
           && request.resource.data.capacity > 0

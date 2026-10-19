@@ -1,0 +1,458 @@
+8920:
+2026-10-19 16:58:35
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.0.1+8-LTS-27 mixed mode, sharing):
+
+Threads class SMR info:
+_java_thread_list=0x0000015f4d203230, length=32, elements={
+0x0000015f262830c0, 0x0000015f47a6c690, 0x0000015f47a6d0f0, 0x0000015f47a6ecc0,
+0x0000015f47a6f880, 0x0000015f47a70860, 0x0000015f47a71420, 0x0000015f47a72590,
+0x0000015f47a811d0, 0x0000015f4c03e0b0, 0x0000015f4c040780, 0x0000015f4d371c40,
+0x0000015f4d39d2d0, 0x0000015f4d3a0530, 0x0000015f4d4ab780, 0x0000015f4d2549d0,
+0x0000015f4d2570e0, 0x0000015f4d259020, 0x0000015f4d253260, 0x0000015f47a7ff70,
+0x0000015f4dca36d0, 0x0000015f4dca2f00, 0x0000015f4dca2730, 0x0000015f4dc9f080,
+0x0000015f4dca0020, 0x0000015f4dc9d140, 0x0000015f4dc9c970, 0x0000015f4d5519d0,
+0x0000015f4d5521a0, 0x0000015f4df78560, 0x0000015f4df79cd0, 0x0000015f513f4b60
+}
+
+"main" #3 [10012] prio=5 os_prio=0 cpu=1093.75ms elapsed=14.58s tid=0x0000015f262830c0 nid=10012 in Object.wait()  [0x0000001413afe000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait0(java.base@25.0.1/Native Method)
+	- waiting on <0x000000070a600810> (a java.lang.Object)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:389)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:351)
+	at io.grpc.internal.ServerImpl.awaitTermination(ServerImpl.java:324)
+	- locked <0x000000070a600810> (a java.lang.Object)
+	at io.gapi.emulators.grpc.GrpcServer.awaitTerminated(GrpcServer.java:234)
+	at com.google.cloud.datastore.emulator.firestore.CloudFirestore.awaitTerminated(CloudFirestore.java:127)
+	at com.google.cloud.datastore.emulator.firestore.CloudFirestore.main(CloudFirestore.java:102)
+
+"Reference Handler" #14 [18096] daemon prio=10 os_prio=2 cpu=0.00ms elapsed=14.56s tid=0x0000015f47a6c690 nid=18096 waiting on condition  [0x00000014142ff000]
+   java.lang.Thread.State: RUNNABLE
+	at java.lang.ref.Reference.waitForReferencePendingList(java.base@25.0.1/Native Method)
+	at java.lang.ref.Reference.processPendingReferences(java.base@25.0.1/Reference.java:246)
+	at java.lang.ref.Reference$ReferenceHandler.run(java.base@25.0.1/Reference.java:208)
+
+"Finalizer" #15 [19876] daemon prio=8 os_prio=1 cpu=0.00ms elapsed=14.56s tid=0x0000015f47a6d0f0 nid=19876 in Object.wait()  [0x00000014143ff000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait0(java.base@25.0.1/Native Method)
+	- waiting on <0x000000070a601098> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:389)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:351)
+	at java.lang.ref.ReferenceQueue.remove0(java.base@25.0.1/ReferenceQueue.java:137)
+	at java.lang.ref.ReferenceQueue.remove(java.base@25.0.1/ReferenceQueue.java:215)
+	- locked <0x000000070a601098> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.Finalizer$FinalizerThread.run(java.base@25.0.1/Finalizer.java:165)
+
+"Signal Dispatcher" #16 [13684] daemon prio=9 os_prio=2 cpu=0.00ms elapsed=14.56s tid=0x0000015f47a6ecc0 nid=13684 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Attach Listener" #17 [5932] daemon prio=5 os_prio=2 cpu=0.00ms elapsed=14.56s tid=0x0000015f47a6f880 nid=5932 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Service Thread" #18 [14228] daemon prio=9 os_prio=0 cpu=0.00ms elapsed=14.56s tid=0x0000015f47a70860 nid=14228 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Monitor Deflation Thread" #19 [5244] daemon prio=9 os_prio=0 cpu=0.00ms elapsed=14.56s tid=0x0000015f47a71420 nid=5244 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C2 CompilerThread0" #20 [4860] daemon prio=9 os_prio=2 cpu=3125.00ms elapsed=14.56s tid=0x0000015f47a72590 nid=4860 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"C1 CompilerThread0" #23 [11492] daemon prio=9 os_prio=2 cpu=1437.50ms elapsed=14.56s tid=0x0000015f47a811d0 nid=11492 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"Notification Thread" #24 [19788] daemon prio=9 os_prio=0 cpu=0.00ms elapsed=14.55s tid=0x0000015f4c03e0b0 nid=19788 runnable  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Common-Cleaner" #25 [19904] daemon prio=8 os_prio=1 cpu=0.00ms elapsed=14.55s tid=0x0000015f4c040780 nid=19904 in Object.wait()  [0x0000001414bff000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait0(java.base@25.0.1/Native Method)
+	- waiting on <0x000000070a6020b8> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:389)
+	at java.lang.ref.ReferenceQueue.remove0(java.base@25.0.1/ReferenceQueue.java:123)
+	at java.lang.ref.ReferenceQueue.remove(java.base@25.0.1/ReferenceQueue.java:201)
+	- locked <0x000000070a6020b8> (a java.lang.ref.ReferenceQueue$Lock)
+	at jdk.internal.ref.CleanerImpl.run(java.base@25.0.1/CleanerImpl.java:146)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+	at jdk.internal.misc.InnocuousThread.run(java.base@25.0.1/InnocuousThread.java:148)
+
+"idle-timeout-task" #37 [17848] daemon prio=5 os_prio=0 cpu=0.00ms elapsed=13.60s tid=0x0000015f4d371c40 nid=17848 in Object.wait()  [0x00000014158fe000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait0(java.base@25.0.1/Native Method)
+	- waiting on <0x000000070a6012c8> (a java.util.TaskQueue)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:389)
+	at java.util.TimerThread.mainLoop(java.base@25.0.1/Timer.java:569)
+	- locked <0x000000070a6012c8> (a java.util.TaskQueue)
+	at java.util.TimerThread.run(java.base@25.0.1/Timer.java:522)
+
+"Timer-0" #38 [5812] prio=5 os_prio=0 cpu=0.00ms elapsed=13.60s tid=0x0000015f4d39d2d0 nid=5812 in Object.wait()  [0x00000014159fe000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait0(java.base@25.0.1/Native Method)
+	- waiting on <0x000000070a601b18> (a java.util.TaskQueue)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:389)
+	at java.lang.Object.wait(java.base@25.0.1/Object.java:351)
+	at java.util.TimerThread.mainLoop(java.base@25.0.1/Timer.java:543)
+	- locked <0x000000070a601b18> (a java.util.TaskQueue)
+	at java.util.TimerThread.run(java.base@25.0.1/Timer.java:522)
+
+"HTTP-Dispatcher" #39 [2764] prio=5 os_prio=0 cpu=0.00ms elapsed=13.59s tid=0x0000015f4d3a0530 nid=2764 runnable  [0x0000001415aff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a600238> (a sun.nio.ch.Util$2)
+	- locked <0x000000070a6001d8> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:142)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(jdk.httpserver@25.0.1/ServerImpl.java:516)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-2-1" #40 [1964] prio=10 os_prio=2 cpu=0.00ms elapsed=13.55s tid=0x0000015f4d4ab780 nid=1964 runnable  [0x0000001415bfe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a6029e0> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a602980> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-1" #42 [17660] prio=10 os_prio=2 cpu=0.00ms elapsed=13.47s tid=0x0000015f4d2549d0 nid=17660 runnable  [0x0000001415cff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a867018> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a600dc0> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-2" #43 [1132] prio=10 os_prio=2 cpu=15.62ms elapsed=13.47s tid=0x0000015f4d2570e0 nid=1132 runnable  [0x0000001415dfe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a601468> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a601408> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-3" #45 [15676] prio=10 os_prio=2 cpu=31.25ms elapsed=13.43s tid=0x0000015f4d259020 nid=15676 runnable  [0x0000001415efe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a601c08> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a601ba8> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-4" #46 [19684] prio=10 os_prio=2 cpu=0.00ms elapsed=12.40s tid=0x0000015f4d253260 nid=19684 runnable  [0x0000001415ffe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a600590> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a600530> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"pool-1-thread-1" #47 [6900] daemon prio=5 os_prio=0 cpu=93.75ms elapsed=12.39s tid=0x0000015f47a7ff70 nid=6900 runnable  [0x0000001414cff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a602390> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a602330> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"grpc-nio-worker-ELG-4-1" #48 [6744] daemon prio=5 os_prio=0 cpu=15.62ms elapsed=12.30s tid=0x0000015f4dca36d0 nid=6744 runnable  [0x00000014160fe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a6038d0> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a603870> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:142)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:891)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"grpc-default-executor-0" #49 [14160] daemon prio=5 os_prio=0 cpu=3140.62ms elapsed=12.30s tid=0x0000015f4dca2f00 nid=14160 waiting on condition  [0x00000014161fe000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@25.0.1/Native Method)
+	- parking to wait for  <0x0000000715b72af8> (a java.util.concurrent.CountDownLatch$Sync)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@25.0.1/LockSupport.java:271)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(java.base@25.0.1/AbstractQueuedSynchronizer.java:792)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.tryAcquireSharedNanos(java.base@25.0.1/AbstractQueuedSynchronizer.java:1166)
+	at java.util.concurrent.CountDownLatch.await(java.base@25.0.1/CountDownLatch.java:276)
+	at com.google.cloud.datastore.emulator.impl.transactions.ReactiveLockManager.acquireLocks(ReactiveLockManager.java:62)
+	at com.google.cloud.datastore.emulator.impl.storage.FlatLocalEntityStore.readWrite(FlatLocalEntityStore.java:85)
+	at com.google.cloud.datastore.emulator.impl.firestore.FirestoreEmulatorHelper.commitHelper(FirestoreEmulatorHelper.java:382)
+	at com.google.cloud.datastore.emulator.impl.firestore.FirestoreEmulatorHelper.internalCommit(FirestoreEmulatorHelper.java:348)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1.commit(CloudFirestoreV1.java:541)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1Router.commit(CloudFirestoreV1Router.java:177)
+	at com.google.cloud.datastore.emulator.firestore.v1.FirestoreV1GrpcAdapter$1.lambda$commit$0(FirestoreV1GrpcAdapter.java:162)
+	at com.google.cloud.datastore.emulator.firestore.v1.FirestoreV1GrpcAdapter$1$$Lambda/0x00000000904ba548.process(Unknown Source)
+	at com.google.cloud.datastore.emulator.firestore.v1.FirestoreV1GrpcAdapter.unary(FirestoreV1GrpcAdapter.java:72)
+	at com.google.cloud.datastore.emulator.firestore.v1.FirestoreV1GrpcAdapter$1.commit(FirestoreV1GrpcAdapter.java:162)
+	at com.google.firestore.v1.FirestoreGrpc$MethodHandlers.invoke(FirestoreGrpc.java:1404)
+	at io.grpc.stub.ServerCalls$UnaryServerCallHandler$UnaryServerCallListener.onHalfClose(ServerCalls.java:182)
+	at io.grpc.PartialForwardingServerCallListener.onHalfClose(PartialForwardingServerCallListener.java:35)
+	at io.grpc.ForwardingServerCallListener.onHalfClose(ForwardingServerCallListener.java:23)
+	at io.grpc.ForwardingServerCallListener$SimpleForwardingServerCallListener.onHalfClose(ForwardingServerCallListener.java:40)
+	at io.grpc.Contexts$ContextualizedServerCallListener.onHalfClose(Contexts.java:86)
+	at io.grpc.PartialForwardingServerCallListener.onHalfClose(PartialForwardingServerCallListener.java:35)
+	at io.grpc.ForwardingServerCallListener.onHalfClose(ForwardingServerCallListener.java:23)
+	at io.grpc.ForwardingServerCallListener$SimpleForwardingServerCallListener.onHalfClose(ForwardingServerCallListener.java:40)
+	at io.grpc.Contexts$ContextualizedServerCallListener.onHalfClose(Contexts.java:86)
+	at io.grpc.internal.ServerCallImpl$ServerStreamListenerImpl.halfClosed(ServerCallImpl.java:356)
+	at io.grpc.internal.ServerImpl$JumpToApplicationThreadServerStreamListener$1HalfClosed.runInContext(ServerImpl.java:879)
+	at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+	at io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@25.0.1/ThreadPoolExecutor.java:1090)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@25.0.1/ThreadPoolExecutor.java:614)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"grpc-default-executor-1" #51 [12180] daemon prio=5 os_prio=0 cpu=0.00ms elapsed=12.28s tid=0x0000015f4dca2730 nid=12180 waiting on condition  [0x00000014163ff000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@25.0.1/Native Method)
+	- parking to wait for  <0x000000070a601fa8> (a java.util.concurrent.SynchronousQueue$Transferer)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@25.0.1/LockSupport.java:408)
+	at java.util.concurrent.LinkedTransferQueue$DualNode.await(java.base@25.0.1/LinkedTransferQueue.java:452)
+	at java.util.concurrent.SynchronousQueue$Transferer.xferLifo(java.base@25.0.1/SynchronousQueue.java:194)
+	at java.util.concurrent.SynchronousQueue.xfer(java.base@25.0.1/SynchronousQueue.java:235)
+	at java.util.concurrent.SynchronousQueue.poll(java.base@25.0.1/SynchronousQueue.java:338)
+	at java.util.concurrent.ThreadPoolExecutor.getTask(java.base@25.0.1/ThreadPoolExecutor.java:1015)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@25.0.1/ThreadPoolExecutor.java:1076)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@25.0.1/ThreadPoolExecutor.java:614)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"grpc-default-executor-2" #52 [3404] daemon prio=5 os_prio=0 cpu=0.00ms elapsed=12.28s tid=0x0000015f4dc9f080 nid=3404 waiting on condition  [0x00000014164fe000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@25.0.1/Native Method)
+	- parking to wait for  <0x000000070a601fa8> (a java.util.concurrent.SynchronousQueue$Transferer)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@25.0.1/LockSupport.java:408)
+	at java.util.concurrent.LinkedTransferQueue$DualNode.await(java.base@25.0.1/LinkedTransferQueue.java:452)
+	at java.util.concurrent.SynchronousQueue$Transferer.xferLifo(java.base@25.0.1/SynchronousQueue.java:194)
+	at java.util.concurrent.SynchronousQueue.xfer(java.base@25.0.1/SynchronousQueue.java:235)
+	at java.util.concurrent.SynchronousQueue.poll(java.base@25.0.1/SynchronousQueue.java:338)
+	at java.util.concurrent.ThreadPoolExecutor.getTask(java.base@25.0.1/ThreadPoolExecutor.java:1015)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@25.0.1/ThreadPoolExecutor.java:1076)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@25.0.1/ThreadPoolExecutor.java:614)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"grpc-nio-worker-ELG-4-2" #53 [13148] daemon prio=5 os_prio=0 cpu=15.62ms elapsed=12.25s tid=0x0000015f4dca0020 nid=13148 runnable  [0x00000014165fe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a6048f0> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a604890> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-5" #54 [18212] prio=10 os_prio=2 cpu=0.00ms elapsed=12.24s tid=0x0000015f4dc9d140 nid=18212 runnable  [0x00000014167ff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a602b40> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a602ae0> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-6" #55 [19884] prio=10 os_prio=2 cpu=31.25ms elapsed=12.23s tid=0x0000015f4dc9c970 nid=19884 runnable  [0x00000014168fe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a608158> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a6080f8> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:142)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:891)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-7" #56 [13856] prio=10 os_prio=2 cpu=0.00ms elapsed=9.65s tid=0x0000015f4d5519d0 nid=13856 runnable  [0x0000001416aff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a84d650> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a84e678> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-8" #57 [15712] prio=10 os_prio=2 cpu=15.62ms elapsed=9.64s tid=0x0000015f4d5521a0 nid=15712 runnable  [0x0000001416bff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a849808> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a84a830> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-9" #58 [5668] prio=10 os_prio=2 cpu=0.00ms elapsed=9.41s tid=0x0000015f4df78560 nid=5668 runnable  [0x0000001416cfe000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a8459c0> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a8469e8> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:147)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:68)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:887)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"nioEventLoopGroup-5-10" #59 [13992] prio=10 os_prio=2 cpu=15.62ms elapsed=9.41s tid=0x0000015f4df79cd0 nid=13992 runnable  [0x0000001416dff000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.WEPoll.wait(java.base@25.0.1/Native Method)
+	at sun.nio.ch.WEPollSelectorImpl.doSelect(java.base@25.0.1/WEPollSelectorImpl.java:108)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@25.0.1/SelectorImpl.java:130)
+	- locked <0x000000070a841b78> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x000000070a842ba0> (a sun.nio.ch.WEPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(java.base@25.0.1/SelectorImpl.java:142)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:891)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.runWith(java.base@25.0.1/Thread.java:1487)
+	at java.lang.Thread.run(java.base@25.0.1/Thread.java:1474)
+
+"C2 CompilerThread1" #21 [19868] daemon prio=9 os_prio=2 cpu=15.62ms elapsed=1.96s tid=0x0000015f513f4b60 nid=19868 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"GC Thread#9" os_prio=2 cpu=46.88ms elapsed=12.30s tid=0x0000015f4d25e500 nid=21000 runnable  
+
+"G1 Conc#2" os_prio=2 cpu=15.62ms elapsed=13.74s tid=0x0000015f4d25dc60 nid=21896 runnable  
+
+"G1 Conc#1" os_prio=2 cpu=15.62ms elapsed=13.74s tid=0x0000015f4d25d3c0 nid=20724 runnable  
+
+"GC Thread#8" os_prio=2 cpu=46.88ms elapsed=13.76s tid=0x0000015f4d25d810 nid=15236 runnable  
+
+"GC Thread#7" os_prio=2 cpu=46.88ms elapsed=13.76s tid=0x0000015f4d25e0b0 nid=22472 runnable  
+
+"GC Thread#6" os_prio=2 cpu=46.88ms elapsed=13.76s tid=0x0000015f4d32dcc0 nid=13824 runnable  
+
+"GC Thread#5" os_prio=2 cpu=46.88ms elapsed=13.76s tid=0x0000015f4d32d890 nid=22416 runnable  
+
+"GC Thread#4" os_prio=2 cpu=62.50ms elapsed=13.76s tid=0x0000015f4d2f9000 nid=11520 runnable  
+
+"GC Thread#3" os_prio=2 cpu=62.50ms elapsed=13.76s tid=0x0000015f4d2f8bd0 nid=22208 runnable  
+
+"GC Thread#2" os_prio=2 cpu=62.50ms elapsed=13.76s tid=0x0000015f4d2f7b70 nid=13520 runnable  
+
+"GC Thread#1" os_prio=2 cpu=62.50ms elapsed=13.76s tid=0x0000015f4d2f7740 nid=7916 runnable  
+
+"VM Thread" os_prio=2 cpu=0.00ms elapsed=14.57s tid=0x0000015f47a59cd0 nid=20720 runnable  
+
+"VM Periodic Task Thread" os_prio=2 cpu=0.00ms elapsed=14.57s tid=0x0000015f47a4c260 nid=7904 waiting on condition  
+
+"G1 Service" os_prio=2 cpu=0.00ms elapsed=14.58s tid=0x0000015f4791a600 nid=1856 runnable  
+
+"G1 Refine#0" os_prio=2 cpu=0.00ms elapsed=14.58s tid=0x0000015f47919d40 nid=16132 runnable  
+
+"G1 Conc#0" os_prio=2 cpu=15.62ms elapsed=14.58s tid=0x0000015f2852bf10 nid=19860 runnable  
+
+"G1 Main Marker" os_prio=2 cpu=0.00ms elapsed=14.58s tid=0x0000015f28529460 nid=12460 runnable  
+
+"GC Thread#0" os_prio=2 cpu=62.50ms elapsed=14.58s tid=0x0000015f28510270 nid=3056 runnable  
+
+JNI global refs: 27, weak refs: 0
+

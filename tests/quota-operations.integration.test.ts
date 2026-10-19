@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { assertFails, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, updateDoc, type Firestore } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc, writeBatch, type Firestore } from "firebase/firestore";
 import { pendingWrites } from "../src/lib/pending-writes";
 import type { Caravan } from "../src/lib/types";
 const runtime = vi.hoisted(() => ({ db: null as Firestore | null, auth: { currentUser: { uid: "owner-a" } } })); vi.mock("../src/lib/firebase", () => runtime);
@@ -55,5 +55,36 @@ describe("quota-linked caravan and internal membership operations", () => {
     await assertFails(setDoc(doc(runtime.db!, "caravans/forged"), { ...payload, organizationId: "a", reservedSeats: 0 }));
     runtime.db = env.authenticatedContext("owner-b").firestore(); runtime.auth.currentUser.uid = "owner-b";
     await expect(createLimitedCaravan("a", payload)).rejects.toBeDefined(); await expect(saveInternalMember("a", "owner-b", "tenant_owner", "active", "Tentativa B")).rejects.toBeDefined();
+  });
+  it("rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK", async () => {
+    await seed();
+    const op = quotaOperationId(); const before = { publishedCaravans: 1, activeMembers: 1, activeOwners: 1 };
+    const after = { ...before, publishedCaravans: 0 };
+    const batch = writeBatch(runtime.db!);
+    batch.update(doc(runtime.db!, "tenantUsage/a"), { ...after, lastQuotaOperationId: op, updatedAt: serverTimestamp() });
+    batch.set(doc(runtime.db!, `tenantQuotaOperations/${op}`), { organizationId: "a", entityId: "base-a", kind: "caravan", action: "caravan_updated", actorUid: "owner-a", at: serverTimestamp(), requestHash: "a".repeat(64), reason: "Contador falso", before, after, beforeStatus: "published", afterStatus: "published", beforeRole: "", afterRole: "" });
+    await assertFails(batch.commit());
+    await assertFails(updateDoc(doc(runtime.db!, "memberships/owner-a/organizations/a"), { role: "staff" }));
+    await assertFails(setDoc(doc(runtime.db!, "tenantUsage/a"), { organizationId: "a", version: "commercial-v1", publishedCaravans: 0, activeMembers: 100, activeOwners: 100 }));
+    await env.withSecurityRulesDisabled(async (context) => { await setDoc(doc(context.firestore(), "platformOwners/platform"), { status: "active" }); });
+    runtime.db = env.authenticatedContext("platform").firestore(); runtime.auth.currentUser.uid = "platform";
+    await expect(saveInternalMember("a", "platform", "tenant_owner", "active", "Escalada global proibida")).rejects.toBeDefined();
+  });
+  it("serializes competing members at the last internal slot", async () => {
+    await seed();
+    const results = await Promise.allSettled([saveInternalMember("a", "one", "staff", "active", "Convite sintético um"), saveInternalMember("a", "two", "staff", "active", "Convite sintético dois")]);
+    expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    expect((await read("tenantUsage/a")).activeMembers).toBe(2);
+  });
+  it("serializes simultaneous owner revocations and preserves a responsible owner", async () => {
+    await seed(); await env.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), "memberships/owner-two/organizations/a"), { uid: "owner-two", organizationId: "a", role: "tenant_owner", status: "active" });
+      await updateDoc(doc(context.firestore(), "tenantUsage/a"), { activeMembers: 2, activeOwners: 2 });
+    });
+    const first = saveInternalMember("a", "owner-a", "tenant_owner", "revoked", "Saída sintética um");
+    runtime.db = env.authenticatedContext("owner-two").firestore(); runtime.auth.currentUser.uid = "owner-two";
+    const second = saveInternalMember("a", "owner-two", "tenant_owner", "revoked", "Saída sintética dois");
+    const results = await Promise.allSettled([first, second]); expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    await env.withSecurityRulesDisabled(async (context) => { const state = (await getDoc(doc(context.firestore(), "tenantUsage/a"))).data()!; expect(state.activeOwners).toBe(1); expect(state.activeMembers).toBe(1); });
   });
 });

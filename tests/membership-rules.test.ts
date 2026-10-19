@@ -15,6 +15,7 @@ async function seed() {
     const db = context.firestore();
     for (const org of ["a", "b"]) {
       await setDoc(doc(db, `organizations/${org}`), { name: `Organização sintética ${org}` });
+      await setDoc(doc(db, `tenantEntitlements/${org}`), { organizationId: org, growthEnabled: true, growthUntil: null, limits: { activeCaravans: 2, passengersPerCaravan: 60, internalUsers: 2 } });
       await setDoc(doc(db, membershipPath(`owner-${org}`, org)), member(`owner-${org}`, org));
       await setDoc(doc(db, `caravans/trip-${org}`), { organizationId: org, status: "draft", capacity: 25, reservedSeats: 1 });
       await setDoc(doc(db, `registrations/private-${org}`), { organizationId: org, caravanId: `trip-${org}`, passengerName: `Pessoa sintética ${org}`, registrationStatus: "confirmed", paymentStatus: "approved", amountCents: 8500, paymentTotalCents: 2500 });

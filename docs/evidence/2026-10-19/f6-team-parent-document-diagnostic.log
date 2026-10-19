@@ -1,0 +1,111 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/quota-minimal.integration.test.ts --testNamePattern "protects final internal" --reporter verbose
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ↓ tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > serializes the final published slot, replays creation and never reopens an archived caravan
+ ↓ tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > requires a plan for new growth but keeps configuration/history and decrements exact published count
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+team: seeded
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: target read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: usage read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: policy read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: directory read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: target read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: usage read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: policy read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: directory read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: target read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: usage read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: policy read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: directory read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: target read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: usage read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: policy read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: directory read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: target read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: usage read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: policy read
+
+stdout | tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+quota member: directory read
+
+ × tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner 12135ms
+   → 10 ABORTED: Transaction lock timeout.
+   → {"error":{"code":409,"message":"Transaction lock timeout.","status":"ABORTED"}}
+ ↓ tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+ ↓ tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+FirebaseError: 10 ABORTED: Transaction lock timeout.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'aborted', customData: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/quota-minimal.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+Error: {"error":{"code":409,"message":"Transaction lock timeout.","status":"ABORTED"}}
+ ❯ RulesTestEnvironmentImpl.clearFirestore node_modules/@firebase/rules-unit-testing/src/impl/test_environment.ts:119:13
+ ❯ tests/quota-minimal.integration.test.ts:12:58
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  17:03:33
+   Duration  15.40s (tests 98%, import 1%, transform 1%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/quota-minimal.integration.test.ts --testNamePattern "protects final internal" --reporter verbose" exited with code 1
+Stopped test emulator started by this run (PID 1444).

@@ -1,0 +1,124 @@
+
+> caravana-77@0.1.0 test:quotas
+> node scripts/run-local-tests.mjs quotas
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/quota-operations.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:37.424Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fac error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:39.433Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fad error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:41.447Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fae error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:43.462Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2faf error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:45.922Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb0 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:50.908Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb1 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+[2026-10-19T19:53:55.974Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb2 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:53:59.440Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb3 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:01.451Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb4 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:02.168Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb5 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:03.480Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb6 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:05.486Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb7 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:07.521Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb8 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:10.096Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fb9 error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:10.125Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fba error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+stderr | tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+[2026-10-19T19:54:17.040Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x500e2fbb error. Code: 10 Message: 10 ABORTED: Transaction lock timeout.
+
+ ❯ tests/quota-operations.integration.test.ts (5 tests | 3 failed) 60249ms
+   ❯ quota-linked caravan and internal membership operations (5)
+     × protects final internal slot, allows audited revoke/reactivate and never removes the last owner 11695ms
+     × denies direct owner counter/status bypass and rejects B/global writes into the existing tenant 22018ms
+     × rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK 22029ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+FirebaseError: 10 ABORTED: Transaction lock timeout.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > protects final internal slot, allows audited revoke/reactivate and never removes the last owner
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+Error: {"error":{"code":409,"message":"Transaction lock timeout.","status":"ABORTED"}}
+ ❯ RulesTestEnvironmentImpl.clearFirestore node_modules/@firebase/rules-unit-testing/src/impl/test_environment.ts:119:13
+ ❯ tests/quota-operations.integration.test.ts:12:58
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > denies direct owner counter/status bypass and rejects B/global writes into the existing tenant
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/quota-operations.integration.test.ts:53:3
+     51|     await saveInternalMember("a", "staff-two", "staff", "active", "Nov…
+     52|   });
+     53|   it("denies direct owner counter/status bypass and rejects B/global w…
+       |   ^
+     54|     await seed(); await assertFails(updateDoc(doc(runtime.db!, "carava…
+     55|     await assertFails(setDoc(doc(runtime.db!, "caravans/forged"), { ..…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/quota-operations.integration.test.ts > quota-linked caravan and internal membership operations > rejects fabricated counter audits, last-owner removal and historical baseline replacement through the SDK
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/quota-operations.integration.test.ts:59:3
+     57|     await expect(createLimitedCaravan("a", payload)).rejects.toBeDefin…
+     58|   });
+     59|   it("rejects fabricated counter audits, last-owner removal and histor…
+       |   ^
+     60|     await seed();
+     61|     const op = quotaOperationId(); const before = { publishedCaravans:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 2 passed (5)
+   Start at  16:53:18
+   Duration  60.82s (tests 99%)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/quota-operations.integration.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 20556).
