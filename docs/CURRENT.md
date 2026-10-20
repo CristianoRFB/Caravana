@@ -1,5 +1,15 @@
 # Estado atual — Caravana 77
 
+## Atualização vigente — staging funcional em 2026-10-20
+
+F6 continua PASS local/sintético. F7/F8 IN_PROGRESS: staging real autorizado `bdall-e3585`, Spark, billing desativado, Rules/11 índices READY, cinco contas exclusivamente fictícias, marcas/planos A×B. Frontend separado https://caravana77-staging.pages.dev, candidato inicial e383b20. Produção `caravana-af306` / `caravana-77` segue protegida; restrições atuais prevalecem sobre autorizações condicionais antigas abaixo.
+
+11 jornadas SDK reais PASS, incluindo PDF privado no Firestore, autorização de menor, equipe/quotas/onboarding/importação/financeiro fictício; 68 regressões locais de documentos e dois E2E do gutter responsivo PASS; lint e ambos typechecks PASS. Backup sintético de 153 documentos restaurado no emulador com fidelidade de campos, contadores/relações/totais e ACL PASS; bootstrap replay cria zero documentos e preserva alterações. Não é backup da produção nem restore de senhas Auth. Evidências em docs/evidence/2026-10-20 e STAGING_BDALL.md.
+
+Próximo: publicar somente staging com correção de largura útil móvel, leitura fresca de comprovante e CSP; verificar UI/headers e ensaiar retorno do frontend de staging. Gates do legado, IAM, backup real e rollback coordenado permanecem BLOCKED. Não reiniciar F0–F6 nem publicar produção.
+
+## Histórico preservado
+
 **Estado vigente em 2026-10-20: F6 PASS local/sintético. Produção SaaS e staging Firebase BLOCKED.** Branch `codex/caravana77-commercial-v1-20261016`, runtime/Rules da candidata `9c0c45d3c6a2bd6e0edbb435cb0be24ebaad23e7`. Checkpoint final de evidências identificado no git log; não houve main/merge/reset/force push.
 
 244 testes unitários/integração/Rules, 8 Auth e 6 Storage PASS; lint/typecheck/build PASS. Gate E2E terminou com 162 PASS/2 FAIL por corrida no listener dos dois prompts do teste financeiro. Corrigido somente o harness e executados 12/12 financeiros nas quatro larguras: **164/164 casos únicos consolidados PASS**, zero falhas pendentes e sem retry. Não alegar uma rodada única 164 PASS. F6_ACCEPTANCE.md e f6-e2e-consolidated.json registram método e evidências. Equipe cobre UID/papel/emissor, aceite, geração, expiração, reenvio, idempotência, auditoria, quotas/última vaga, suspensão/downgrade, A×B/global/staff e último owner.

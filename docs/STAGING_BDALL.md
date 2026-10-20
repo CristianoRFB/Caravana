@@ -1,5 +1,19 @@
 # F7/F8 — staging isolado bdall-e3585
 
+## Aceite funcional incremental — 2026-10-20
+
+PASS: 11 jornadas SDK no Firebase real de staging, sem Admin SDK nem bypass de Rules: Auth, marcas/planos A×B, reserva/replay, negativas de acesso privado, onboarding, concorrência de quota/arquivamento, PDF, financeiro fictício/check-in reversível, CSV/deduplicação/rollback, convite/revogação/último owner, suspensão e autorização privada de menor. Evidência: `staging-sdk-pdf.log`; as falhas anteriores e correções do harness permanecem registradas. Nenhuma cobrança bancária foi executada.
+
+Comprovantes e autorizações PDF usam o fluxo existente no Firestore, com limite de 600 KiB e revisão manual. O teste remoto confirma download pelo owner e negativas para B/global/visitante e staff revogado. Download de comprovante agora exige leitura do servidor para revalidar a permissão. 68 testes locais relacionados PASS. Cloud Storage não foi habilitado nem homologado remotamente.
+
+O link opaco ativo da inscrição continua sendo uma credencial do passageiro: revogar um integrante não revoga automaticamente um link que ele conheça. Documentos privados, financeiro e listagens exigem ACL própria; o bloqueio do link usa revogação explícita do portal. O contrato legado foi preservado e testado, sem promessa de sigilo de um link compartilhado.
+
+Backup sintético: exportação somente leitura de staging para arquivo ignorado, com manifesto/hash público; restauração exclusivamente no emulador `demo-caravana77-test`, sem sobrescrita, compara todos os campos, relações, contadores, totais e ACL A×B. Metadados Auth não incluem senhas e não representam restauração de credenciais. Isso não prova backup/restauração da produção.
+
+Inspeção visual de staging encontrou scrollbar vertical reduzindo a largura útil de 320 para 305 px. Corrigido `body` para respeitar a largura disponível, com dois E2E direcionados PASS. Cabeçalhos CSP/noindex ficam restritos ao build de staging. A publicação e inspeção remota desta correção serão registradas separadamente.
+
+Credenciais fictícias locais: `.firebase/staging-accounts.json` (ignorado). URL funcional: https://caravana77-staging.pages.dev. Não usar credenciais nem dados do Ítalo neste ambiente.
+
 ## Autorização e limites
 
 Instrução do usuário de2026-10-20 autoriza configuração, Rules/índices, Auth, dados fictícios e publicação em Pages separado, com orçamento máximo R$0. Produção `caravana-af306` e Pages `caravana-77` continuam protegidos. Não há autorização para migração real, alteração de dados/Rules/Auth/índices de produção ou merge.

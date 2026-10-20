@@ -1,0 +1,81 @@
+{
+  "projectId": "bdall-e3585",
+  "scope": "Real Spark staging using five synthetic identities and client SDKs; no Admin SDK or Rules bypass in tests",
+  "passed": 11,
+  "failed": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only authenticates the synthetic owner and verifies server-backed plans, brands and counters",
+      "status": "passed",
+      "durationMs": 1825.2375000000002
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only reserves once through Auth/Firestore and preserves the exact retry receipt",
+      "status": "passed",
+      "durationMs": 1329.0373999999993
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only denies B/global/anonymous private ledger access, self-grants and mutable seat counters",
+      "status": "passed",
+      "durationMs": 632.6108999999997
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only stores a tiny synthetic PDF privately in free-tier Firestore with MIME and size validation",
+      "status": "passed",
+      "durationMs": 462.46489999999994
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only creates a complete organization with the real Rules and safely replays onboarding",
+      "status": "passed",
+      "durationMs": 489.96910000000025
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only serializes the final published caravan slot and archives without removing history",
+      "status": "passed",
+      "durationMs": 757.9264000000003
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only records only fictitious ledger entries, reviews and reverses an audited idempotent check-in",
+      "status": "passed",
+      "durationMs": 1455.9956000000002
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only cancels and rolls back CSV through real transactions without deleting historical records",
+      "status": "passed",
+      "durationMs": 2145.4748999999993
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only activates the invited UID exactly once, denies staff escalation and enforces immediate revocation",
+      "status": "passed",
+      "durationMs": 1905.0447999999997
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only blocks growth on manual subscription suspension and preserves the ledger through reload",
+      "status": "passed",
+      "durationMs": 1376.3978000000006
+    },
+    {
+      "name": "real isolated Spark staging — synthetic SDK journeys only requires minor consent and private PDF approval before boarding, preserving the historical record",
+      "status": "passed",
+      "durationMs": 1607.1325000000015
+    }
+  ],
+  "source": "e383b20 plus pending fresh server proof-read change; see next checkpoint",
+  "initialFailures": [
+    {
+      "round": "staging-sdk-first.log",
+      "result": "9 not executed",
+      "cause": "Explicit staging guard rejected the default test-mode environment; corrected to --mode staging."
+    },
+    {
+      "round": "second (raw preserved privately)",
+      "result": "6 PASS / 3 FAIL",
+      "cause": "Two tests incorrectly expected active opaque bearer links to require organization membership; replaced by private ledger/proof/listing checks plus explicit link revocation. One text expectation mismatched the legitimate growth-block notice; corrected and added restoration in finally."
+    }
+  ],
+  "productionWrites": 0,
+  "bankingOperations": 0,
+  "cloudStorageVerified": false,
+  "inlineFirestorePdfVerified": true
+}

@@ -83,4 +83,4 @@ function encode(value) {
 }
 if (!existing) await admin.request("firestore", "post", `${prefix}/databases/(default)/documents:commit`, { writes: documents.map(({ path, data }) => ({ update: { name: documentName(path), fields: encode(data).mapValue.fields }, currentDocument: { exists: false } })) });
 const summary = { checkedOn: new Date().toISOString(), projectId: admin.projectId, billingEnabled: false, authAccounts: Object.keys(accounts), authUserCount: users.users.length, createdFixtureDocuments: existing ? 0 : documents.length, preservedExistingData: existing, authorizedDomain: domain, storageEnabled: false, productionWrites: 0, credentialFile: ".firebase/staging-accounts.json (ignored; never publish)" };
-await writeFile("docs/evidence/2026-10-20/staging-bootstrap.json", JSON.stringify(summary, null, 2) + "\n"); console.log(JSON.stringify(summary, null, 2));
+await writeFile(`docs/evidence/2026-10-20/staging-bootstrap${existing ? "-replay" : ""}.json`, JSON.stringify(summary, null, 2) + "\n"); console.log(JSON.stringify(summary, null, 2));

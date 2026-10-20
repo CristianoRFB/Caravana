@@ -377,7 +377,7 @@ export async function updateCaravan(
 export async function loadProof(reg: Registration): Promise<Blob> {
   if (!db || !reg.proofId)
     throw new Error("Comprovante não encontrado.");
-  const snapshot = await getDoc(
+  const snapshot = await getDocFromServer(
     doc(db, "registrations", reg.id, "proofs", reg.proofId),
   );
   if (!snapshot.exists()) throw new Error("Comprovante não encontrado.");

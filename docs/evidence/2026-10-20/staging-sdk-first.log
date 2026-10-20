@@ -1,0 +1,30 @@
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > authenticates the synthetic owner and verifies server-backed plans, brands and counters
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > reserves once through Auth/Firestore and preserves the exact retry receipt
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > denies B/global/anonymous private access, self-grants and mutable seat counters
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > creates a complete organization with the real Rules and safely replays onboarding
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > serializes the final published caravan slot and archives without removing history
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > records only fictitious ledger entries, reviews and reverses an audited idempotent check-in
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > cancels and rolls back CSV through real transactions without deleting historical records
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > activates the invited UID exactly once, denies staff escalation and enforces immediate revocation
+ ↓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > blocks growth on manual subscription suspension and preserves the ledger through reload
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  staging-tests/functional.test.ts [ staging-tests/functional.test.ts ]
+Error: Refusing build: exact isolated staging target required.
+ ❯ Module.assertStagingBuild scripts/staging-target.mjs:4:159
+
+ ❯ staging-tests/functional.test.ts:44:67
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 skipped (9)
+   Start at  13:19:29
+   Duration  955ms (import 59%, transform 39%, tests 1%, worker 1%)
+
+JSON report written to C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana/.firebase/staging-vitest-report.json

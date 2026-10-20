@@ -1,0 +1,14 @@
+{
+  "version": "staging-synthetic-backup-v1",
+  "projectId": "bdall-e3585",
+  "exportedAt": "2026-10-20T16:29:36.401Z",
+  "documentCount": 107,
+  "syntheticAuthMetadataCount": 5,
+  "bytes": 98397,
+  "sha256": "13a2670fdc86659309786b00bf1289836afcb4004927ded9efbd232f7690cbb5",
+  "sourceWrites": 0,
+  "productionAccess": false,
+  "rawBackupIgnored": true,
+  "containsAuthSecrets": false,
+  "restoreStatus": "TODO"
+}

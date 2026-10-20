@@ -1,0 +1,25 @@
+
+> caravana-77@0.1.0 test:staging
+> vitest run --mode staging --config vitest.staging.config.ts
+
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > authenticates the synthetic owner and verifies server-backed plans, brands and counters 1825ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > reserves once through Auth/Firestore and preserves the exact retry receipt 1329ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > denies B/global/anonymous private ledger access, self-grants and mutable seat counters 633ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > stores a tiny synthetic PDF privately in free-tier Firestore with MIME and size validation 462ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > creates a complete organization with the real Rules and safely replays onboarding 490ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > serializes the final published caravan slot and archives without removing history 758ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > records only fictitious ledger entries, reviews and reverses an audited idempotent check-in 1456ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > cancels and rolls back CSV through real transactions without deleting historical records 2145ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > activates the invited UID exactly once, denies staff escalation and enforces immediate revocation 1905ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > blocks growth on manual subscription suspension and preserves the ledger through reload 1376ms
+ ✓ staging-tests/functional.test.ts > real isolated Spark staging — synthetic SDK journeys only > requires minor consent and private PDF approval before boarding, preserving the historical record 1607ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  13:35:39
+   Duration  17.16s (tests 95%, import 3%, transform 2%)
+
+JSON report written to C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana/.firebase/staging-vitest-report.json

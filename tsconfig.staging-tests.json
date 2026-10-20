@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "allowJs": true, "checkJs": false, "noEmit": true, "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.staging-tests.tsbuildinfo" },
+  "include": ["staging-tests/**/*.ts", "vitest.staging.config.ts", "scripts/staging-target.mjs"]
+}

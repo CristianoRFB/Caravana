@@ -1,0 +1,10 @@
+{
+  "projectId": "bdall-e3585",
+  "url": "https://caravana77-staging.pages.dev/admin/financeiro",
+  "viewport": 320,
+  "clientWidth": 305,
+  "scrollWidth": 320,
+  "overflow": 15,
+  "result": "FAIL_FIXED_IN_SOURCE_PENDING_REDEPLOY",
+  "cause": "body min-width 320px exceeds the 305px client width when a classic scrollbar is present"
+}

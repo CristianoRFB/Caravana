@@ -1,0 +1,15 @@
+{
+  "checkedOn": "2026-10-20T16:30:37.347Z",
+  "sourceProject": "bdall-e3585",
+  "destinationProject": "demo-caravana77-test",
+  "destinationHost": "127.0.0.1:18080",
+  "restoredDocuments": 107,
+  "exactFieldFidelity": true,
+  "tenantCountersAndRelationships": "PASS",
+  "aclOwnReadAndCrossTenantDenial": "PASS",
+  "activePaymentCents": "5000",
+  "activeExpenseCents": "0",
+  "backupSha256": "13a2670fdc86659309786b00bf1289836afcb4004927ded9efbd232f7690cbb5",
+  "productionAccess": false,
+  "realProductionBackupVerified": false
+}

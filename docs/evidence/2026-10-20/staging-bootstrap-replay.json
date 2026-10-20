@@ -1,0 +1,19 @@
+{
+  "checkedOn": "2026-10-20T16:45:30.040Z",
+  "projectId": "bdall-e3585",
+  "billingEnabled": false,
+  "authAccounts": [
+    "platform",
+    "ownerA",
+    "ownerB",
+    "staffA",
+    "passenger"
+  ],
+  "authUserCount": 5,
+  "createdFixtureDocuments": 0,
+  "preservedExistingData": true,
+  "authorizedDomain": "caravana77-staging.pages.dev",
+  "storageEnabled": false,
+  "productionWrites": 0,
+  "credentialFile": ".firebase/staging-accounts.json (ignored; never publish)"
+}
