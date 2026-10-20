@@ -1,5 +1,7 @@
 # F8 — homologação e barreiras de publicação
 
+Atualização vigente2026-10-20: configuração/homologação autorizadas exclusivamente no staging `bdall-e3585`, com R$0. Produção permanece protegida mesmo se os testes sintéticos passarem. Configuração isolada já verificada, mas gate funcional de staging ainda IN_PROGRESS; não modificar os14 gates antes das respectivas evidências. Ver STAGING_BDALL.md. A autorização condicional histórica abaixo não substitui a restrição atual de produção.
+
 IN_PROGRESS para evidências locais; **BLOCKED para homologação remota e produção**. A autorização condicional do usuário de2026-10-20 é suficiente quando todos os14 gates estiverem comprovados; não há solicitação de confirmação rotineira pendente. Não converter UNKNOWN em PASS.
 
 ## Níveis de evidência

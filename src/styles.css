@@ -1411,6 +1411,10 @@ button:disabled {
 .login-safe svg {
   color: #33a47c;
 }
+.staging-shell { padding-top: 44px; }
+.staging-notice { position: fixed; inset: 0 0 auto; height: 44px; box-sizing: border-box; display: grid; place-items: center; padding: 6px 12px; z-index: 1000; background: #fef3c7; color: #713f12; font: 700 12px/16px system-ui, sans-serif; text-align: center; }
+.staging-shell .admin-top { top: 44px; }
+.staging-shell .admin-sidebar { top: 110px; }
 .admin-app {
   min-height: 100vh;
   background: #f5f6fa;

@@ -14,7 +14,7 @@ const config = {
 
 const useEmulators = import.meta.env.VITE_USE_EMULATORS === "true";
 export const assertIdentityAllowed = (email: string) => assertDemoIdentityAllowed(email, useEmulators, config.projectId, typeof window === "undefined" ? undefined : window.location.hostname);
-assertFirebaseEnvironment(typeof window === "undefined" ? undefined : window.location.hostname, config.projectId, useEmulators, import.meta.env.DEV);
+assertFirebaseEnvironment(typeof window === "undefined" ? undefined : window.location.hostname, config.projectId, useEmulators, import.meta.env.DEV, import.meta.env.VITE_APP_ENV);
 
 export const firebaseConfigured = Object.values(config).every(Boolean);
 const app = firebaseConfigured ? initializeApp(config) : null;

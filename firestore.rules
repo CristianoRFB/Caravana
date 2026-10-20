@@ -62,7 +62,7 @@ service cloud.firestore {
     }
     function namespaceBootstrapReady() {
       let marker = get(/databases/$(database)/documents/namespaceBootstrap/state).data;
-      return marker.version == 'namespace-v1' && marker.coverageVersion == 'tenant-references-v1'
+      return marker.version == 'namespace-v1' && marker.coverageVersion == 'tenant-references-v2'
         && marker.inventoryComplete == true && marker.manifestHash.matches('^[a-f0-9]{64}$');
     }
     function newTenantNamespace(orgId, op) {
@@ -220,27 +220,28 @@ service cloud.firestore {
     }
     function invitationEvent(event, orgId, op) {
       let path = invitationPath(orgId, event.uid);
-      let before = exists(path) ? get(path).data : null;
+      let existed = exists(path);
+      let before = existed ? get(path).data : {};
       let after = getAfter(path).data;
       return !exists(/databases/$(database)/documents/tenantInvitations/$(orgId)/events/$(op))
         && op.matches('^[a-f0-9]{32}$') && event.keys().hasOnly(['organizationId', 'uid', 'actorUid', 'action', 'at', 'requestHash', 'reason', 'before', 'after'])
         && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
         && event.requestHash.matches('^[a-f0-9]{64}$') && event.reason is string && event.reason.size() >= 3 && event.reason.size() <= 300
-        && event.before == before && event.after == after && after.lastOperationId == op && after.updatedAt == request.time
+        && ((existed && event.before == before) || (!existed && event.before == null)) && event.after == after && after.lastOperationId == op && after.updatedAt == request.time
         && after.organizationId == orgId && after.uid == event.uid
         && getAfter(/databases/$(database)/documents/invitationInboxes/$(event.uid)/organizations/$(orgId)).data == after
         && ((event.action == 'invitation_issued' && isTenantOwner(orgId) && event.uid != request.auth.uid
           && after.keys().hasOnly(['organizationId', 'uid', 'role', 'generation', 'status', 'issuedBy', 'issuedAt', 'expiresAt', 'acceptedAt', 'updatedAt', 'lastOperationId'])
           && event.uid is string && event.uid.size() > 0 && event.uid.size() <= 128 && event.uid.matches('^[^/]+$') && !(event.uid in ['.', '..'])
           && after.role in ['tenant_owner', 'staff'] && after.status == 'pending' && after.acceptedAt == null
-          && after.generation is int && after.generation == (before == null ? 1 : before.generation + 1)
+          && after.generation is int && ((!existed && after.generation == 1) || (existed && after.generation == before.generation + 1))
           && after.issuedBy == request.auth.uid && after.issuedAt == request.time
           && after.expiresAt is timestamp && after.expiresAt > request.time && after.expiresAt <= request.time + duration.value(7, 'd')
           && exists(/databases/$(database)/documents/organizations/$(orgId)) && quotaGrowth(orgId)
           && get(/databases/$(database)/documents/tenantUsage/$(orgId)).data.version == 'commercial-v1'
           && (!exists(/databases/$(database)/documents/memberships/$(event.uid)/organizations/$(orgId))
             || get(/databases/$(database)/documents/memberships/$(event.uid)/organizations/$(orgId)).data.status == 'revoked'))
-          || (before != null && before.status == 'pending' && after.diff(before).affectedKeys().hasOnly(['status', 'updatedAt', 'lastOperationId'])
+          || (existed && before.status == 'pending' && after.diff(before).affectedKeys().hasOnly(['status', 'updatedAt', 'lastOperationId'])
             && ((event.action == 'invitation_revoked' && after.status == 'revoked' && isTenantOwner(orgId))
               || (event.action == 'invitation_expired' && after.status == 'expired' && before.expiresAt <= request.time
                 && (request.auth.uid == event.uid || isTenantOwner(orgId))))));

@@ -1,0 +1,30 @@
+{
+  "checkedOn": "2026-10-20T16:03:15.331Z",
+  "projectId": "bdall-e3585",
+  "projectNumber": "146882624278",
+  "billingEnabled": false,
+  "billingAccountLinked": false,
+  "databaseEdition": "STANDARD",
+  "freeTier": true,
+  "locationId": "southamerica-east1",
+  "collectionIds": [],
+  "authUserCountFirstPage": 0,
+  "authUsersHaveNextPage": false,
+  "emailPasswordEnabled": true,
+  "authorizedDomains": [
+    "localhost",
+    "bdall-e3585.firebaseapp.com",
+    "bdall-e3585.web.app"
+  ],
+  "rulesRelease": "projects/bdall-e3585/releases/cloud.firestore",
+  "rulesetName": "projects/bdall-e3585/rulesets/c5c6a04d-d3e8-4a8d-9446-38989037d19e",
+  "rulesFiles": [
+    {
+      "name": "firestore.rules",
+      "sha256": "ecf30f940747dcc3c5ba4993093e9a11ac9fc5df7e14b2a1512d2446923d84eb"
+    }
+  ],
+  "compositeIndexes": [],
+  "writesPerformed": 0,
+  "productionAccess": false
+}

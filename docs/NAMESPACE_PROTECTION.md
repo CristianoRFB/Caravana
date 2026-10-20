@@ -4,7 +4,7 @@ Status: PASS incremental local. Inventário e bootstrap REAIS: BLOCKED sem autor
 
 ## Runtime candidato
 
-O cadastro assistido lê namespaceBootstrap/state e tenantNamespaces/{slug} antes de criar qualquer documento. O marcador exige version namespace-v1, coverageVersion tenant-references-v1, inventoryComplete true e manifestHash SHA256. Cliente, incluindo Platform Owner, não cria/altera o marcador. Nenhum marcador real foi criado ou consultado.
+O cadastro assistido lê namespaceBootstrap/state e tenantNamespaces/{slug} antes de criar qualquer documento. O marcador exige version namespace-v1, coverageVersion tenant-references-v2, inventoryComplete true e manifestHash SHA256. Cliente, incluindo Platform Owner, não cria/altera o marcador. Nenhum marcador de produção foi criado ou consultado.
 
 Novo cadastro exige namespace desocupado, raiz inexistente e evento tenant_created, e cria a reivindicação ativa junto com organização/owner/disponibilidade/auditoria na transação. Claim não pode ser atualizado nem excluído pelo cliente. UID/IDs históricos não são normalizados pelo planner. Referência órfã também reserva o identificador: ausência de organizations/{id} não autoriza apropriação.
 
@@ -23,6 +23,8 @@ Procedimento real futuro requer export/backups autorizados, inventário completo
 - f6-namespace-claims.log:4 PASS/4,80s, planner e nova tentativa de branding contra raiz estrangeira e namespace órfão. Os5 outros testes do arquivo de branding não foram repetidos nessa rodada, pois já passaram na regressão anterior.
 
 Fixtures têm guard de emulador/projeto exatos, inventário de dataset conhecido e preparação Rules-disabled. Não são backfill de cliente real, nem homologação de staging/produção.
+
+2026-10-20: na reconciliação para staging, a cobertura passou de v1 para v2 e passou a incluir `tenantInvitations` e `invitationInboxes`. Inventários antigos não bastam para novo onboarding. Registros e IDs existentes permanecem intactos. O staging vazio `bdall-e3585` foi explicitamente autorizado; o bootstrap será exclusivamente de organizações fictícias, separado da produção `caravana-af306`. A autorização não abrange inventário, migração ou escrita no cliente real.
 
 ## Próximo módulo autorizado
 

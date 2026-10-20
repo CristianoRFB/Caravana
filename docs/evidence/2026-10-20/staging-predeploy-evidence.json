@@ -1,0 +1,13 @@
+{
+  "checkedOn": "2026-10-20T16:10:39.393Z",
+  "projectId": "bdall-e3585",
+  "security": "PASS",
+  "securityTests": 56,
+  "team": "PASS",
+  "teamNamespacePlatformTests": 48,
+  "files": {
+    "firestore.rules": "d3ff21085bd14c53109ae6a7ff2917caf38dacd878f37db72258482c05f3e840",
+    "firestore.indexes.json": "d38a1eb6ebd4e0f693e16954d6c9bce29490463a995bd79d3aff0530f3bf7b49"
+  },
+  "productionWrites": 0
+}

@@ -1,0 +1,247 @@
+{
+  "checkedOn": "2026-10-20T16:13:02.240Z",
+  "projectId": "bdall-e3585",
+  "billingEnabled": false,
+  "databaseEdition": "STANDARD",
+  "freeTier": true,
+  "rulesMatchCandidate": true,
+  "rulesetName": "projects/bdall-e3585/rulesets/803cecff-31cb-4f32-b436-52257ad73f12",
+  "rulesSha256": "d3ff21085bd14c53109ae6a7ff2917caf38dacd878f37db72258482c05f3e840",
+  "indexes": [
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/financialOperations/indexes/CICAgJim14AJ",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/importOperations/indexes/CICAgOjXh4EJ",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "caravanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/caravans/indexes/CICAgJjF9oIJ",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "slug",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/registrationOperations/indexes/CICAgOi3kJAJ",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "caravanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/registrations/indexes/CICAgJim14AK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "caravanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/documentEvents/indexes/CICAgOjXh4EK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/financialOperations/indexes/CICAgJjF9oIK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "caravanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/caravans/indexes/CICAgJiUpoMK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "slug",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/importOperations/indexes/CICAgOi3kJAK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "caravanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "batchId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/commercialOperations/indexes/CICAgJjmiJEK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "name": "projects/bdall-e3585/databases/(default)/collectionGroups/tenantQuotaOperations/indexes/CICAgJjFqZMK",
+      "state": "READY",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "organizationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "at",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "allIndexesReady": true,
+  "emailPasswordEnabled": true,
+  "stagingDomainAuthorized": true,
+  "namespaceCoverage": "tenant-references-v2",
+  "storageEnabledByThisWork": false,
+  "productionWrites": 0
+}

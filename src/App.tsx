@@ -3707,7 +3707,7 @@ function TenantSupport() {
 }
 
 export default function App() {
-  return (
+  const routes = (
     <Routes>
       <Route path="/saas" element={<Suspense fallback={<Loading />}><CommercialLanding /></Suspense>} />
       <Route
@@ -3805,4 +3805,5 @@ export default function App() {
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
+  return import.meta.env.VITE_APP_ENV === "staging" ? <div className="staging-shell"><aside className="staging-notice" role="note">STAGING · Somente dados fictícios · Sem pagamentos</aside>{routes}</div> : routes;
 }

@@ -4,6 +4,8 @@ dist-e2e/
 .env*
 !.env.example
 !.env.e2e
+!.env.staging.example
+dist-staging/
 test-results/
 playwright-report/
 .wrangler/

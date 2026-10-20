@@ -1,5 +1,11 @@
 # F7 — auditoria e preparação de release
 
+## Atualização vigente — staging autorizado em2026-10-20
+
+Somente `bdall-e3585` foi autorizado para configurações e dados fictícios, com orçamento R$0. Produção `caravana-af306`/`caravana-77` continua sem autorização de modificação, deploy, migração ou merge neste fluxo. Não aplicar a autorização condicional histórica abaixo como permissão para produção.
+
+STAGING_BDALL.md registra pull663bdca, preservação do WIP, projeto/Standard/freeTier/billing desativado conferidos, snapshot inicial vazio, Rules e11 índices READY implantados e comparados por hash, Auth/domínio e bootstrap fictício.48 testes direcionados+56 de segurança+20 puros PASS; há sobreposição entre suítes. Homologação funcional e frontend ainda IN_PROGRESS. Storage real e backup/restore/compatibilidade do cliente continuam BLOCKED.
+
 IN_PROGRESS para preparação; publicação no ambiente existente BLOCKED. A instrução de 2026-10-20 autoriza publicação sem confirmação adicional **somente** com todos os 14 gates comprovados. Não autoriza migração real do Ítalo, custos novos nem dados presumidos. Não há autorização rotineira pendente: faltam acesso efetivo e evidências.
 
 ## Auditoria real em leitura — 2026-10-20

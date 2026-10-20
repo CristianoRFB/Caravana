@@ -19,4 +19,11 @@ describe("historical namespace protection offline planner", () => {
     const input = inventory(); input.references.push({ organizationId: "wrong/id", source: "memberships" }, { organizationId: "guess", source: "unknown" });
     expect(planNamespaceProtection(input).creates).toEqual([]); expect(planNamespaceProtection(input).conflicts).toHaveLength(2);
   });
+  it("requires both invitation sources and reserves their orphan organization references", () => {
+    for (const source of ["tenantInvitations", "invitationInboxes"]) {
+      const input = { ...inventory(), references: [{ organizationId: `orphan-${source}`, source }] };
+      expect(planNamespaceProtection({ ...input, coveredSources: input.coveredSources.filter((item) => item !== source) }).readyForSyntheticRehearsal).toBe(false);
+      expect(planNamespaceProtection(input).creates).toContainEqual({ namespace: `orphan-${source}`, organizationId: `orphan-${source}`, state: "reserved", version: "namespace-v1" });
+    }
+  });
 });
