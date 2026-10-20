@@ -2,9 +2,13 @@
 
 ## Retomada Linux Cloud — evidência atual
 
-Checkout ab4aff1 íntegro, na branch obrigatória, sem WIP local perdido. CI do próprio checkpoint PASS em todas as etapas (run39476952320), substituindo o bloqueio histórico de CI abaixo. Staging público 8c1340d reconferido: 12 assets e cabeçalhos exatos; isso não executa jornadas autenticadas. CLI deste Cloud sem contas autorizadas; não copiar a sessão do laboratório. Observabilidade parcial e política Auth estão documentadas; abuso remoto, advisories de tooling e compatibilidade/recuperação reais mantêm F7 IN_PROGRESS / BLOCKED. Parecer atual e plano de corte em MIGRATION_READINESS_FINAL.md; resultados Linux e acesso mínimo em CLOUD_TRANSFER_2026-10-20.md. Nenhum serviço pago/Blaze ou alteração de produção.
+Checkout ab4aff1 íntegro, na branch obrigatória, sem WIP local perdido. CI do checkpoint recuperado PASS e CI da candidata51cf4f5 também PASS (run39504978890), substituindo o bloqueio histórico de CI abaixo. Staging público 8c1340d reconferido: 12 assets e cabeçalhos exatos; isso não executa jornadas autenticadas. CLI deste Cloud sem contas autorizadas; não copiar a sessão do laboratório. Observabilidade parcial e política Auth estão documentadas; abuso remoto, advisories de tooling e compatibilidade/recuperação reais mantêm F7 IN_PROGRESS / BLOCKED. Parecer atual e plano de corte em MIGRATION_READINESS_FINAL.md; resultados Linux e acesso mínimo em CLOUD_TRANSFER_2026-10-20.md. Nenhum serviço pago/Blaze ou alteração de produção.
 
-## Aceite incremental do staging — 2026-10-20
+## Preparação isolada — atualização da candidata Cloud
+
+Os critérios1–8 da matriz de staging abaixo conservam evidência válida **das versões que foram efetivamente testadas**, incluindo os incrementos funcionais de8c1340d e Auth do checkpointab4aff1. Health/Pages atuais confirmam8c1340d; nenhum deploy51cf4f5 é alegado. Critério9: CI integral51cf4f5 PASS, run39504978890:282 backend/Rules,8Auth,6Storage e184 E2E. Critério10 segue BLOCKED por proteção de abuso/alertas e advisories conhecidos. Nove dos10 critérios de preparação isolada comprovados (90%), com o critério10 BLOCKED; não é um percentual de preparação integral da produção. O novo compilador altera hashes e exige seu próprio aceite, sem invalidar testes de Rules/contratos cujo código não mudou.
+
+## Histórico — aceite incremental do staging19c6564
 
 Checkpoint publicado `19c6564`, deployment `9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85`, https://caravana77-staging.pages.dev. Os11 assets de navegador são idênticos ao runtime8b0dad3 usado no aceite funcional e no ensaio de retorno. Produção continua protegida e sem autorização de alteração.
 

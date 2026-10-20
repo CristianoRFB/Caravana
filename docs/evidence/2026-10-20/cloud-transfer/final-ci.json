@@ -1,0 +1,130 @@
+{
+  "source": "GitHub run and job log, authenticated read-only",
+  "head": "51cf4f5c9157928e0da10f9f24f40f5fa7718a0c",
+  "tree": "7413afa2873c622cf72fb7c3a472220be195d0d6",
+  "runId": 39504978890,
+  "jobId": 118911523591,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/39504978890",
+  "status": "completed",
+  "conclusion": "success",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Set up Node.js",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Set up Java for Firebase emulators",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Audit runtime dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Lint",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Unit, integration and Firestore Rules",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Auth emulator integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Storage Rules with Auth",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install Chromium",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Desktop and mobile E2E (synthetic only)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Record synthetic browser summary without artifact storage",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Set up Java for Firebase emulators",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Set up Node.js",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Checkout",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "numericEvidence": [
+    "2026-10-20T22:03:15.4254555Z  Test Files  44 passed (44)",
+    "2026-10-20T22:03:15.4257076Z       Tests  282 passed (282)",
+    "2026-10-20T22:03:31.6487448Z  Test Files  1 passed (1)",
+    "2026-10-20T22:03:31.6488511Z       Tests  8 passed (8)",
+    "2026-10-20T22:03:48.3401352Z  Test Files  1 passed (1)",
+    "2026-10-20T22:03:48.3402258Z       Tests  6 passed (6)",
+    "2026-10-20T22:13:08.9589042Z   184 passed (8.9m)"
+  ],
+  "productionWrites": 0,
+  "newPaidServices": 0,
+  "counts": {
+    "backend": 282,
+    "auth": 8,
+    "storage": 6,
+    "e2e": 184
+  },
+  "retriesConfigured": 0
+}

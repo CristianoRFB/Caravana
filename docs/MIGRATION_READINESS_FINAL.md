@@ -4,7 +4,7 @@
 
 ## Evidências e alcance
 
-- IMPLEMENTED / LOCAL_TESTED: F0–F6 e diferenciação funcional posterior. CI do próprio checkpoint recuperado PASS: [run 39476952320](https://github.com/CristianoRFB/Caravana/actions/runs/39476952320). Todas as etapas obrigatórias concluíram com sucesso; log do próprio job confirmou281 backend/Rules,8Auth,6Storage e184 E2E. Patch posterior do Cloud tem18 testes direcionados,8Auth/6Storage e32 E2E PASS; seu CI integral será registrado separadamente. Resumo independente: `evidence/2026-10-20/cloud-transfer/recovered-ci.json`.
+- IMPLEMENTED / LOCAL_TESTED: F0–F6 e diferenciação funcional posterior. CI do próprio checkpoint recuperado PASS: [run 39476952320](https://github.com/CristianoRFB/Caravana/actions/runs/39476952320). Todas as etapas obrigatórias concluíram com sucesso; log do próprio job confirmou281 backend/Rules,8Auth,6Storage e184 E2E. A candidata Cloud51cf4f5 passou também no CI integral [39504978890](https://github.com/CristianoRFB/Caravana/actions/runs/39504978890):282 backend/Rules,8Auth,6Storage e184 E2E, sem retry configurado; lint/typechecks/build PASS. Resumo: cloud-transfer/final-ci.json. Resumo independente: `evidence/2026-10-20/cloud-transfer/recovered-ci.json`.
 - STAGING_VERIFIED no escopo registrado: frontend `8c1340d`, seis jornadas SDK dos três planos, Rules, 11 índices, Auth e corpus fictício. Health público reconferido no Cloud: 12 assets exatos e cabeçalhos, sem autenticação nem consulta a documentos. Isso não revalida jornadas autenticadas.
 - Auth de staging, evidência anterior do checkpoint: Email/Password, enumeração protegida, senha mínima 12, enforcement ENFORCE, anônimo desabilitado. Não confundir essa política com proteção de abuso validada.
 - Backup/restauração de 153 documentos fictícios staging→emulador e retorno do frontend de staging têm evidências históricas próprias em STAGING_BDALL.md / RELEASE_AND_ROLLBACK.md. Não incluem recuperação de senha Auth ou arquivos reais.
@@ -35,7 +35,7 @@ PASS significa comprovação no escopo da coluna de evidência; BLOCKED impede R
 | 16 | Segurança operacional | BLOCKED | Diagnóstico sanitizado/health/Auth implementados; abuso remoto/alertas operacionais não comprovados e advisories de tooling permanecem registrados |
 | 17 | Procedimento e documentação finais | PASS documental | Este parecer, plano abaixo, runbook de staging e rollback. Não equivale a aprovação de execução |
 
-**6/17 gates PASS (35% dos gates de preparação), 11 BLOCKED.** É uma proporção verificável de gates, não estimativa de linhas de código ou de segurança do cliente. F0–F6 mantêm seus aceites locais; F7/F8 não estão integralmente concluídas. A matriz original de 14 gates continua em F8_ACCEPTANCE.md.
+**6/17 gates PASS (35% dos gates de preparação), 11 BLOCKED.** É uma proporção verificável de gates, não estimativa de linhas de código ou de segurança do cliente. F0–F6 mantêm seus aceites locais; F7/F8 não estão integralmente concluídas. A matriz original de14 gates continua em F8_ACCEPTANCE.md, com5PASS/9BLOCKED para a candidata. F7 tem9/10 critérios de preparação isolada (90% neste escopo), sem comprovar preparação integral de produção; F8 tem5/14 gates (36%). F0–F6 preservam os aceites locais anteriores, sem recalcular percentuais ou homologação real a partir de testes sintéticos.
 
 ## Oferta comercial preservada
 

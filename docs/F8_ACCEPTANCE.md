@@ -2,9 +2,32 @@
 
 ## GOAL FINAL e transferência Cloud — parecer vigente
 
-**NOT_READY_FOR_MIGRATION / BLOCKED.** O novo GOAL exige 17 gates, mantidos separadamente em MIGRATION_READINESS_FINAL.md (6 PASS de escopo definido /11 BLOCKED). A matriz histórica de 14 gates abaixo não é substituída nem convertida artificialmente em aprovação de migração. F6 permanece PASS local; CI integral do checkpoint ab4aff1 PASS, staging público 8c1340d conferido novamente. Nenhuma homologação real de dados/Auth/Storage do Ítalo, backup/restauração real ou rollback coordenado foi comprovada. Produção não alterada.
+**NOT_READY_FOR_MIGRATION / BLOCKED.** O novo GOAL exige 17 gates, mantidos separadamente em MIGRATION_READINESS_FINAL.md (6 PASS de escopo definido /11 BLOCKED). A matriz de14 gates é mantida abaixo, com avaliação da candidata atual e histórico separado; não é aprovação de migração. F6 permanece PASS local; CI integral da candidata51cf4f5 PASS (282+8Auth+6Storage+184 E2E), staging público 8c1340d conferido novamente. Nenhuma homologação real de dados/Auth/Storage do Ítalo, backup/restauração real ou rollback coordenado foi comprovada. Produção não alterada.
 
-## Matriz vigente — staging funcional em 2026-10-20
+## Matriz dos14 gates — candidata Cloud51cf4f5
+
+O parecer é BLOCKED, independentemente do resultado do CI. A matriz separa a candidata nova do staging8c1340d, preservando o aceite anterior abaixo. Produção continua proibida pela instrução vigente.
+
+| # | Gate obrigatório | Estado | Evidência / pendência |
+|---|---|---|---|
+| 1 | F6 concluída | PASS local | Aceite12/12 preservado; novos relatórios/roteiros também implementados |
+| 2 | F7 aplicável concluída | BLOCKED | Observabilidade/abuso, recuperação e compatibilidade reais pendentes |
+| 3 | Testes essenciais da candidata | PASS | CI integral39504978890:282 backend/Rules,8Auth,6Storage e184 E2E PASS; lint/typechecks/build PASS |
+| 4 | Staging isolado da candidata | BLOCKED atualização |8c1340d funcional/publicamente conferido; build Vite6.4.4 de51cf4f5 ainda não publicado/homologado |
+| 5 | Backup real e restauração | BLOCKED | Apenas153 documentos fictícios restaurados; sem Auth/objetos reais |
+| 6 | Compatibilidade frontend/Rules/índices/Auth | BLOCKED real |Fonte src/Rules/índices igual a8c1340d; não comprova equivalência ao legado nem candidata nova no staging |
+| 7 | Fluxos legados do Ítalo preservados | BLOCKED comprovação |Nenhuma mutação real executada; falta prova operacional dos registros existentes |
+| 8 | Ausência de migração destrutiva necessária | BLOCKED |Sem schema real e backfill completo revisado; não inferir pela fixture |
+| 9 | Nenhuma operação financeira/dados reais | PASS escopo executado |Somente testes sintéticos e leituras públicas/staging |
+| 10 | Rollback testado e aplicável | BLOCKED coordenado |Retorno frontend staging limitado; Rules/Auth/índices/dados reais não restaurados |
+| 11 | Credenciais/configuração efetivas de produção | BLOCKED |Nenhuma autenticação administrativa Firebase neste Cloud; sem pedido de escrita em produção |
+| 12 | Nenhum custo novo não autorizado | PASS ações executadas |Sem Blaze/projeto/serviço pago; CI público em runner padrão |
+| 13 | Ausência de falha crítica de segurança | BLOCKED comprovação integral |Runtime audit0; tooling7; abuso/alertas/IAM/tokens reais não comprovados |
+| 14 | Evidências e SHA registrados | PASS checkpoint |51cf4f5 enviado; logs, árvore idêntica, manifesto, plano e17 gates versionados |
+
+**5PASS/14 (36% dos gates),9BLOCKED.** Não converter percentuais em autorização de produção. O gate3 foi atualizado após o resultado completo, sem transformar testes sintéticos em comprovação real.
+
+## Histórico — matriz de staging funcional19c6564
 
 F6 permanece PASS local. Staging funcional `bdall-e3585` + https://caravana77-staging.pages.dev, checkpoint `19c6564` (assets idênticos ao runtime8b0dad3), aceito no escopo sintético descrito em STAGING_BDALL.md. Produção permanece explicitamente protegida, independentemente de percentuais. A matriz abaixo substitui os estados históricos preservados adiante.
 

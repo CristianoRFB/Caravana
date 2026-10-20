@@ -1,5 +1,11 @@
 # Estado atual — Caravana 77
 
+## Fechamento da transferência Cloud — fonte51cf4f5
+
+CI integral39504978890 PASS:282 backend/Rules,8Auth,6Storage e184 E2E em rodada completa; lint/typechecks/build PASS. Evidência sanitizada cloud-transfer/final-ci.json. Correções e relatório enviados na branch obrigatória; checkpoint posterior somente documental [skip ci], sem alteração executável. F0–F6 mantêm aceites locais. F7:9/10 critérios isolados (90%, não produção); F8 candidata:5/14 gates (36%); GOAL FINAL:6/17 (35%), NOT_READY_FOR_MIGRATION. Não calcular média dessas matrizes de escopos diferentes.
+
+Staging publicado continua8c1340d,12assets conferidos; nenhuma publicação da candidata51cf4f5. Cloud sem login Firebase e sem credenciais fictícias transferidas. Próxima operação necessária é auditoria GET do staging após autenticação oficial, com permissões mínimas e alvo conferido conforme CLOUD_TRANSFER_2026-10-20.md. Inventário real/backup/restore/compatibilidade e rollback coordenado continuam BLOCKED. Produção não alterada; nenhum Blaze/custo novo/migração real.
+
 ## Transferência Linux Cloud — 2026-10-20
 
 Recuperado ab4aff1 na branch obrigatória, limpo, fetch/fast-forward e fsck PASS. CI do próprio checkpoint PASS (run39476952320); baseline Linux281 testes backend/Rules PASS. Vite atualizado somente6.4.3→6.4.4 por advisory compatível; runtime audit0, tooling7 achados conhecidos. Runner Node direto agora usa binários locais do lockfile; FAIL inicial de PATH preservado. Cutover sintético passa a rejeitar referências entre tenants e caravanas contraditórias no histórico:18 direcionados PASS, mais8Auth/6Storage e16 E2E comerciais nas quatro larguras PASS; mais16 E2E financeiros/equipe/gutter1440/320 PASS. Não contar esses conjuntos sobrepostos como testes únicos somados.
