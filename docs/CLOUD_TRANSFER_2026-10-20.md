@@ -1,5 +1,7 @@
 # Transferência para Linux Cloud — 2026-10-20
 
+Atualização vigente: a tentativa CLI anterior não oferece terminal acessível ao usuário Android. **Não usar comandos com código como argumento nem pedir segredos no chat. Somente leitura em bdall-e3585 autorizada nesta fase.** Procedimento novo e testado: FIREBASE_READONLY_ANDROID.md; o histórico abaixo não autoriza escritas ou recuperação de senhas de fixtures neste fluxo.
+
 ## Recuperação comprovada
 
 Repositório oficial `CristianoRFB/Caravana`, remote HTTPS oficial e branch obrigatória `codex/caravana77-commercial-v1-20261016`. Fetch e avanço fast-forward de663bdca para `ab4aff115685f468d99050d248a047b070297cab`, sem merge de main, reset ou perda de WIP. Checkout originalmente limpo; fsck de conectividade PASS, três blobs pendentes sem exclusão. Oito commits novos: e383b20,8b0dad3,19c6564,865b803,13fe987,40de512,8c1340d,ab4aff1. Trabalho inacessível do laboratório não foi declarado recuperado.

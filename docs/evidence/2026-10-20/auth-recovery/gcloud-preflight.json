@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-20T22:53:08.066147+00:00",
+  "projectId": "bdall-e3585",
+  "expectedPrincipal": "crisf.bueno10@gmail.com",
+  "authSource": "gcloud",
+  "scriptSha256": "43094a5756c208d7bc38cc96fc3c10aa92405870515d30486a90d7a1244c3e82",
+  "status": "BLOCKED",
+  "projectWrites": 0,
+  "productionAccess": false,
+  "businessDocumentsRead": false,
+  "credentialsExported": false,
+  "reason": "gcloud_not_available_use_google_cloud_shell",
+  "requests": []
+}

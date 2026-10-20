@@ -1,0 +1,2 @@
+# Optional managed ADC mode only. Cloud Shell/gcloud mode uses Python stdlib.
+google-auth[requests]==2.62.0

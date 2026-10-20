@@ -1,0 +1,31 @@
+{
+  "status": "PASS_LOCAL_AUTH_DIAGNOSTIC_NOT_AUTHENTICATED",
+  "firebaseCliVersion": "15.34.0",
+  "registryLatestVersion": "15.34.0",
+  "nodeVersion": "24.19.0",
+  "nodeSupportedByCli": true,
+  "priorLocalPkceStateDiscarded": true,
+  "aiAgentDetectionForcesNonInteractive": true,
+  "officialInteractiveOverrideTested": true,
+  "interactivePromptReached": true,
+  "freshUrl": {
+    "officialOrigin": true,
+    "parametersPresent": {
+      "code_challenge": true,
+      "session": true,
+      "attest": true
+    },
+    "duplicateParameters": false,
+    "pkceS256ShapeValid": true,
+    "sessionShapeValid": true,
+    "httpStatus": 302,
+    "redirectToGoogle": true,
+    "parameterValuesStoredInReport": false
+  },
+  "freshSessionCancelledAfterValidation": true,
+  "authorizationCodeSubmitted": false,
+  "firebaseAccountsAuthorized": 0,
+  "firebaseProjectOperations": 0,
+  "androidBrowserExecutionVerified": false,
+  "previousInvalidRequestRootCause": "Not established; new URL accepted from Cloud. Do not infer truncation/expiry or Android incompatibility."
+}

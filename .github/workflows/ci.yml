@@ -50,6 +50,12 @@ jobs:
       - name: Typecheck opt-in staging and restore harnesses (no remote execution)
         run: npm run typecheck:staging
 
+      - name: Read-only staging audit guards (no credentials or remote audit)
+        run: |
+          python3 -m venv "$RUNNER_TEMP/caravana-readonly-venv"
+          "$RUNNER_TEMP/caravana-readonly-venv/bin/python" -m pip install -r scripts/staging-readonly-requirements.txt
+          "$RUNNER_TEMP/caravana-readonly-venv/bin/python" -m unittest discover -s scripts/tests -p test_staging_readonly.py -v
+
       - name: Unit, integration and Firestore Rules
         run: npm test
 

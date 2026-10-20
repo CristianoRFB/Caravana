@@ -10,6 +10,8 @@ test-results/
 playwright-report/
 .wrangler/
 coverage/
+__pycache__/
+*.py[cod]
 .firebase/
 firebase-debug.log
 firestore-debug.log

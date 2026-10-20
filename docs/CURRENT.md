@@ -1,5 +1,11 @@
 # Estado atual — Caravana 77
 
+## Autenticação — restrição atual de somente leitura
+
+Conta indicada: crisf.bueno10@gmail.com. O fluxo anterior foi encerrado. CLI15.34 detectava agente e escolhia nonInteractive mesmo com PTY; nova sessão oficial --no-localhost --interactive alcançou o prompt, parâmetros completos e HTTP302 Google, depois foi cancelada sem código. Não há terminal do Codex exposto ao usuário Android e não será pedido código/token/senha no chat. Causa específica do invalid_request antigo não comprovada; não atribuir ao Android.
+
+Novo caminho em FIREBASE_READONLY_ANDROID.md: sessão Google gerenciada no Cloud Shell pelo celular, auditoria Python GET-only de bdall-e3585 e relatório sanitizado; ou conexão GCP/ADC gerenciada do runtime quando realmente configurada.16 guards offline PASS, dependências ADC importadas. Preflights atuais BLOCKED com zero requisições: gcloud ausente e nenhuma conexão GCP gerenciada. Nenhuma autenticação, IAM ou auditoria remota simulada. A autorização atual é **somente leitura do staging**: não usar stagingAdmin, test:staging, bootstrap/reset de fixtures, deploy ou scripts de escrita. Nenhum projeto Firebase alterado. F7/F8 e17 gates permanecem bloqueados no escopo real.
+
 ## Fechamento da transferência Cloud — fonte51cf4f5
 
 CI integral39504978890 PASS:282 backend/Rules,8Auth,6Storage e184 E2E em rodada completa; lint/typechecks/build PASS. Evidência sanitizada cloud-transfer/final-ci.json. Correções e relatório enviados na branch obrigatória; checkpoint posterior somente documental [skip ci], sem alteração executável. F0–F6 mantêm aceites locais. F7:9/10 critérios isolados (90%, não produção); F8 candidata:5/14 gates (36%); GOAL FINAL:6/17 (35%), NOT_READY_FOR_MIGRATION. Não calcular média dessas matrizes de escopos diferentes.
