@@ -1,0 +1,12 @@
+[
+  {
+    "suite": "cutover",
+    "command": [
+      "node",
+      "scripts/run-local-tests.mjs",
+      "cutover-rehearsal"
+    ],
+    "exitCode": 127,
+    "completedAt": "2026-10-20T21:54:19.392960+00:00"
+  }
+]

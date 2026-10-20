@@ -1,5 +1,9 @@
 # F7 — auditoria e preparação de release
 
+## Retomada Linux Cloud — evidência atual
+
+Checkout ab4aff1 íntegro, na branch obrigatória, sem WIP local perdido. CI do próprio checkpoint PASS em todas as etapas (run39476952320), substituindo o bloqueio histórico de CI abaixo. Staging público 8c1340d reconferido: 12 assets e cabeçalhos exatos; isso não executa jornadas autenticadas. CLI deste Cloud sem contas autorizadas; não copiar a sessão do laboratório. Observabilidade parcial e política Auth estão documentadas; abuso remoto, advisories de tooling e compatibilidade/recuperação reais mantêm F7 IN_PROGRESS / BLOCKED. Parecer atual e plano de corte em MIGRATION_READINESS_FINAL.md; resultados Linux e acesso mínimo em CLOUD_TRANSFER_2026-10-20.md. Nenhum serviço pago/Blaze ou alteração de produção.
+
 ## Aceite incremental do staging — 2026-10-20
 
 Checkpoint publicado `19c6564`, deployment `9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85`, https://caravana77-staging.pages.dev. Os11 assets de navegador são idênticos ao runtime8b0dad3 usado no aceite funcional e no ensaio de retorno. Produção continua protegida e sem autorização de alteração.

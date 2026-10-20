@@ -1,5 +1,12 @@
 # Estado atual — Caravana 77
 
+## Transferência Linux Cloud — 2026-10-20
+
+Recuperado ab4aff1 na branch obrigatória, limpo, fetch/fast-forward e fsck PASS. CI do próprio checkpoint PASS (run39476952320); baseline Linux281 testes backend/Rules PASS. Vite atualizado somente6.4.3→6.4.4 por advisory compatível; runtime audit0, tooling7 achados conhecidos. Runner Node direto agora usa binários locais do lockfile; FAIL inicial de PATH preservado. Cutover sintético passa a rejeitar referências entre tenants e caravanas contraditórias no histórico:18 direcionados PASS, mais8Auth/6Storage e16 E2E comerciais nas quatro larguras PASS; mais16 E2E financeiros/equipe/gutter1440/320 PASS. Não contar esses conjuntos sobrepostos como testes únicos somados.
+
+Staging público8c1340d, deployment175b982d,12 assets/hash e cabeçalhos PASS, Cloudflare GET sem bindings/variáveis. Nenhum deploy novo ou alteração de produção. CLI Cloud sem contas e fixtures privadas não transferidas; acesso real de staging BLOCKED, com procedimento mínimo em CLOUD_TRANSFER_2026-10-20.md. Parecer MIGRATION_READINESS_FINAL.md: NOT_READY_FOR_MIGRATION,6/17 gates PASS de escopo definido e11 BLOCKED. Inventário real, backup/restore Auth/Storage, backfill completo, compatibilidade e rollback coordenado não comprovados. F0–F6 preservadas; F7/F8 IN_PROGRESS/BLOCKED. Somente staging está autorizado; o histórico abaixo não reativa autorização de produção.
+
+
 ## Checkpoint GOAL FINAL — diagnóstico e staging dos planos
 
 CI completo de40de512 PASS (run39472143981). Diagnóstico sem PII/sem envio automático e health público fixo implementados;8 testes direcionados+8 E2E nas quatro larguras PASS,39 regressões de writes PASS,lint/typechecks PASS. Capturas de cartões e diagnóstico inspecionadas em320px. Nova Rules validada por56 segurança+49 equipe/plataforma/namespace e publicada exclusivamente em bdall-e3585;11 índices READY e hash conferido.6 jornadas SDK reais dos planos Essencial/Pro/Premium PASS: relatório/CSV/auditoria/replay,20 tarefas/undo/stale revision,A×B,downgrade/suspensão/histórico. Primeiro ensaio recusou cor não canônica da fixture; corrigida sem relaxar validação. Frontend staging ainda19c6564 até o próximo build/publicação deste checkpoint.

@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-20T21:57:56.660Z",
+  "operation": "GET exact staging Pages project",
+  "productionAccess": false,
+  "inventory": {
+    "success": true,
+    "project": "caravana77-staging",
+    "domains": [
+      "caravana77-staging.pages.dev"
+    ],
+    "subdomain": "caravana77-staging.pages.dev",
+    "sourceType": "direct_upload",
+    "deployment": {
+      "id": "175b982d-91c1-4c73-8b8c-a46af5db1ade",
+      "url": "https://175b982d.caravana77-staging.pages.dev",
+      "environment": "production",
+      "status": "success",
+      "commit": "8c1340da2d7e110194bf64aecd6955313d5a79e9"
+    },
+    "configurations": {
+      "preview": {
+        "environmentVariableNames": [],
+        "kvBindings": [],
+        "d1Bindings": [],
+        "r2Bindings": [],
+        "services": [],
+        "usageModel": "standard"
+      },
+      "production": {
+        "environmentVariableNames": [],
+        "kvBindings": [],
+        "d1Bindings": [],
+        "r2Bindings": [],
+        "services": [],
+        "usageModel": "standard"
+      }
+    }
+  }
+}

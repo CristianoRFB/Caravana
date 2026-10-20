@@ -72,7 +72,10 @@ let exitCode = 1;
 try {
   exitCode = await new Promise((resolve, reject) => {
     const runtimeArgs = suite === "storage" ? ["--require", path.join(workspace, "scripts/emulator-loopback-proxy.cjs"), command, ...args] : [command, ...args];
-    const child = spawn(process.execPath, runtimeArgs, { cwd: workspace, stdio: "inherit" });
+    // Direct `node scripts/run-local-tests.mjs …` invocations need the same
+    // pinned local executables that npm scripts add to PATH automatically.
+    const env = { ...process.env, PATH: [path.join(workspace, "node_modules", ".bin"), process.env.PATH].filter(Boolean).join(path.delimiter) };
+    const child = spawn(process.execPath, runtimeArgs, { cwd: workspace, stdio: "inherit", env });
     child.on("error", reject);
     child.on("exit", (code) => resolve(code ?? 1));
   });

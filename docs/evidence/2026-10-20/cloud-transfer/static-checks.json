@@ -1,0 +1,18 @@
+[
+  {
+    "check": "lint-final",
+    "exitCode": 0
+  },
+  {
+    "check": "typecheck-final",
+    "exitCode": 0
+  },
+  {
+    "check": "typecheck-staging-final",
+    "exitCode": 0
+  },
+  {
+    "check": "build-final",
+    "exitCode": 0
+  }
+]

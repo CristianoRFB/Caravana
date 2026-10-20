@@ -11,7 +11,25 @@ export function syntheticCutoverPlan(fixture){
   if(byPath.size!==source.length)throw Error("Duplicate source document");
   const organizations=source.filter(d=>/^organizations\/[^/]+$/.test(d.path)).map(d=>d.path.split("/")[1]);
   const auth=new Set(fixture.authUids);if(auth.size!==fixture.authUids.length)throw Error("Duplicate Auth UID");
-  for(const d of source){const f=d.data;if(f.organizationId&&!byPath.has(`organizations/${f.organizationId}`))throw Error("Orphan organization");if(f.caravanId&&!byPath.has(`caravans/${f.caravanId}`))throw Error("Orphan caravan");if(/^registrations\/[^/]+\//.test(d.path)&&!byPath.has(d.path.split("/").slice(0,2).join("/")))throw Error("Orphan private history");if(d.path.startsWith("admins/")&&!auth.has(d.path.split("/")[1]))throw Error("Legacy admin has no verified Auth UID");}
+  for(const d of source){
+    const f=d.data;
+    if(f.organizationId&&!byPath.has(`organizations/${f.organizationId}`))throw Error("Orphan organization");
+    if(f.caravanId){
+      const caravan=byPath.get(`caravans/${f.caravanId}`);
+      if(!caravan)throw Error("Orphan caravan");
+      if(f.organizationId&&caravan.organizationId!==f.organizationId)throw Error("Cross-tenant caravan reference");
+    }
+    if(/^registrations\/[^/]+\//.test(d.path)&&!byPath.has(d.path.split("/").slice(0,2).join("/")))throw Error("Orphan private history");
+    // Legacy children may omit organizationId. An explicit tenant must agree
+    // with every known parent; existence alone does not establish isolation.
+    const segments=d.path.split("/");
+    for(let length=segments.length-2;length>=2;length-=2){
+      const parent=byPath.get(segments.slice(0,length).join("/"));
+      if(f.organizationId&&parent?.organizationId&&f.organizationId!==parent.organizationId)throw Error("Cross-tenant private history");
+      if(f.caravanId&&parent?.caravanId&&f.caravanId!==parent.caravanId)throw Error("Conflicting private history caravan");
+    }
+    if(d.path.startsWith("admins/")&&!auth.has(d.path.split("/")[1]))throw Error("Legacy admin has no verified Auth UID");
+  }
   const members=planMembershipMigration(source,fixture.timestamp);if(members.conflicts.length)throw Error("Membership conflict; no overwrite");
   const projected=[...source,...members.creates.map(op=>({path:op.path,data:op.after}))];
   const baseline=planCommercialBaseline({organizations,caravans:source.filter(d=>/^caravans\/[^/]+$/.test(d.path)).map(d=>({id:d.path.split("/")[1],...d.data})),members:projected.filter(d=>/^memberships\/[^/]+\/organizations\/[^/]+$/.test(d.path)).map(d=>d.data),existingUsage:Object.fromEntries(source.filter(d=>d.path.startsWith("tenantUsage/")).map(d=>[d.path.split("/")[1],d.data])),existingAssignments:{},requestedAssignments:fixture.assignments},Date.parse(fixture.timestamp));

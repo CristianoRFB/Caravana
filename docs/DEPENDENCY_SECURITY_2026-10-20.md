@@ -13,3 +13,7 @@ Restantes: sugestões automáticas exigem downgrade major do Firebase CLI ou sub
 Evidências: staging-dependency-audit.json, staging-dependency-audit-after.json e staging-grpc-lock-update.log. Nenhuma dependência/arquivo da produção foi alterado.
 
 PASS instalação/validação final: CLI15.34/Wrangler4.151.3 iniciam;253 testes backend,8 Auth,6 Storage,16 E2E direcionados e1 SDK remoto somente leitura PASS após instalação. Lint/typechecks/build PASS. Os11 assets de navegador são byte a byte iguais à candidata já validada em168 E2E. Detalhes e warning do encerramento do engine Storage em STAGING_ACCEPTANCE_2026-10-20.md. Isso estabiliza a atualização compatível; os7 advisories remanescentes continuam abertos.
+
+## Transferência Linux Cloud — nova auditoria
+
+A base recuperada ab4aff1 apresentou um novo grupo Vite/launch-editor em6.4.3, além dos7 achados conhecidos do CLI. Patch compatível6.4.4 aplicado no package/lock, sem force ou downgrade major; apenas o pacote Vite mudou. Auditoria posterior retorna runtime0 e tooling7 (3altas/4moderadas). Logs/JSON em evidence/2026-10-20/cloud-transfer. Lint/typechecks/build passam após patch; hashes de build mudaram e a paridade false foi registrada, portanto E2E da versão anterior não é aprovação automática da nova. Nenhuma dependência ou artefato publicado de produção foi alterado.

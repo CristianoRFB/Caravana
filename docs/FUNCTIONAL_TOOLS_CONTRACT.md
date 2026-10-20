@@ -1,6 +1,6 @@
 # Diferenciação funcional aditiva — contrato
 
-Implementação em andamento após13fe987. Nada foi publicado ainda desta alteração. Preços/limites e os7 grupos CORE anteriores preservados em todos os planos. A condição de preço temporária não concede automaticamente funcionalidades de outro plano.
+Implementação iniciada após13fe987 e publicada somente em staging8c1340d. Seis jornadas SDK reais de staging e CI integral ab4aff1 PASS; health público reconferido na transferência Cloud. Os parágrafos de evidência incremental abaixo preservam o histórico anterior à publicação. Preços/limites e os7 grupos CORE anteriores preservados em todos os planos. A condição de preço temporária não concede automaticamente funcionalidades de outro plano.
 
 ## Capacidades e segurança
 

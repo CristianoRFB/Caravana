@@ -1,0 +1,38 @@
+{
+  "beforeVite": "6.4.3",
+  "afterVite": "6.4.4",
+  "identical": false,
+  "before": {
+    "_redirects": "6036983e5fc00f0169c9e939b1816ed771eee00e27f2fcc517b819041460b9ef",
+    "index.html": "0eb722c7893a1e810bb30047fd41892497416e780352c370bc45c79c1a9bf701",
+    "assets/team-DO-9gEyi.css": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8",
+    "assets/CommercialLanding-D7gePXPr.js": "0fa5578d4280a8a52d22615cf3c9ab1092d7c77d1df8d5b6cc3de3f90c0c7f90",
+    "assets/CommercialLanding-0uZpc247.css": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64",
+    "assets/team-hKow400V.js": "d27c24beac2bed833f9fcf7c01966746e5f7870a60e1db9f1b5d0c31f7e6486f",
+    "assets/OperationalTools-CAaWWtOR.js": "0a44d858ee99c34232e4104ce23e58590dd047aab34352378dbea59be404b1bd",
+    "assets/index-WxrywgLI.css": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf",
+    "assets/firebase-firestore-B1ljOV07.js": "69200b7ee7140a3eb24f43acc79170fbe4597c2f668023d607e36dccf402fe1b",
+    "assets/firebase-auth-DriciRFR.js": "225ef98debc44a0ddf81ab378c4af03b0551c781c404ecae1af13e926a64242b",
+    "assets/react-vendor-Cy33O35p.js": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5",
+    "assets/TeamManagement-Cc1ulwqP.js": "6677643fe4c959d376a764f52bdb7507b4a93ac2f6ce47f635566257b6584f45",
+    "assets/InvitationInbox-BsHLLKc6.js": "74df8d5320c300db905c689405b7dd1b54fd2f9151b98bd3841d7279bd6b08e4",
+    "assets/index-CaN63lmk.js": "c16b71ad6f5787500b3143923ba3ab8a48f589184f886962f270e9f2b23631fc"
+  },
+  "after": {
+    "_redirects": "6036983e5fc00f0169c9e939b1816ed771eee00e27f2fcc517b819041460b9ef",
+    "index.html": "cf5b58410234086801cdd50ed0d3170a7b23a400f3a45fd88ae745471680e207",
+    "assets/team-DO-9gEyi.css": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8",
+    "assets/OperationalTools-DyjL00YJ.js": "a0843013e3609eaabf09d342b9cdaeed17c6fb093c050d5f773f20c932e5be39",
+    "assets/CommercialLanding-0uZpc247.css": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64",
+    "assets/index-WxrywgLI.css": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf",
+    "assets/firebase-firestore-B8X3RQXa.js": "3c6126e2ea6f9ae825ea6a41dfe11375ba27c63b845533bb49a8760b1149d759",
+    "assets/InvitationInbox-CzOYqOHy.js": "4838c97166d633fe3155ca79ddcc99273248c7b0b529d0e32da56150473449a8",
+    "assets/firebase-auth-9-_4xxym.js": "633cad0aeb89f129938038b2c1dda5734cc41fed9d9e027f86c10609b772b135",
+    "assets/TeamManagement-C26ms3Wz.js": "30780a6977c2249fbbb5aa2a58afaebfd2bf678d4ef9548baa0ceee93309aab9",
+    "assets/team-BKBsBNVL.js": "cb231593e61a3ae54b73aafe7c188ba5ffebbad96180be23b3d495d5ec3a07e5",
+    "assets/CommercialLanding-CoYuo3sN.js": "1389c2cb1e3cddd3e21f4c81e457915b55abb65a0a404c00eec73e3937f0eccc",
+    "assets/index-BJNhtP8q.js": "26c8588205f4b5a77d2857231cd7541660d89c175e6e41db6d92641007f24b32",
+    "assets/react-vendor-Cy33O35p.js": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+  },
+  "configuration": "default build, not a staging deployment"
+}

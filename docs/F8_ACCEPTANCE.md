@@ -1,5 +1,9 @@
 # F8 — homologação e barreiras de publicação
 
+## GOAL FINAL e transferência Cloud — parecer vigente
+
+**NOT_READY_FOR_MIGRATION / BLOCKED.** O novo GOAL exige 17 gates, mantidos separadamente em MIGRATION_READINESS_FINAL.md (6 PASS de escopo definido /11 BLOCKED). A matriz histórica de 14 gates abaixo não é substituída nem convertida artificialmente em aprovação de migração. F6 permanece PASS local; CI integral do checkpoint ab4aff1 PASS, staging público 8c1340d conferido novamente. Nenhuma homologação real de dados/Auth/Storage do Ítalo, backup/restauração real ou rollback coordenado foi comprovada. Produção não alterada.
+
 ## Matriz vigente — staging funcional em 2026-10-20
 
 F6 permanece PASS local. Staging funcional `bdall-e3585` + https://caravana77-staging.pages.dev, checkpoint `19c6564` (assets idênticos ao runtime8b0dad3), aceito no escopo sintético descrito em STAGING_BDALL.md. Produção permanece explicitamente protegida, independentemente de percentuais. A matriz abaixo substitui os estados históricos preservados adiante.

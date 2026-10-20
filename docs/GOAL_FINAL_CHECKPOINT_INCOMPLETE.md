@@ -1,6 +1,6 @@
 # CARAVANA 77 — GOAL FINAL INCOMPLETO
 
-Status: WIP / IN_PROGRESS
+Status: WIP / IN_PROGRESS — retomado no Linux Cloud; parecer atual em MIGRATION_READINESS_FINAL.md e evidências em CLOUD_TRANSFER_2026-10-20.md. Os itens abaixo preservam o instante da interrupção; gates reais ainda BLOCKED.
 Checkpoint criado após esgotamento da cota do Codex.
 
 ## Últimas evidências informadas

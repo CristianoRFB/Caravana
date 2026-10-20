@@ -1,0 +1,50 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/functional-tools.spec.ts e2e/commercial-landing.spec.ts
+[WebServer] (node:4880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:4912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:4930) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop-1440] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (11.5s)
+  ✓   2 [desktop-1440] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (6.8s)
+  ✓   3 [desktop-1440] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (6.5s)
+  ✓   4 [desktop-1440] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (5.3s)
+(node:5175) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 [tablet-768] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (5.5s)
+  ✓   6 [tablet-768] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (5.0s)
+  ✓   7 [tablet-768] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (6.0s)
+  ✓   8 [tablet-768] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (5.3s)
+(node:5403) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 [mobile-375] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (4.9s)
+  ✓  10 [mobile-375] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (5.8s)
+  ✓  11 [mobile-375] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (5.4s)
+  ✓  12 [mobile-375] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (5.3s)
+(node:5629) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 [mobile-320] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (5.7s)
+  ✓  14 [mobile-320] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (6.6s)
+  ✓  15 [mobile-320] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (5.2s)
+  ✓  16 [mobile-320] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (4.8s)
+
+  16 passed (1.9m)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

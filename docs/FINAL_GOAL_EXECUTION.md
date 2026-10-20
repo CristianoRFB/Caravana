@@ -1,5 +1,9 @@
 # GOAL FINAL — execução vigente
 
+## Retomada Cloud — estado reconciliado em ab4aff1
+
+Esta atualização prevalece sobre a lista histórica abaixo: itens 1–3 IMPLEMENTED / LOCAL_TESTED, com ferramentas Pro/Premium também exercitadas em staging; CI do próprio ab4aff1 PASS (run39476952320). Diagnóstico local/health e política Auth de staging implementados; proteção contra abuso e segurança operacional integral BLOCKED. Inventário/backup/restauração reais BLOCKED. Cutover sintético limitado executado, sem equivalência ao schema real ou backfill comercial integral. Parecer de 17 gates concluído em [MIGRATION_READINESS_FINAL.md](MIGRATION_READINESS_FINAL.md): NOT_READY_FOR_MIGRATION. Somente staging autorizado; nenhuma mudança em produção.
+
 Fonte autorizada: `C:/xampp/77/prompts/goalfinal.txt`, recebida em2026-10-20, preservada em GOAL_FINAL_2026-10-20.md. Substitui limites/ordem antigos quando houver divergência; produção continua somente leitura. Branch codex/caravana77-commercial-v1-20261016, retomada865b803 limpa e remoto conferido/pull sem alterações. Não reiniciar aceites F0–F6.
 
 ## Ordem de execução

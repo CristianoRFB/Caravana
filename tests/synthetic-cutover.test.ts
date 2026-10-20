@@ -30,6 +30,16 @@ describe("bounded synthetic cutover rehearsal without a real-client migration ex
     const orphan=fixture();orphan.documents.push({path:"registrations/orphan",data:{organizationId:"missing"}});expect(()=>syntheticCutoverPlan(orphan)).toThrow(/Orphan/);
     const revoked=fixture();revoked.documents.push({path:"memberships/synthetic-owner-a/organizations/synthetic-org-a",data:{uid:"synthetic-owner-a",organizationId:"synthetic-org-a",role:"tenant_owner",status:"revoked"}});expect(()=>syntheticCutoverPlan(revoked)).toThrow(/conflict/);
   });
+  it("rejects existing but cross-tenant references and contradictory private-history caravans",()=>{
+    const foreignTrip=fixture();foreignTrip.documents.find((d:Document)=>d.path==="registrations/synthetic-passenger-original-id").data.caravanId="synthetic-trip-b";
+    expect(()=>syntheticCutoverPlan(foreignTrip)).toThrow(/Cross-tenant caravan/);
+    for(const path of ["registrations/synthetic-passenger-original-id/proofs/current","caravans/synthetic-trip-original-id/expenses/old-cost"]){
+      const foreignChild=fixture();foreignChild.documents.find((d:Document)=>d.path===path).data.organizationId="synthetic-org-b";
+      expect(()=>syntheticCutoverPlan(foreignChild)).toThrow(/Cross-tenant private history/);
+    }
+    const conflictingChild=fixture();conflictingChild.documents.find((d:Document)=>d.path==="registrations/synthetic-passenger-original-id/proofs/current").data.caravanId="synthetic-trip-b";
+    expect(()=>syntheticCutoverPlan(conflictingChild)).toThrow(/Conflicting private history caravan/);
+  });
   it("resumes after interruption, preserves IDs/full history, rejects source drift and roundtrips encrypted synthetic bytes",()=>{
     const f=fixture(),before=fingerprint(f),plan=syntheticCutoverPlan(f);const interrupted=syntheticStep(f.documents,plan,1);expect(interrupted.created).toBe(1);expect(interrupted.remaining).toBeGreaterThan(0);
     let state=interrupted;while(state.remaining)state=syntheticStep(state.documents,plan,1);expect(syntheticStep(state.documents,plan,100).created).toBe(0);expect(fingerprint(f)).toBe(before);

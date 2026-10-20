@@ -1,5 +1,10 @@
 # Continuidade Cloud / LAB04-PC23
 
+## Transferência vigente — ab4aff1 → Linux Cloud
+
+O computador local ficou inacessível. ab4aff1 foi recuperado integralmente na branch obrigatória, sem WIP local pendente. O GOAL FINAL original agora está versionado em GOAL_FINAL_2026-10-20.md e prevalece sobre as restrições históricas abaixo: **somente staging autorizado; nenhuma alteração em produção**. Relatório atualizado: CLOUD_TRANSFER_2026-10-20.md; parecer17 gates: MIGRATION_READINESS_FINAL.md (NOT_READY_FOR_MIGRATION). CI integral ab4aff1 PASS confirmado; frontend de staging8c1340d e12 assets conferidos, sem repetir jornadas autenticadas. CLI Cloud sem contas; não copiar a sessão/credenciais do computador anterior. O procedimento seguro e as permissões mínimas estão no relatório de transferência. As seções seguintes preservam o histórico, não o estado atual de staging/GOAL.
+
+
 Branch oficial `codex/caravana77-commercial-v1-20261016`. Retomada atual recuperou `bc2c3d13a966fe032295a4f79cb185c9e9ae2219`, checkout limpo e remoto sem commits novos. Nenhuma troca por main, merge automático, reset destrutivo ou force push.
 
 O WIP de equipe/convites do LAB04-PC23 não chegou ao GitHub e não foi recuperado nem testado. A instrução de2026-10-20 autorizou implementar no Cloud sem esperar sua sincronização. O novo contrato está em TEAM_INVITATIONS.md. WIP `9dabaa1` foi corrigido em `9c0c45d`; não usar o WIP como release. F6 agora PASS local: 244 testes, 8 Auth, 6 Storage e 164 E2E únicos consolidados após correção do harness financeiro (162/2 no gate integral e 12/12 financeiros finais). Commits finais de evidência no log/CURRENT.md.
