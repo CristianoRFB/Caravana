@@ -1,0 +1,53 @@
+{
+  "scope": "SYNTHETIC_ONLY",
+  "codeSnapshotCommit": "f87b2652f0180b4f55ffc9a6814a547a04a9e0f2",
+  "applicationSourceTree": "74f366027820354343bec425b29e56dcbd7ef791",
+  "unitRulesIntegration": {
+    "passed": 216,
+    "files": 35
+  },
+  "additionalProxyRoutingUnit": {
+    "passed": 13,
+    "files": 1,
+    "separateExecution": true
+  },
+  "auth": {
+    "passed": 8
+  },
+  "storage": {
+    "passed": 6
+  },
+  "e2e": {
+    "startTime": "2026-10-20T00:05:59.665Z",
+    "duration": 481487.855,
+    "expected": 148,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "viewports": [
+    320,
+    375,
+    768,
+    1440
+  ],
+  "screenshots": [
+    {
+      "path": "docs/evidence/2026-10-19/cloud/screens/landing-desktop-1440.png",
+      "width": 1440,
+      "height": 3249,
+      "bytes": 372043,
+      "sha256": "d84ae005945e4a0df97cdc468c107a1314bf2b7d7248796b2caf274a1ca68397"
+    },
+    {
+      "path": "docs/evidence/2026-10-19/cloud/screens/landing-mobile-320.png",
+      "width": 320,
+      "height": 5922,
+      "bytes": 318389,
+      "sha256": "33f8076c6b473520eeda23d78ea38b65de251328f15663b16e8998490664c356"
+    }
+  ],
+  "f6Gate": "BLOCKED_TEAM_SYNC",
+  "productionHomologation": "BLOCKED",
+  "productionWrites": false
+}

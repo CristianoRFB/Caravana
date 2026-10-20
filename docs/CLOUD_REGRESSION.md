@@ -9,7 +9,7 @@ Branch de trabalho preservada. Logs agrupados pela data de início da sessão em
 | Roteamento local do runner Storage | PASS |13 casos puros; f6-proxy-routing-tests.log |
 | Auth real emulado/demo | PASS |8 casos/12,10s; f6-candidate-auth.log |
 | Storage privado/isolamento/revogação | PASS |6 casos/18,85s/exit0; f6-candidate-storage.log |
-| E2E integral do candidato final | IN_PROGRESS | f6-candidate-e2e.log, quatro larguras |
+| E2E integral do candidato final | PASS corpus disponível |148 PASS/0 FAIL/0 skip/0 retry, 481.49s,320/375/768/1440; f6-candidate-e2e.log |
 | Landing antes de extração em chunk | PASS incremental |4 E2E/48,0s e inspeção visual1440/320; f6-landing-e2e.log |
 | Convites do LAB04-PC23 | BLOCKED | Código/testes não sincronizados, sem evidência concluída disponível |
 
@@ -24,3 +24,5 @@ Primeira suite Storage:3 PASS/3 FAIL nos casos positivos. Diagnóstico confirmou
 Falhas iniciais da demo por hook frio e invocação fora do PATH npm continuam registradas em F6_DEMO.md. Logs de FAIL são históricos; os resultados finais são os da tabela. As216 verificações e os13 casos novos do runner são execuções separadas; não alegar uma única execução de229.
 
 F6 permanece IN_PROGRESS até sincronizar convites e executar o gate desse módulo, mesmo com a regressão dos arquivos disponíveis aprovada. F7/F8 reais continuam BLOCKED. Nenhum aceite sintético equivale à homologação de produção.
+
+Fechamento em2026-10-20: código do candidatof87b2652f0180b4f55ffc9a6814a547a04a9e0f2, sem alteração de fonte durante a execução. As148 jornadas cobrem financeiro legado, reservas/retry, documentos, CSV, branding, plano/onboarding, demo, vagas e landing. Manifesto f6-candidate-summary.json registra estatísticas e duas capturas PNG com dimensões/hashes; inspeção visual direta desktop/mobile. O relatório de fechamento altera somente documentação/evidência.

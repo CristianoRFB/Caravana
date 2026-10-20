@@ -64,6 +64,6 @@ Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançado
 
 | F6-public-commercial-seats | P1 | PASS incremental local | Disponibilidade comercial confirmada/live no catálogo/detalhe/FAQ/formulário; rascunho e retry preservados |45 testes+26 E2E1440/320, lint/typecheck/build E2E PASS; PUBLIC_COMMERCIAL_AVAILABILITY.md | Landing e gate F6 pendentes; equipe BLOCKED de sync |
 
-| F6-landing | P1 | PASS incremental / IN_PROGRESS regressão final | /saas separada, catálogo canônico e implantação assistida, chunk próprio |4 E2E nas quatro larguras, visual1440/320; COMMERCIAL_LANDING.md | Contato oficial BLOCKED;148 E2E gerais em execução |
-| CLOUD-candidate-regression | P0 | IN_PROGRESS | Fixture histórica de branding corrigida sem relaxar Rules; runner Storage trata apenas GET sintético local |216 SDK/Rules+13 proxy+8 Auth+6 Storage PASS; CLOUD_REGRESSION.md | E2E final e gate dos convites ainda pendentes |
+| F6-landing | P1 | PASS local / BLOCKED contato | /saas separada, catálogo canônico e implantação assistida, chunk próprio |4 E2E direcionados+148 E2E gerais nas quatro larguras; COMMERCIAL_LANDING.md | Contato oficial BLOCKED; gate de convites pendente |
+| CLOUD-candidate-regression | P0 | PASS corpus disponível / BLOCKED convites | Fixture histórica de branding corrigida sem relaxar Rules; runner Storage trata apenas GET sintético local |216 SDK/Rules+13 proxy+8 Auth+6 Storage+148 E2E PASS; CLOUD_REGRESSION.md | Gate dos convites ainda pendente; produção não homologada |
 | F7-safe-preparation | P1 | PASS documento / TODO infraestrutura | Runbook sem alterações reais, CI atual conferido, critérios de staging/restore/release | F7_PREPARATION.md; nenhum CI remoto/deploy executado | F6 geral pendente, ações reais BLOCKED |
