@@ -14,6 +14,7 @@ const commands = {
   "functional-tools-e2e": "playwright test e2e/functional-tools.spec.ts e2e/commercial-landing.spec.ts",
   "functional-tools-ui-focus": "playwright test e2e/functional-tools.spec.ts --project desktop-1440 --project mobile-320",
   diagnostics: "vitest run tests/diagnostics.test.ts tests/pending-writes.test.ts tests/staging-health.test.ts",
+  "cutover-rehearsal": "vitest run tests/synthetic-cutover.test.ts tests/membership-migration.test.ts tests/commercial-baseline.test.ts tests/namespace-protection.test.ts",
   "diagnostics-e2e": "playwright test e2e/diagnostics.spec.ts e2e/commercial-landing.spec.ts",
   "release-smoke-e2e": "playwright test e2e/finance-ledger.spec.ts e2e/team.spec.ts e2e/responsive-gutter.spec.ts --project desktop-1440 --project mobile-320",
   "staging-rules": "vitest run tests/team-invitations.integration.test.ts tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts tests/namespace-protection.test.ts",

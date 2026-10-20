@@ -1,6 +1,8 @@
 import { createRequire } from "node:module";
 import { STAGING_PROJECT } from "./staging-target.mjs";
 const require = createRequire(import.meta.url);
+// Administrative responses may contain credentials or document payloads.
+require("firebase-tools/lib/logger").logger.silent = true;
 const origins = {
   firebase: ["https://firebase.googleapis.com", "v1beta1"],
   billing: ["https://cloudbilling.googleapis.com", "v1"],

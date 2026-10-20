@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-10-20T18:28:14.241Z",
+  "status": "PASS_PUBLIC_STAGING_ARTIFACTS",
+  "source": "8c1340da2d7e110194bf64aecd6955313d5a79e9",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "securityHeaders": "PASS",
+  "assets": [
+    {
+      "path": "assets/CommercialLanding-0uZpc247.css",
+      "bytes": 10506,
+      "sha256": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64"
+    },
+    {
+      "path": "assets/CommercialLanding-Bk9PjzaX.js",
+      "bytes": 13600,
+      "sha256": "7068541c4734e1c6864d13414e6badb1d22d6a0cc6bb0e335219b29ba058f58e"
+    },
+    {
+      "path": "assets/firebase-auth-9-_4xxym.js",
+      "bytes": 123693,
+      "sha256": "633cad0aeb89f129938038b2c1dda5734cc41fed9d9e027f86c10609b772b135"
+    },
+    {
+      "path": "assets/firebase-firestore-B8X3RQXa.js",
+      "bytes": 364560,
+      "sha256": "3c6126e2ea6f9ae825ea6a41dfe11375ba27c63b845533bb49a8760b1149d759"
+    },
+    {
+      "path": "assets/index-BJvPpUz4.js",
+      "bytes": 508206,
+      "sha256": "b98e6904bbfd1276c2e8c5420dc42b93486620ad3d7f033de103325c66307fa5"
+    },
+    {
+      "path": "assets/index-WxrywgLI.css",
+      "bytes": 49354,
+      "sha256": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf"
+    },
+    {
+      "path": "assets/InvitationInbox-B5ML8ocE.js",
+      "bytes": 3186,
+      "sha256": "6b290c003664597429187a799fc4f95225b8923d45b850e409571e0a1e2afe84"
+    },
+    {
+      "path": "assets/OperationalTools-DWCPX74_.js",
+      "bytes": 18130,
+      "sha256": "00c384cea7912f4fb0e7eb71a465e328ad3726c0dbd3027cceade82502896097"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/team-5-4FM6R_.js",
+      "bytes": 8946,
+      "sha256": "abd536a2cfcdba8bf298452bc288efff716c35c478d73576b26742af599002ae"
+    },
+    {
+      "path": "assets/team-DO-9gEyi.css",
+      "bytes": 1315,
+      "sha256": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8"
+    },
+    {
+      "path": "assets/TeamManagement-CPrMbch8.js",
+      "bytes": 8708,
+      "sha256": "40b8b168fdf7ef94c905a8fc1dbfd32786f69b127050152b5b2a837a810ec511"
+    }
+  ],
+  "authenticatedJourneysVerified": false,
+  "productionAccess": false,
+  "credentialsUsed": false,
+  "privateDataRead": false
+}

@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-20T18:34:06.917Z",
+  "projectId": "bdall-e3585",
+  "configurationWrites": 0,
+  "emailPasswordEnabled": true,
+  "anonymousEnabled": false,
+  "emailEnumerationProtection": true,
+  "passwordPolicyConfigured": true,
+  "passwordPolicyEnforcement": "ENFORCE",
+  "passwordMinimumLength": 12,
+  "stagingDomainAuthorized": true,
+  "remoteAbusePreventionVerified": false,
+  "billingEnabled": false,
+  "productionAccess": false
+}

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { loadEnv } from "vite";
 import { initializeApp, deleteApp } from "firebase/app";
-import { initializeAuth, inMemoryPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { initializeAuth, inMemoryPersistence, signInWithEmailAndPassword, signOut, validatePassword } from "firebase/auth";
 import { collection, doc, getDocFromServer, getDocsFromServer, getFirestore, query, where, terminate, setLogLevel } from "firebase/firestore";
 import { assertStagingBuild } from "../scripts/staging-target.mjs";
 
@@ -21,6 +21,8 @@ it("verifies refreshed Node dependencies against existing synthetic staging with
     try {
       try { await signInWithEmailAndPassword(auth, account.email, account.password); } catch { throw new Error("Synthetic login failed; credential diagnostics suppressed."); }
       expect(auth.currentUser?.uid).toBe(account.uid);
+      expect((await validatePassword(auth, 'short')).isValid).toBe(false);
+      expect((await validatePassword(auth, account.password)).isValid).toBe(true);
       expect((await auth.currentUser!.getIdTokenResult()).claims.aud).toBe("bdall-e3585");
       expect((await getDocFromServer(doc(database, `subscriptions/${organizationId}`))).data()?.planId).toBe(plan);
       const own = await getDocsFromServer(query(collection(database, "registrations"), where("organizationId", "==", organizationId)));

@@ -1,0 +1,6 @@
+import { stagingAdmin } from "./staging-admin.mjs";
+import { writeFile } from "node:fs/promises";
+const admin=await stagingAdmin();const config=await admin.request("authConfig","get",`/projects/${admin.projectId}/config`);
+const policy=config.passwordPolicyConfig;
+const report={checkedAt:new Date().toISOString(),projectId:admin.projectId,configurationWrites:0,emailPasswordEnabled:config.signIn?.email?.enabled===true&&config.signIn?.email?.passwordRequired===true,anonymousEnabled:config.signIn?.anonymous?.enabled===true,emailEnumerationProtection:config.emailPrivacyConfig?.enableImprovedEmailPrivacy===true,passwordPolicyConfigured:!!policy,passwordPolicyEnforcement:policy?.enforcementState||policy?.passwordPolicyEnforcementState||"UNSPECIFIED",passwordMinimumLength:policy?.constraints?.minLength||policy?.passwordPolicyVersions?.[0]?.customStrengthOptions?.minPasswordLength||null,stagingDomainAuthorized:config.authorizedDomains?.includes("caravana77-staging.pages.dev")===true,remoteAbusePreventionVerified:false,billingEnabled:false,productionAccess:false};
+await writeFile("docs/evidence/2026-10-20/final-staging-auth-audit.json",JSON.stringify(report,null,2)+"\n");console.log(JSON.stringify(report,null,2));

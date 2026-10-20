@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-10-20T18:29:32.466Z",
+  "scope": "Only the previously exposed Firebase CLI session; no Google browser accounts, Auth users, projects, IAM or other application sessions changed",
+  "localRemoved": true,
+  "remoteRevocation": "CONFIRMED_OFFICIAL_REVOKE_RESPONSE",
+  "credentialsPrinted": false,
+  "productionDataWrites": 0
+}
