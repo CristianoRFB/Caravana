@@ -61,7 +61,7 @@
       "durationMs": 1607.1325000000015
     }
   ],
-  "source": "e383b20 plus pending fresh server proof-read change; see next checkpoint",
+  "source": "8b0dad3269aa8ff3a4e843ac3a1c9c9e34ba2be3 functional runtime; before Node dependency refresh",
   "initialFailures": [
     {
       "round": "staging-sdk-first.log",

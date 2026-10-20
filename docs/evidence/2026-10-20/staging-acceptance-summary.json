@@ -1,0 +1,64 @@
+{
+  "checkedOn": "2026-10-20T17:04:10.736Z",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "functionalRuntime": "8b0dad3269aa8ff3a4e843ac3a1c9c9e34ba2be3",
+  "status": "PASS_LOCAL_AND_SYNTHETIC_STAGING_ONLY",
+  "beforeToolchainUpdate": {
+    "unitRules": 253,
+    "e2e": 168,
+    "retries": 0
+  },
+  "afterToolchainUpdate": {
+    "unitRules": 253,
+    "auth": 8,
+    "storage": 6,
+    "e2eSmoke": 16,
+    "stagingReadOnlySdk": 1,
+    "lint": "PASS",
+    "types": "PASS",
+    "build": "PASS",
+    "browserAssetsByteIdentical": 11
+  },
+  "stagingFunctionalSdkJourneys": 11,
+  "syntheticRestoredDocuments": 153,
+  "rollbackScope": "STAGING_FRONTEND_ONLY",
+  "runtimeAudit": {
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "toolchainAudit": {
+    "high": 3,
+    "moderate": 4,
+    "total": 7
+  },
+  "productionWrites": 0,
+  "productionDeploys": 0,
+  "bankingOperations": 0,
+  "paidResourcesEnabled": 0,
+  "phases": {
+    "F6": "PASS_LOCAL",
+    "F7": "IN_PROGRESS",
+    "F8": "IN_PROGRESS"
+  },
+  "releaseGates": {
+    "provenWithScope": 7,
+    "total": 14,
+    "blocked": 7
+  },
+  "warnings": [
+    "Storage emulator emitted Java Unsafe warnings and a shutdown NPE after six PASS assertions and script exit 0; runner cleanup completed and ports were no longer listening. Not claiming warning-free logs.",
+    "Full 168 E2E ran before the dependency refresh; refreshed toolchain revalidated 16 affected smoke cases with all eleven shipped browser assets byte-identical."
+  ],
+  "remaining": [
+    "Remote CI API credential",
+    "Seven toolchain advisories",
+    "Abuse protection and operational alerts",
+    "Approved commercial contact",
+    "Protected production inventory/legacy/IAM",
+    "Real production backup/restore",
+    "Coordinated component rollback",
+    "Specific production authorization"
+  ]
+}

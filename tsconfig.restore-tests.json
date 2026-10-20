@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "noEmit": true, "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.restore-tests.tsbuildinfo" },
+  "include": ["restore-tests/**/*.ts", "vitest.restore.config.ts"]
+}

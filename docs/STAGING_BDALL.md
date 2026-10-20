@@ -14,6 +14,18 @@ Inspeção visual de staging encontrou scrollbar vertical reduzindo a largura ú
 
 Credenciais fictícias locais: `.firebase/staging-accounts.json` (ignorado). URL funcional: https://caravana77-staging.pages.dev. Não usar credenciais nem dados do Ítalo neste ambiente.
 
+### Reexecução delimitada
+
+`STAGING_CONFIRM_PROJECT=bdall-e3585 npm run test:staging` (adaptar variável ao PowerShell) executa apenas staging-tests, com config ignorada e identidades fictícias. Cada rodada adiciona histórico sintético e cancela/arquiva/revoga suas próprias operações; não limpa o banco. `STAGING_FIREBASE_ACCOUNT` seleciona explicitamente a conta autorizada nos helpers administrativos. Exportar com `node scripts/export-staging-backup.mjs`, preservar o snapshot anterior e conferir manifesto; a exportação falha se encontrar passageiro/conta fora da fixture ou mais de500 documentos. Não elevar esse limite nem fazer limpeza silenciosa.
+
+Restaurar somente com `STAGING_RESTORE_CONFIRM=demo-caravana77-test` e `node scripts/run-local-tests.mjs staging-restore`; o runner usa emulador loopback e a restauração recusa sobrescrita. Não usar conta/chave de produção. CI padrão não executa testes SDK remotos nem precisa dos arquivos ignorados; valida os dois harnesses TypeScript em projetos separados para evitar mistura dos tipos modular/compat do SDK.
+
+Publicação final isolada: runtime8b0dad3/deployment3304e9dd; CSP e login B verificados; móvel320 tem largura útil305 e scrollWidth305. Retorno ao deploymente5e60818 e avanço de volta PASS, sem alteração dos153 documentos comparados. Retorno de Rules/Auth/dados reais não foi ensaiado.
+
+### Encerramento no computador compartilhado
+
+Ao concluir o uso, sair do painel fictício e das contas Google/Firebase/Cloudflare no navegador. No terminal, `npx --no-install firebase logout` encerra as sessões locais do CLI (sintaxe conferida na versão instalada); `wrangler logout` encerra a sessão local Cloudflare. Não executar comandos de listagem de tokens. Na conta Google da sessão antiga exposta, revogar a autorização Firebase CLI em Segurança/conexões de terceiros e autenticar novamente apenas quando necessário. Isso não exclui usuários, projetos ou dados. Os arquivos ignorados de credenciais/backups devem ficar sob controle do responsável, fora de compartilhamento público. Não foi alegado que essas sessões já tenham sido encerradas.
+
 ## Autorização e limites
 
 Instrução do usuário de2026-10-20 autoriza configuração, Rules/índices, Auth, dados fictícios e publicação em Pages separado, com orçamento máximo R$0. Produção `caravana-af306` e Pages `caravana-77` continuam protegidos. Não há autorização para migração real, alteração de dados/Rules/Auth/índices de produção ou merge.

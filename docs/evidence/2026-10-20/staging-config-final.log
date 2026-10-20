@@ -1,0 +1,111 @@
+{
+  "checkedOn": "2026-10-20T16:52:09.674Z",
+  "projectId": "bdall-e3585",
+  "billingEnabled": false,
+  "databaseEdition": "STANDARD",
+  "freeTier": true,
+  "rulesMatchCandidate": true,
+  "rulesetName": "projects/bdall-e3585/rulesets/803cecff-31cb-4f32-b436-52257ad73f12",
+  "rulesSha256": "d3ff21085bd14c53109ae6a7ff2917caf38dacd878f37db72258482c05f3e840",
+  "indexes": [
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "at",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "caravanId",
+        "at",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "slug",
+        "status",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "caravanId",
+        "at",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "caravanId",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "at",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "caravanId",
+        "at",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "slug",
+        "status",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "caravanId",
+        "batchId",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "at",
+        "__name__"
+      ]
+    },
+    {
+      "state": "READY",
+      "fields": [
+        "organizationId",
+        "at",
+        "__name__"
+      ]
+    }
+  ],
+  "allIndexesReady": true,
+  "emailPasswordEnabled": true,
+  "stagingDomainAuthorized": true,
+  "namespaceCoverage": "tenant-references-v2",
+  "storageEnabledByThisWork": false,
+  "productionWrites": 0
+}

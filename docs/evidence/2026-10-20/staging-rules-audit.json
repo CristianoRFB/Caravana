@@ -1,9 +1,35 @@
 {
   "score": 4,
-  "summary": "Revisão delimitada da candidata e testes negativos locais; não é auditoria de produção nem aprovação comercial. Fontes de autoridade são memberships/ACLs persistidas e eventos atômicos. Atualizações preservam UID/tenant/vínculos, provas têm limites de MIME/tamanho e quotas controlam crescimento. Homologação negativa no staging ainda pendente.",
+  "summary": "Bounded candidate audit with local negative suites and 11 actual synthetic staging SDK journeys PASS; no production audit or commercial approval. Membership ACLs, atomic events, quotas and private PDF limits verified within this scope.",
   "findings": [
-    { "check": "Authority Source / historical namespaces", "severity": "major", "status": "RESOLVED_LOCAL", "issue": "O inventário v1 não exigia as duas novas fontes de convites, permitindo considerar incompleto um inventário que antes era válido.", "recommendation": "Cobertura v2 inclui tenantInvitations/invitationInboxes; marcadores antigos não liberam onboarding. Planner e SDK/Rules direcionados aprovados. Nenhuma migração real." },
-    { "check": "Type Safety", "severity": "minor", "status": "RESOLVED_STAGING_COMPILE", "issue": "Compilador remoto alertava sobre união map/null no estado anterior de um convite.", "recommendation": "Mapa interno tipado com existência explícita, preservando null no primeiro evento. Compilação remota subsequente sem warning e testes de emissão/reenvio/revogação aprovados." },
-    { "check": "Storage Abuse / Resource Exhaustion", "severity": "minor", "status": "OPEN_RELEASE_GATE", "issue": "Quotas e validação de inscrições não equivalem a limitação de requisições por origem. A reserva pública pode consumir a franquia de leitura/escrita sob abuso.", "recommendation": "Conferir proteção contra abuso e monitoramento antes de release comercial. Não ativar serviços pagos nem presumir App Check implantado. Spark sem billing limita custo, não garante disponibilidade." }
-  ]
+    {
+      "check": "Authority Source / historical namespaces",
+      "severity": "major",
+      "status": "RESOLVED_LOCAL",
+      "issue": "O inventário v1 não exigia as duas novas fontes de convites, permitindo considerar incompleto um inventário que antes era válido.",
+      "recommendation": "Cobertura v2 inclui tenantInvitations/invitationInboxes; marcadores antigos não liberam onboarding. Planner e SDK/Rules direcionados aprovados. Nenhuma migração real."
+    },
+    {
+      "check": "Type Safety",
+      "severity": "minor",
+      "status": "RESOLVED_STAGING_COMPILE",
+      "issue": "Compilador remoto alertava sobre união map/null no estado anterior de um convite.",
+      "recommendation": "Mapa interno tipado com existência explícita, preservando null no primeiro evento. Compilação remota subsequente sem warning e testes de emissão/reenvio/revogação aprovados."
+    },
+    {
+      "check": "Storage Abuse / Resource Exhaustion",
+      "severity": "minor",
+      "status": "OPEN_RELEASE_GATE",
+      "issue": "Quotas e validação de inscrições não equivalem a limitação de requisições por origem. A reserva pública pode consumir a franquia de leitura/escrita sob abuso.",
+      "recommendation": "Conferir proteção contra abuso e monitoramento antes de release comercial. Não ativar serviços pagos nem presumir App Check implantado. Spark sem billing limita custo, não garante disponibilidade."
+    },
+    {
+      "check": "Bearer link contract and revocation",
+      "severity": "operational",
+      "status": "DOCUMENTED_TESTED",
+      "issue": "An active opaque passenger link is independent of team membership; staff revocation alone does not revoke a known link.",
+      "recommendation": "Explicit portal revocation where appropriate; private proofs, authorization PDFs, listings and finance remain under current organization ACL, with fresh server reads for downloads."
+    }
+  ],
+  "stagingSdkNegativeChecks": "PASS"
 }

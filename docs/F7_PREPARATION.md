@@ -1,5 +1,34 @@
 # F7 — auditoria e preparação de release
 
+## Aceite incremental do staging — 2026-10-20
+
+Runtime publicado `8b0dad3`, deployment `3304e9dd-bb51-4326-a007-d270b63812de`, https://caravana77-staging.pages.dev. Produção continua protegida e sem autorização de alteração.
+
+| Critério de preparação isolada | Estado | Evidência |
+|---|---|---|
+| 1. Destino e custo | PASS | bdall-e3585, Spark/freeTier, billing desativado; sem Blaze/Storage/Functions |
+| 2. Guard de configuração | PASS | Build/runtime recusam ambiente misto; manifesto release.json com projeto e SHA |
+| 3. Firestore | PASS staging | Rules SHA d3ff2108… e 11 índices READY; namespace v2 |
+| 4. Auth e bootstrap | PASS staging | Cinco contas fictícias; A/B, primeiro owner, planos/contadores; replay cria zero e preserva alterações |
+| 5. Frontend e headers | PASS staging | CSP/noindex/DENY; login B e consultas remotas funcionam; zero erros/warnings recentes na inspeção |
+| 6. Jornadas de clientes | PASS staging | 11 SDK reais; financeiro A×B e filtros Tudo/caravana na UI; 320/1440 inspecionados |
+| 7. Backup/restauração | PASS sintético | 153 documentos restaurados no emulador; todos os campos/relações/contadores/totais/ACL conferidos |
+| 8. Retorno de frontend | PASS staging | Retorno e avanço entre e383b20 e 8b0dad3; 153 documentos canônicos iguais antes/depois |
+| 9. CI remoto | BLOCKED credencial | Workflow preparado, sem deploy; gh sem autenticação de API. Autenticação de push via GCM não comprova acesso Actions |
+| 10. Observabilidade e proteção contra abuso | BLOCKED release | Auditoria e logs locais disponíveis; alertas/tráfego público pendentes; 7 advisories de ferramentas ainda abertos após correções compatíveis |
+
+**8/10 critérios de preparação isolada comprovados (80%).** Não é prontidão de produção. O inventário protegido de produção continua 5/10 categorias identificadas (50%); staging não substitui IAM, inventário legado, backup real ou retorno coordenado de Rules/Auth/dados. Cloud Storage permanece somente testado no emulador; PDF remoto usa o fluxo privado existente do Firestore.
+
+Comparação do retorno ordena recursivamente chaves de mapas antes do hash: a primeira comparação de JSON bruto recusou a ordem variável da API; a comparação canônica confirmou zero campos alterados. Evidência em staging-frontend-rollback.json. Não foi realizado rollback de Rules, Auth, índices ou dados.
+
+### Operação segura de staging
+
+Antes de qualquer comando administrativo, conferir o destino e billing pelo helper staging-admin.mjs. Parar se houver usuário fora de @caravana77.invalid ou passageiro fora da fixture. Logs/evidências públicos não devem conter senhas, tokens, links de passageiro ou PDFs. Credenciais e backups brutos ficam ignorados localmente. Acompanhamento manual: erros de login/permissão, respostas de quota indisponível e totais financeiros por tenant; isso não equivale a alerta automatizado ativo. Limites Spark protegem o orçamento, sem garantia de disponibilidade sob abuso.
+
+Revogar membro não revoga um link opaco de passageiro conhecido. No desligamento, avaliar revogação explícita dos links compartilhados; PDFs/financeiro/listagens exigem ACL atual. A leitura de comprovante foi alterada para servidor e testada após revogação.
+
+## Registro histórico anterior à homologação de staging
+
 ## Atualização vigente — staging autorizado em2026-10-20
 
 Somente `bdall-e3585` foi autorizado para configurações e dados fictícios, com orçamento R$0. Produção `caravana-af306`/`caravana-77` continua sem autorização de modificação, deploy, migração ou merge neste fluxo. Não aplicar a autorização condicional histórica abaixo como permissão para produção.

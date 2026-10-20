@@ -1,0 +1,44 @@
+
+up to date, audited 887 packages in 6s
+
+# npm audit report
+
+@opentelemetry/core  <2.8.0
+Severity: moderate
+OpenTelemetry Core: Unbounded memory allocation in W3C Baggage propagation - https://github.com/advisories/GHSA-8988-4f7v-96qf
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.23.0, which is a breaking change
+node_modules/@opentelemetry/core
+  @google-cloud/pubsub  5.1.0 - 6.0.0
+  Depends on vulnerable versions of @opentelemetry/core
+  node_modules/@google-cloud/pubsub
+    firebase-tools  >=6.9.0
+    Depends on vulnerable versions of @google-cloud/pubsub
+    Depends on vulnerable versions of chokidar
+    Depends on vulnerable versions of gaxios
+    node_modules/firebase-tools
+
+braces  *
+Severity: high
+braces vulnerable to stack-exhaustion denial of service through deeply nested patterns - https://github.com/advisories/GHSA-vfj7-8cjw-p6xm
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.23.0, which is a breaking change
+node_modules/braces
+  chokidar  2.0.0 - 3.6.0
+  Depends on vulnerable versions of braces
+  node_modules/chokidar
+
+uuid  <11.1.1
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+fix available via `npm audit fix --force`
+Will install firebase-tools@14.23.0, which is a breaking change
+node_modules/uuid
+  gaxios  6.4.0 - 6.7.1
+  Depends on vulnerable versions of uuid
+  node_modules/gaxios
+
+7 vulnerabilities (4 moderate, 3 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

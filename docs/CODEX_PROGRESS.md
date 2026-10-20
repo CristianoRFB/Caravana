@@ -1,5 +1,20 @@
 # Progresso — fonte única
 
+## Checkpoint de staging — 2026-10-20
+
+| ID | Estado | Implementação/evidência | Próximo gate |
+|---|---|---|---|
+| F7-staging-functional | PASS sintético | Runtime8b0dad3 enviado/publicado somente em caravana77-staging, backend bdall-e3585 Spark; 11 SDK sem bypass PASS | Produção segue protegida |
+| F7-staging-documents | PASS | PDF Firestore privado/menor/consentimento/revogação; 68 testes locais PASS, leitura fresca de comprovante | Storage remoto BLOCKED |
+| F7-staging-restore | PASS sintético | 153 documentos, hash db97cc72…, fidelidade de campos/relações/contadores/totais/ACL no emulador | Backup real BLOCKED |
+| F7-staging-return | PASS frontend | Retorno/avanço e383b20↔8b0dad3; 153 documentos canônicos iguais | Retorno coordenado Rules/Auth/dados BLOCKED |
+| F8-responsive | PASS inspeção staging | 320/1440; móvel width320/client305/body305/scroll305; filtro Tudo/caravana e Financeiro A×B | Regressão integral em execução |
+| F7-ci | BLOCKED remoto | CI inclui typecheck isolado dos harnesses; push GCM funciona, gh sem login API | Credencial Actions necessária, sem segredo solicitado no chat |
+| F7-dependencies | PASS correção compatível / BLOCKED7 restantes | Audit runtime4→0, ferramentas18→7; gRPC1.13.6, CLI15.34/Wrangler4.151.3 instalados;253+8Auth+6Storage+16 E2E+1 SDK somente leitura PASS | Advisories sem patch compatível/major e CI remoto pendentes |
+| F7/F8-real-release | BLOCKED | Gates atuais em F8_ACCEPTANCE.md, sem prontidão comercial | Legado/IAM/backup real/observabilidade/abuso/contato e autorização específica |
+
+Histórico abaixo preservado. Restrição atual autoriza somente staging R$0; não inferir deploy de produção das autorizações condicionais antigas.
+
 Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT não equivalem a TESTED/RUNTIME_CONFIRMED. Linhas de fase abaixo refletem o estado consolidado; linhas RED/WIP preservam a trilha histórica. Matriz atual da F6 em F6_ACCEPTANCE.md.
 
 | ID | Prioridade | Estado | Base/alteração | Evidência/teste | Risco/dependência/próximo passo |

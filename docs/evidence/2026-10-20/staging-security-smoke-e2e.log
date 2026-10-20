@@ -1,0 +1,48 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/finance-ledger.spec.ts e2e/team.spec.ts e2e/responsive-gutter.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:4604) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:10340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:19956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-1440] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (7.1s)
+  ok  2 [desktop-1440] › e2e\finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.2s)
+  ok  3 [desktop-1440] › e2e\finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.0s)
+  ok  4 [desktop-1440] › e2e\responsive-gutter.spec.ts:5:1 › finance fits the actual client width with a reserved classic scrollbar gutter (1.6s)
+  ok  5 [desktop-1440] › e2e\team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (7.1s)
+  ok  6 [desktop-1440] › e2e\team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (6.9s)
+  ok  7 [desktop-1440] › e2e\team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (6.0s)
+  ok  8 [desktop-1440] › e2e\team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (4.4s)
+(node:23136) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 [mobile-320] › e2e\finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (3.2s)
+  ok 10 [mobile-320] › e2e\finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (2.3s)
+  ok 11 [mobile-320] › e2e\finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (1.8s)
+  ok 12 [mobile-320] › e2e\responsive-gutter.spec.ts:5:1 › finance fits the actual client width with a reserved classic scrollbar gutter (1.4s)
+  ok 13 [mobile-320] › e2e\team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (6.4s)
+  ok 14 [mobile-320] › e2e\team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (7.6s)
+  ok 15 [mobile-320] › e2e\team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (7.2s)
+  ok 16 [mobile-320] › e2e\team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (5.7s)
+
+  16 passed (1.5m)
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+Stopped test emulator started by this run (PID 21748).

@@ -1,5 +1,38 @@
 # F8 — homologação e barreiras de publicação
 
+## Matriz vigente — staging funcional em 2026-10-20
+
+F6 permanece PASS local. Staging funcional `bdall-e3585` + https://caravana77-staging.pages.dev, runtime `8b0dad3`, aceito no escopo sintético descrito em STAGING_BDALL.md. Produção permanece explicitamente protegida, independentemente de percentuais. A matriz abaixo substitui os estados históricos preservados adiante.
+
+| # | Gate | Estado vigente | Evidência/limite |
+|---|---|---|---|
+| 1 | F6 PASS | PASS local | 12/12 critérios anteriores preservados |
+| 2 | F7 aplicável concluída | BLOCKED release | Preparação isolada 8/10; CI remoto e observabilidade pendentes; inventário protegido 5/10 |
+| 3 | Testes essenciais | PASS local | Aceites anteriores + regressões incrementais; rodada final registrada separadamente |
+| 4 | Staging isolado | PASS sintético | 11 jornadas reais SDK sem bypass; UI A×B/financeiro/filtros/móvel e login com CSP |
+| 5 | Backup real/restauração | BLOCKED produção | 153 documentos fictícios restaurados com fidelidade no emulador; nenhum backup de dados reais autorizado/comprovado |
+| 6 | Frontend/Rules/índices/Auth | PASS staging | Artefatos coerentes no projeto isolado, índices READY e login/consultas reais; não é paridade de produção |
+| 7 | Legado Ítalo | BLOCKED release | Nenhuma alteração real; integridade operacional dos registros reais não foi auditada |
+| 8 | Migração não destrutiva comprovada | BLOCKED real | Planner/dry-run sintético preservados; namespaces/baselines reais não verificados nem criados |
+| 9 | Sem operação financeira/modificação real | PASS escopo executado | Somente dados fictícios em bdall; nenhuma operação bancária nem escrita em caravana-af306 |
+| 10 | Rollback aplicável | BLOCKED coordenado | Frontend staging voltou/avançou com documentos iguais; Rules/Auth/índices/dados reais não ensaiados |
+| 11 | Credenciais/configuração de produção | BLOCKED | Login de staging não autoriza nem comprova configuração/IAM de produção |
+| 12 | Sem custo novo não autorizado | PASS escopo executado | Spark, billing=false, sem conta vinculada; Pages estático separado; nenhum recurso pago ativado |
+| 13 | Segurança completa para release | BLOCKED | Negativas A×B/global/staff e PDFs PASS; abuso/alertas/IAM/tokens legados pendentes; audit runtime zero, ferramentas 7 advisories abertos |
+| 14 | Evidências/SHA | PASS checkpoint | e383b20 e 8b0dad3 enviados na branch; logs, manifestos e capturas reais preservados |
+
+**7/14 gates têm evidência no escopo declarado (50%); sete gates de release continuam BLOCKED.** Não é 50% de prontidão comercial: três PASS dependem explicitamente do escopo staging/sintético e a publicação de produção segue proibida. Nenhum teste do emulador comprova integridade dos dados reais.
+
+### Aceite remoto dirigido
+
+11/11 SDK PASS: autenticação/planos/marcas/contadores; reserva idempotente; privacidade/negação A×B/global/visitante; onboarding completo; concorrência de quota e arquivamento; PDF privado com limites; ledger fictício/check-in/reversão; CSV entre lotes/rollback; convite/revogação/último owner; suspensão/reload; autorização de menor/consentimento/embarque. Falhas iniciais do harness registradas em staging-sdk-summary.json, sem alteração permissiva para obter PASS.
+
+Inspeção real do frontend: Financeiro A (3 passageiros fictícios, R$75 registrados), filtro Tudo/caravana; B zero e sem histórico A; Pro/limites próprios; catálogo/viagem B. Correção móvel confirmada em 320 px: largura útil 305, corpo/scrollWidth 305. PDFs ficam no Firestore existente; Storage remoto não habilitado. Capturas staging-finance-320-final.png / staging-finance-1440-final.png / staging-finance-b-final.png.
+
+Próximos gates externos: credencial Actions para execução remota; canal comercial oficial aprovado; proteção contra abuso/monitoramento; inventário, backup real e compatibilidade legada em procedimento especificamente autorizado. Nenhuma alteração de produção será inferida de um aceite de staging.
+
+## Histórico anterior ao staging funcional
+
 Atualização vigente2026-10-20: configuração/homologação autorizadas exclusivamente no staging `bdall-e3585`, com R$0. Produção permanece protegida mesmo se os testes sintéticos passarem. Configuração isolada já verificada, mas gate funcional de staging ainda IN_PROGRESS; não modificar os14 gates antes das respectivas evidências. Ver STAGING_BDALL.md. A autorização condicional histórica abaixo não substitui a restrição atual de produção.
 
 IN_PROGRESS para evidências locais; **BLOCKED para homologação remota e produção**. A autorização condicional do usuário de2026-10-20 é suficiente quando todos os14 gates estiverem comprovados; não há solicitação de confirmação rotineira pendente. Não converter UNKNOWN em PASS.

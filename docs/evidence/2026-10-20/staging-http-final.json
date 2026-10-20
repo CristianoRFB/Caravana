@@ -1,0 +1,15 @@
+{
+  "checkedOn": "2026-10-20T16:47:19.1466351Z",
+  "projectId": "bdall-e3585",
+  "csp": [
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com; frame-src https://bdall-e3585.firebaseapp.com; frame-ancestors 'none'; form-action 'self'; base-uri 'none'; object-src 'none'"
+  ],
+  "status": 200,
+  "noindex": [
+    "noindex, nofollow"
+  ],
+  "frame": [
+    "DENY"
+  ],
+  "source": "8b0dad3269aa8ff3a4e843ac3a1c9c9e34ba2be3"
+}

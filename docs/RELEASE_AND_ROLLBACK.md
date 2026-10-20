@@ -1,5 +1,17 @@
 # Release e rollback
 
+## Restrição vigente e ensaio isolado — 2026-10-20
+
+Somente staging `bdall-e3585` / Pages `caravana77-staging` está autorizado. Produção `caravana-af306` / `caravana-77`, Rules/índices/Auth reais, migração e merge continuam proibidos sem autorização específica. Esta regra substitui a autorização condicional histórica abaixo.
+
+PASS: retorno do frontend isolado para deployment `e5e60818-cfdf-4203-91c9-5ad0a09d8edd` (e383b20) e avanço para `3304e9dd-bb51-4326-a007-d270b63812de` (8b0dad3), com release.json conferido por HTTP em cada etapa. 153 documentos de staging foram comparados por caminho/campos canônicos, sem alteração. O projeto de produção permaneceu no deployment4d069e0a. Evidência staging-frontend-rollback.json.
+
+Procedimento reproduzível exclusivamente para staging: listar deployments do projeto autorizado, conferir UUID/SHA do anterior e do candidato, usar POST `/accounts/{account}/pages/projects/caravana77-staging/deployments/{uuid}/rollback`, conferir release.json, repetir para o candidato. Nunca derivar destino de nome parcial nem executar em caravana-77. A API denomina o ambiente primário como production mesmo dentro do projeto separado de staging.
+
+Backup/restauração sintético PASS: 153 documentos de staging exportados somente por GET/list e restaurados no emulador com exists:false. O manifesto db97cc72… corresponde ao arquivo privado testado. Senhas Auth não foram exportadas/restauradas. Nenhum retorno coordenado de Rules/Auth/índices/dados reais foi comprovado; esse gate continua BLOCKED. Não aplicar Rules deny-all iniciais sobre o staging funcional como ensaio de compatibilidade.
+
+## Histórico e requisitos para um futuro release autorizado
+
 Publicação autorizada condicionalmente pelo usuário em2026-10-20, sem nova confirmação rotineira. **BLOCKED** enquanto houver gate obrigatório desconhecido/falho. Não há autorização para migração real do Ítalo, destruição, alteração financeira real ou custos novos. Este procedimento ainda não foi ensaiado em staging remoto.
 
 Produção confirmada em leitura: Pages `caravana-77`, deployment `4d069e0a-344a-415a-ae41-aa314df10ace`, URL https://caravana-77.pages.dev. Preview anterior0141fb45 não é staging desta candidata. Metadados/hashes em docs/evidence/2026-10-20/. Não inferir versão por main ou pelo commit dirty do deployment.

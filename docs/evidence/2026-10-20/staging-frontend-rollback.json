@@ -1,0 +1,17 @@
+{
+  "checkedOn": "2026-10-20T16:48:29.7291376Z",
+  "rollbackDeployment": "e5e60818-cfdf-4203-91c9-5ad0a09d8edd",
+  "rollbackSource": "e383b2089d5e86c5a950e840e8341783ff710858",
+  "pagesProject": "caravana77-staging",
+  "productionTouched": false,
+  "status": "PASS_FRONTEND_ONLY",
+  "rollforwardSource": "8b0dad3269aa8ff3a4e843ac3a1c9c9e34ba2be3",
+  "rollforwardDeployment": "3304e9dd-bb51-4326-a007-d270b63812de",
+  "firestoreDocumentsUnchanged": true,
+  "comparison": "All paths and canonical field maps; initial raw comparison rejected API key ordering, no field changes",
+  "documentCount": 153,
+  "documentFieldsSha256": "f7ce5408cb037ad7c386e8da3518bfacac319eb9b13809281ed27bb4878b46e7",
+  "rulesRollbackVerified": false,
+  "authRollbackVerified": false,
+  "productionRollbackVerified": false
+}

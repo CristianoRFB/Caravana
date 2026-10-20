@@ -1,0 +1,7 @@
+{
+  "comparedAt": "2026-10-20T17:00:47.518Z",
+  "deployedSource": "8b0dad3269aa8ff3a4e843ac3a1c9c9e34ba2be3",
+  "browserAssetsByteIdentical": true,
+  "assetCount": 11,
+  "scope": "Node toolchain/grpc security update; unchanged shipped browser assets"
+}

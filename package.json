@@ -13,7 +13,7 @@
     "preview:e2e": "vite preview --outDir dist-e2e --host 127.0.0.1 --port 4177 --strictPort",
     "lint": "eslint .",
     "typecheck": "tsc -b --pretty false",
-    "typecheck:staging": "tsc -p tsconfig.staging-tests.json --pretty false",
+    "typecheck:staging": "tsc -p tsconfig.staging-tests.json --pretty false && tsc -p tsconfig.restore-tests.json --pretty false",
     "test:staging": "vitest run --mode staging --config vitest.staging.config.ts",
     "test": "node scripts/run-local-tests.mjs",
     "test:e2e": "node scripts/run-local-tests.mjs e2e",
@@ -68,6 +68,11 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.6.2"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "1.13.6"
+    }
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

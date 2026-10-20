@@ -10,6 +10,7 @@ const suite = process.argv[2] || "unit";
 const commands = {
   unit: "vitest run",
   "staging-restore": "vitest run --config vitest.restore.config.ts",
+  "release-smoke-e2e": "playwright test e2e/finance-ledger.spec.ts e2e/team.spec.ts e2e/responsive-gutter.spec.ts --project desktop-1440 --project mobile-320",
   "staging-rules": "vitest run tests/team-invitations.integration.test.ts tests/quota-operations.integration.test.ts tests/membership-rules.test.ts tests/platform.integration.test.ts tests/namespace-protection.test.ts",
   "finance-ledger-e2e": "playwright test e2e/finance-ledger.spec.ts",
   "team-e2e": "playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320",

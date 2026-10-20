@@ -10,5 +10,7 @@
   "productionAccess": false,
   "rawBackupIgnored": true,
   "containsAuthSecrets": false,
-  "restoreStatus": "TODO"
+  "restoreStatus": "PASS_EMULATOR",
+  "restoreDestination": "demo-caravana77-test",
+  "authCredentialsRestored": false
 }

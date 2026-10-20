@@ -32,11 +32,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Lint
         run: npm run lint
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Typecheck opt-in staging and restore harnesses (no remote execution)
+        run: npm run typecheck:staging
 
       - name: Unit, integration and Firestore Rules
         run: npm test
