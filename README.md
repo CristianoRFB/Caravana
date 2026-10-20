@@ -2,7 +2,7 @@
 
 Plataforma para publicar caravanas, organizar inscrições, conferir comprovantes, acompanhar financeiro e fazer check-in. React, TypeScript, Vite e Firebase, com desenvolvimento isolado por emuladores.
 
-Branch de continuidade: `codex/caravana77-commercial-v1-20261016`, repositório `CristianoRFB/Caravana`. Estado consolidado em [CURRENT.md](docs/CURRENT.md), [CODEX_PROGRESS.md](docs/CODEX_PROGRESS.md) e [F6_ACCEPTANCE.md](docs/F6_ACCEPTANCE.md). Os aceites F2–F5 são locais/sintéticos; F6 permanece IN_PROGRESS e equipe/convites do LAB04-PC23 dependem de sincronização.
+Branch de continuidade: `codex/caravana77-commercial-v1-20261016`, repositório `CristianoRFB/Caravana`. Estado consolidado em [CURRENT.md](docs/CURRENT.md), [CODEX_PROGRESS.md](docs/CODEX_PROGRESS.md) e [F6_ACCEPTANCE.md](docs/F6_ACCEPTANCE.md). Os aceites F2–F5 são locais/sintéticos; F6 está no gate ampliado de equipe/convites, implementados no Cloud por instrução atual; o WIP inacessível do LAB04-PC23 não foi recuperado.
 
 ## Executar a demonstração local
 
@@ -48,10 +48,12 @@ O workflow atual executa lint/typecheck/Rules/build em main/PR; pushes desta bra
 
 ## Preservação e operação
 
-O cliente Ítalo/Anime Fest, seus IDs, administradores, caravanas, passageiros, comprovantes, documentos e histórico financeiro devem ser preservados. Nenhuma escrita em Firebase real, migração, Rule implantada, deploy, merge, exclusão destrutiva ou operação financeira real está autorizada nesta continuidade. Procedimentos antigos de publicação/migração do README foram substituídos pelos gates em [RELEASE_AND_ROLLBACK.md](docs/RELEASE_AND_ROLLBACK.md); o histórico original permanece no Git. Backup de código não prova backup dos dados reais.
+O cliente Ítalo/Anime Fest, seus IDs, administradores, caravanas, passageiros, comprovantes, documentos e histórico financeiro devem ser preservados. A instrução de2026-10-20 autoriza deploy compatível somente após todos os14 gates comprovados, sem confirmação rotineira adicional. Migração real do cliente, destruição e operações financeiras reais continuam proibidas; staging, backup/restore e compatibilidade não comprovados mantêm produção BLOCKED. Procedimentos antigos de publicação/migração do README foram substituídos pelos gates em [RELEASE_AND_ROLLBACK.md](docs/RELEASE_AND_ROLLBACK.md); o histórico original permanece no Git. Backup de código não prova backup dos dados reais.
 
 Pix e outros pagamentos acontecem fora da plataforma. O sistema registra lançamentos informados e conferência manual; não cobra, transfere dinheiro, reembolsa ou dispara mensagens automaticamente. Comprovantes atuais são privados no Firestore, até 600 KiB (rótulo legado 600 KB). Storage legado continua com Rules candidatas separadas, sem mutações do cliente. O link privado da inscrição é uma credencial: não o compartilhe.
 
 Financeiro Geral mantém Tudo/caravana e histórico auditado. Correções e cancelamentos preservam os registros. Redução de plano não apaga história; bloqueia crescimento acima dos limites. CSV aceita até 400 linhas com identidade/replay e rollback auditados.
 
-Para reconciliar o WIP local do LAB04-PC23 com os checkpoints Cloud, consulte [CLOUD_HANDOFF.md](docs/CLOUD_HANDOFF.md). Não sobrescreva o checkout anterior nem reimplemente convites em paralelo.
+Para reconciliar o WIP local do LAB04-PC23 com os checkpoints Cloud, consulte [CLOUD_HANDOFF.md](docs/CLOUD_HANDOFF.md). Preserve o checkout anterior e compare manualmente eventual WIP com o contrato Cloud em [TEAM_INVITATIONS.md](docs/TEAM_INVITATIONS.md). A continuidade Cloud não depende mais da sincronização desse WIP.
+
+Equipe: responsáveis gerenciam `/admin/equipe`; convidados encontram o próprio UID e aceitam em `/conta/convites`. Não há envio de e-mail ou concessão de acesso sem aceite; veja [TEAM_INVITATIONS.md](docs/TEAM_INVITATIONS.md). Prévia estática independente: [PUBLIC_PREVIEW.md](docs/PUBLIC_PREVIEW.md), build local sem Firebase; não representa staging do SaaS.

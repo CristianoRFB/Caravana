@@ -1,5 +1,7 @@
 # Preservação do cliente real — Ítalo / Anime Fest
 
+Atualização2026-10-20: deploy compatível está autorizado condicionalmente aos14 gates, sem nova confirmação rotineira. As proibições históricas abaixo de deploy por falta de autorização foram substituídas; migração real do Ítalo, destruição e operações financeiras reais continuam proibidas. Nesta retomada houve somente GET de metadados Cloudflare e assets públicos; nenhum documento, identidade Auth, Rule, índice ou objeto real modificado. Integridade/completude de backup e restauração real ainda não comprovadas; a preservação do cliente não pode ser homologada com os testes sintéticos. Ver F7_PREPARATION.md/F8_ACCEPTANCE.md.
+
 Reforço explícito do proprietário recebido em 2026-10-16. Esta confirmação é pré-requisito da FASE 2.
 
 | Ponto | Confirmação e evidência | Estado |

@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-10-20T00:57:29.317181+00:00",
+  "sourceCheckpoint": "9dabaa11c7491d93d5601138271bc915bb32c3b7",
+  "syntheticOnly": true,
+  "steps": [
+    {
+      "name": "unit-rules",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "elapsedSeconds": 108.72
+    },
+    {
+      "name": "auth",
+      "command": [
+        "npm",
+        "run",
+        "test:demo"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "elapsedSeconds": 22.23
+    },
+    {
+      "name": "storage",
+      "command": [
+        "npm",
+        "run",
+        "test:storage"
+      ],
+      "exitCode": 0,
+      "status": "PASS",
+      "elapsedSeconds": 24.48
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "exitCode": 130,
+      "status": "FAIL",
+      "elapsedSeconds": 157.57
+    }
+  ]
+}

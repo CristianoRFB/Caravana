@@ -8,7 +8,7 @@ const files = [];
 for (const file of ["index.html", ...(await readdir("dist-public-preview/assets")).map((name) => `assets/${name}`)]) {
   if (file.endsWith(".css")) {
     const css = await readFile(`dist-public-preview/${file}`, "utf8");
-    await writeFile(`dist-public-preview/${file}`, css.replace(/@import[^;]+;/g, ""));
+    await writeFile(`dist-public-preview/${file}`, css.replace(/@import\s*(?:url\([^)]*\)|"[^"]*"|'[^']*')\s*;/g, ""));
   }
   const bytes = await readFile(`dist-public-preview/${file}`);
   if (/caravana-af306|firestore\.googleapis|identitytoolkit\.googleapis|securetoken\.googleapis|initializeApp|apiKey:/.test(bytes.toString())) throw new Error(`Backend dependency in public preview: ${file}`);

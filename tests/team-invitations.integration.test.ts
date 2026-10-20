@@ -81,6 +81,24 @@ describe("UID-bound tenant invitations with transactional consent and quotas", (
       await vi.waitFor(() => expect(access).toEqual([]), { timeout: 10000 });
     } finally { stop(); }
   });
+  it("cannot attach another UID's canonical invitation to a valid expiry event", async () => {
+    await seed(); await invite("guest");
+    await env.withSecurityRulesDisabled(async (ctx) => { for (const path of ["tenantInvitations/a/users/guest", "invitationInboxes/guest/organizations/a"]) await updateDoc(doc(ctx.firestore(), path), { expiresAt: Timestamp.fromMillis(Date.now() - 1000) }); });
+    as("guest"); const before = (await inspect("tenantInvitations/a/users/guest"))!; const op = quotaOperationId();
+    const after = { ...before, status: "expired", updatedAt: serverTimestamp(), lastOperationId: op };
+    const batch = writeBatch(runtime.db!);
+    batch.set(doc(runtime.db!, "tenantInvitations/a/users/guest"), after);
+    batch.set(doc(runtime.db!, "invitationInboxes/guest/organizations/a"), after);
+    batch.set(doc(runtime.db!, "tenantInvitations/a/events", op), { organizationId: "a", uid: "guest", actorUid: "guest", action: "invitation_expired", at: serverTimestamp(), requestHash: "a".repeat(64), reason: "Expiração pelo destinatário", before, after });
+    // The caller has no owner authority. A valid event for guest must not
+    // authorize an unaudited owner invitation for a second account it controls.
+    batch.set(doc(runtime.db!, "tenantInvitations/a/users/rogue"), { ...before, uid: "rogue", role: "tenant_owner", status: "pending", expiresAt: Timestamp.fromMillis(future()), lastOperationId: op });
+    await assertFails(batch.commit());
+    expect(await inspect("tenantInvitations/a/users/rogue")).toBeUndefined();
+    expect((await inspect("tenantInvitations/a/users/guest"))?.status).toBe("pending");
+    await closeTeamInvitation("a", "guest", 1, "expired", "Expiração legítima isolada");
+    expect((await inspect("tenantInvitations/a/users/guest"))?.status).toBe("expired");
+  });
   it("binds issuer identity and limits roles in a fully linked issuance batch", async () => {
     await seed();
     await expect(invite("owner-a")).rejects.toThrow("própria conta");

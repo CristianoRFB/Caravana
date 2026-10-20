@@ -1,5 +1,7 @@
 # F6 — landing SaaS separada
 
+Atualização2026-10-20: contato neutro configurável foi expressamente aceito pelo usuário; ausência de contato oficial não bloqueia F6 local. Não reutilizar contatos do Ítalo nem inventar destinos. Publicação continua condicionada aos gates reais.
+
 Rota nova `/saas`, sem substituir o catálogo `/`, links históricos ou páginas `/o/:tenantSlug`. Identidade neutra da Caravana 77, recursos existentes, comparação de planos e processo de ativação assistida. A ilustração do painel está identificada como exemplo com dados fictícios, sem alegar métricas de clientes reais.
 
 Preços e quotas vêm diretamente do `PlanCatalog`; implantação usa `COMMERCIAL_POLICY`. Essencial R$89/mês, Pro R$149/mês, Premium R$219/mês; limites 2/60/2, 5/200/5 e 15/500/15. Anual continua deferred; sem checkout, cobrança automática, trial público, criação de conta global ou alteração do preço do passageiro. Pagamento dos passageiros fora da plataforma e histórico preservado em downgrade são explicados.

@@ -249,10 +249,12 @@ service cloud.firestore {
       allow get: if (signedIn() && request.auth.uid == uid) || isTenantOwner(orgId);
       allow list: if isTenantOwner(orgId);
       allow delete: if false;
-      allow create, update: if signedIn() &&
-        ((request.resource.data.status == 'accepted' && invitationQuota(orgId, uid, request.resource.data.lastOperationId)
+      allow create, update: if signedIn() && request.resource.data.uid == uid && request.resource.data.organizationId == orgId
+        && ((request.resource.data.status == 'accepted' && invitationQuota(orgId, uid, request.resource.data.lastOperationId)
           && getAfter(/databases/$(database)/documents/invitationInboxes/$(uid)/organizations/$(orgId)).data == request.resource.data)
         || (request.resource.data.status in ['pending', 'revoked', 'expired']
+          && getAfter(/databases/$(database)/documents/tenantInvitations/$(orgId)/events/$(request.resource.data.lastOperationId)).data.uid == uid
+          && getAfter(/databases/$(database)/documents/tenantInvitations/$(orgId)/events/$(request.resource.data.lastOperationId)).data.after == request.resource.data
           && invitationEvent(getAfter(/databases/$(database)/documents/tenantInvitations/$(orgId)/events/$(request.resource.data.lastOperationId)).data, orgId, request.resource.data.lastOperationId)));
     }
     match /tenantInvitations/{orgId}/events/{op} {

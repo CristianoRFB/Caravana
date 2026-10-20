@@ -23,8 +23,14 @@ Suspensão/downgrade bloqueiam crescimento e aceite sem apagar histórico ou int
 
 ## Evidências incrementais
 
-`docs/evidence/2026-10-20/team-expanded.log`: 32 PASS (13 novos casos de convites, mais quotas e memberships). Cobertura de SDK cru, autoridade do emissor, papéis, isolamento A×B/global/staff, geração, UID errado, validade, idempotência, suspensão autoritativa, downgrade, disputa da última vaga, reativação e último owner. UI/Auth/E2E em validação; o gate integral será registrado em F6_ACCEPTANCE.md após execução concluída.
+`docs/evidence/2026-10-20/team-expanded.log`: 32 PASS (13 novos casos de convites, mais quotas e memberships). Cobertura de SDK cru, autoridade do emissor, papéis, isolamento A×B/global/staff, geração, UID errado, validade, idempotência, suspensão autoritativa, downgrade, disputa da última vaga, reativação e último owner. Oito E2E com Auth real emulado, desktop1440/mobile320, PASS em team-e2e-fifth.log. A suite ampliada anterior teve33 PASS com um caso adicional do resolver. Gate integral em execução; resultado será registrado em F6_ACCEPTANCE.md após conclusão.
 
 RED inicial: guard de offline tratava `navigator.onLine` indefinido do Node24 como offline; corrigido para `=== false`. Depois, aceite válido excedia orçamento de expressões; corrigido com recibo obrigatório centralizado. Primeira execução E2E interrompida após seletor incorreto; segunda teve quatro falhas de fixture/espera. Nenhuma dessas execuções é evidência de PASS. Logs conservados.
 
 Índice candidato de auditoria: `tenantQuotaOperations(organizationId ASC, at DESC)`. Não foi implantado. Novas Rules e frontend não foram publicados. Testes locais não comprovam compatibilidade com o cliente real.
+
+Autorrevogação no navegador revelou contexto obsoleto da coleção observada após o commit, embora operações privadas já fossem negadas. A mutação do próprio integrante agora confirma diretamente seu documento de membership no servidor e atualiza o resolver aberto; não altera autoridade das Rules. Nova execução8/8 E2E PASS, incluindo retirada imediata do próprio painel e proteção do novo último owner. A execução anterior com atualização pela coleção ainda falhou e permanece registrada; não foi contada como PASS.
+
+## Revisão adicional do vínculo canônico
+
+O WIP9dabaa1 não é candidato de release. Uma transação de expiração legítima de guest conseguia anexar um canônico de outro UID sem evento correspondente. O novo teste reproduziu1 FAIL/33 PASS (`team-binding-red.log`). A candidata agora exige UID e organização iguais ao caminho, UID do evento igual ao destinatário e snapshot after exatamente igual ao documento alterado, além da validação integral do evento. `team-binding-green.log`:34 PASS, incluindo ataque negado atomicamente e expiração legítima funcionando. Não houve implantação dessa regra vulnerável; o gate de164 E2E foi interrompido para a correção e será reiniciado. Corpus anterior243/8Auth/6Storage é evidência da versão anterior, não aprovação da correção nova.

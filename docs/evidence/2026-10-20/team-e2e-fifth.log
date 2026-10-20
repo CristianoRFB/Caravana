@@ -1,0 +1,42 @@
+
+> caravana-77@0.1.0 test:team:e2e
+> node scripts/run-local-tests.mjs team-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:20808) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:20839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:20857) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop-1440] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (16.3s)
+  ✓  2 [desktop-1440] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (13.2s)
+  ✓  3 [desktop-1440] › e2e/team.spec.ts:58:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (9.1s)
+  ✓  4 [desktop-1440] › e2e/team.spec.ts:69:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (8.0s)
+(node:21369) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [mobile-320] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (9.7s)
+  ✓  6 [mobile-320] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (9.5s)
+  ✓  7 [mobile-320] › e2e/team.spec.ts:58:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (9.7s)
+  ✓  8 [mobile-320] › e2e/team.spec.ts:69:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (7.9s)
+
+  8 passed (1.6m)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

@@ -1,0 +1,18 @@
+{
+  "checkedOn": "2026-10-20",
+  "firebaseCli": {"command": "firebase login:list", "authorizedAccounts": 0},
+  "gcloudInstalled": false,
+  "runtimeAdministrativeCredentials": "NONE_CONFIGURED",
+  "cloudflareProjectRead": "PASS",
+  "cloudflarePagesAssetAccess": "BLOCKED_HTTP_403",
+  "productionPrivateConfigurationAudited": false,
+  "protectedRealDataBackupVerified": false,
+  "realDataRestoreVerified": false,
+  "firebaseIsolatedStagingVerified": false,
+  "realDataWrites": 0,
+  "authMutations": 0,
+  "rulesOrIndexesDeployed": false,
+  "newPagesProjectsCreated": 0,
+  "productionDeploymentsCreated": 0,
+  "scope": "No account identities, tokens, environment values or private data included. No real backup was attempted without an effective authorized administrative channel."
+}

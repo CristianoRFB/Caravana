@@ -1557,8 +1557,9 @@ function AdminGuard({ children }: { children: ReactNode }) {
             <h1>{accessError ? "Atualização necessária" : "Conta ainda não autorizada"}</h1>
             <p>
               {accessError ||
-                "Peça à pessoa responsável para vincular seu usuário à organização no Firebase."}
+                "Peça um convite à pessoa responsável pela sua organização e aceite-o na área da sua conta."}
             </p>
+            <p><Link className="button button-outline" to="/conta/convites">Meus convites</Link></p>
             {accessError ? (
               <button
                 className="button button-outline"

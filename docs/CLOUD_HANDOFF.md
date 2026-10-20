@@ -1,24 +1,13 @@
-# Continuidade Cloud → LAB04-PC23
+# Continuidade Cloud / LAB04-PC23
 
-**Retomada atual — 2026-10-20:** HEAD recuperado e remoto conferido `bc2c3d13a966fe032295a4f79cb185c9e9ae2219`, branch oficial preservada, checkout inicial limpo. O usuário autorizou concluir equipe/convites no Cloud sem aguardar o WIP inacessível do LAB04-PC23; o código local não foi recuperado. Também autorizou staging e deploy condicional aos 14 gates, sem nova confirmação rotineira. As restrições históricas abaixo de “não reimplementar”/“nenhum deploy autorizado” são substituídas por essa instrução; preservação absoluta do Ítalo, ausência de migração real e gates continuam obrigatórios. Equipe implementada;32 testes direcionados PASS, E2E em validação. Ver TEAM_INVITATIONS.md. F6 ainda IN_PROGRESS até regressão integral; produção BLOCKED por staging, backup/restore e compatibilidade real não comprovados.
+Branch oficial `codex/caravana77-commercial-v1-20261016`. Retomada atual recuperou `bc2c3d13a966fe032295a4f79cb185c9e9ae2219`, checkout limpo e remoto sem commits novos. Nenhuma troca por main, merge automático, reset destrutivo ou force push.
 
+O WIP de equipe/convites do LAB04-PC23 não chegou ao GitHub e não foi recuperado nem testado. A instrução de2026-10-20 autorizou implementar no Cloud sem esperar sua sincronização. O novo contrato está em TEAM_INVITATIONS.md. Checkpoint WIP Cloud `9dabaa1` preserva implementação e evidências, ainda sem gate F6 PASS. Commits posteriores devem ser conferidos no log/CURRENT.md.
 
-Sessão iniciada em 2026-10-19 e continuada em 2026-10-20 UTC. Branch única de trabalho: codex/caravana77-commercial-v1-20261016. Origem: CristianoRFB/Caravana. Não usar main nem force/merge/reset destrutivo.
+Caso o checkout do laboratório reapareça: preservar backup/bundle e branch local antes de qualquer atualização, identificar base e diff completos e comparar manualmente UID/papel/geração/expiração/aceite, recibos, diretório/contadores e UI com o contrato Cloud. Não sobrescrever a linha Cloud nem alegar que o WIP antigo foi validado por estes testes. Reconciliar conteúdo em commit adicional na branch autorizada somente quando necessário.
 
-Recuperado65f8facd4a8bf93c351666567668bbaa8b9ccaf9 sem commits posteriores. O módulo de convites do LAB04-PC23 não estava no GitHub. O Cloud não implementou convites nem considerou aprovados seus testes locais interrompidos. Base transacional de membros preexistente mantida.
+HTTPS no executor usa Nevez06 sem permissão; os checkpoints são publicados pelo conector CristianoRFB com tree SHA idêntico ao local, parent remoto exato, expected_sha e force=false. Commit local original preservado em checkpoint/cloud-team-wip-03e35f8 e demais checkpoint/cloud-*. A ponta remota é buscada e conferida após publicação; nenhuma sincronização destrutiva.
 
-Checkpoints remotos da retomada:54a7587 (demo comercial A/Essencial/azul e B/Pro/verde),0d76e34 (vagas comerciais públicas),f87b265 (landing e tooling de regressão). O relatório final é identificado pelo commit posterior em git log; consultar CURRENT.md e F6_ACCEPTANCE.md para resultado final, sem SHA autorreferente.
+O usuário autorizou staging e deploy condicional aos14 gates sem nova confirmação rotineira. O bloqueio real é técnico/evidencial: Firebase administrativo indisponível, staging backend, backup/restore, Rules/Auth/índices atuais e compatibilidade real não comprovados. Nenhum dado do cliente, configuração real ou produção foi alterado. Prévia pública estática tem build/testes locais; publicação de assets Cloudflare encontrou403 e nenhum projeto/deployment foi criado. F7_PREPARATION.md, PUBLIC_PREVIEW.md e RELEASE_AND_ROLLBACK.md registram os limites.
 
-## Retomar equipe sem perder o trabalho local
-
-1. Preservar antes o checkout WIP do LAB04-PC23, alterações e testes/evidências. Não extrair o checkout Cloud por cima dele nem descartá-lo.
-2. Conferir status, branch e HEAD local/remoto. Criar checkpoint local do WIP antes de reconciliar os novos commits da branch.
-3. Integrar os checkpoints Cloud preservando as duas linhas de trabalho; resolver conflitos por conteúdo. O Cloud alterou App.tsx (disponibilidade pública e rota /saas), seed-demo.mjs, testes de demo/reserva/branding e documentação. Não houve alteração de firestore.rules ou implementação de convites nesta retomada.
-4. Enviar checkpoint reconciliado à branch autorizada com push normal. Se houver rejeição por avanço remoto, buscar e inspecionar a nova ponta; nunca usar force. No Cloud, HTTPS usa Nevez06 sem permissão; o conector CristianoRFB permitiu envio com expected_sha/force=false.
-5. Só após o código chegar, executar a suite de convites, incluindo UID/role/emissor, geração obsoleta, replay, expiração/revogação/reenvio, quota pendente, última vaga concorrente, suspensão/downgrade, isolamento A×B/global/escalada, auditoria imutável, último owner e UI desktop/mobile. Usar dados sintéticos e documentar o resultado final efetivamente concluído.
-
-F6 permanece IN_PROGRESS apesar dos PASS incrementais da Cloud. Contato comercial oficial pendente. Nenhuma evidência local homologa produção. GOAL original citado no handoff externo não está versionado; não declarar conferência integral desse arquivo.
-
-F7_PREPARATION.md contém apenas preparação de staging/release. Nenhum deploy, Rule implantada, migração, mudança Auth/IAM/DNS, consulta a dados do cliente ou operação financeira real foi executada. Backups de código não provam backup de dados reais.
-
-Regressão final concluída:216 unit/SDK/Rules+13 puros do runner+8 Auth+6 Storage+148 E2E PASS, sem skip/retry. Código final igual ao snapshot f87b265; fechamento posterior somente documental/evidências. Matriz F6 continua bloqueada para convites e produção.
+GOAL original citado no handoff externo não está versionado no checkout. As instruções atuais e contratos vigentes orientam o trabalho; não inventar decisões comerciais, contatos, memberships ou baselines legados. Os aceites F0–F5 e a regressão anterior216+13+8Auth+6Storage+148E2E continuam válidos no seu escopo local; nova equipe exige gate ampliado antes de fechar F6. Ver F6_ACCEPTANCE.md e evidências datadas.

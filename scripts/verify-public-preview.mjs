@@ -7,7 +7,7 @@ try {
   for (const width of [1440, 320]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } }); const page = await context.newPage(); const errors = []; const backend = [];
     page.on("pageerror", (error) => errors.push(error.message)); page.on("request", (request) => { if (/googleapis|firebaseio|cloudfunctions/.test(new URL(request.url()).hostname)) backend.push(request.url().split("?")[0]); });
-    await page.goto(`${base}/saas`); await expect(page.getByRole("heading", { level: 1 })).toBeVisible(); await expect(page.getByText(/Prévia comercial\. O painel/)).toBeVisible(); await expect(page.getByRole("heading", { name: "Essencial", exact: true })).toBeVisible();
+    await page.goto(`${base}/saas`); await expect(page.getByRole("heading", { level: 1 })).toBeVisible(); await expect(page.locator(".saas-nav")).toHaveCSS("display", "flex"); await expect(page.getByText(/Prévia comercial\. O painel/)).toBeVisible(); await expect(page.getByRole("heading", { name: "Essencial", exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     await page.screenshot({ path: `docs/evidence/2026-10-20/public-preview-${base.startsWith("https") ? "hosted" : "local"}-${width}.png`, fullPage: true });
     await page.getByRole("link", { name: "Entrar", exact: true }).click(); await expect(page.getByRole("heading", { name: "Prévia comercial", exact: true })).toBeVisible(); await expect(page.locator("input")).toHaveCount(0);

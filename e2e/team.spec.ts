@@ -44,8 +44,9 @@ test("owner invites the exact Auth UID, staff accepts once and revocation remove
   await guest.reload(); await expect(guest.getByRole("button", { name: "Aceitar convite", exact: true })).toHaveCount(0); await guest.getByRole("link", { name: "Abrir painel da organização", exact: true }).click(); await expect(guest.locator(".admin-content")).toHaveAttribute("data-org", "demo-org-a");
   await guest.goto("/admin/equipe"); await expect(guest.getByText(/Somente responsáveis podem gerenciar a equipe/)).toBeVisible(); await expect(guest.getByRole("button", { name: "Criar convite", exact: true })).toHaveCount(0);
   await expect(member(page, seed.accounts.passenger.uid)).toContainText("Equipe operacional · Ativo"); await revokeMember(page, seed.accounts.passenger.uid); await expect(guest.getByRole("heading", { name: "Conta ainda não autorizada", exact: true })).toBeVisible();
+  await guest.getByRole("link", { name: "Meus convites", exact: true }).click(); await expect(guest).toHaveURL(/\/conta\/convites$/); await expect(guest.getByRole("button", { name: "Aceitar convite", exact: true })).toHaveCount(0);
   await expect(page.getByText("Convite aceito", { exact: true })).toBeVisible(); await expect(page.getByText("Acesso alterado", { exact: true })).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width); await page.screenshot({ path: testInfo.outputPath("team-owner.png"), fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width); await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({ path: testInfo.outputPath("team-owner.png"), fullPage: true });
 });
 test("resend changes generation and role; an accepted owner cannot demote the last responsible member", async ({ page, browser }) => {
   await login(page, "owner", true); await page.goto("/admin/equipe"); await issue(page, seed.accounts.passenger.uid);
