@@ -2,6 +2,8 @@
 
 ## Aceite funcional incremental — 2026-10-20
 
+Entrega final desta etapa: checkpoint19c6564 enviado e publicado exclusivamente no staging, deployment9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85. Upload final alterou somente release.json: os11 assets permanecem idênticos aos aprovados em8b0dad3. Fonte/evidências também preservadas em bundle completo verificado; manifesto staging-source-backup.json. HTTP200/CSP/noindex e projeto/SHA do release conferidos. Produção permanece no deployment4d069e0a. Relatório consolidado em STAGING_ACCEPTANCE_2026-10-20.md.
+
 PASS: 11 jornadas SDK no Firebase real de staging, sem Admin SDK nem bypass de Rules: Auth, marcas/planos A×B, reserva/replay, negativas de acesso privado, onboarding, concorrência de quota/arquivamento, PDF, financeiro fictício/check-in reversível, CSV/deduplicação/rollback, convite/revogação/último owner, suspensão e autorização privada de menor. Evidência: `staging-sdk-pdf.log`; as falhas anteriores e correções do harness permanecem registradas. Nenhuma cobrança bancária foi executada.
 
 Comprovantes e autorizações PDF usam o fluxo existente no Firestore, com limite de 600 KiB e revisão manual. O teste remoto confirma download pelo owner e negativas para B/global/visitante e staff revogado. Download de comprovante agora exige leitura do servidor para revalidar a permissão. 68 testes locais relacionados PASS. Cloud Storage não foi habilitado nem homologado remotamente.

@@ -60,5 +60,8 @@
     "Real production backup/restore",
     "Coordinated component rollback",
     "Specific production authorization"
-  ]
+  ],
+  "publishedCheckpoint": "19c65640461c8415be628c6f642c9d71e3a1f6a3",
+  "publishedDeployment": "9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85",
+  "finalUploadChangedOnly": "release.json"
 }

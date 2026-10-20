@@ -2,7 +2,7 @@
 
 ## Aceite incremental do staging — 2026-10-20
 
-Runtime publicado `8b0dad3`, deployment `3304e9dd-bb51-4326-a007-d270b63812de`, https://caravana77-staging.pages.dev. Produção continua protegida e sem autorização de alteração.
+Checkpoint publicado `19c6564`, deployment `9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85`, https://caravana77-staging.pages.dev. Os11 assets de navegador são idênticos ao runtime8b0dad3 usado no aceite funcional e no ensaio de retorno. Produção continua protegida e sem autorização de alteração.
 
 | Critério de preparação isolada | Estado | Evidência |
 |---|---|---|

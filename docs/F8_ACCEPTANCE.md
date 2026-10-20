@@ -2,7 +2,7 @@
 
 ## Matriz vigente — staging funcional em 2026-10-20
 
-F6 permanece PASS local. Staging funcional `bdall-e3585` + https://caravana77-staging.pages.dev, runtime `8b0dad3`, aceito no escopo sintético descrito em STAGING_BDALL.md. Produção permanece explicitamente protegida, independentemente de percentuais. A matriz abaixo substitui os estados históricos preservados adiante.
+F6 permanece PASS local. Staging funcional `bdall-e3585` + https://caravana77-staging.pages.dev, checkpoint `19c6564` (assets idênticos ao runtime8b0dad3), aceito no escopo sintético descrito em STAGING_BDALL.md. Produção permanece explicitamente protegida, independentemente de percentuais. A matriz abaixo substitui os estados históricos preservados adiante.
 
 | # | Gate | Estado vigente | Evidência/limite |
 |---|---|---|---|

@@ -2,6 +2,8 @@
 
 ## Atualização vigente — staging funcional em 2026-10-20
 
+**Checkpoint de implementação publicado19c6564**, deployment9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85. GitHub atualizado; bundle completo de fonte/evidências verificado em C:/xampp/77/Caravana-audit-20261020/staging-19c6564.bundle. Os11 assets são byte a byte iguais ao runtime8b0dad3 do aceite abaixo; o novo upload atualizou somente release.json. Sessão fictícia B encerrada, viewport restaurado e aba de login do staging entregue. Sessões Google/CLI/Cloudflare não foram encerradas; orientação de revogação/logout está em STAGING_BDALL.md.
+
 F6 continua PASS local/sintético. F7/F8 IN_PROGRESS: staging real autorizado `bdall-e3585`, Spark, billing desativado, Rules/11 índices READY, cinco contas exclusivamente fictícias, marcas/planos A×B. Frontend separado https://caravana77-staging.pages.dev, candidato inicial e383b20. Produção `caravana-af306` / `caravana-77` segue protegida; restrições atuais prevalecem sobre autorizações condicionais antigas abaixo.
 
 11 jornadas SDK reais PASS, incluindo PDF privado no Firestore, autorização de menor, equipe/quotas/onboarding/importação/financeiro fictício; 68 regressões locais de documentos e dois E2E do gutter responsivo PASS; lint e ambos typechecks PASS. Backup sintético de 153 documentos restaurado no emulador com fidelidade de campos, contadores/relações/totais e ACL PASS; bootstrap replay cria zero documentos e preserva alterações. Não é backup da produção nem restore de senhas Auth. Evidências em docs/evidence/2026-10-20 e STAGING_BDALL.md.

@@ -1,0 +1,16 @@
+{
+  "deployment": "9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85",
+  "productionDeployment": "4d069e0a-344a-415a-ae41-aa314df10ace",
+  "csp": [
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com; frame-src https://bdall-e3585.firebaseapp.com; frame-ancestors 'none'; form-action 'self'; base-uri 'none'; object-src 'none'"
+  ],
+  "checkedOn": "2026-10-20T17:05:30.4890163Z",
+  "pagesProject": "caravana77-staging",
+  "status": 200,
+  "source": "19c65640461c8415be628c6f642c9d71e3a1f6a3",
+  "productionChanged": false,
+  "firebaseProject": "bdall-e3585",
+  "noindex": [
+    "noindex, nofollow"
+  ]
+}

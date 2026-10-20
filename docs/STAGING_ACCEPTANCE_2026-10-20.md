@@ -2,7 +2,7 @@
 
 ## Ambiente e preservação
 
-Branch: `codex/caravana77-commercial-v1-20261016`, repositório CristianoRFB/Caravana. Checkpoint funcional8b0dad3 enviado; deployment3304e9dd-bb51-4326-a007-d270b63812de em https://caravana77-staging.pages.dev. Firebase exclusivo bdall-e3585, Standard/freeTier/southamerica-east1, Spark e faturamento desativado. Configuração, contas e backups brutos ignorados pelo Git. Rules/hash d3ff2108…;11 índices READY; Auth E-mail/Senha/domínio específico verificados.
+Branch: `codex/caravana77-commercial-v1-20261016`, repositório CristianoRFB/Caravana. Checkpoint final de implementação19c6564 enviado; deployment9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85 em https://caravana77-staging.pages.dev. Os11 assets são idênticos ao checkpoint funcional8b0dad3; último upload alterou somente o manifesto de release. Firebase exclusivo bdall-e3585, Standard/freeTier/southamerica-east1, Spark e faturamento desativado. Configuração, contas e backups brutos ignorados pelo Git. Rules/hash d3ff2108…;11 índices READY; Auth E-mail/Senha/domínio específico verificados.
 
 Não houve escrita em caravana-af306, deploy no Pages caravana-77, alteração de DNS/domínio, migração real, merge/main, reset/exclusão de dados reais ou operação financeira bancária. Produção conferida em leitura no deployment4d069e0a-344a-415a-ae41-aa314df10ace. Não se alega integridade/backup dos documentos reais com base nessa conferência. WIP anterior permanece no bundle/stash documentados, sem reaplicação sobre equipe mais nova.
 
