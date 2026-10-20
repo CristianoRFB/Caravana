@@ -20,11 +20,11 @@ Este caminho executa a leitura no Google Cloud Shell e entrega ao Codex somente 
 
 1. No Chrome Android, entrar como crisf.bueno10@gmail.com em **https://shell.cloud.google.com/?project=bdall-e3585**. Se o terminal não aparecer, ativar **Site para computador** no menu do Chrome. Abrir o terminal do Cloud Shell, não o editor. Se a conta não tiver Cloud Shell disponível, registrar a limitação; não habilitar billing nem criar projeto para contorná-la.
 2. Concluir a autorização **Authorize Cloud Shell**, apresentada pelo Google para permitir o uso da sessão existente. Não enviar códigos/tokens ao chat. Essa autorização não concede novas permissões IAM ao usuário. Selecionar o projeto existente bdall-e3585; não criar projetos ou recursos. Cloud Shell é gratuito segundo a documentação oficial, sujeito às quotas/condições do serviço.
-3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. O comando completo com SHA será registrado após o checkpoint; o modelo abaixo usa SHA_DO_CHECKPOINT, não uma credencial:
+3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão fixa6ee1bb27f1348c035435c250942239da46d2ecf6; código testado localmente em16 casos. O SHA identifica o código, não uma credencial:
 
 ```bash
 umask 077
-curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/SHA_DO_CHECKPOINT/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
+curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/6ee1bb27f1348c035435c250942239da46d2ecf6/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
 python3 /tmp/caravana-staging-readonly.py --output /tmp/caravana-staging-readonly.json
 ```
 
@@ -80,7 +80,7 @@ O nome do alias é configuração não secreta; o principal é confirmado pelo e
 
 ## Validação independente concluída
 
-16 testes offline: identidade/projeto divergentes, produção e rotas não permitidas, redirect, ruleset adulterado, billing/banco, Rules/índices/paginação, Auth, ausência de setup, chave privada recusada, erros sanitizados, sessão gcloud e arquivo de relatório privado0600. Dependências ADC importadas no Linux; nenhum teste faz autenticação real ou consulta Firebase. CI ganhou essa suíte antes da regressão existente. Não reexecutar toda a regressão frontend local para uma ferramenta de leitura separada.
+16 testes offline: identidade/projeto divergentes, produção e rotas não permitidas, redirect, ruleset adulterado, billing/banco, Rules/índices/paginação, Auth, ausência de setup, chave privada recusada, erros sanitizados, sessão gcloud e arquivo de relatório privado0600. Dependências ADC importadas no Linux; nenhum teste faz autenticação real ou consulta Firebase. CI ganhou essa suíte antes da regressão existente; a etapa dos16 guards concluiu PASS no run39511925824, fonte6ee1bb2. O workflow integral ainda estava em execução na observação registrada; não foi declarado PASS nem equivalente à autenticação Firebase real. Não reexecutar toda a regressão frontend local para uma ferramenta de leitura separada.
 
 Evidências: evidence/2026-10-20/auth-recovery/. Preflights reais do Codex: gcloud indisponível e conexão GCP não configurada, ambos com lista de requisições vazia. A aplicação e Rules permanecem sem alteração.
 

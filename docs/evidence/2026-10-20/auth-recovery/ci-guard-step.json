@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "6ee1bb27f1348c035435c250942239da46d2ecf6",
+  "runId": 39511925824,
+  "jobId": 118934800951,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/39511925824",
+  "guardStep": {
+    "name": "Read-only staging audit guards (no credentials or remote audit)",
+    "status": "completed",
+    "conclusion": "success",
+    "number": 10,
+    "started_at": "2026-10-20T22:59:46Z",
+    "completed_at": "2026-10-20T22:59:53Z"
+  },
+  "guardTests": 16,
+  "wholeWorkflowStatus": "IN_PROGRESS_AT_OBSERVATION",
+  "wholeWorkflowApproved": false,
+  "firebaseAuthenticationVerified": false,
+  "firebaseProjectWrites": 0
+}
