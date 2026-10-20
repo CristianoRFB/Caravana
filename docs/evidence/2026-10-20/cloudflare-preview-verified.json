@@ -1,0 +1,39 @@
+{
+  "checkedOn": "2026-10-20",
+  "projects": [
+    {
+      "name": "caravana-77",
+      "domains": [
+        "caravana-77.pages.dev"
+      ],
+      "sourceType": null,
+      "productionBranch": "main",
+      "usesFunctions": false,
+      "deployment": {
+        "id": "4d069e0a-344a-415a-ae41-aa314df10ace",
+        "url": "https://4d069e0a.caravana-77.pages.dev",
+        "status": "success",
+        "commitHash": "10f30a0c1d05605cb1cd6fba0007ee4dc35d465b"
+      },
+      "bindings": {},
+      "environmentVariableNames": []
+    },
+    {
+      "name": "caravana77-commercial-preview",
+      "domains": [
+        "caravana77-commercial-preview.pages.dev"
+      ],
+      "sourceType": null,
+      "productionBranch": "preview-only",
+      "usesFunctions": false,
+      "deployment": {
+        "id": "4b868473-c7c6-4dbe-9ca6-367da9d795ae",
+        "url": "https://4b868473.caravana77-commercial-preview.pages.dev",
+        "status": "success",
+        "commitHash": "9c0c45d3c6a2bd6e0edbb435cb0be24ebaad23e7"
+      },
+      "bindings": {},
+      "environmentVariableNames": []
+    }
+  ]
+}

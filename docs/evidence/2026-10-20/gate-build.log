@@ -8,20 +8,20 @@ transforming...
 rendering chunks...
 computing gzip size...
 dist/index.html                               0.90 kB │ gzip:   0.45 kB
-dist/assets/team-xGJWvpHh.css                 1.28 kB │ gzip:   0.53 kB
+dist/assets/team-DO-9gEyi.css                 1.32 kB │ gzip:   0.54 kB
 dist/assets/CommercialLanding-Dgo8XFuJ.css    9.72 kB │ gzip:   2.39 kB
 dist/assets/index-Dz4Sm1O0.css               48.09 kB │ gzip:  11.56 kB
-dist/assets/InvitationInbox-B77c85bJ.js       3.19 kB │ gzip:   1.45 kB
-dist/assets/TeamManagement-OB_xC1lV.js        8.71 kB │ gzip:   3.20 kB
-dist/assets/team-6QPySRRO.js                  8.95 kB │ gzip:   3.02 kB
+dist/assets/InvitationInbox-CoeJJQUl.js       3.19 kB │ gzip:   1.45 kB
+dist/assets/TeamManagement-Bb0UtHj8.js        8.71 kB │ gzip:   3.20 kB
+dist/assets/team-BaCZ3zWx.js                  8.95 kB │ gzip:   3.02 kB
 dist/assets/react-vendor-Cy33O35p.js          9.06 kB │ gzip:   3.42 kB
-dist/assets/CommercialLanding-DfYW7xqy.js    11.95 kB │ gzip:   3.72 kB
+dist/assets/CommercialLanding-DZJIBA6C.js    11.95 kB │ gzip:   3.72 kB
 dist/assets/firebase-auth-9-_4xxym.js       123.69 kB │ gzip:  25.28 kB
 dist/assets/firebase-firestore-B8X3RQXa.js  364.56 kB │ gzip:  90.71 kB
-dist/assets/index-Dm5mhXGo.js               500.68 kB │ gzip: 148.83 kB
+dist/assets/index-Dm0LHlcp.js               500.80 kB │ gzip: 148.85 kB
 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 11.59s
+✓ built in 8.65s

@@ -1,20 +1,16 @@
-# Issues e dependências
+# Bloqueadores atuais
 
-**Retomada atual — 2026-10-20:** HEAD recuperado e remoto conferido `bc2c3d13a966fe032295a4f79cb185c9e9ae2219`, branch oficial preservada, checkout inicial limpo. O usuário autorizou concluir equipe/convites no Cloud sem aguardar o WIP inacessível do LAB04-PC23; o código local não foi recuperado. Também autorizou staging e deploy condicional aos 14 gates, sem nova confirmação rotineira. As restrições históricas abaixo de “não reimplementar”/“nenhum deploy autorizado” são substituídas por essa instrução; preservação absoluta do Ítalo, ausência de migração real e gates continuam obrigatórios. Equipe implementada;32 testes direcionados PASS, E2E em validação. Ver TEAM_INVITATIONS.md. F6 ainda IN_PROGRESS até regressão integral; produção BLOCKED por staging, backup/restore e compatibilidade real não comprovados.
+F6 PASS local/sintético, branch oficial e runtime9c0c45d. A autorização condicional de deploy já foi concedida; não falta confirmação rotineira. F7/F8 reais continuam BLOCKED por evidência/acesso, não por decisão já documentada.
 
+| Item | Estado | Condição estritamente necessária |
+|---|---|---|
+| Firebase administrativo | BLOCKED | CLI sem contas autorizadas, gcloud ausente e runtime sem credenciais administrativas; necessário canal efetivo autorizado |
+| Staging backend independente | BLOCKED | Destino Firebase separado e custos/limites conferidos; não copiar dados pessoais reais |
+| Rules/Auth/índices/IAM atuais | BLOCKED | Captura atual e inventário legado em leitura; manifesto histórico não é diff atual. Storage exige memberships e tokens/IAM ainda não auditados |
+| Backup e restauração real | BLOCKED | Export protegido, integridade/completude e restore em destino isolado comprovados; código não é backup de dados |
+| Compatibilidade e rollback | BLOCKED | Staging coordenado, administradores/links/financeiro legados preservados e retorno por componente ensaiado; sem migração real neste fluxo |
+| Prévia comercial visual | RESOLVED | Publicada e smoke verificado em projeto separado; não aprova backend/staging/produção |
+| WIP LAB04-PC23 | Continuidade RESOLVED | Código local inacessível não recuperado/testado; implementação Cloud autorizada e concluída. Reconciliar manualmente caso reapareça |
+| GOAL original externo | Não disponível | Matriz usa instruções atuais/contratos verificáveis; não alegar conferência do arquivo ausente |
 
-| ID | Estado | Evidência | Ação |
-|---|---|---|---|
-| ID-01 | PASS local; produção antiga permanece | Quatro falhas reproduzidas antes do fix; 34 testes verdes após correção e leituras canônicas | Publicação condicionada à autorização futura |
-| LIVE-RULES | PASS | Rules implantadas capturadas em modo leitura; hash idêntico à fonte avançada | Comparar futuras alterações somente no emulador |
-| PROD-GATES | BLOCKED técnico/evidencial | Deploy condicional autorizado em2026-10-20; staging, backup/restore e compatibilidade real não comprovados | Cumprir os14 gates; não pedir confirmação rotineira nem migrar dados reais |
-| MODEL-SETTINGS | BLOCKED | Não há ferramenta da sessão para alterar/confirmar modelo, esforço ou aceleração | Configuração no seletor do app; não alegar confirmação |
-| PUSH-AUTHORIZATION | PASS para branch de trabalho | Instrução complementar de 2026-10-16 autoriza commit e push nos checkpoints | Somente codex/caravana77-commercial-v1-20261016, sem force/merge/main; workflow só main/PR e Cloudflare sem conexão Git na auditoria |
-| PROD-DEMO-AUTH-POLICY | BLOCKED para alteração do serviço real | Código bloqueia identidades demo fora do emulador; nenhuma política do Auth real foi alterada | Não prometer impedir cadastro arbitrário direto na API do provedor sem configuração autorizada |
-| DEMO-WINDOWS-INTERRUPT | FAIL observado; encerramento normal PASS | Ctrl+C no terminal Windows/JDK25 deixou Java do demo ativo; processo próprio conferido e encerrado | Usar q+Enter no Vite: exit0, runner limpa Java, zero listeners; documentado em TEST_ACCOUNTS.txt |
-
-
-| CLOUD-TEAM-SYNC | RESOLVED para continuidade / WIP antigo inacessível | Nova instrução autoriza implementação Cloud a partir de bc2c3d1; checkpoint9dabaa1 | Eventual WIP do laboratório deve ser preservado e reconciliado manualmente; não aguardar sincronização |
-| MASTER-ORIGINAL-CLOUD | BLOCKED para conferência integral do original | GOAL original é citado em SOURCE_RECONCILIATION.md como handoff/ externo; não existe arquivo original no checkout remoto recuperado | Usar instruções atuais e contratos versionados; não inventar decisões comerciais nem declarar GOAL integral homologado |
-
-BLOCKED de uma atividade não bloqueia trabalho independente e seguro. Gate F0 PASS para recuperação objetiva; F1 e seguintes ainda exigem seus próprios testes/gates.
+Percentuais: F0–F6 100% nos aceites locais declarados; F7 identificação5/10 (50%); F8 gates4/14 (29%), todos com limites em F8_ACCEPTANCE.md. Não relaxar segurança, fabricar memberships/baselines ou usar produção como laboratório. Nenhum dado real foi alterado nesta execução. Os bloqueios independentes executáveis foram tratados; restantes exigem acesso/evidência externos.

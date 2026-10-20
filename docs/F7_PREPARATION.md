@@ -8,7 +8,7 @@ IN_PROGRESS para preparação; publicação no ambiente existente BLOCKED. A ins
 |---|---|---|
 | Aplicação publicada | VERIFIED em leitura | Cloudflare GET: produção `4d069e0a-344a-415a-ae41-aa314df10ace`, sucesso, criada2026-09-29; trigger ad_hoc, commit10f30a0c, dirty=true. Git não prova versão publicada. |
 | Projeto Firebase | VERIFIED no bundle público | `caravana-af306`; manifesto production-public-readonly.json. Não é prova de acesso administrativo ou integridade dos dados. |
-| Firestore/Storage Rules implantadas | BLOCKED atualização | Captura histórica Firestore2026-10-16 fe594614… disponível; não houve GET administrativo atual. Storage/IAM/tokens antigos não auditados. |
+| Firestore/Storage Rules implantadas | BLOCKED atualização | Manifesto histórico Firestore2026-10-16 fe594614… disponível; arquivo bruto não recuperado no checkout e sem GET administrativo atual. Storage/IAM/tokens antigos não auditados. |
 | Auth real | BLOCKED | Firebase CLI: nenhuma conta autorizada; gcloud ausente; runtime sem credenciais/identidades administrativas. Sem inventário de UIDs, provedores ou domínios Auth atuais. |
 | Índices reais | BLOCKED | Candidatos versionados, incluindo novo índice de auditoria da equipe; implantação/paridade não verificadas. |
 | Cloudflare | VERIFIED metadados do projeto | `caravana-77`, direct upload, source=null, production_branch=main, sem nomes de env vars em preview/production; nenhum PATCH/deploy. Outros projetos não alterados. |
@@ -21,7 +21,7 @@ A auditoria cobre fatos observáveis, não é homologação de produção. Cinco
 
 ## Staging e gate aplicável
 
-Staging backend independente BLOCKED: nenhum projeto Firebase isolado administrativo conectado para implantar Auth/Rules/Storage/índices, nenhuma restauração real comprovada. Os emuladores usam exclusivamente `demo-caravana77-test`; não se publicam emuladores nem configuração demo em domínio remoto. A demonstração local funciona com dados fictícios e marcas/planos A×B. Uma prévia pública estática isolada, se publicada, será identificada separadamente e não contará como STAGING_VERIFIED do SaaS.
+Staging backend independente BLOCKED: nenhum projeto Firebase isolado administrativo conectado para implantar Auth/Rules/Storage/índices, nenhuma restauração real comprovada. Os emuladores usam exclusivamente `demo-caravana77-test`; não se publicam emuladores nem configuração demo em domínio remoto. A demonstração local funciona com dados fictícios e marcas/planos A×B. Prévia visual isolada publicada e verificada em https://caravana77-commercial-preview.pages.dev/saas, sem backend; não conta como STAGING_VERIFIED do SaaS. PUBLIC_PREVIEW.md registra deployment, hashes e smoke.
 
 Frontend, Firestore Rules, Storage Rules e índices precisam ser validados juntos em destino separado. O cliente não cria inventários comerciais de tenants existentes. Não aplicar a candidata sobre o legado enquanto UIDs, admins, memberships, links, comprovantes e baselines não estiverem comprovados. Não relaxar segurança para contornar o bloqueio.
 
@@ -39,3 +39,5 @@ CI ampliado para Auth, Storage e Chromium/E2E das quatro larguras, retenção de
 4. Dados reais não serão migrados neste fluxo. Regressão exige parar rollout e retornar somente artefatos/configurações previamente testados; nenhuma reversão improvisada de dados.
 
 Os 14 gates e o estado F8 serão consolidados no fechamento. Até lá, nenhuma publicação no projeto existente nem afirmação de preservação real baseada apenas em testes sintéticos.
+
+Prévia estática separada publicada pelo fluxo oficial com token temporário de upload;403 inicial resolvido sem alterar permissões/billing. Projeto original, deployment4d069e0a e hash JS conferidos novamente e inalterados. RULES_COMPATIBILITY_REVIEW.md documenta riscos concretos de release e ausência de diff atual verificável. CI ampliado está preparado em fonte; execução remota não alegada.

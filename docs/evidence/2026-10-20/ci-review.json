@@ -1,0 +1,21 @@
+{
+  "workflowSha256": "fd921d8b808db120b2962378b881bf768535e816349ea4713d3dbf346049cbde",
+  "permissions": {
+    "contents": "read"
+  },
+  "commands": [
+    "npm ci",
+    "npm run lint",
+    "npm run typecheck",
+    "npm test",
+    "npm run test:demo",
+    "npm run test:storage",
+    "npx playwright install --with-deps chromium",
+    "npm run test:e2e",
+    "npm run build"
+  ],
+  "workflowDispatchConfigured": true,
+  "remoteExecutionVerified": false,
+  "productionCredentialsRequired": false,
+  "scope": "Static workflow validation; no GitHub Actions run dispatched."
+}

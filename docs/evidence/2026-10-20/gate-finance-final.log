@@ -1,0 +1,50 @@
+
+> caravana-77@0.1.0 test:finance:all-e2e
+> node scripts/run-local-tests.mjs finance-ledger-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/finance-ledger.spec.ts
+[WebServer] (node:32819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:32851) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:32869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop-1440] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (13.0s)
+  ✓   2 [desktop-1440] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (5.6s)
+  ✓   3 [desktop-1440] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (3.7s)
+(node:33057) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 [tablet-768] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (5.5s)
+  ✓   5 [tablet-768] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.2s)
+  ✓   6 [tablet-768] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.5s)
+(node:33244) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   7 [mobile-375] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (4.9s)
+  ✓   8 [mobile-375] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.3s)
+  ✓   9 [mobile-375] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.3s)
+(node:33414) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 [mobile-320] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (4.2s)
+  ✓  11 [mobile-320] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.3s)
+  ✓  12 [mobile-320] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.2s)
+
+  12 passed (1.2m)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

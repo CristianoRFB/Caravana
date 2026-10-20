@@ -1,10 +1,13 @@
 {
   "checkedOn": "2026-10-20",
-  "firebaseCli": {"command": "firebase login:list", "authorizedAccounts": 0},
+  "firebaseCli": {
+    "command": "firebase login:list",
+    "authorizedAccounts": 0
+  },
   "gcloudInstalled": false,
   "runtimeAdministrativeCredentials": "NONE_CONFIGURED",
   "cloudflareProjectRead": "PASS",
-  "cloudflarePagesAssetAccess": "BLOCKED_HTTP_403",
+  "cloudflarePagesAssetAccess": "PASS_OFFICIAL_PROJECT_UPLOAD_TOKEN",
   "productionPrivateConfigurationAudited": false,
   "protectedRealDataBackupVerified": false,
   "realDataRestoreVerified": false,
@@ -12,7 +15,8 @@
   "realDataWrites": 0,
   "authMutations": 0,
   "rulesOrIndexesDeployed": false,
-  "newPagesProjectsCreated": 0,
+  "newPagesProjectsCreated": 1,
   "productionDeploymentsCreated": 0,
-  "scope": "No account identities, tokens, environment values or private data included. No real backup was attempted without an effective authorized administrative channel."
+  "scope": "Real SaaS/Firebase production unchanged. One separate static preview project deployed with official short-lived Pages upload token; no backend, Functions, paid resources, credentials on disk, private data or real-data writes.",
+  "staticVisualPreviewDeploymentsCreated": 1
 }

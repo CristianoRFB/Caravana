@@ -1,0 +1,135 @@
+{
+  "recordedAt": "2026-10-20T04:59:46.639879+00:00",
+  "branch": "codex/caravana77-commercial-v1-20261016",
+  "runtimeSourceCommit": "9c0c45d3c6a2bd6e0edbb435cb0be24ebaad23e7",
+  "F6": {
+    "status": "PASS",
+    "evidenceLevel": "LOCAL_TESTED",
+    "criteriaPassed": 12,
+    "criteriaTotal": 12,
+    "unitIntegrationRules": 244,
+    "auth": 8,
+    "storage": 6,
+    "e2eUniqueCases": 164,
+    "fullE2ERun": {
+      "passed": 162,
+      "failed": 2
+    },
+    "targetedFinanceAfterHarnessFix": {
+      "passed": 12,
+      "failed": 0,
+      "retries": 0
+    },
+    "unresolvedFailures": 0
+  },
+  "F7": {
+    "status": "IN_PROGRESS_BLOCKED",
+    "inventoryCategoriesIdentified": 5,
+    "inventoryCategoriesTotal": 10,
+    "stagingBackendVerified": false
+  },
+  "F8": {
+    "status": "BLOCKED",
+    "productionGatesPassed": [
+      1,
+      3,
+      9,
+      14
+    ],
+    "productionGatesTotal": 14
+  },
+  "visualPreview": {
+    "url": "https://caravana77-commercial-preview.pages.dev/saas",
+    "deploymentId": "4b868473-c7c6-4dbe-9ca6-367da9d795ae",
+    "status": "DEPLOYED_SMOKE_VERIFIED",
+    "backend": false,
+    "usesFunctions": false
+  },
+  "existingProduction": {
+    "url": "https://caravana-77.pages.dev",
+    "deploymentId": "4d069e0a-344a-415a-ae41-aa314df10ace",
+    "candidateDeployed": false,
+    "privateDataMutations": 0,
+    "realBackupRestoreVerified": false
+  },
+  "images": [
+    {
+      "path": "docs/evidence/2026-10-20/public-preview-hosted-1440.png",
+      "width": 1440,
+      "height": 3220,
+      "sha256": "6b8c1b092ee08688eae477a908eb8cab5486d08c89f4dd153af4ecac24145d02",
+      "scope": "Hosted static preview"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/public-preview-hosted-320.png",
+      "width": 320,
+      "height": 5829,
+      "sha256": "18627069f2acf5c94122235925b91889aca97d6375988cfcee8291a700a7462b",
+      "scope": "Hosted static preview"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/team-owner-desktop-1440.png",
+      "width": 1440,
+      "height": 1903,
+      "sha256": "62ddffc9da3109b79c277cf13b97159f2674d5f7d4c5dd00e17040bbf415782b",
+      "scope": "Incremental synthetic team screenshot before padding adjustment"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/team-owner-mobile-320.png",
+      "width": 320,
+      "height": 2463,
+      "sha256": "5eb7991231db9c9b50b96b8f2da2d3282ba80d5d78238343a016d1b8edef9630",
+      "scope": "Incremental synthetic team screenshot before padding adjustment"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/evidence/2026-10-20/gate-unit-rules.log",
+      "sha256": "1e3da6f191ead134dfb737cdadcd8826ccf02e1d9431399321c976f127fd723b"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/gate-auth.log",
+      "sha256": "c14bfde079cd905ab23be734225e0a3f04e9ea36d56dc4e8afe17cce54155909"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/gate-storage.log",
+      "sha256": "9aa080e8b845cd6a9930b70f61b71200af42d3eb0775c734e65abf7fd376629c"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/gate-e2e.log",
+      "sha256": "0acc10904eb00dfc99eb0a3ca810fbc8675989af59e8fad437f2b636c1676761"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/gate-finance-final.log",
+      "sha256": "7327489bf4facbab3c3a74ffbca50ca211c81259587aa4cca3b65db825e87914"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-lint.log",
+      "sha256": "af33e23cd08eccc752c63cbb7bc67e5cf47f1473ac719ff7f0385906ea2a029c"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-typecheck.log",
+      "sha256": "b58203dae5dfca6d9787d1a3f35307fef054d58ed3188d80894fd9c969cb75d6"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/gate-build.log",
+      "sha256": "7f6efc6964ce1e206fbbd092461481d1e9c24116f97319de8df32fae8cfd0a0d"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/public-preview-hosted.json",
+      "sha256": "1144c4420512726f9738d7b1f8118f6d67f9e5b745ccb51653ea1551da2215af"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/public-preview-deployed-integrity.json",
+      "sha256": "48d88f7507b486bf259155e7a4584d1c9faffe637dec1a2328f31cc6f27402cc"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/f6-e2e-consolidated.json",
+      "sha256": "b9d061b10b349089ea90936f1ae5b6dd42a79071edd152c5b2a2091211ace508"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/finance-final-report.json",
+      "sha256": "80dc8ec1d52ffcc6db1de2d6678ab0a5efb2986cf5984b2e9b5036a65a54f0ea"
+    }
+  ]
+}

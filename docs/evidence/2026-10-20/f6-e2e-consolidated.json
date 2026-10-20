@@ -1,0 +1,1338 @@
+{
+  "runtimeSourceCommit": "9c0c45d3c6a2bd6e0edbb435cb0be24ebaad23e7",
+  "method": "Original full gate log plus targeted finance JSON after dialog-listener test correction. No runtime/Rules changes after full gate.",
+  "fullRun": {
+    "cases": 164,
+    "passed": 162,
+    "failed": 2,
+    "logSha256": "0acc10904eb00dfc99eb0a3ca810fbc8675989af59e8fad437f2b636c1676761"
+  },
+  "targetedFinance": {
+    "cases": 12,
+    "passed": 12,
+    "failed": 0,
+    "retries": 0,
+    "reportSha256": "80dc8ec1d52ffcc6db1de2d6678ab0a5efb2986cf5984b2e9b5036a65a54f0ea"
+  },
+  "consolidated": {
+    "uniqueCases": 164,
+    "passed": 164,
+    "unresolvedFailures": 0,
+    "unchangedCasesReused": 152,
+    "financeCasesRevalidated": 12
+  },
+  "cases": [
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a guessed caravan path cannot expose another organization's private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "public booking, private proof, manual review and check-in use the recovered source",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "revoking a shared private link hides an open guest portal and preserves the admin record",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Pix configuration is conditional, empty values explain the process, and copying uses the configured key",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "switching organizations clears filters/drafts and live revocation cannot use legacy access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "staff can read scoped finance without controls to register or correct money",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a pending write prevents tenant switching until server acknowledgement",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/branding.spec.ts",
+      "title": "tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/branding.spec.ts",
+      "title": "a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/branding.spec.ts",
+      "title": "owner updates public identity live without rebuilding and tenant B keeps its own branding and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/commercial-landing.spec.ts",
+      "title": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/commercial.spec.ts",
+      "title": "platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed owner signs in with the Auth Emulator and sees only demonstration A finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed passenger signs in, opens the seeded private registration and has no admin access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo shows distinct brands and plans with a working scoped reservation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo owner sees only its own Essencial plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo ownerB sees only its own Pro plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/documents.spec.ts",
+      "title": "minor authorization requires consent, private staff download and manual review before boarding",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/documents.spec.ts",
+      "title": "policy changes only affect new uploads and owner cleanup preserves passenger and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance retries a committed payment after reload using the persisted attempt without receiving twice",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance corrects a historical expected fare with audit and preserves the recorded receipts",
+      "initialStatus": "FAIL",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/import.spec.ts",
+      "title": "historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/import.spec.ts",
+      "title": "staff has no import or rollback controls",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/import.spec.ts",
+      "title": "CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/operations.spec.ts",
+      "title": "audited boarding reverses, survives refresh and never carries history from tenant A to B",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/operations.spec.ts",
+      "title": "offline staff does not queue a fake boarding and can retry once online",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/platform.spec.ts",
+      "title": "platform owner onboards an existing Auth user, audits status and loses the UI on revocation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/platform.spec.ts",
+      "title": "tenant owner cannot enter the platform and platform authority cannot enter tenant private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "catalog and trip show commercial seats live while another organization remains independent",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "suspension and expiration disable new bookings live without clearing the passenger draft",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/reservation.spec.ts",
+      "title": "a persisted committed attempt survives reload and recovers the same final-seat registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/reservation.spec.ts",
+      "title": "field validation leaves the form editable and the same passenger can correct and submit",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/reservation.spec.ts",
+      "title": "commercial passenger quota blocks A growth while preserving its private link and allowing B reservations",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/support.spec.ts",
+      "title": "owner consents, operator explicitly starts read-only support, revocation clears private configuration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/support.spec.ts",
+      "title": "staff cannot authorize platform support",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/team.spec.ts",
+      "title": "owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/team.spec.ts",
+      "title": "resend changes generation and role; an accepted owner cannot demote the last responsible member",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/team.spec.ts",
+      "title": "two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "desktop-1440",
+      "file": "e2e/team.spec.ts",
+      "title": "expired, revoked and commercially blocked invitations never grant access and drafts survive errors",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a guessed caravan path cannot expose another organization's private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "public booking, private proof, manual review and check-in use the recovered source",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "revoking a shared private link hides an open guest portal and preserves the admin record",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Pix configuration is conditional, empty values explain the process, and copying uses the configured key",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "switching organizations clears filters/drafts and live revocation cannot use legacy access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "staff can read scoped finance without controls to register or correct money",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a pending write prevents tenant switching until server acknowledgement",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/branding.spec.ts",
+      "title": "tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/branding.spec.ts",
+      "title": "a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/branding.spec.ts",
+      "title": "owner updates public identity live without rebuilding and tenant B keeps its own branding and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/commercial-landing.spec.ts",
+      "title": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/commercial.spec.ts",
+      "title": "platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed owner signs in with the Auth Emulator and sees only demonstration A finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed passenger signs in, opens the seeded private registration and has no admin access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo shows distinct brands and plans with a working scoped reservation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo owner sees only its own Essencial plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo ownerB sees only its own Pro plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/documents.spec.ts",
+      "title": "minor authorization requires consent, private staff download and manual review before boarding",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/documents.spec.ts",
+      "title": "policy changes only affect new uploads and owner cleanup preserves passenger and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance retries a committed payment after reload using the persisted attempt without receiving twice",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance corrects a historical expected fare with audit and preserves the recorded receipts",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/import.spec.ts",
+      "title": "historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/import.spec.ts",
+      "title": "staff has no import or rollback controls",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/import.spec.ts",
+      "title": "CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/operations.spec.ts",
+      "title": "audited boarding reverses, survives refresh and never carries history from tenant A to B",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/operations.spec.ts",
+      "title": "offline staff does not queue a fake boarding and can retry once online",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/platform.spec.ts",
+      "title": "platform owner onboards an existing Auth user, audits status and loses the UI on revocation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/platform.spec.ts",
+      "title": "tenant owner cannot enter the platform and platform authority cannot enter tenant private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "catalog and trip show commercial seats live while another organization remains independent",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "suspension and expiration disable new bookings live without clearing the passenger draft",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/reservation.spec.ts",
+      "title": "a persisted committed attempt survives reload and recovers the same final-seat registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/reservation.spec.ts",
+      "title": "field validation leaves the form editable and the same passenger can correct and submit",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/reservation.spec.ts",
+      "title": "commercial passenger quota blocks A growth while preserving its private link and allowing B reservations",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/support.spec.ts",
+      "title": "owner consents, operator explicitly starts read-only support, revocation clears private configuration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/support.spec.ts",
+      "title": "staff cannot authorize platform support",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/team.spec.ts",
+      "title": "owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/team.spec.ts",
+      "title": "resend changes generation and role; an accepted owner cannot demote the last responsible member",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/team.spec.ts",
+      "title": "two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "tablet-768",
+      "file": "e2e/team.spec.ts",
+      "title": "expired, revoked and commercially blocked invitations never grant access and drafts survive errors",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a guessed caravan path cannot expose another organization's private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "public booking, private proof, manual review and check-in use the recovered source",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "revoking a shared private link hides an open guest portal and preserves the admin record",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Pix configuration is conditional, empty values explain the process, and copying uses the configured key",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "switching organizations clears filters/drafts and live revocation cannot use legacy access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "staff can read scoped finance without controls to register or correct money",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a pending write prevents tenant switching until server acknowledgement",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/branding.spec.ts",
+      "title": "tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/branding.spec.ts",
+      "title": "a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/branding.spec.ts",
+      "title": "owner updates public identity live without rebuilding and tenant B keeps its own branding and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/commercial-landing.spec.ts",
+      "title": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/commercial.spec.ts",
+      "title": "platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed owner signs in with the Auth Emulator and sees only demonstration A finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed passenger signs in, opens the seeded private registration and has no admin access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo shows distinct brands and plans with a working scoped reservation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo owner sees only its own Essencial plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo ownerB sees only its own Pro plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/documents.spec.ts",
+      "title": "minor authorization requires consent, private staff download and manual review before boarding",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/documents.spec.ts",
+      "title": "policy changes only affect new uploads and owner cleanup preserves passenger and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance retries a committed payment after reload using the persisted attempt without receiving twice",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance corrects a historical expected fare with audit and preserves the recorded receipts",
+      "initialStatus": "FAIL",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/import.spec.ts",
+      "title": "historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/import.spec.ts",
+      "title": "staff has no import or rollback controls",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/import.spec.ts",
+      "title": "CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/operations.spec.ts",
+      "title": "audited boarding reverses, survives refresh and never carries history from tenant A to B",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/operations.spec.ts",
+      "title": "offline staff does not queue a fake boarding and can retry once online",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/platform.spec.ts",
+      "title": "platform owner onboards an existing Auth user, audits status and loses the UI on revocation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/platform.spec.ts",
+      "title": "tenant owner cannot enter the platform and platform authority cannot enter tenant private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "catalog and trip show commercial seats live while another organization remains independent",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "suspension and expiration disable new bookings live without clearing the passenger draft",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/reservation.spec.ts",
+      "title": "a persisted committed attempt survives reload and recovers the same final-seat registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/reservation.spec.ts",
+      "title": "field validation leaves the form editable and the same passenger can correct and submit",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/reservation.spec.ts",
+      "title": "commercial passenger quota blocks A growth while preserving its private link and allowing B reservations",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/support.spec.ts",
+      "title": "owner consents, operator explicitly starts read-only support, revocation clears private configuration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/support.spec.ts",
+      "title": "staff cannot authorize platform support",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/team.spec.ts",
+      "title": "owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/team.spec.ts",
+      "title": "resend changes generation and role; an accepted owner cannot demote the last responsible member",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/team.spec.ts",
+      "title": "two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-375",
+      "file": "e2e/team.spec.ts",
+      "title": "expired, revoked and commercially blocked invitations never grant access and drafts survive errors",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a guessed caravan path cannot expose another organization's private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "public booking, private proof, manual review and check-in use the recovered source",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "revoking a shared private link hides an open guest portal and preserves the admin record",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "Pix configuration is conditional, empty values explain the process, and copying uses the configured key",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "switching organizations clears filters/drafts and live revocation cannot use legacy access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "staff can read scoped finance without controls to register or correct money",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/baseline.spec.ts",
+      "title": "a pending write prevents tenant switching until server acknowledgement",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/branding.spec.ts",
+      "title": "tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/branding.spec.ts",
+      "title": "a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/branding.spec.ts",
+      "title": "owner updates public identity live without rebuilding and tenant B keeps its own branding and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/commercial-landing.spec.ts",
+      "title": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/commercial.spec.ts",
+      "title": "platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed owner signs in with the Auth Emulator and sees only demonstration A finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/demo.spec.ts",
+      "title": "fixed passenger signs in, opens the seeded private registration and has no admin access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo shows distinct brands and plans with a working scoped reservation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo owner sees only its own Essencial plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/demo.spec.ts",
+      "title": "commercial demo ownerB sees only its own Pro plan and usage",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/documents.spec.ts",
+      "title": "minor authorization requires consent, private staff download and manual review before boarding",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/documents.spec.ts",
+      "title": "policy changes only affect new uploads and owner cleanup preserves passenger and finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance retries a committed payment after reload using the persisted attempt without receiving twice",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/finance-ledger.spec.ts",
+      "title": "finance corrects a historical expected fare with audit and preserves the recorded receipts",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": true,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/import.spec.ts",
+      "title": "historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/import.spec.ts",
+      "title": "staff has no import or rollback controls",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/import.spec.ts",
+      "title": "CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/operations.spec.ts",
+      "title": "audited boarding reverses, survives refresh and never carries history from tenant A to B",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/operations.spec.ts",
+      "title": "offline staff does not queue a fake boarding and can retry once online",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/platform.spec.ts",
+      "title": "platform owner onboards an existing Auth user, audits status and loses the UI on revocation",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/platform.spec.ts",
+      "title": "tenant owner cannot enter the platform and platform authority cannot enter tenant private finance",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "catalog and trip show commercial seats live while another organization remains independent",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/public-availability.spec.ts",
+      "title": "suspension and expiration disable new bookings live without clearing the passenger draft",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/reservation.spec.ts",
+      "title": "a persisted committed attempt survives reload and recovers the same final-seat registration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/reservation.spec.ts",
+      "title": "field validation leaves the form editable and the same passenger can correct and submit",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/reservation.spec.ts",
+      "title": "commercial passenger quota blocks A growth while preserving its private link and allowing B reservations",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/support.spec.ts",
+      "title": "owner consents, operator explicitly starts read-only support, revocation clears private configuration",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/support.spec.ts",
+      "title": "staff cannot authorize platform support",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/team.spec.ts",
+      "title": "owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/team.spec.ts",
+      "title": "resend changes generation and role; an accepted owner cannot demote the last responsible member",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/team.spec.ts",
+      "title": "two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    },
+    {
+      "project": "mobile-320",
+      "file": "e2e/team.spec.ts",
+      "title": "expired, revoked and commercially blocked invitations never grant access and drafts survive errors",
+      "initialStatus": "PASS",
+      "resolvedByFinanceRerun": false,
+      "finalStatus": "PASS"
+    }
+  ]
+}

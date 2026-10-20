@@ -1,0 +1,17 @@
+{
+  "historicalCapture": {
+    "capturedAt": "2026-10-16T16:30:00.686Z",
+    "reportedDeployedSha256": "fe5946141707e594e66911564163719474c77f7445e668aada5afaad42b22c1b",
+    "matchingGitCommit": null,
+    "rawCaptureAvailableInCheckout": false
+  },
+  "candidate": {
+    "sourceCommit": "9c0c45d3c6a2bd6e0edbb435cb0be24ebaad23e7",
+    "firestoreSha256": "f0cd8656d3b24d946af3bb09d3bccad66a8cdb683498c64bb602eab85dc8f11f",
+    "storageSha256": "81bb28df14b202aafa3711dd4bd18605ee06eaa60591db8812f65f2858722c62",
+    "indexesSha256": "18784f60c746661c92f46622e14d2a4ac32f53bf9c87ecad4a3babe5878bf1e2"
+  },
+  "currentDeployedRulesParityVerified": false,
+  "legacyDataCompatibilityVerified": false,
+  "deploymentAllowed": false
+}

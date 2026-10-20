@@ -1,0 +1,591 @@
+{
+  "candidateRemoteCommit": "9c0c45d3c6a2bd6e0edbb435cb0be24ebaad23e7",
+  "candidateLocalOriginalCommit": "92d858f7ffb8f915402ab4047220d091201667e9",
+  "candidateTree": "d517296d32bee7071caf3c5c22def220e9e89b5e",
+  "scope": "Runtime/Rules frozen at9c0c45d for full gate. Later differences are only finance dialog test/runner command/package script and proxy support in static-preview verifier; finance12/12 and hosted preview smoke validate these changes. Later report commits do not alter runtime.",
+  "files": [
+    {
+      "path": ".env.e2e",
+      "sha256": "fa6c168148fd82d14e885e6ecf3a941d5e6a594e879d9fdcfbabd2fd8031ca39"
+    },
+    {
+      "path": "e2e/baseline.spec.ts",
+      "sha256": "50217e5c9f9b3ce6e382a00bdae3beec6faa270c8d1386eb14e077c3619b7906"
+    },
+    {
+      "path": "e2e/branding.spec.ts",
+      "sha256": "d556206dd497b4c580b8c77a4d2c788056e048fa94febc6740d07319ed4fadc3"
+    },
+    {
+      "path": "e2e/commercial-landing.spec.ts",
+      "sha256": "e776bd90b6719526b972bed0e34d6a54868fe2004f1a3bfe7cc15cfe351da3a3"
+    },
+    {
+      "path": "e2e/commercial.spec.ts",
+      "sha256": "5b5d2adbf81c3704044aacb24f5dc0d2d0aab26940c913d24cd8ea99692604ed"
+    },
+    {
+      "path": "e2e/demo.spec.ts",
+      "sha256": "97a552f8585a7eae34dd858b1b4dcf4960da067987041ea74ac32fb89229db28"
+    },
+    {
+      "path": "e2e/documents.spec.ts",
+      "sha256": "c3392ff5ba4a122b901762e86620de6822d88b72d467b63a60d56c694af157e1"
+    },
+    {
+      "path": "e2e/finance-ledger.spec.ts",
+      "sha256": "cee3dec99d462515f93f8186a3aa4f98b3ec124f346d31712d801c3e21047ebd"
+    },
+    {
+      "path": "e2e/fixtures.ts",
+      "sha256": "82ac91b3f0f5c8860436bbde4f499ed6b8a80abfaac797131eaeb25b029f5ca9"
+    },
+    {
+      "path": "e2e/import.spec.ts",
+      "sha256": "d0e9a84ce7d551ca9c4f5518a9be6f8e5e5031765ed10bec3ddf35ffcd576349"
+    },
+    {
+      "path": "e2e/operations.spec.ts",
+      "sha256": "191e4226ba4a0a531a515b287b8d9bf1a910884374114496e2361feb8ccb3712"
+    },
+    {
+      "path": "e2e/platform.spec.ts",
+      "sha256": "4fada7f9bbc6c1dfc4c17ed05980e60aa0cbd0611c5e531d3e120207afc01189"
+    },
+    {
+      "path": "e2e/public-availability.spec.ts",
+      "sha256": "1d97846f1b2bb38f702481c17bc691d5ee080e53e9dcbd9056c835146466949d"
+    },
+    {
+      "path": "e2e/reservation.spec.ts",
+      "sha256": "4cc8b9b6e5bef59560644e5223f04e02d1d0db4b9b14016b52d652970de9431c"
+    },
+    {
+      "path": "e2e/support.spec.ts",
+      "sha256": "4b11415900794354e5f0eb3f6b418b9c2b6589cc486b535e5465e734451a730c"
+    },
+    {
+      "path": "e2e/team.spec.ts",
+      "sha256": "9210b230394674a814d582fcbf229b2b5f49dec2d14f30348ecd2879d7765b0a"
+    },
+    {
+      "path": "firebase.test.json",
+      "sha256": "8e814b0c39add5d4f8f3d50e6eddd4ce05ac655de983cf7e3dad3ecb44dfe45e"
+    },
+    {
+      "path": "firestore.indexes.json",
+      "sha256": "18784f60c746661c92f46622e14d2a4ac32f53bf9c87ecad4a3babe5878bf1e2"
+    },
+    {
+      "path": "firestore.rules",
+      "sha256": "f0cd8656d3b24d946af3bb09d3bccad66a8cdb683498c64bb602eab85dc8f11f"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0669555ddf09e01c76608bec28e2f39a893870378f753da29a410cc9da27d9ed"
+    },
+    {
+      "path": "package.json",
+      "sha256": "bd74d81a67296fa76b3474607fa5c2b2b38c4979e271562d142f8e8af6592311"
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "0537ad3e00f7e39a25425320fd8ad8d21e42248cbadc9b574b722f4359992fbc"
+    },
+    {
+      "path": "scripts/build-public-preview.mjs",
+      "sha256": "5763dceaee6509623dc185bc08a98b1d6f78063db47802c8ab460806ddf10c6f"
+    },
+    {
+      "path": "scripts/collect-e2e-evidence.mjs",
+      "sha256": "e81a1551241f6eac9163ce37b8c12be6184ad2a7f04a27415b983283449bd4ec"
+    },
+    {
+      "path": "scripts/diagnose-finance.mjs",
+      "sha256": "ffd923859e778cd521786d05941510fc6304365270ea99572633e128e9b836f8"
+    },
+    {
+      "path": "scripts/emulator-loopback-proxy.cjs",
+      "sha256": "3567820a349d9b79f10c78f6ec66ee03d590b2a328c30a668eb687193cdfa287"
+    },
+    {
+      "path": "scripts/fixtures/membership-migration.synthetic.json",
+      "sha256": "d23dd6d5321f29271c065616fcd33e1f59aef4b9c7f76bf8adebe901574e9af6"
+    },
+    {
+      "path": "scripts/run-local-tests.mjs",
+      "sha256": "fa7f0a93952f7d85eef631b4bedbccbf5aae02fb72eaf6cd6c9ac10756faf9f1"
+    },
+    {
+      "path": "scripts/seed-demo.mjs",
+      "sha256": "1942f49c167caa6c299dba54c7daef58cd225fe6f20c36c17ed03dbc9f5e7051"
+    },
+    {
+      "path": "scripts/simulate-membership-migration.mjs",
+      "sha256": "337c05a4cc2f2a16e8128727feb4a8772c8f080082169f3bbacc30bd12fb742d"
+    },
+    {
+      "path": "scripts/start-demo.mjs",
+      "sha256": "93d2388df4e981dd5554afb5ad621403725db176808f3be2f68973088c9a6b38"
+    },
+    {
+      "path": "scripts/verify-public-preview.mjs",
+      "sha256": "bd034162a7678f5a1eb5e5c1246e836569f204f4a702616867c298712370fa61"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "b33a572e8e71612a8709ee7a1cd95f15ba098c73aa38d3f1b75d745cfe2d72c6"
+    },
+    {
+      "path": "src/CommercialLanding.tsx",
+      "sha256": "c9b0bc0aa7f65000f56c24ca081c14b95ffbd1e9d5145822bcab59535fa91b07"
+    },
+    {
+      "path": "src/CommercialPlanPanel.tsx",
+      "sha256": "c6eea6d17a5cc721c63548561eae3893e9d88c2016afa55933d8afef6a9ca187"
+    },
+    {
+      "path": "src/DocumentSettings.tsx",
+      "sha256": "1d37bfa4d0069cf0a822ef3801edf194e0d744b7fd0a87ae90e994e2b347dffd"
+    },
+    {
+      "path": "src/Finance.tsx",
+      "sha256": "c823c1b9c80b6a22e29e92c6bed0fbe215244498448b7103f73d38f59c9233d9"
+    },
+    {
+      "path": "src/FinancialHistory.tsx",
+      "sha256": "6a2d5f3bdc94d032d738f6fee2fa56f0ca90fa699988a68c25c7dec1ff1a3188"
+    },
+    {
+      "path": "src/ImportHistory.tsx",
+      "sha256": "18f7751bc3d55385d9c76a82a7b19fb94f93046488bd3fe354a770f1594a5c8b"
+    },
+    {
+      "path": "src/InvitationInbox.tsx",
+      "sha256": "f6cf7643236e0ef0cf38884d13c3d9de5ee0d41fefb0e1a1f3d4316a594ef3c7"
+    },
+    {
+      "path": "src/MinorAuthorization.tsx",
+      "sha256": "c7eb74c519d66d5f62594cc69e5aaf92761266caf2111b8a3cc03b2f0d9402e8"
+    },
+    {
+      "path": "src/OperationalHistory.tsx",
+      "sha256": "4e2c8a2f3d9a9241e0e44a3ebe2b33cd399a3498f5935bde8bd6bbb41b5c74ae"
+    },
+    {
+      "path": "src/Platform.tsx",
+      "sha256": "3fa4018b37d93662428c4535c63ba5a2a565881e59d9b701189c5f7785fb90f3"
+    },
+    {
+      "path": "src/PublicIndex.tsx",
+      "sha256": "0c5d781d1fe1103ed7d8bdbf4dee50a06b6ce762070205cad8b1011f276bff43"
+    },
+    {
+      "path": "src/PublicPreview.tsx",
+      "sha256": "6cc5ab0639ed5bd9125db6d97b96ecccd823b85c99caf619aaad255734ed4b2d"
+    },
+    {
+      "path": "src/PublicSeatCount.tsx",
+      "sha256": "29dca8ba350cfd4c7d8c1780124a5d191cd5848f4888db28c3376b00825a00d3"
+    },
+    {
+      "path": "src/Support.tsx",
+      "sha256": "68edbf7a56bdaa4bcf67aeae72b4af14f37a7ddd6c18417e7465a1bc36440597"
+    },
+    {
+      "path": "src/TeamManagement.tsx",
+      "sha256": "10c171fd1239d4f6933b6f4783864caaacd12197044d68ac1e12a8a09a69cd2b"
+    },
+    {
+      "path": "src/TenantBrandScope.tsx",
+      "sha256": "2756c47a2e69785fdeed10beddeed3b51c4753f887ef5ce3c2479938b6b2702a"
+    },
+    {
+      "path": "src/TenantBrandSettings.tsx",
+      "sha256": "74d29f103e3cbc88701a7a4936da25d4e040abf20984c90782516a6f22046b81"
+    },
+    {
+      "path": "src/TenantCommercial.tsx",
+      "sha256": "427b3af93e800290ba0e232f3f265f68ddcbc38ab82b906809b56dec5e944f9a"
+    },
+    {
+      "path": "src/commercial-landing.css",
+      "sha256": "32f20eb70d205ba40a4f401ae66009bcb9bc57029192c661176287d7ecf4757b"
+    },
+    {
+      "path": "src/features.css",
+      "sha256": "71e7e5b4edf3c320ed07ddf583b369cdaa2772112573d9b5d2717c7d1cba14e8"
+    },
+    {
+      "path": "src/lib/commercial-baseline.ts",
+      "sha256": "d4dab71d38bc8e47a45b65c8deeb271fb215f9416aff1c8c723aee6c3ff3d69d"
+    },
+    {
+      "path": "src/lib/commercial-data.ts",
+      "sha256": "73e8181824870d27a7dc24025580d8107e7d938d3cae470552ac63484aac1d5c"
+    },
+    {
+      "path": "src/lib/data.ts",
+      "sha256": "5ddc40819434b20007f991dfb12c5caf8297d0456e1f20fffd7f46721a792bbf"
+    },
+    {
+      "path": "src/lib/demo-identities.ts",
+      "sha256": "353fab6d5081e940ee2cf02ed3e7d14ab3e3090b6d8a5290894ccc68d9fb6c38"
+    },
+    {
+      "path": "src/lib/document-policy.ts",
+      "sha256": "b3ccdb1c3f733953af10742e1652829835c17a0047799a5edddef5f1af09c07b"
+    },
+    {
+      "path": "src/lib/documents.ts",
+      "sha256": "273a24d4dd59ed6265e42eb8922094fe3f61c4f75c082507fa3e2b9c1d890337"
+    },
+    {
+      "path": "src/lib/finance.ts",
+      "sha256": "723e6f215971a52b27b58afb5298421c6f9230c60f6772dbc5e57ac5cabf12fd"
+    },
+    {
+      "path": "src/lib/financial-attempt.ts",
+      "sha256": "3682c548fdb09d5384ec8b7328564f8bec99102c44b8bed9d9b013ceca425871"
+    },
+    {
+      "path": "src/lib/financial-diagnostics.ts",
+      "sha256": "c97e856c3b7ef661a04d82fbbb560b3f933e0afe980483cad1bdb531544f15b2"
+    },
+    {
+      "path": "src/lib/financial-inspection.ts",
+      "sha256": "3b601db1721e27095ac78ae49136d5f42e938285da674f90e255db43504036c0"
+    },
+    {
+      "path": "src/lib/financial-operations.ts",
+      "sha256": "7e8606992ad1d0e534123165da8142d18b49a0f33d3bf9588f80c3acd16bd46a"
+    },
+    {
+      "path": "src/lib/firebase-environment.ts",
+      "sha256": "c91681d732c8e00b707bac8d573b5864a85e0f7e52af0cf1104792e15d27b715"
+    },
+    {
+      "path": "src/lib/firebase.ts",
+      "sha256": "1d84ee7ffa7de581695a252b8c00906691eea3d1ba258dfdd8dc2d46d0af59fb"
+    },
+    {
+      "path": "src/lib/import-identity.ts",
+      "sha256": "0a403dea824ad1671bd182b72240c7df9a83042e5c7a71cd9864521fc0756a2a"
+    },
+    {
+      "path": "src/lib/import-operations.ts",
+      "sha256": "35e10b9e5e7d19e938c5537afddabb6cf49a0213a5185df575c4049e43885ef2"
+    },
+    {
+      "path": "src/lib/legacy-import.ts",
+      "sha256": "0af5d7443b7382c2138744234c6e5b739e1506b2b98250c3ccd48fac09e8f79c"
+    },
+    {
+      "path": "src/lib/legacy-trip-aliases.ts",
+      "sha256": "041337f07fe34cc2c9433eea1895851be15a136af484613733de2bea6a8a89ad"
+    },
+    {
+      "path": "src/lib/membership-migration.ts",
+      "sha256": "72987f0917e98653705a9168fc0a04fdca6d37981627c7f50d3e419184558519"
+    },
+    {
+      "path": "src/lib/memberships.ts",
+      "sha256": "e272ce3f9ef99ce035313bb0ea97f81140239a6cfe474d190462160a468e9047"
+    },
+    {
+      "path": "src/lib/namespace-protection.ts",
+      "sha256": "95ed15777c54261c7bad287650467883c09d29d321269ac39394e79954f7d4c4"
+    },
+    {
+      "path": "src/lib/onboarding-payload.ts",
+      "sha256": "47b27c1ae1f1e28052b66c6b67840b2b9fc58326c0611577c7f240faba868645"
+    },
+    {
+      "path": "src/lib/pending-writes.ts",
+      "sha256": "eb570d573fd07906cd897970e0420a557bff7deca587c4a368a40b85d84003c7"
+    },
+    {
+      "path": "src/lib/plan-catalog.ts",
+      "sha256": "6a38fd875a3b36c3410db5c9a57ac81009fe5a9e8fb6f6be7eb14669292743f1"
+    },
+    {
+      "path": "src/lib/platform.ts",
+      "sha256": "50f428261d4b61e37a307d22ebd0f2d58d39309f01d7617f87360584773fb8a6"
+    },
+    {
+      "path": "src/lib/proof-policy.ts",
+      "sha256": "9e91924300e28831e390abf300ee7497e7d33cf4880d2a97d3c363923751a767"
+    },
+    {
+      "path": "src/lib/public-availability.ts",
+      "sha256": "1dea6eee6f2cf28fac8ffa61cc003325868f11d6eb131799a1f2a03e01358d2c"
+    },
+    {
+      "path": "src/lib/quota-attempt.ts",
+      "sha256": "59d96ddff78e07d3ba64eb4c0d737a39f12d5aa9d7e08e92bcc5c2fe59f0bd65"
+    },
+    {
+      "path": "src/lib/quota-operations.ts",
+      "sha256": "e9f64e0071d203f602462647fab3db741e5a30c1a26dbc60f5ee85ca26656413"
+    },
+    {
+      "path": "src/lib/registration-operations.ts",
+      "sha256": "c002d503c650f2c2ba4ba9fbc50190862284b6f57404637288c8819e970bb318"
+    },
+    {
+      "path": "src/lib/reservation-attempt.ts",
+      "sha256": "b9352d089b12f99d3ae08ec51746844ea0225f45de03d5532859396a328c5109"
+    },
+    {
+      "path": "src/lib/support.ts",
+      "sha256": "47734be07bcf57e1e1d7d39094a539d3274e9046403eedfdd07b43927275b2df"
+    },
+    {
+      "path": "src/lib/team-invitations.ts",
+      "sha256": "149704510858497fb6e64d6bc5c81a94ceab3cf5d8bb6a361c1f9f81fa09fd02"
+    },
+    {
+      "path": "src/lib/tenant-access.ts",
+      "sha256": "56985b9f37f8a19e28ff6e8f9d77595a38f62634c168bc7b50e58e2697ac99dd"
+    },
+    {
+      "path": "src/lib/tenant-brand-context.ts",
+      "sha256": "77dc24da7984b9fd55fc54d4ad23cdda3afeaa616f6904014540a3a080cf889a"
+    },
+    {
+      "path": "src/lib/tenant-branding-data.ts",
+      "sha256": "859a96b5b2cb6a6ab56f7a06a8e84cd9635fd04cfafdaa6a8c7ea1e5e7f59fb8"
+    },
+    {
+      "path": "src/lib/tenant-branding.ts",
+      "sha256": "d7bd6ae488bfb5e9275d3b5d41d2a8331cdb0bec746634e97161580a5439694f"
+    },
+    {
+      "path": "src/lib/tenant-preference.ts",
+      "sha256": "435ca6687a7142f29194d4a00532547b0d69f61ab7cf65ad21f0aea6ab300b97"
+    },
+    {
+      "path": "src/lib/tracked-firestore.ts",
+      "sha256": "233d3c559bf9d0cac5b787ff3f2aecc7e193db6eddc14e6f36fae57941df3cc9"
+    },
+    {
+      "path": "src/lib/types.ts",
+      "sha256": "4d2b3f356149749b07fe1c093bce6702cf171dc43c04cac71b461a37a80d6a36"
+    },
+    {
+      "path": "src/lib/use-public-availability.ts",
+      "sha256": "028aa7175bb87a504229de0d507cda712af095ecc0370e4e12b721d760c1769c"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "3b4bf342ec8111dd21d5343fe5ae6e9a453d0a1dbe648a5c0748e4d5be19e787"
+    },
+    {
+      "path": "src/styles.css",
+      "sha256": "6f9f9f531e2638f48289fabf9fb033052c994eb958c7dabcb1c2b20bd5313316"
+    },
+    {
+      "path": "src/team.css",
+      "sha256": "3a1d8d92ab5315894c04b2cba652a4055c5c3c99511f9a881d20f8f18ea1dbf3"
+    },
+    {
+      "path": "storage.rules",
+      "sha256": "81bb28df14b202aafa3711dd4bd18605ee06eaa60591db8812f65f2858722c62"
+    },
+    {
+      "path": "tests/commercial-baseline.test.ts",
+      "sha256": "20eb394377e1ac248fa617d66cd41aac9251e1409c792a894d4a493e88190296"
+    },
+    {
+      "path": "tests/commercial-data.integration.test.ts",
+      "sha256": "91f630e400a943759923f121a5075151318b0e8d08a0218d52dcfc8b8c453569"
+    },
+    {
+      "path": "tests/data.integration.test.ts",
+      "sha256": "02deda1bc8f4ed1c05763ef533991cd8033074d929a1e88d2195e4c063e478bc"
+    },
+    {
+      "path": "tests/demo-identities.test.ts",
+      "sha256": "577340ab3010af054af376b7d560ff41d90b9e22a734effdf4a7810851910281"
+    },
+    {
+      "path": "tests/documents.integration.test.ts",
+      "sha256": "7d9bdf99c5b248c570726c75517cd242e4d945c0e3addcba236d65d3afb9f8fc"
+    },
+    {
+      "path": "tests/emulator-loopback-proxy.test.ts",
+      "sha256": "9307d600be409a9b108761741daedcc92e9b80b924bf389cfe7e24b588b1141b"
+    },
+    {
+      "path": "tests/finance.test.ts",
+      "sha256": "7260f64a212b6e772e244245dbb05c62634fe9eff46dabd401784f5983e0cdda"
+    },
+    {
+      "path": "tests/financial-attempt.test.ts",
+      "sha256": "1b355880fd4f8884e56f5f7fd4a12bd254f8508d79b2cd21d19f2882c7a259f4"
+    },
+    {
+      "path": "tests/financial-diagnostics.test.ts",
+      "sha256": "500cbee96bfaff1e73646d1d3dac561bef78aec2487dccf30239cb42a5c23fb4"
+    },
+    {
+      "path": "tests/financial-operations.integration.test.ts",
+      "sha256": "0f726678a4ef63483f78d032c39c3a127c71ecd14606ccd02d5b3c2909616f2f"
+    },
+    {
+      "path": "tests/firebase-environment.test.ts",
+      "sha256": "9a52ac0cb9233df4086dbf91a588e59b49ff7dab26c00d42c57e7ec8eda9a907"
+    },
+    {
+      "path": "tests/firestore.rules.test.ts",
+      "sha256": "9d69f045746de281afef74e646027d1626a49c968f60be0979bd4a0689b112de"
+    },
+    {
+      "path": "tests/fixtures/commercial-policy.ts",
+      "sha256": "925e4df703446c6b870eb8e28049f20ba8d3399f8b6dc09c7549cba6f515da62"
+    },
+    {
+      "path": "tests/fixtures/finance-diagnostic.synthetic.json",
+      "sha256": "5c6e0591c5f39ed4a04b72e1293a0435085798223d5fcf66fe7098876a1ee20f"
+    },
+    {
+      "path": "tests/fixtures/namespace-bootstrap.ts",
+      "sha256": "267fcc699d135597eaa8118171e0d660158412a77b0d5bbf742f4093f3172790"
+    },
+    {
+      "path": "tests/import-operations.integration.test.ts",
+      "sha256": "7ec09bd3c249da3c5a3a5722eeec0a5839ba439214b6293a5b589496bf516d83"
+    },
+    {
+      "path": "tests/import-scale.integration.test.ts",
+      "sha256": "b026a80387337572bc2bc0c2a70f60eeb06f98a7bffbd8f08164ab3a07f09349"
+    },
+    {
+      "path": "tests/legacy-import.test.ts",
+      "sha256": "5b767d0bff9fcd78e3060b5c6deeaf4b7066841f49bfce86bf1adb0867aa09b3"
+    },
+    {
+      "path": "tests/legacy-trip-aliases.test.ts",
+      "sha256": "da32fc2a2c08e6748be3787477c0a9ff382aa32b7673c43e8fdc7d591b380313"
+    },
+    {
+      "path": "tests/membership-migration.test.ts",
+      "sha256": "14be1a9586166611ad61e202fcd97f90f76e50db481f07780a25dc043f7a1195"
+    },
+    {
+      "path": "tests/membership-rules.test.ts",
+      "sha256": "e738296a5d59dab0816dca1dc2d18a2485a4c90db83fc25395da54de0b54bf94"
+    },
+    {
+      "path": "tests/migration-cli.test.ts",
+      "sha256": "febd5bbfc94dde883b9a805b659a6855cb4716b2deb6972fdbb23a9b73195a0a"
+    },
+    {
+      "path": "tests/namespace-protection.test.ts",
+      "sha256": "6df101faacd4085f89d7bc1bdff3b860d9810b3129091a4a4363e26ec7a6aa34"
+    },
+    {
+      "path": "tests/onboarding-payload.test.ts",
+      "sha256": "2e46e054a3cee8a4297e151cc9ebdf0beded36a958b40c178a8977b6174de549"
+    },
+    {
+      "path": "tests/pending-writes.test.ts",
+      "sha256": "992b6f4b3e8732e6ce25722a4d9386bd8d688153a09d5005a8206a88d16f71bb"
+    },
+    {
+      "path": "tests/plan-catalog.test.ts",
+      "sha256": "7dd260cc334e89768f3b95418fc569c99d7edb4fdd7c8476822b7333564a7901"
+    },
+    {
+      "path": "tests/platform.integration.test.ts",
+      "sha256": "937319a4d58be8ae54e34b713ce80c95c8af57995dc374da166c5459664f59b0"
+    },
+    {
+      "path": "tests/proof-policy.test.ts",
+      "sha256": "a5d5cd9fbab85a4d9ad45f0658fd1c07264f5eceac1251954b5e55cd4ff65d3e"
+    },
+    {
+      "path": "tests/public-availability.test.ts",
+      "sha256": "1f781a63405a9454f56801a903207a5d1d69523b1557f72c41fbb9ce827ddfe0"
+    },
+    {
+      "path": "tests/quota-attempt.test.ts",
+      "sha256": "a8773b956b4446ddc8511677288bf4c0210aab016da0a83d5f5cfe187059cea6"
+    },
+    {
+      "path": "tests/quota-operations.integration.test.ts",
+      "sha256": "6e963d8ec02edbbf76f58f9a6c0446b0fd9a198e78286ae1a3d42ffd32743ce0"
+    },
+    {
+      "path": "tests/registration-operations.integration.test.ts",
+      "sha256": "a74a259943462cd7677e5e0218d2bcdb2570dbd33b84e459629107404f24c365"
+    },
+    {
+      "path": "tests/reservation-attempt.test.ts",
+      "sha256": "e10b6c989d3aa4c207a3a456a62ec409f66ecc39046f3420d15ca376ac579280"
+    },
+    {
+      "path": "tests/setup-emulators.ts",
+      "sha256": "54f7e290a3c51cdf3f284ed6ad5d937aa448b1058cfa8ee4b7d69a3d90090d6a"
+    },
+    {
+      "path": "tests/support.integration.test.ts",
+      "sha256": "bf96601e922980fce4358cf285a7c5a080c4f7a550015d4c064d9f9fefcdca65"
+    },
+    {
+      "path": "tests/team-invitations.integration.test.ts",
+      "sha256": "9fcf5fd0815313e6706fff24eff61c8b29f8500e0d385cd2b0b4d393f95ef59a"
+    },
+    {
+      "path": "tests/tenant-access.integration.test.ts",
+      "sha256": "bfba524272829d7c98511f7fe308304c62bc5b672ca7eec51ba3eb15cbbef059"
+    },
+    {
+      "path": "tests/tenant-branding.integration.test.ts",
+      "sha256": "81bdc621fec4e5f4f4e493a97a966aa1a354d8d6c519233595563780bdb76f5a"
+    },
+    {
+      "path": "tests/tenant-branding.test.ts",
+      "sha256": "ab06fc8dc7d601ff2a338c0630bf7e3db4670702f60a9aff177283312a87fe78"
+    },
+    {
+      "path": "tests/tenant-preference.test.ts",
+      "sha256": "f9bebae35d345328155a0a9f68680f9f189ae3c882b3174bfe203c4ee364466f"
+    },
+    {
+      "path": "tests/types.test.ts",
+      "sha256": "e5379c7b8ccb44190c571aa3c0d907b16fa7f67e519b71c07ac24747ba739798"
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "2daf835c5610b71c4def16f56edfc0b6a7f52571716095049792cc143a3551f9"
+    },
+    {
+      "path": "vite.preview.config.ts",
+      "sha256": "006e820e54ec9d2b8b3fade1229e20d53f1248ad09b5086df64ca2cc3644fc36"
+    }
+  ],
+  "postGateHarnessChanges": [
+    {
+      "path": "e2e/finance-ledger.spec.ts",
+      "gateSha256": "cee3dec99d462515f93f8186a3aa4f98b3ec124f346d31712d801c3e21047ebd",
+      "finalSha256": "707c545a6d719dbd7661bc976e96b0f88e87f827059bd4ad6408741612efd764"
+    },
+    {
+      "path": "package.json",
+      "gateSha256": "bd74d81a67296fa76b3474607fa5c2b2b38c4979e271562d142f8e8af6592311",
+      "finalSha256": "13d4774ccff6188a6cf47b5f45556b55a332e917428c80ed8224a074bcbe52ef"
+    },
+    {
+      "path": "scripts/run-local-tests.mjs",
+      "gateSha256": "fa7f0a93952f7d85eef631b4bedbccbf5aae02fb72eaf6cd6c9ac10756faf9f1",
+      "finalSha256": "0376c5146b3d952bfc4724d2ebe8c98775081d89458d1c2fcff7490401974270"
+    },
+    {
+      "path": "scripts/verify-public-preview.mjs",
+      "gateSha256": "bd034162a7678f5a1eb5e5c1246e836569f204f4a702616867c298712370fa61",
+      "finalSha256": "d8d968ad2a92c22cd95e0d1653d24287442b3863c9917a8814c50ce85d8458e0"
+    }
+  ],
+  "runtimeAndRulesUnchanged": true
+}

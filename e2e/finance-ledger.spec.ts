@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page, type Dialog } from "@playwright/test";
 import { patchSyntheticMembership, seedSyntheticEnvironment, testAccount } from "./fixtures";
 let dispose: (() => Promise<void>) | undefined;
 let failures: string[];
@@ -55,9 +55,16 @@ test("finance retries a committed payment after reload using the persisted attem
 });
 test("finance corrects a historical expected fare with audit and preserves the recorded receipts", async ({ page }) => {
   await login(page); await page.getByLabel("Mostrar dados de").selectOption("ride-a");
-  page.once("dialog", async (dialog) => { await dialog.accept("95,00"); page.once("dialog", (reason) => reason.accept("Tarifa histórica conferida")); });
-  await page.getByRole("button", { name: "Corrigir valor previsto", exact: true }).click();
-  await expect(metric(page, "Recebido registrado")).toContainText("25,00");
-  const audit = page.getByRole("heading", { name: "Auditoria financeira", exact: true }).locator(".."); await expect(audit).toContainText("Valor previsto corrigido"); await expect(audit).toContainText("Tarifa histórica conferida");
+  // Both prompts can arrive before accept() of the first resolves. Register
+  // one handler up front so Playwright never auto-dismisses the reason dialog.
+  const responses = ["95,00", "Tarifa histórica conferida"];
+  const answer = (dialog: Dialog) => { void dialog.accept(responses.shift()); };
+  page.on("dialog", answer);
+  try {
+    await page.getByRole("button", { name: "Corrigir valor previsto", exact: true }).click();
+    await expect(metric(page, "Recebido registrado")).toContainText("25,00");
+    const audit = page.getByRole("heading", { name: "Auditoria financeira", exact: true }).locator(".."); await expect(audit).toContainText("Valor previsto corrigido"); await expect(audit).toContainText("Tarifa histórica conferida");
+    expect(responses).toEqual([]);
+  } finally { page.off("dialog", answer); }
   await page.reload(); await expect(metric(page, "Recebido registrado")).toContainText("145,00");
 });

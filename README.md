@@ -2,7 +2,7 @@
 
 Plataforma para publicar caravanas, organizar inscrições, conferir comprovantes, acompanhar financeiro e fazer check-in. React, TypeScript, Vite e Firebase, com desenvolvimento isolado por emuladores.
 
-Branch de continuidade: `codex/caravana77-commercial-v1-20261016`, repositório `CristianoRFB/Caravana`. Estado consolidado em [CURRENT.md](docs/CURRENT.md), [CODEX_PROGRESS.md](docs/CODEX_PROGRESS.md) e [F6_ACCEPTANCE.md](docs/F6_ACCEPTANCE.md). Os aceites F2–F5 são locais/sintéticos; F6 está no gate ampliado de equipe/convites, implementados no Cloud por instrução atual; o WIP inacessível do LAB04-PC23 não foi recuperado.
+Branch de continuidade: `codex/caravana77-commercial-v1-20261016`, repositório `CristianoRFB/Caravana`. Estado consolidado em [CURRENT.md](docs/CURRENT.md), [CODEX_PROGRESS.md](docs/CODEX_PROGRESS.md) e [F6_ACCEPTANCE.md](docs/F6_ACCEPTANCE.md). Os aceites F2–F5 são locais/sintéticos; F6 PASS local/sintético, incluindo equipe/convites; F7/F8 e produção permanecem BLOCKED por gates reais. O WIP inacessível do LAB04-PC23 não foi recuperado.
 
 ## Executar a demonstração local
 
@@ -56,4 +56,6 @@ Financeiro Geral mantém Tudo/caravana e histórico auditado. Correções e canc
 
 Para reconciliar o WIP local do LAB04-PC23 com os checkpoints Cloud, consulte [CLOUD_HANDOFF.md](docs/CLOUD_HANDOFF.md). Preserve o checkout anterior e compare manualmente eventual WIP com o contrato Cloud em [TEAM_INVITATIONS.md](docs/TEAM_INVITATIONS.md). A continuidade Cloud não depende mais da sincronização desse WIP.
 
-Equipe: responsáveis gerenciam `/admin/equipe`; convidados encontram o próprio UID e aceitam em `/conta/convites`. Não há envio de e-mail ou concessão de acesso sem aceite; veja [TEAM_INVITATIONS.md](docs/TEAM_INVITATIONS.md). Prévia estática independente: [PUBLIC_PREVIEW.md](docs/PUBLIC_PREVIEW.md), build local sem Firebase; não representa staging do SaaS.
+Equipe: responsáveis gerenciam `/admin/equipe`; convidados encontram o próprio UID e aceitam em `/conta/convites`. Não há envio de e-mail ou concessão de acesso sem aceite; veja [TEAM_INVITATIONS.md](docs/TEAM_INVITATIONS.md). Prévia estática independente: [PUBLIC_PREVIEW.md](docs/PUBLIC_PREVIEW.md), publicada e smoke verificado sem Firebase; não representa staging do SaaS.
+
+Prévia visual isolada: https://caravana77-commercial-preview.pages.dev/saas — sem painel/backend. Estado de homologação e percentuais: [F8_ACCEPTANCE.md](docs/F8_ACCEPTANCE.md).

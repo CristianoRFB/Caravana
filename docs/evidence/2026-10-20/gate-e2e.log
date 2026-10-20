@@ -1,0 +1,290 @@
+
+> caravana-77@0.1.0 test:e2e
+> node scripts/run-local-tests.mjs e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test
+[WebServer] (node:25300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:25332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 164 tests using 1 worker
+
+(node:25350) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    1 [desktop-1440] › e2e/baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (11.1s)
+  ✓    2 [desktop-1440] › e2e/baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (3.5s)
+  ✓    3 [desktop-1440] › e2e/baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (10.1s)
+  ✓    4 [desktop-1440] › e2e/baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (4.9s)
+  ✓    5 [desktop-1440] › e2e/baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (4.2s)
+  ✓    6 [desktop-1440] › e2e/baseline.spec.ts:171:1 › switching organizations clears filters/drafts and live revocation cannot use legacy access (3.2s)
+  ✓    7 [desktop-1440] › e2e/baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (2.3s)
+  ✓    8 [desktop-1440] › e2e/baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement (3.4s)
+  ✓    9 [desktop-1440] › e2e/branding.spec.ts:34:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias (4.3s)
+  ✓   10 [desktop-1440] › e2e/branding.spec.ts:47:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration (2.9s)
+  ✓   11 [desktop-1440] › e2e/branding.spec.ts:53:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance (3.7s)
+  ✓   12 [desktop-1440] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (5.4s)
+  ✓   13 [desktop-1440] › e2e/commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (4.7s)
+  ✓   14 [desktop-1440] › e2e/demo.spec.ts:21:1 › fixed owner signs in with the Auth Emulator and sees only demonstration A finance (2.3s)
+  ✓   15 [desktop-1440] › e2e/demo.spec.ts:33:1 › fixed passenger signs in, opens the seeded private registration and has no admin access (3.7s)
+  ✓   16 [desktop-1440] › e2e/demo.spec.ts:47:1 › commercial demo shows distinct brands and plans with a working scoped reservation (4.3s)
+  ✓   17 [desktop-1440] › e2e/demo.spec.ts:70:3 › commercial demo owner sees only its own Essencial plan and usage (2.4s)
+  ✓   18 [desktop-1440] › e2e/demo.spec.ts:70:3 › commercial demo ownerB sees only its own Pro plan and usage (2.2s)
+  ✓   19 [desktop-1440] › e2e/documents.spec.ts:21:1 › minor authorization requires consent, private staff download and manual review before boarding (5.6s)
+  ✓   20 [desktop-1440] › e2e/documents.spec.ts:32:1 › policy changes only affect new uploads and owner cleanup preserves passenger and finance (4.1s)
+  ✓   21 [desktop-1440] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (5.0s)
+  ✓   22 [desktop-1440] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (4.0s)
+  ✘   23 [desktop-1440] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (12.5s)
+(node:26385) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   24 [desktop-1440] › e2e/import.spec.ts:28:1 › historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated (7.7s)
+  ✓   25 [desktop-1440] › e2e/import.spec.ts:43:1 › staff has no import or rollback controls (2.1s)
+  ✓   26 [desktop-1440] › e2e/import.spec.ts:49:1 › CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked (3.7s)
+  ✓   27 [desktop-1440] › e2e/operations.spec.ts:19:1 › audited boarding reverses, survives refresh and never carries history from tenant A to B (3.9s)
+  ✓   28 [desktop-1440] › e2e/operations.spec.ts:30:1 › offline staff does not queue a fake boarding and can retry once online (3.3s)
+  ✓   29 [desktop-1440] › e2e/platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.9s)
+  ✓   30 [desktop-1440] › e2e/platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (2.2s)
+  ✓   31 [desktop-1440] › e2e/public-availability.spec.ts:28:1 › catalog and trip show commercial seats live while another organization remains independent (2.4s)
+  ✓   32 [desktop-1440] › e2e/public-availability.spec.ts:42:1 › suspension and expiration disable new bookings live without clearing the passenger draft (6.1s)
+  ✓   33 [desktop-1440] › e2e/reservation.spec.ts:24:1 › a persisted committed attempt survives reload and recovers the same final-seat registration (3.7s)
+  ✓   34 [desktop-1440] › e2e/reservation.spec.ts:49:1 › field validation leaves the form editable and the same passenger can correct and submit (2.1s)
+  ✓   35 [desktop-1440] › e2e/reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations (6.0s)
+  ✓   36 [desktop-1440] › e2e/support.spec.ts:29:1 › owner consents, operator explicitly starts read-only support, revocation clears private configuration (4.4s)
+  ✓   37 [desktop-1440] › e2e/support.spec.ts:62:1 › staff cannot authorize platform support (2.0s)
+  ✓   38 [desktop-1440] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (8.0s)
+  ✓   39 [desktop-1440] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (8.5s)
+  ✓   40 [desktop-1440] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (7.9s)
+  ✓   41 [desktop-1440] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (5.8s)
+(node:27168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   42 [tablet-768] › e2e/baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.9s)
+  ✓   43 [tablet-768] › e2e/baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (2.1s)
+  ✓   44 [tablet-768] › e2e/baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (7.2s)
+  ✓   45 [tablet-768] › e2e/baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (4.2s)
+  ✓   46 [tablet-768] › e2e/baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (3.6s)
+  ✓   47 [tablet-768] › e2e/baseline.spec.ts:171:1 › switching organizations clears filters/drafts and live revocation cannot use legacy access (2.4s)
+  ✓   48 [tablet-768] › e2e/baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.8s)
+  ✓   49 [tablet-768] › e2e/baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement (3.4s)
+  ✓   50 [tablet-768] › e2e/branding.spec.ts:34:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias (2.9s)
+  ✓   51 [tablet-768] › e2e/branding.spec.ts:47:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration (3.1s)
+  ✓   52 [tablet-768] › e2e/branding.spec.ts:53:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance (3.0s)
+  ✓   53 [tablet-768] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (3.9s)
+  ✓   54 [tablet-768] › e2e/commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (4.0s)
+  ✓   55 [tablet-768] › e2e/demo.spec.ts:21:1 › fixed owner signs in with the Auth Emulator and sees only demonstration A finance (1.9s)
+  ✓   56 [tablet-768] › e2e/demo.spec.ts:33:1 › fixed passenger signs in, opens the seeded private registration and has no admin access (2.2s)
+  ✓   57 [tablet-768] › e2e/demo.spec.ts:47:1 › commercial demo shows distinct brands and plans with a working scoped reservation (2.9s)
+  ✓   58 [tablet-768] › e2e/demo.spec.ts:70:3 › commercial demo owner sees only its own Essencial plan and usage (1.7s)
+  ✓   59 [tablet-768] › e2e/demo.spec.ts:70:3 › commercial demo ownerB sees only its own Pro plan and usage (2.0s)
+  ✓   60 [tablet-768] › e2e/documents.spec.ts:21:1 › minor authorization requires consent, private staff download and manual review before boarding (2.9s)
+  ✓   61 [tablet-768] › e2e/documents.spec.ts:32:1 › policy changes only affect new uploads and owner cleanup preserves passenger and finance (3.7s)
+  ✓   62 [tablet-768] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (3.8s)
+  ✓   63 [tablet-768] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.4s)
+  ✓   64 [tablet-768] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.2s)
+  ✓   65 [tablet-768] › e2e/import.spec.ts:28:1 › historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated (4.7s)
+  ✓   66 [tablet-768] › e2e/import.spec.ts:43:1 › staff has no import or rollback controls (1.6s)
+  ✓   67 [tablet-768] › e2e/import.spec.ts:49:1 › CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked (3.5s)
+  ✓   68 [tablet-768] › e2e/operations.spec.ts:19:1 › audited boarding reverses, survives refresh and never carries history from tenant A to B (3.2s)
+  ✓   69 [tablet-768] › e2e/operations.spec.ts:30:1 › offline staff does not queue a fake boarding and can retry once online (2.5s)
+  ✓   70 [tablet-768] › e2e/platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.7s)
+  ✓   71 [tablet-768] › e2e/platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (2.6s)
+  ✓   72 [tablet-768] › e2e/public-availability.spec.ts:28:1 › catalog and trip show commercial seats live while another organization remains independent (1.9s)
+  ✓   73 [tablet-768] › e2e/public-availability.spec.ts:42:1 › suspension and expiration disable new bookings live without clearing the passenger draft (5.4s)
+  ✓   74 [tablet-768] › e2e/reservation.spec.ts:24:1 › a persisted committed attempt survives reload and recovers the same final-seat registration (3.5s)
+  ✓   75 [tablet-768] › e2e/reservation.spec.ts:49:1 › field validation leaves the form editable and the same passenger can correct and submit (2.0s)
+  ✓   76 [tablet-768] › e2e/reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations (3.2s)
+  ✓   77 [tablet-768] › e2e/support.spec.ts:29:1 › owner consents, operator explicitly starts read-only support, revocation clears private configuration (4.1s)
+  ✓   78 [tablet-768] › e2e/support.spec.ts:62:1 › staff cannot authorize platform support (1.8s)
+  ✓   79 [tablet-768] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (7.5s)
+  ✓   80 [tablet-768] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (6.9s)
+  ✓   81 [tablet-768] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (8.0s)
+  ✓   82 [tablet-768] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (5.2s)
+(node:28823) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   83 [mobile-375] › e2e/baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (3.1s)
+  ✓   84 [mobile-375] › e2e/baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (1.7s)
+  ✓   85 [mobile-375] › e2e/baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (5.7s)
+  ✓   86 [mobile-375] › e2e/baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (3.2s)
+  ✓   87 [mobile-375] › e2e/baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (2.2s)
+  ✓   88 [mobile-375] › e2e/baseline.spec.ts:171:1 › switching organizations clears filters/drafts and live revocation cannot use legacy access (2.6s)
+  ✓   89 [mobile-375] › e2e/baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.6s)
+  ✓   90 [mobile-375] › e2e/baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement (3.5s)
+  ✓   91 [mobile-375] › e2e/branding.spec.ts:34:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias (2.4s)
+  ✓   92 [mobile-375] › e2e/branding.spec.ts:47:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration (2.3s)
+  ✓   93 [mobile-375] › e2e/branding.spec.ts:53:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance (2.9s)
+  ✓   94 [mobile-375] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (4.1s)
+  ✓   95 [mobile-375] › e2e/commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (4.1s)
+  ✓   96 [mobile-375] › e2e/demo.spec.ts:21:1 › fixed owner signs in with the Auth Emulator and sees only demonstration A finance (1.6s)
+  ✓   97 [mobile-375] › e2e/demo.spec.ts:33:1 › fixed passenger signs in, opens the seeded private registration and has no admin access (1.7s)
+  ✓   98 [mobile-375] › e2e/demo.spec.ts:47:1 › commercial demo shows distinct brands and plans with a working scoped reservation (2.7s)
+  ✓   99 [mobile-375] › e2e/demo.spec.ts:70:3 › commercial demo owner sees only its own Essencial plan and usage (1.6s)
+  ✓  100 [mobile-375] › e2e/demo.spec.ts:70:3 › commercial demo ownerB sees only its own Pro plan and usage (1.5s)
+  ✓  101 [mobile-375] › e2e/documents.spec.ts:21:1 › minor authorization requires consent, private staff download and manual review before boarding (2.9s)
+  ✓  102 [mobile-375] › e2e/documents.spec.ts:32:1 › policy changes only affect new uploads and owner cleanup preserves passenger and finance (3.3s)
+  ✓  103 [mobile-375] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (3.3s)
+  ✓  104 [mobile-375] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (2.6s)
+  ✘  105 [mobile-375] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (12.5s)
+(node:29844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  106 [mobile-375] › e2e/import.spec.ts:28:1 › historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated (4.7s)
+  ✓  107 [mobile-375] › e2e/import.spec.ts:43:1 › staff has no import or rollback controls (1.5s)
+  ✓  108 [mobile-375] › e2e/import.spec.ts:49:1 › CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked (2.8s)
+  ✓  109 [mobile-375] › e2e/operations.spec.ts:19:1 › audited boarding reverses, survives refresh and never carries history from tenant A to B (2.8s)
+  ✓  110 [mobile-375] › e2e/operations.spec.ts:30:1 › offline staff does not queue a fake boarding and can retry once online (2.1s)
+  ✓  111 [mobile-375] › e2e/platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (2.2s)
+  ✓  112 [mobile-375] › e2e/platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (1.9s)
+  ✓  113 [mobile-375] › e2e/public-availability.spec.ts:28:1 › catalog and trip show commercial seats live while another organization remains independent (1.8s)
+  ✓  114 [mobile-375] › e2e/public-availability.spec.ts:42:1 › suspension and expiration disable new bookings live without clearing the passenger draft (5.4s)
+  ✓  115 [mobile-375] › e2e/reservation.spec.ts:24:1 › a persisted committed attempt survives reload and recovers the same final-seat registration (3.7s)
+  ✓  116 [mobile-375] › e2e/reservation.spec.ts:49:1 › field validation leaves the form editable and the same passenger can correct and submit (1.8s)
+  ✓  117 [mobile-375] › e2e/reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations (3.5s)
+  ✓  118 [mobile-375] › e2e/support.spec.ts:29:1 › owner consents, operator explicitly starts read-only support, revocation clears private configuration (3.7s)
+  ✓  119 [mobile-375] › e2e/support.spec.ts:62:1 › staff cannot authorize platform support (1.4s)
+  ✓  120 [mobile-375] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (7.3s)
+  ✓  121 [mobile-375] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (7.9s)
+  ✓  122 [mobile-375] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (6.9s)
+  ✓  123 [mobile-375] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (4.8s)
+(node:30584) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  124 [mobile-320] › e2e/baseline.spec.ts:34:1 › Financeiro Geral preserves Tudo/caravan totals, reload and organization scoping (2.8s)
+  ✓  125 [mobile-320] › e2e/baseline.spec.ts:62:1 › a guessed caravan path cannot expose another organization's private finance (1.7s)
+  ✓  126 [mobile-320] › e2e/baseline.spec.ts:70:1 › public booking, private proof, manual review and check-in use the recovered source (5.3s)
+  ✓  127 [mobile-320] › e2e/baseline.spec.ts:110:1 › revoking a shared private link hides an open guest portal and preserves the admin record (3.8s)
+  ✓  128 [mobile-320] › e2e/baseline.spec.ts:144:1 › Pix configuration is conditional, empty values explain the process, and copying uses the configured key (3.5s)
+  ✓  129 [mobile-320] › e2e/baseline.spec.ts:171:1 › switching organizations clears filters/drafts and live revocation cannot use legacy access (2.3s)
+  ✓  130 [mobile-320] › e2e/baseline.spec.ts:200:1 › staff can read scoped finance without controls to register or correct money (1.6s)
+  ✓  131 [mobile-320] › e2e/baseline.spec.ts:211:1 › a pending write prevents tenant switching until server acknowledgement (3.4s)
+  ✓  132 [mobile-320] › e2e/branding.spec.ts:34:1 › tenant namespaces distinguish identical trip slugs and preserve the explicit historical alias (2.4s)
+  ✓  133 [mobile-320] › e2e/branding.spec.ts:47:1 › a scoped reservation keeps its tenant on reload and another tenant path cannot display that bearer registration (3.1s)
+  ✓  134 [mobile-320] › e2e/branding.spec.ts:53:1 › owner updates public identity live without rebuilding and tenant B keeps its own branding and finance (2.7s)
+  ✓  135 [mobile-320] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (3.8s)
+  ✓  136 [mobile-320] › e2e/commercial.spec.ts:15:1 › platform manually assigns temporary Pro90, keeps catalog and downgrades with audit while A and B remain separate (5.4s)
+  ✓  137 [mobile-320] › e2e/demo.spec.ts:21:1 › fixed owner signs in with the Auth Emulator and sees only demonstration A finance (1.7s)
+  ✓  138 [mobile-320] › e2e/demo.spec.ts:33:1 › fixed passenger signs in, opens the seeded private registration and has no admin access (1.8s)
+  ✓  139 [mobile-320] › e2e/demo.spec.ts:47:1 › commercial demo shows distinct brands and plans with a working scoped reservation (3.3s)
+  ✓  140 [mobile-320] › e2e/demo.spec.ts:70:3 › commercial demo owner sees only its own Essencial plan and usage (1.7s)
+  ✓  141 [mobile-320] › e2e/demo.spec.ts:70:3 › commercial demo ownerB sees only its own Pro plan and usage (2.8s)
+  ✓  142 [mobile-320] › e2e/documents.spec.ts:21:1 › minor authorization requires consent, private staff download and manual review before boarding (2.8s)
+  ✓  143 [mobile-320] › e2e/documents.spec.ts:32:1 › policy changes only affect new uploads and owner cleanup preserves passenger and finance (3.4s)
+  ✓  144 [mobile-320] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (3.6s)
+  ✓  145 [mobile-320] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.2s)
+  ✓  146 [mobile-320] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.0s)
+  ✓  147 [mobile-320] › e2e/import.spec.ts:28:1 › historical CSV report survives reload, rollback preserves record, duplicate retry and tenant B stay isolated (5.2s)
+  ✓  148 [mobile-320] › e2e/import.spec.ts:43:1 › staff has no import or rollback controls (2.4s)
+  ✓  149 [mobile-320] › e2e/import.spec.ts:49:1 › CSV consumes the final plan seat and rollback plus duplicate replay remain usable after growth is blocked (4.7s)
+  ✓  150 [mobile-320] › e2e/operations.spec.ts:19:1 › audited boarding reverses, survives refresh and never carries history from tenant A to B (2.7s)
+  ✓  151 [mobile-320] › e2e/operations.spec.ts:30:1 › offline staff does not queue a fake boarding and can retry once online (2.2s)
+  ✓  152 [mobile-320] › e2e/platform.spec.ts:26:1 › platform owner onboards an existing Auth user, audits status and loses the UI on revocation (3.0s)
+  ✓  153 [mobile-320] › e2e/platform.spec.ts:57:1 › tenant owner cannot enter the platform and platform authority cannot enter tenant private finance (1.8s)
+  ✓  154 [mobile-320] › e2e/public-availability.spec.ts:28:1 › catalog and trip show commercial seats live while another organization remains independent (1.8s)
+  ✓  155 [mobile-320] › e2e/public-availability.spec.ts:42:1 › suspension and expiration disable new bookings live without clearing the passenger draft (6.0s)
+  ✓  156 [mobile-320] › e2e/reservation.spec.ts:24:1 › a persisted committed attempt survives reload and recovers the same final-seat registration (6.0s)
+  ✓  157 [mobile-320] › e2e/reservation.spec.ts:49:1 › field validation leaves the form editable and the same passenger can correct and submit (2.0s)
+  ✓  158 [mobile-320] › e2e/reservation.spec.ts:60:1 › commercial passenger quota blocks A growth while preserving its private link and allowing B reservations (4.8s)
+  ✓  159 [mobile-320] › e2e/support.spec.ts:29:1 › owner consents, operator explicitly starts read-only support, revocation clears private configuration (5.5s)
+  ✓  160 [mobile-320] › e2e/support.spec.ts:62:1 › staff cannot authorize platform support (1.7s)
+  ✓  161 [mobile-320] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (8.3s)
+  ✓  162 [mobile-320] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (9.4s)
+  ✓  163 [mobile-320] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (9.8s)
+  ✓  164 [mobile-320] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (7.8s)
+
+
+  1) [desktop-1440] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('heading', { name: 'Auditoria financeira', exact: true }).locator('..')
+    Expected substring: "Valor previsto corrigido"
+    Received string:    "Auditoria financeiraAté 30 operações confirmadas pelo servidor no filtro atual. Não há integração bancária.Nenhuma operação auditada neste filtro; lançamentos legados continuam no histórico original."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('heading', { name: 'Auditoria financeira', exact: true }).locator('..') with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Auditoria financeira', exact: true }).locator('..')
+        24 × locator resolved to <section class="admin-panel platform-section operational-history">…</section>
+           - unexpected value "Auditoria financeiraAté 30 operações confirmadas pelo servidor no filtro atual. Não há integração bancária.Nenhuma operação auditada neste filtro; lançamentos legados continuam no histórico original."
+
+
+      59 |   await page.getByRole("button", { name: "Corrigir valor previsto", exact: true }).click();
+      60 |   await expect(metric(page, "Recebido registrado")).toContainText("25,00");
+    > 61 |   const audit = page.getByRole("heading", { name: "Auditoria financeira", exact: true }).locator(".."); await expect(audit).toContainText("Valor previsto corrigido"); await expect(audit).toContainText("Tarifa histórica conferida");
+         |                                                                                                                             ^
+      62 |   await page.reload(); await expect(metric(page, "Recebido registrado")).toContainText("145,00");
+      63 | });
+      64 |
+        at /workspace/Caravana/e2e/finance-ledger.spec.ts:61:125
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-desktop-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-desktop-1440/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-desktop-1440/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-desktop-1440/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-375] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('heading', { name: 'Auditoria financeira', exact: true }).locator('..')
+    Expected substring: "Valor previsto corrigido"
+    Received string:    "Auditoria financeiraAté 30 operações confirmadas pelo servidor no filtro atual. Não há integração bancária.Nenhuma operação auditada neste filtro; lançamentos legados continuam no histórico original."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('heading', { name: 'Auditoria financeira', exact: true }).locator('..') with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Auditoria financeira', exact: true }).locator('..')
+        24 × locator resolved to <section class="admin-panel platform-section operational-history">…</section>
+           - unexpected value "Auditoria financeiraAté 30 operações confirmadas pelo servidor no filtro atual. Não há integração bancária.Nenhuma operação auditada neste filtro; lançamentos legados continuam no histórico original."
+
+
+      59 |   await page.getByRole("button", { name: "Corrigir valor previsto", exact: true }).click();
+      60 |   await expect(metric(page, "Recebido registrado")).toContainText("25,00");
+    > 61 |   const audit = page.getByRole("heading", { name: "Auditoria financeira", exact: true }).locator(".."); await expect(audit).toContainText("Valor previsto corrigido"); await expect(audit).toContainText("Tarifa histórica conferida");
+         |                                                                                                                             ^
+      62 |   await page.reload(); await expect(metric(page, "Recebido registrado")).toContainText("145,00");
+      63 | });
+      64 |
+        at /workspace/Caravana/e2e/finance-ledger.spec.ts:61:125
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-mobile-375/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-mobile-375/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-mobile-375/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/finance-ledger-finance-cor-b5eb4-erves-the-recorded-receipts-mobile-375/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts 
+    [mobile-375] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts 
+  162 passed (10.9m)
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test" exited with code 1

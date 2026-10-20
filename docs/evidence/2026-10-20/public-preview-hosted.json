@@ -1,0 +1,18 @@
+{
+  "base": "https://caravana77-commercial-preview.pages.dev",
+  "scope": "Static landing only, no backend staging",
+  "results": [
+    {
+      "width": 1440,
+      "status": "PASS",
+      "jsErrors": 0,
+      "firebaseRequests": 0
+    },
+    {
+      "width": 320,
+      "status": "PASS",
+      "jsErrors": 0,
+      "firebaseRequests": 0
+    }
+  ]
+}

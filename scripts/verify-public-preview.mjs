@@ -2,7 +2,8 @@ import { chromium, expect } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 const base = process.argv[2] || "http://127.0.0.1:4180";
 if (!/^http:\/\/127\.0\.0\.1:4180$|^https:\/\/(?:[a-f0-9]+\.)?caravana77-commercial-preview\.pages\.dev$/.test(base)) throw new Error("Only isolated public preview targets allowed.");
-const browser = await chromium.launch({ headless: true }); const results = [];
+const hostedProxy = base.startsWith("https:") ? process.env.HTTPS_PROXY || process.env.HTTP_PROXY : undefined;
+const browser = await chromium.launch({ headless: true, ...(hostedProxy ? { proxy: { server: hostedProxy } } : {}) }); const results = [];
 try {
   for (const width of [1440, 320]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } }); const page = await context.newPage(); const errors = []; const backend = [];

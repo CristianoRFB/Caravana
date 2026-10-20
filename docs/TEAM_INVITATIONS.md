@@ -1,6 +1,6 @@
 # Equipe e convites — contrato Cloud
 
-IMPLEMENTED em 2026-10-20, a partir de bc2c3d1. O WIP do LAB04-PC23 não chegou ao GitHub e não foi recuperado nem testado. A instrução atual autoriza concluir o módulo no Cloud; eventual código do laboratório deve ser comparado manualmente com este contrato, preservando ambos os históricos, sem merge automático.
+IMPLEMENTED / LOCAL_TESTED, F6 PASS em 2026-10-20. Runtime corrigido em9c0c45d: 244 testes (15 de convites), 8 Auth, 6 Storage e 164 E2E únicos consolidados; 16 E2E de equipe nas quatro larguras PASS. Implementação iniciada a partir de bc2c3d1. O WIP do LAB04-PC23 não chegou ao GitHub e não foi recuperado nem testado. A instrução atual autoriza concluir o módulo no Cloud; eventual código do laboratório deve ser comparado manualmente com este contrato, preservando ambos os históricos, sem merge automático.
 
 ## Operação
 

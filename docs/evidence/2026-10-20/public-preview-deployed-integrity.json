@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-20T04:53:36.353089+00:00",
+  "url": "https://caravana77-commercial-preview.pages.dev",
+  "kind": "PUBLIC_LANDING_PREVIEW_ONLY",
+  "backend": false,
+  "assets": [
+    {
+      "path": "index.html",
+      "servedUrl": "https://caravana77-commercial-preview.pages.dev/",
+      "sha256": "2e423180858145b41f955017e9e1298916a9abc52574a5613fbaa49a4e56ce74",
+      "bytes": 433,
+      "status": "MATCH"
+    },
+    {
+      "path": "assets/index-Dw7hG0FD.css",
+      "servedUrl": "https://caravana77-commercial-preview.pages.dev/assets/index-Dw7hG0FD.css",
+      "sha256": "701f38043102e5e48f1fbc704c7e6d61c4792415bf4bd45c66c9bd955614be34",
+      "bytes": 45508,
+      "status": "MATCH"
+    },
+    {
+      "path": "assets/index-t8RxE2m1.js",
+      "servedUrl": "https://caravana77-commercial-preview.pages.dev/assets/index-t8RxE2m1.js",
+      "sha256": "9bee80e6c78dedc52c12c92d2c5731ae7f0a0833d5a0805e8708c89bfe96e251",
+      "bytes": 279452,
+      "status": "MATCH"
+    }
+  ],
+  "securityHeaders": [
+    "content-security-policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'self'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'",
+    "referrer-policy: no-referrer",
+    "x-content-type-options: nosniff",
+    "x-robots-tag: noindex, nofollow"
+  ],
+  "existingProductionJsSha256": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16",
+  "scope": "Public static assets only; no private documents or production mutations."
+}

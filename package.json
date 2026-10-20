@@ -56,7 +56,8 @@
     "test:landing:e2e": "node scripts/run-local-tests.mjs landing-e2e",
     "test:team": "node scripts/run-local-tests.mjs team",
     "test:team:e2e": "node scripts/run-local-tests.mjs team-e2e",
-    "build:public-preview": "tsc -b && node scripts/build-public-preview.mjs"
+    "build:public-preview": "tsc -b && node scripts/build-public-preview.mjs",
+    "test:finance:all-e2e": "node scripts/run-local-tests.mjs finance-ledger-e2e"
   },
   "dependencies": {
     "firebase": "^11.10.0",
