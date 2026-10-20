@@ -1,0 +1,43 @@
+
+> caravana-77@0.1.0 test:staging
+> vitest run --mode staging --config vitest.staging.config.ts staging-tests/functional-tools.test.ts
+
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ↓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > preserves prices, quotas and the first owner across independent organizations
+ ↓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > Essential cannot enable the new paid tools by calling SDK directly
+ ↓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > Pro saves an audited private report with replay and exports without passenger details
+ ↓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > Premium creates 20 tasks, reverses completion and rejects stale revisions
+ ↓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > A cannot read B's report and B cannot read Premium's private worklist
+ ↓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > downgrade and suspension retain historical tools but block new mutations
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  staging-tests/functional-tools.test.ts [ staging-tests/functional-tools.test.ts ]
+Error: Confira nome, endereço público, cor, imagem e contatos da organização.
+ ❯ validateTenantBranding src/lib/tenant-branding.ts:23:184
+
+ ❯ onboardingPayload src/lib/onboarding-payload.ts:12:20
+ ❯ src/lib/platform.ts:41:19
+ ❯ trackWrite src/lib/pending-writes.ts:13:22
+ ❯ Module.onboardTenant src/lib/platform.ts:39:10
+ ❯ staging-tests/functional-tools.test.ts:27:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  staging-tests/functional-tools.test.ts [ staging-tests/functional-tools.test.ts ]
+TypeError: Cannot read properties of undefined (reading 'revision')
+ ❯ plan staging-tests/functional-tools.test.ts:21:318
+
+ ❯ staging-tests/functional-tools.test.ts:29:111
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 skipped (6)
+   Start at  15:25:36
+   Duration  3.12s (tests 77%, import 16%, transform 6%)
+
+JSON report written to C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana/.firebase/staging-vitest-report.json

@@ -1,6 +1,8 @@
 import { usePublicAvailability } from "./lib/use-public-availability";
 import TenantBrandSettings from "./TenantBrandSettings";
 import TenantCommercial from "./TenantCommercial";
+import SafetyDiagnostics, { AppErrorBoundary } from "./SafetyDiagnostics";
+import { installDiagnosticHandlers, setDiagnosticScope } from "./lib/diagnostics";
 import { TenantBrandScope, TenantRoute } from "./TenantBrandScope";
 import { useTenantBrand } from "./lib/tenant-brand-context";
 import { tenantCaravanPath, tenantHomePath } from "./lib/tenant-branding";
@@ -1602,6 +1604,7 @@ function AdminShell({
 }) {
   const [open, setOpen] = useState(false);
   const pendingCount = useSyncExternalStore(observePendingWrites, pendingWrites, () => 0);
+  useEffect(() => { setDiagnosticScope(`${user.uid}:${orgId}`); return () => setDiagnosticScope("public"); }, [user.uid, orgId]);
   const nav = useNavigate();
   async function exit() {
     await logout();
@@ -1669,6 +1672,7 @@ function AdminShell({
           <Link to="/admin/equipe"><span>♧</span> Equipe e convites</Link>
           <Link to="/admin/relatorios"><span aria-hidden="true">▥</span> Relatórios</Link>
           <Link to="/admin/roteiros"><span aria-hidden="true">☷</span> Roteiros da equipe</Link>
+          <Link to="/admin/diagnostico"><span aria-hidden="true">?</span> Diagnóstico local</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
@@ -3717,6 +3721,7 @@ function TenantSupport() {
 }
 
 export default function App() {
+  useEffect(() => installDiagnosticHandlers(window), []);
   const routes = (
     <Routes>
       <Route path="/saas" element={<Suspense fallback={<Loading />}><CommercialLanding /></Suspense>} />
@@ -3747,6 +3752,7 @@ export default function App() {
       <Route path="/admin/equipe" element={<AdminGuard><TenantTeam /></AdminGuard>} />
       <Route path="/admin/relatorios" element={<AdminGuard><TenantOperationalTools mode="reports" /></AdminGuard>} />
       <Route path="/admin/roteiros" element={<AdminGuard><TenantOperationalTools mode="worklists" /></AdminGuard>} />
+      <Route path="/admin/diagnostico" element={<AdminGuard><SafetyDiagnostics /></AdminGuard>} />
       <Route path="/conta/convites" element={<Suspense fallback={<Loading />}><InvitationInbox /></Suspense>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
@@ -3817,5 +3823,5 @@ export default function App() {
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
-  return import.meta.env.VITE_APP_ENV === "staging" ? <div className="staging-shell"><aside className="staging-notice" role="note">STAGING · Somente dados fictícios · Sem pagamentos</aside>{routes}</div> : routes;
+  return <AppErrorBoundary>{import.meta.env.VITE_APP_ENV === "staging" ? <div className="staging-shell"><aside className="staging-notice" role="note">STAGING · Somente dados fictícios · Sem pagamentos</aside>{routes}</div> : routes}</AppErrorBoundary>;
 }

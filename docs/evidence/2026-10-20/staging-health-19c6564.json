@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-10-20T18:20:47.303Z",
+  "status": "PASS_PUBLIC_STAGING_ARTIFACTS",
+  "source": "19c65640461c8415be628c6f642c9d71e3a1f6a3",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "securityHeaders": "PASS",
+  "assets": [
+    {
+      "path": "assets/CommercialLanding-Co3_wYUr.js",
+      "bytes": 11948,
+      "sha256": "37deb0a90f5c38380a6dbbf486ba2e2006a8ead5885656ed71f3c8780d7c172e"
+    },
+    {
+      "path": "assets/CommercialLanding-Dgo8XFuJ.css",
+      "bytes": 9723,
+      "sha256": "2c45be08a1d9425c45d1e9200e3fb53f6e9a1f794eb582473953d6940d7c5160"
+    },
+    {
+      "path": "assets/firebase-auth-9-_4xxym.js",
+      "bytes": 123693,
+      "sha256": "633cad0aeb89f129938038b2c1dda5734cc41fed9d9e027f86c10609b772b135"
+    },
+    {
+      "path": "assets/firebase-firestore-B8X3RQXa.js",
+      "bytes": 364560,
+      "sha256": "3c6126e2ea6f9ae825ea6a41dfe11375ba27c63b845533bb49a8760b1149d759"
+    },
+    {
+      "path": "assets/index-CFRBFKn4.js",
+      "bytes": 501115,
+      "sha256": "28137f7d58457dafe04642148b5ae3c24239d207c2868a135e80f596543a1f94"
+    },
+    {
+      "path": "assets/index-D3GRPkmW.css",
+      "bytes": 48441,
+      "sha256": "63d30b23591ebfb928257a430385ba94e635cb1be19665ce136cdbb8bc5650b6"
+    },
+    {
+      "path": "assets/InvitationInbox-CtuBK_5n.js",
+      "bytes": 3186,
+      "sha256": "9b5d3249ec07acf64d10f48a260069d219e80dc5603da41d97806f01382aea1d"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/team-B9RC0ayN.js",
+      "bytes": 8946,
+      "sha256": "329076543f2dd44b2cfcd3b8780dbc69997e55ddab7b5e8e667fd0ce5f9a8725"
+    },
+    {
+      "path": "assets/team-DO-9gEyi.css",
+      "bytes": 1315,
+      "sha256": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8"
+    },
+    {
+      "path": "assets/TeamManagement-DptCiIv4.js",
+      "bytes": 8708,
+      "sha256": "86c67658b69712c2d8e8aa8b7c394926419900f03ba53801da61100f9152ce6a"
+    }
+  ],
+  "authenticatedJourneysVerified": false,
+  "productionAccess": false,
+  "credentialsUsed": false,
+  "privateDataRead": false
+}

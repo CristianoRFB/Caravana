@@ -1,12 +1,12 @@
 {
-  "checkedOn": "2026-10-20T17:00:33.282Z",
+  "checkedOn": "2026-10-20T18:25:35.109Z",
   "projectId": "bdall-e3585",
   "billingEnabled": false,
   "databaseEdition": "STANDARD",
   "freeTier": true,
   "rulesMatchCandidate": true,
-  "rulesetName": "projects/bdall-e3585/rulesets/803cecff-31cb-4f32-b436-52257ad73f12",
-  "rulesSha256": "d3ff21085bd14c53109ae6a7ff2917caf38dacd878f37db72258482c05f3e840",
+  "rulesetName": "projects/bdall-e3585/rulesets/3ef0e36d-c0cb-4646-9cac-bf6c593f0107",
+  "rulesSha256": "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81",
   "indexes": [
     {
       "name": "projects/bdall-e3585/databases/(default)/collectionGroups/financialOperations/indexes/CICAgJim14AJ",

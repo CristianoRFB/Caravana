@@ -1,5 +1,12 @@
 # Estado atual — Caravana 77
 
+## Checkpoint GOAL FINAL — diagnóstico e staging dos planos
+
+CI completo de40de512 PASS (run39472143981). Diagnóstico sem PII/sem envio automático e health público fixo implementados;8 testes direcionados+8 E2E nas quatro larguras PASS,39 regressões de writes PASS,lint/typechecks PASS. Capturas de cartões e diagnóstico inspecionadas em320px. Nova Rules validada por56 segurança+49 equipe/plataforma/namespace e publicada exclusivamente em bdall-e3585;11 índices READY e hash conferido.6 jornadas SDK reais dos planos Essencial/Pro/Premium PASS: relatório/CSV/auditoria/replay,20 tarefas/undo/stale revision,A×B,downgrade/suspensão/histórico. Primeiro ensaio recusou cor não canônica da fixture; corrigida sem relaxar validação. Frontend staging ainda19c6564 até o próximo build/publicação deste checkpoint.
+
+Produção somente leitura: tentativa com conta nova autorizada recebeu HTTP403 na identidade do projeto caravana-af306; nenhum documento real consultado/escrito. Inventário real BLOCKED por permissão efetiva. Não reutilizada sessão antiga exposta; backup real não criado em computador compartilhado. Próximo: publicar frontend staging, verificar três planos/artefatos/visual; fechar F7 dependências/Auth/sessões; ensaio de interrupção/retomada/retorno sintético e17 gates finais.
+
+
 ## GOAL FINAL vigente — 2026-10-20
 
 Fonte integral GOAL_FINAL_2026-10-20.md, hash externoB663E4AC…; execução em FINAL_GOAL_EXECUTION.md. Retomada865b803 limpa/pull atualizado, branch preservada. CI remoto de13fe987 PASS: https://github.com/CristianoRFB/Caravana/actions/runs/39466150457, padrão Ubuntu público, sem cache/artifacts/deploy e sem credencial nova. Bloqueio de login Actions superado por trigger da branch autorizada; não alegar gate da nova candidata ainda.

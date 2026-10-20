@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-20T18:22:41.730Z",
+  "projectId": "caravana-af306",
+  "mode": "READ_ONLY_AGGREGATES_IN_MEMORY",
+  "productionMutations": 0,
+  "rawDataPersisted": false,
+  "realBackupCreated": false,
+  "gates": {
+    "identity": {
+      "status": "BLOCKED",
+      "reason": "READ_ONLY_firebase_HTTP_403"
+    }
+  },
+  "result": "BLOCKED_READ_ONLY_INVENTORY"
+}

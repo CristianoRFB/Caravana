@@ -30,6 +30,7 @@ html {
 .tool-form input, .tool-form select, .tool-form textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid #bcc0d0; border-radius: 8px; font: inherit; }
 .tool-cards { display: grid; gap: 1rem; }
 .tool-cards article { min-width: 0; overflow-wrap: anywhere; }
+.tool-cards article, .operational-tools details { text-align: left; overflow-wrap: anywhere; min-width: 0; }
 .tool-cards dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .4rem 1rem; }
 .tool-cards dd { margin: 0; font-weight: 600; }
 .tool-checkbox { display: flex; align-items: baseline; gap: .6rem; }

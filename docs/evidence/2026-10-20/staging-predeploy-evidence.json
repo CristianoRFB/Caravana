@@ -1,13 +1,16 @@
 {
-  "checkedOn": "2026-10-20T16:10:39.393Z",
-  "projectId": "bdall-e3585",
-  "security": "PASS",
-  "securityTests": 56,
-  "team": "PASS",
-  "teamNamespacePlatformTests": 48,
   "files": {
-    "firestore.rules": "d3ff21085bd14c53109ae6a7ff2917caf38dacd878f37db72258482c05f3e840",
-    "firestore.indexes.json": "d38a1eb6ebd4e0f693e16954d6c9bce29490463a995bd79d3aff0530f3bf7b49"
+    "firestore.indexes.json": "d38a1eb6ebd4e0f693e16954d6c9bce29490463a995bd79d3aff0530f3bf7b49",
+    "firestore.rules": "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81"
   },
-  "productionWrites": 0
+  "productionWrites": 0,
+  "functionalEnforcementEvidence": "final-functional-tools-seventh.log",
+  "teamEvidence": "final-staging-team.log",
+  "projectId": "bdall-e3585",
+  "team": "PASS",
+  "teamNamespacePlatformTests": 49,
+  "security": "PASS",
+  "securityEvidence": "final-staging-security.log",
+  "securityTests": 56,
+  "checkedOn": "2026-10-20T18:24:46.0527762Z"
 }

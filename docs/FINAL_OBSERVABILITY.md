@@ -1,0 +1,11 @@
+# Diagnóstico e verificação gratuita — 2026-10-20
+
+PASS local: diagnóstico temporário em memória, no máximo 50 códigos padronizados/categorias/minutos, sem mensagem, payload, UID, organização, link, credencial ou envio automático. Limpa ao trocar contexto/sair; falhas tardias de writes anteriores são descartadas. Exportação JSON explícita e local. Error boundary orienta conferir histórico antes de repetir; não inventa rollback de operação confirmada.
+
+8 testes puros/pendências/health PASS; 39 regressões de writes PASS; 8 E2E de landing/diagnóstico nas quatro larguras PASS, incluindo exportação sem conteúdo privado e limpeza após logout. Capturas sintéticas em evidence/2026-10-20/final-ui. Primeira tentativa de teste falhou por PATH sem vitest ao executar Node diretamente; repetida via npm e aprovada, log anterior preservado. Não há falha funcional encoberta.
+
+`node scripts/staging-health.mjs [SHA40]` faz somente GET público do staging fixo, confere identidade, CSP/noindex/DENY e hashes/tamanho de todos os assets do manifesto. Recusa outro alvo e caminhos externos. PASS no runtime19c6564/11 assets. Não autentica, consulta Firestore ou confirma jornadas; não é serviço agendado nem alerta remoto. Executar antes/depois de publicação de staging e em diagnóstico manual. Monitoramento proativo exige responsável/canal real e política de operação ainda não definidos.
+
+Auditoria obrigatória confirmada no servidor permanece nos módulos de operações/financeiro/equipe/planos/roteiros. Esses eventos não são substituídos pelo buffer local. Não anexar logs brutos ou comprovantes a chamados; exportação do diagnóstico é deliberadamente mínima.
+
+BLOCKED release: proteção de abuso no tráfego público precisa de mecanismo verificável no ambiente definitivo (por exemplo App Check com provedor autorizado e rollout compatível), não apenas limitação visual. Não ativado na produção nem anunciado como entregue. Spark mantém o orçamento sem garantir disponibilidade sob abuso.

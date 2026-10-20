@@ -48,6 +48,7 @@ test("separate SaaS landing uses the approved catalog, assisted onboarding and f
   // Check individual elements too: root overflow clipping must not conceal a broken layout.
   expect(await page.locator(".saas-page").evaluate((root) => [...root.querySelectorAll("h1,h2,h3,.saas-plan,.saas-button,.saas-preview")].every((element) => { const rect = element.getBoundingClientRect(); return rect.left >= -1 && rect.right <= window.innerWidth + 1 && element.scrollWidth <= element.clientWidth + 1; }))).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("saas-landing.png"), fullPage: true });
+  await page.locator("#planos").screenshot({path:testInfo.outputPath("saas-plans.png")});
   await page.getByRole("link", { name: "Explorar demonstração local", exact: true }).click();
   await expect(page).toHaveURL(/\/o\/demo-organizadora-a$/);
   await expect(page.locator(".topbar .brand")).toContainText("Organizadora Demonstrativa A");

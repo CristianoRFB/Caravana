@@ -1,0 +1,22 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/pending-writes.test.ts tests/data.integration.test.ts tests/membership-rules.test.ts tests/tenant-access.integration.test.ts
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+
+ Test Files  4 passed (4)
+      Tests  39 passed (39)
+   Start at  15:14:49
+   Duration  15.38s (tests 92%, import 5%, transform 2%)
+
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+Stopped test emulator started by this run (PID 24644).

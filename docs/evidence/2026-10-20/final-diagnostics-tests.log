@@ -1,0 +1,17 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/diagnostics.test.ts tests/pending-writes.test.ts tests/staging-health.test.ts
+'vitest' não é reconhecido como um comando interno
+ou externo, um programa operável ou um arquivo em lotes.
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/diagnostics.test.ts tests/pending-writes.test.ts tests/staging-health.test.ts" exited with code 1
+Stopped test emulator started by this run (PID 24800).

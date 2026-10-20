@@ -50,7 +50,7 @@ export default function TenantCommercial({ organizationId, canManage }: { organi
       {validUsage && policy && (usage!.publishedCaravans >= policy.limits.activeCaravans || usage!.activeMembers >= policy.limits.internalUsers) && <p>Um limite de crescimento foi atingido. Arquivar uma caravana ou revogar um acesso libera o respectivo recurso; um downgrade preserva o que já existe, mesmo acima do novo limite.</p>}
       <p>Pagamentos e alterações de contrato são tratados manualmente com a administração da plataforma. Esta página não efetua cobranças nem altera o preço cobrado dos passageiros.</p>
       <p>Os planos incluem os recursos implementados de caravanas, inscrições, comprovantes, check-in, importação, financeiro e identidade pública. A disponibilidade operacional depende também das permissões e configurações da organização.</p>
-      {current.planId && <><h2>Recursos do plano</h2><ul>{PlanCatalog[current.planId].features.map(feature=><li key={feature}>{COMMERCIAL_FEATURE_LABELS[feature]}</li>)}</ul><p>Novos relatórios são incluídos no Pro e Premium. Roteiros e modelos são incluídos no Premium. A atribuição comercial atualizada confirma essas capacidades no servidor; após downgrade ou suspensão, o histórico continua sob as permissões da organização.</p></>}
+      {current.planId && <><h2>Recursos do plano</h2><ul>{PlanCatalog[current.planId].features.map(feature=><li key={feature}>{COMMERCIAL_FEATURE_LABELS[feature]}</li>)}</ul><p>Novos relatórios são incluídos no Pro e Premium. Roteiros e modelos são incluídos no Premium. Recursos adicionais são liberados na ativação assistida do plano; após downgrade ou suspensão, o histórico continua disponível aos acessos autorizados.</p></>}
     </>}
   </section>;
 }

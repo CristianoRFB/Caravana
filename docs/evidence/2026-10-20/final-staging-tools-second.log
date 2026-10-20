@@ -1,0 +1,20 @@
+
+> caravana-77@0.1.0 test:staging
+> vitest run --mode staging --config vitest.staging.config.ts staging-tests/functional-tools.test.ts
+
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ✓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > preserves prices, quotas and the first owner across independent organizations 1128ms
+ ✓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > Essential cannot enable the new paid tools by calling SDK directly 294ms
+ ✓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > Pro saves an audited private report with replay and exports without passenger details 1324ms
+ ✓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > Premium creates 20 tasks, reverses completion and rejects stale revisions 1210ms
+ ✓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > A cannot read B's report and B cannot read Premium's private worklist 94ms
+ ✓ staging-tests/functional-tools.test.ts > three real staging plans with synthetic data only > downgrade and suspension retain historical tools but block new mutations 774ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  15:25:54
+   Duration  7.96s (tests 92%, import 5%, transform 3%)
+
+JSON report written to C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana/.firebase/staging-vitest-report.json

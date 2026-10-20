@@ -12,8 +12,8 @@ Auditoria inicial em13fe987, antes de anunciar diferenças novas. Fontes: src/li
 | Nome/cores/imagem/links de organizadora — CORE | Sim | Sim | Sim | Sim | Identidade própria | F5_ACCEPTANCE.md |
 | Equipe/convites/último owner/suporte consentido — CORE | Sim | Sim | Sim | Sim | Acessos necessários e seguros | TEAM_INVITATIONS.md |
 | Auth/RBAC/isolation/quotas/auditoria obrigatória — CORE | Sim | Sim | Sim | Sim | Segurança e integridade; nunca vendidos como upgrade | F2/F6 |
-| Relatórios operacionais salvos e compartilhados/exportáveis — GROWTH | Sim, PASS local | Não | Sim | Incluído do Pro | Fotografia por data da viagem, embarque e valores conhecidos, sem lista de passageiros, recuperável pela equipe |36 direcionados+16 E2E quatro larguras |
-| Roteiros de tarefas por caravana e modelos reutilizáveis — PREMIUM_CANDIDATE aprovado localmente | Sim, PASS local | Não | Não | Sim | Reutilizar preparação e acompanhar trabalho da equipe; não substitui check-in/documentos/controles de segurança | SDK/Rules/20 tarefas/legado/downgrade;16 E2E |
+| Relatórios operacionais salvos e compartilhados/exportáveis — GROWTH | Sim, PASS local e SDK staging | Não | Sim | Incluído do Pro | Fotografia por data da viagem, embarque e valores conhecidos, sem lista de passageiros, recuperável pela equipe |36 direcionados+16 E2E quatro larguras;6 SDK reais em bdall-e3585 |
+| Roteiros de tarefas por caravana e modelos reutilizáveis — PREMIUM_CANDIDATE aprovado localmente | Sim, PASS local e SDK staging | Não | Não | Sim | Reutilizar preparação e acompanhar trabalho da equipe; não substitui check-in/documentos/controles de segurança | SDK/Rules/20 tarefas/legado/downgrade;16 E2E;6 SDK staging |
 | Cobrança automática/integrações bancárias — NOT_IMPLEMENTED | Não | Não | Não | Não | Fora do escopo; não anunciar | Proibição vigente |
 | Trial público/anual/domínio próprio/automação de mensagens — DEFERRED | Não disponíveis | Não | Não | Não | Não anunciar como entregue | COMMERCIAL_POLICY/F5 |
 
