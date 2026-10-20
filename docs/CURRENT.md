@@ -1,5 +1,8 @@
 # Estado atual — Caravana 77
 
+**Retomada atual — 2026-10-20:** HEAD recuperado e remoto conferido `bc2c3d13a966fe032295a4f79cb185c9e9ae2219`, branch oficial preservada, checkout inicial limpo. O usuário autorizou concluir equipe/convites no Cloud sem aguardar o WIP inacessível do LAB04-PC23; o código local não foi recuperado. Também autorizou staging e deploy condicional aos 14 gates, sem nova confirmação rotineira. As restrições históricas abaixo de “não reimplementar”/“nenhum deploy autorizado” são substituídas por essa instrução; preservação absoluta do Ítalo, ausência de migração real e gates continuam obrigatórios. Equipe implementada;32 testes direcionados PASS, E2E em validação. Ver TEAM_INVITATIONS.md. F6 ainda IN_PROGRESS até regressão integral; produção BLOCKED por staging, backup/restore e compatibilidade real não comprovados.
+
+
 GOAL MASTER de 2026-10-16 em execução. Branch codex/caravana77-commercial-v1-20261016, base oficial fa4d1381274a56104406fc7b5895971b76044e62.
 
 **Retomada Cloud encerrada em 2026-10-20:** demo comercial, vagas públicas e landing /saas implementadas;216 SDK/Rules+13 runner+8 Auth+6 Storage+148 E2E PASS. F6 geral IN_PROGRESS por equipe/convites não sincronizados do LAB04-PC23; contato oficial e homologação real pendentes. Estado detalhado: F6_ACCEPTANCE.md, CLOUD_REGRESSION.md e CLOUD_HANDOFF.md. Nenhuma escrita real/deploy/migração/merge.

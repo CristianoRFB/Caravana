@@ -5,6 +5,7 @@ import { doc, getDoc, serverTimestamp, setDoc, updateDoc, writeBatch, type Fires
 import { pendingWrites } from "../src/lib/pending-writes";
 import type { Caravan } from "../src/lib/types";
 const runtime = vi.hoisted(() => ({ db: null as Firestore | null, auth: { currentUser: { uid: "owner-a" } } })); vi.mock("../src/lib/firebase", () => runtime);
+import { issueTeamInvitation, acceptTeamInvitation } from "../src/lib/team-invitations";
 import { createLimitedCaravan, updateLimitedCaravan, saveInternalMember, quotaOperationId } from "../src/lib/quota-operations";
 let env: RulesTestEnvironment;
 const payload: Omit<Caravan, "id" | "organizationId" | "reservedSeats"> = { name: "Caravana sintética", slug: "same-slug", event: "Fictício", description: "Dados sintéticos", date: "2026-11-05", departureTime: "06:00", returnTime: "22:00", city: "Cidade fictícia", destination: "Destino fictício", address: "Local fictício", priceCents: 8500, capacity: 60, status: "published", pixKey: "", pixReceiver: "", whatsapp: "", boardingPoints: [{ id: "point", name: "Terminal fictício", address: "", time: "06:00" }], benefits: [], rules: [], faqs: [], announcements: [] };
@@ -21,6 +22,14 @@ async function seed() {
       await setDoc(doc(database, `caravans/base-${org}`), { ...payload, organizationId: org, reservedSeats: 1 });
     }
   }); runtime.db = env.authenticatedContext("owner-a").firestore();
+}
+async function enroll(uid: string, role: "staff" | "tenant_owner", reason: string) {
+  const issuer = runtime.auth.currentUser.uid;
+  const previous = await getDoc(doc(runtime.db!, "tenantInvitations/a/users", uid));
+  const generation = await issueTeamInvitation("a", uid, role, previous.data()?.generation || 0, Date.now() + 86400000, reason);
+  runtime.db = env.authenticatedContext(uid).firestore(); runtime.auth.currentUser.uid = uid;
+  try { return await acceptTeamInvitation("a", uid, generation, role); }
+  finally { runtime.db = env.authenticatedContext(issuer).firestore(); runtime.auth.currentUser.uid = issuer; }
 }
 async function read(path: string) { return (await getDoc(doc(runtime.db!, path))).data()!; }
 describe("quota-linked caravan and internal membership operations", () => {
@@ -78,12 +87,12 @@ describe("quota-linked caravan and internal membership operations", () => {
     expect((await read("caravans/base-a")).capacity).toBe(59);
   });
   it("protects final internal slot, allows audited revoke/reactivate and never removes the last owner", async () => {
-    await seed(); await saveInternalMember("a", "staff-one", "staff", "active", "Convite sintético conferido");
-    await expect(saveInternalMember("a", "staff-two", "staff", "active", "Outro convite sintético")).rejects.toThrow("plano");
+    await seed(); await enroll("staff-one", "staff", "Convite sintético conferido");
+    await expect(enroll("staff-two", "staff", "Outro convite sintético")).rejects.toThrow("plano");
     await expect(saveInternalMember("a", "owner-a", "staff", "active", "Troca de papel")).rejects.toThrow("responsável ativo");
     const revoke = quotaOperationId(); await saveInternalMember("a", "staff-one", "staff", "revoked", "Revogação sintética", revoke); await saveInternalMember("a", "staff-one", "staff", "revoked", "Revogação sintética", revoke);
     expect((await read("tenantUsage/a")).activeMembers).toBe(1); expect((await read("memberships/staff-one/organizations/a")).status).toBe("revoked");
-    await saveInternalMember("a", "staff-two", "staff", "active", "Novo convite conferido"); expect((await read("tenantUsage/a")).activeMembers).toBe(2);
+    await enroll("staff-two", "staff", "Novo convite conferido"); expect((await read("tenantUsage/a")).activeMembers).toBe(2);
   });
   it("denies direct owner counter/status bypass and rejects B/global writes into the existing tenant", async () => {
     await seed(); await assertFails(updateDoc(doc(runtime.db!, "caravans/base-a"), { status: "archived" })); await assertFails(updateDoc(doc(runtime.db!, "tenantUsage/a"), { publishedCaravans: 0 }));
@@ -107,7 +116,7 @@ describe("quota-linked caravan and internal membership operations", () => {
   });
   it("serializes competing members at the last internal slot", async () => {
     await seed();
-    const results = await Promise.allSettled([saveInternalMember("a", "one", "staff", "active", "Convite sintético um"), saveInternalMember("a", "two", "staff", "active", "Convite sintético dois")]);
+    const results = await Promise.allSettled([enroll("one", "staff", "Convite sintético um"), enroll("two", "staff", "Convite sintético dois")]);
     expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
     expect((await read("tenantUsage/a")).activeMembers).toBe(2);
   });

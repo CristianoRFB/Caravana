@@ -1,0 +1,14 @@
+
+> caravana-77@0.1.0 build:public-preview
+> tsc -b && node scripts/build-public-preview.mjs
+
+vite v6.4.3 building for production...
+transforming...
+✓ 1594 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-public-preview/public-preview/index.html    0.43 kB │ gzip:  0.31 kB
+dist-public-preview/assets/index-Dw7hG0FD.css   45.64 kB │ gzip: 10.98 kB
+dist-public-preview/assets/index-t8RxE2m1.js   279.45 kB │ gzip: 88.42 kB
+✓ built in 3.50s
+Public preview verified: 3 files; no Firebase runtime/configuration.

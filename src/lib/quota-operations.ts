@@ -1,6 +1,7 @@
 import { doc, getDocFromServer, serverTimestamp, type DocumentData } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { runTransaction } from "./tracked-firestore";
+import { refreshOwnTenantAccess } from "./tenant-access";
 import { trackWrite } from "./pending-writes";
 import { importDigest } from "./import-identity";
 import type { Caravan } from "./types";
@@ -8,7 +9,7 @@ import type { PublicEntitlements } from "./commercial-data";
 export const quotaOperationId = () => crypto.randomUUID().replaceAll("-", "");
 interface Counters { publishedCaravans: number; activeMembers: number; activeOwners: number }
 export function quotaGrowthAllowed(policy: PublicEntitlements | null, now = Date.now()) { return Boolean(policy?.growthEnabled && (!policy.growthUntil || policy.growthUntil.toMillis() > now)); }
-function counters(data: DocumentData): Counters {
+export function counters(data: DocumentData): Counters {
   const value = { publishedCaravans: data.publishedCaravans, activeMembers: data.activeMembers, activeOwners: data.activeOwners };
   if (data.version !== "commercial-v1" || Object.values(value).some((count) => !Number.isSafeInteger(count) || count < 0) || value.activeOwners < 1 || value.activeOwners > value.activeMembers) throw new Error("O inventário comercial precisa ser conferido. Nenhum contador foi alterado.");
   return value;
@@ -77,6 +78,7 @@ export async function saveInternalMember(organizationId: string, uid: string, ro
         after.activeMembers += Number(willBeActive) - Number(wasActive);
         after.activeOwners += Number(willBeActive && role === "tenant_owner") - Number(wasActive && original?.role === "tenant_owner");
         const policy = policySnapshot.exists() ? policySnapshot.data() as PublicEntitlements : null;
+        if (after.activeMembers > before.activeMembers && organization.data()?.status !== "suspended") throw new Error("Envie um convite e aguarde o aceite do destinatário para conceder acesso.");
         if (after.activeMembers > before.activeMembers && organization.data()?.status === "suspended") throw new Error("A organização está suspensa para novos integrantes. O histórico foi preservado.");
         if (after.activeOwners < 1) throw new Error("Mantenha pelo menos um responsável ativo na organização.");
         if (after.activeMembers < after.activeOwners || after.activeMembers < 0 || (after.activeMembers > before.activeMembers && (!quotaGrowthAllowed(policy) || after.activeMembers > policy!.limits.internalUsers))) throw new Error("O plano não permite incluir mais pessoas na equipe ou o inventário está inconsistente.");
@@ -85,6 +87,7 @@ export async function saveInternalMember(organizationId: string, uid: string, ro
         if (after.activeMembers !== before.activeMembers || after.activeOwners !== before.activeOwners) tx.update(usageRef, { ...after, updatedAt: serverTimestamp(), lastQuotaOperationId: operationId });
         tx.set(audit, { organizationId, entityId: uid, kind: "member", action: "member_saved", actorUid, at: serverTimestamp(), requestHash, reason: note, before, after, beforeStatus: original?.status || "absent", afterStatus: status, beforeRole: original?.role || "", afterRole: role });
       });
-    } catch (cause) { try { const confirmed = await getDocFromServer(audit); if (confirmed.exists() && matches(confirmed.data())) return; } catch { /* original failure remains */ } throw cause; }
+    } catch (cause) { try { const confirmed = await getDocFromServer(audit); if (!(confirmed.exists() && matches(confirmed.data()))) throw cause; } catch { throw cause; } }
+    if (uid === actorUid) await refreshOwnTenantAccess(uid, organizationId);
   });
 }

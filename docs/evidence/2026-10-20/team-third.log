@@ -1,0 +1,78 @@
+
+> caravana-77@0.1.0 test:team
+> node scripts/run-local-tests.mjs team
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/team-invitations.integration.test.ts --reporter verbose
+
+ RUN  v5.0.1 /workspace/Caravana
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > issues without granting access, accepts once, keeps membership/directory/inbox/counters consistent 1932ms
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects the wrong UID, role and a complete SDK privilege-escalation batch
+[2026-10-20T00:35:58.627Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3aca5e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L252:32 for 'create' @ L252, evaluation error at L252:32 for 'update' @ L252, evaluation error at L267:32 for 'create' @ L267, evaluation error at L267:32 for 'update' @ L267, evaluation error at L486:24 for 'create' @ L486, evaluation error at L489:24 for 'create' @ L489, evaluation error at L499:24 for 'update' @ L499, evaluation error at L502:24 for 'update' @ L502, evaluation error at L349:32 for 'create' @ L349, evaluation error at L359:24 for 'create' @ L359, evaluation error at L349:32 for 'update' @ L349, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L373, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L380, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L343, false for 'update' @ L345, false for 'update' @ L252, false for 'create' @ L486, false for 'update' @ L373, false for 'update' @ L380, false for 'create' @ L343
+
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects the wrong UID, role and a complete SDK privilege-escalation batch
+[2026-10-20T00:35:58.738Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3aca61 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L252:32 for 'create' @ L252, evaluation error at L252:32 for 'update' @ L252, evaluation error at L267:32 for 'create' @ L267, evaluation error at L267:32 for 'update' @ L267, evaluation error at L486:24 for 'create' @ L486, evaluation error at L489:24 for 'create' @ L489, evaluation error at L499:24 for 'update' @ L499, evaluation error at L502:24 for 'update' @ L502, evaluation error at L349:32 for 'create' @ L349, evaluation error at L359:24 for 'create' @ L359, evaluation error at L349:32 for 'update' @ L349, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L373, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L380, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L343, false for 'update' @ L345, false for 'update' @ L252
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects the wrong UID, role and a complete SDK privilege-escalation batch 589ms
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > resends in a new generation, rejects stale acceptance and preserves both immutable issue receipts
+[2026-10-20T00:35:59.300Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3aca7e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L252:32 for 'create' @ L252, evaluation error at L252:32 for 'update' @ L252, evaluation error at L267:32 for 'create' @ L267, evaluation error at L267:32 for 'update' @ L267, evaluation error at L486:24 for 'create' @ L486, evaluation error at L489:24 for 'create' @ L489, evaluation error at L499:24 for 'update' @ L499, evaluation error at L502:24 for 'update' @ L502, evaluation error at L349:32 for 'create' @ L349, evaluation error at L359:24 for 'create' @ L359, evaluation error at L349:32 for 'update' @ L349, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L373, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L380, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L343, false for 'update' @ L345, false for 'update' @ L252, false for 'create' @ L486, false for 'update' @ L373, false for 'update' @ L380, false for 'create' @ L343
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > resends in a new generation, rejects stale acceptance and preserves both immutable issue receipts 700ms
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > revokes idempotently, prevents acceptance, then permits a genuinely new generation 668ms
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects expired invitation through service and SDK; records expiry and allows owner reissue
+[2026-10-20T00:36:00.460Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acab8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L252:32 for 'create' @ L252, evaluation error at L252:32 for 'update' @ L252, evaluation error at L267:32 for 'create' @ L267, evaluation error at L267:32 for 'update' @ L267, evaluation error at L486:24 for 'create' @ L486, evaluation error at L489:24 for 'create' @ L489, evaluation error at L499:24 for 'update' @ L499, evaluation error at L502:24 for 'update' @ L502, evaluation error at L349:32 for 'create' @ L349, evaluation error at L359:24 for 'create' @ L359, evaluation error at L349:32 for 'update' @ L349, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L373, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L380, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L343, false for 'update' @ L345, false for 'update' @ L252, false for 'create' @ L486, false for 'update' @ L373, false for 'update' @ L380, false for 'create' @ L343
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects expired invitation through service and SDK; records expiry and allows owner reissue 542ms
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > serializes two guests at the final team slot and leaves the loser pending until a member is revoked 619ms
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > does not reactivate a revoked member by replaying historical acceptance; requires a new invitation 631ms
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > enforces authoritative suspension even if public policy/projection are stale and retains pending invitations
+[2026-10-20T00:36:02.558Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb2f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L252:32 for 'create' @ L252, evaluation error at L252:32 for 'update' @ L252, evaluation error at L267:32 for 'create' @ L267, evaluation error at L267:32 for 'update' @ L267, evaluation error at L486:24 for 'create' @ L486, evaluation error at L489:24 for 'create' @ L489, evaluation error at L499:24 for 'update' @ L499, evaluation error at L502:24 for 'update' @ L502, evaluation error at L349:32 for 'create' @ L349, evaluation error at L359:24 for 'create' @ L359, evaluation error at L349:32 for 'update' @ L349, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L373, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L380, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L343, false for 'update' @ L345, false for 'update' @ L252, false for 'create' @ L486, false for 'update' @ L373, false for 'update' @ L380, false for 'create' @ L343
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > enforces authoritative suspension even if public policy/projection are stale and retains pending invitations 755ms
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > blocks acceptance after downgrade/quota exhaustion while permitting revocation and retaining history
+[2026-10-20T00:36:03.281Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb5b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L252:32 for 'create' @ L252, evaluation error at L252:32 for 'update' @ L252, evaluation error at L267:32 for 'create' @ L267, evaluation error at L267:32 for 'update' @ L267, evaluation error at L486:24 for 'create' @ L486, evaluation error at L489:24 for 'create' @ L489, evaluation error at L499:24 for 'update' @ L499, evaluation error at L502:24 for 'update' @ L502, evaluation error at L349:32 for 'create' @ L349, evaluation error at L359:24 for 'create' @ L359, evaluation error at L349:32 for 'update' @ L349, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L373, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L380, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L343, false for 'update' @ L345, false for 'update' @ L267, false for 'update' @ L373, false for 'update' @ L380, false for 'update' @ L252, false for 'create' @ L486, false for 'create' @ L343
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > blocks acceptance after downgrade/quota exhaustion while permitting revocation and retaining history 750ms
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery
+[2026-10-20T00:36:03.687Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb73 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L267:32 for 'update' @ L267, false for 'update' @ L267
+
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery
+[2026-10-20T00:36:03.771Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb7b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L267:32 for 'update' @ L267, false for 'update' @ L267
+
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery
+[2026-10-20T00:36:03.867Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb83 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L267:32 for 'update' @ L267, false for 'update' @ L267
+
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery
+[2026-10-20T00:36:03.985Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb8b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L267:32 for 'update' @ L267, false for 'update' @ L267
+
+stderr | tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery
+[2026-10-20T00:36:04.057Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x2c3acb8d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L262
+
+ ✓ tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery 695ms
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  00:35:48
+   Duration  15.81s (tests 98%, import 1%, transform 1%)
+
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

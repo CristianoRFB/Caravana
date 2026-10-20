@@ -1,0 +1,109 @@
+
+> caravana-77@0.1.0 test:team:e2e
+> node scripts/run-local-tests.mjs team-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:16130) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:16166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:16184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop-1440] › e2e/team.spec.ts:34:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (45.4s)
+(node:16283) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop-1440] › e2e/team.spec.ts:45:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (33.5s)
+
+
+  1) [desktop-1440] › e2e/team.spec.ts:34:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Papel do convite', { exact: true })
+
+
+      18 | }
+      19 | async function issue(page: Page, uid: string, role = "staff") {
+    > 20 |   await page.getByLabel("UID da conta convidada", { exact: true }).fill(uid); await page.getByLabel("Papel do convite", { exact: true }).selectOption(role); await page.getByLabel("Motivo do convite", { exact: true }).fill("UID conferido para teste sintético");
+         |                                                                                                                                          ^
+      21 |   await page.getByLabel("Conferi o UID de uma conta existente e o papel que desejo conceder.", { exact: true }).check(); await page.getByRole("button", { name: "Criar convite", exact: true }).click(); await expect(page.getByText("Convite registrado. Acesso só será concedido após o aceite do destinatário.", { exact: true })).toBeVisible();
+      22 | }
+      23 | const member = (page: Page, uid: string) => page.getByRole("article", { name: `Integrante ${uid}`, exact: true });
+        at issue (/workspace/Caravana/e2e/team.spec.ts:20:138)
+        at /workspace/Caravana/e2e/team.spec.ts:35:71
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/team-owner-invites-the-exa-3a0fe-s-an-open-panel-immediately-desktop-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/team-owner-invites-the-exa-3a0fe-s-an-open-panel-immediately-desktop-1440/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/team-owner-invites-the-exa-3a0fe-s-an-open-panel-immediately-desktop-1440/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/team-owner-invites-the-exa-3a0fe-s-an-open-panel-immediately-desktop-1440/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop-1440] › e2e/team.spec.ts:45:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member 
+
+    Test was interrupted.
+
+    Error: locator.selectOption: Test ended.
+    Call log:
+      - waiting for getByLabel('Papel do convite', { exact: true })
+
+
+      18 | }
+      19 | async function issue(page: Page, uid: string, role = "staff") {
+    > 20 |   await page.getByLabel("UID da conta convidada", { exact: true }).fill(uid); await page.getByLabel("Papel do convite", { exact: true }).selectOption(role); await page.getByLabel("Motivo do convite", { exact: true }).fill("UID conferido para teste sintético");
+         |                                                                                                                                          ^
+      21 |   await page.getByLabel("Conferi o UID de uma conta existente e o papel que desejo conceder.", { exact: true }).check(); await page.getByRole("button", { name: "Criar convite", exact: true }).click(); await expect(page.getByText("Convite registrado. Acesso só será concedido após o aceite do destinatário.", { exact: true })).toBeVisible();
+      22 | }
+      23 | const member = (page: Page, uid: string) => page.getByRole("article", { name: `Integrante ${uid}`, exact: true });
+        at issue (/workspace/Caravana/e2e/team.spec.ts:20:138)
+        at /workspace/Caravana/e2e/team.spec.ts:46:71
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop-1440] › e2e/team.spec.ts:34:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately 
+  1 interrupted
+    [desktop-1440] › e2e/team.spec.ts:45:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member 
+  6 did not run
+⚠  Script exited unsuccessfully (code 130)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320" exited with code 130

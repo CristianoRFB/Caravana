@@ -1,0 +1,13 @@
+{
+  "checkedOn": "2026-10-20",
+  "scope": "Read-only project metadata; no configuration change or deployment",
+  "project": "caravana-77",
+  "subdomain": "caravana-77.pages.dev",
+  "domains": ["caravana-77.pages.dev"],
+  "sourceType": null,
+  "productionBranch": "main",
+  "production": {"id": "4d069e0a-344a-415a-ae41-aa314df10ace", "url": "https://4d069e0a.caravana-77.pages.dev", "createdOn": "2026-09-29T18:18:18.819148Z", "status": "success", "commitHash": "10f30a0c1d05605cb1cd6fba0007ee4dc35d465b", "commitDirty": true},
+  "latestPreview": {"id": "0141fb45-4f60-4e3c-b753-d2303d10dfd6", "url": "https://0141fb45.caravana-77.pages.dev", "createdOn": "2026-10-09T21:35:49.82599Z", "status": "success", "commitHash": "", "commitDirty": false},
+  "environmentVariableNames": {"preview": [], "production": []},
+  "staticPreviewAssetAccess": {"method": "POST", "endpoint": "/pages/assets/check-missing", "httpStatus": 403, "errorCode": 8000013, "message": "Authorization failed", "assetsUploaded": false, "newProjectCreated": false}
+}

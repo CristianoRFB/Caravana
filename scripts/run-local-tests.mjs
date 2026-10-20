@@ -9,6 +9,8 @@ const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/fireba
 const suite = process.argv[2] || "unit";
 const commands = {
   unit: "vitest run",
+  "team-e2e": "playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320",
+  team: "vitest run tests/team-invitations.integration.test.ts tests/quota-operations.integration.test.ts tests/membership-rules.test.ts --reporter verbose",
   "landing-e2e": "playwright test e2e/commercial-landing.spec.ts",
   "public-availability": "vitest run tests/public-availability.test.ts tests/data.integration.test.ts tests/firestore.rules.test.ts",
   "public-availability-e2e": "playwright test e2e/public-availability.spec.ts e2e/reservation.spec.ts e2e/demo.spec.ts e2e/branding.spec.ts --project desktop-1440 --project mobile-320",

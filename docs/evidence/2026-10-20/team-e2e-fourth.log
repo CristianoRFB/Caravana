@@ -1,0 +1,134 @@
+
+> caravana-77@0.1.0 test:team:e2e
+> node scripts/run-local-tests.mjs team-e2e
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320
+[WebServer] (node:19231) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:19263) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:19329) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop-1440] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (16.8s)
+  ✘  2 [desktop-1440] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (19.7s)
+(node:19656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [desktop-1440] › e2e/team.spec.ts:58:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (11.6s)
+  ✓  4 [desktop-1440] › e2e/team.spec.ts:69:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (7.1s)
+(node:19882) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [mobile-320] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (7.7s)
+  ✘  6 [mobile-320] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (16.2s)
+(node:20046) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  7 [mobile-320] › e2e/team.spec.ts:58:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (11.5s)
+  ✓  8 [mobile-320] › e2e/team.spec.ts:69:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (9.7s)
+
+
+  1) [desktop-1440] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Conta ainda não autorizada', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Conta ainda não autorizada', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Conta ainda não autorizada', exact: true })
+
+
+      52 |   const invitation = page.getByRole("article", { name: `Convite ${seed.accounts.passenger.uid}`, exact: true }); await invitation.getByRole("button", { name: "Reenviar convite", exact: true }).click(); await page.getByRole("combobox", { name: "Papel do convite", exact: true }).selectOption("tenant_owner"); await page.getByLabel("Motivo do convite", { exact: true }).fill("Reenvio com novo papel conferido"); await page.getByLabel("Conferi o UID de uma conta existente e o papel que desejo conceder.", { exact: true }).check(); await page.getByRole("button", { name: "Confirmar reenvio", exact: true }).click(); await expect(invitation).toContainText("Responsável · Pendente · geração 2");
+      53 |   const context = await browser.newContext({ viewport: page.viewportSize()! }); contexts.push(context); const guest = await context.newPage(); await protect(guest, context); await login(guest, "passenger"); await guest.goto("/conta/convites"); await guest.getByRole("button", { name: "Aceitar convite", exact: true }).click(); await expect(guest.getByText("Convite aceito. Seu acesso à organização foi registrado.", { exact: true })).toBeVisible();
+    > 54 |   const originalOwner = member(page, seed.accounts.owner.uid); await originalOwner.getByLabel(`Motivo da alteração de ${seed.accounts.owner.uid}`, { exact: true }).fill("Transferir a responsabilidade"); await originalOwner.getByRole("button", { name: "Revogar acesso", exact: true }).click(); await expect(page.getByRole("heading", { name: "Conta ainda não autorizada", exact: true })).toBeVisible();
+         |                                                                                                                                                                                                                                                                                                                                                                                                   ^
+      55 |   await guest.goto("/admin/equipe"); const own = member(guest, seed.accounts.passenger.uid); await own.getByRole("combobox", { name: `Papel de ${seed.accounts.passenger.uid}`, exact: true }).selectOption("staff"); await own.getByLabel(`Motivo da alteração de ${seed.accounts.passenger.uid}`, { exact: true }).fill("Teste de proteção do último owner"); await own.getByRole("button", { name: "Salvar papel", exact: true }).click(); await expect(guest.getByRole("alert")).toContainText("responsável ativo");
+      56 |   expect(await guest.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(guest.viewportSize()!.width);
+      57 | });
+        at /workspace/Caravana/e2e/team.spec.ts:54:387
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-desktop-1440/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile-320] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Conta ainda não autorizada', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Conta ainda não autorizada', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Conta ainda não autorizada', exact: true })
+
+
+      52 |   const invitation = page.getByRole("article", { name: `Convite ${seed.accounts.passenger.uid}`, exact: true }); await invitation.getByRole("button", { name: "Reenviar convite", exact: true }).click(); await page.getByRole("combobox", { name: "Papel do convite", exact: true }).selectOption("tenant_owner"); await page.getByLabel("Motivo do convite", { exact: true }).fill("Reenvio com novo papel conferido"); await page.getByLabel("Conferi o UID de uma conta existente e o papel que desejo conceder.", { exact: true }).check(); await page.getByRole("button", { name: "Confirmar reenvio", exact: true }).click(); await expect(invitation).toContainText("Responsável · Pendente · geração 2");
+      53 |   const context = await browser.newContext({ viewport: page.viewportSize()! }); contexts.push(context); const guest = await context.newPage(); await protect(guest, context); await login(guest, "passenger"); await guest.goto("/conta/convites"); await guest.getByRole("button", { name: "Aceitar convite", exact: true }).click(); await expect(guest.getByText("Convite aceito. Seu acesso à organização foi registrado.", { exact: true })).toBeVisible();
+    > 54 |   const originalOwner = member(page, seed.accounts.owner.uid); await originalOwner.getByLabel(`Motivo da alteração de ${seed.accounts.owner.uid}`, { exact: true }).fill("Transferir a responsabilidade"); await originalOwner.getByRole("button", { name: "Revogar acesso", exact: true }).click(); await expect(page.getByRole("heading", { name: "Conta ainda não autorizada", exact: true })).toBeVisible();
+         |                                                                                                                                                                                                                                                                                                                                                                                                   ^
+      55 |   await guest.goto("/admin/equipe"); const own = member(guest, seed.accounts.passenger.uid); await own.getByRole("combobox", { name: `Papel de ${seed.accounts.passenger.uid}`, exact: true }).selectOption("staff"); await own.getByLabel(`Motivo da alteração de ${seed.accounts.passenger.uid}`, { exact: true }).fill("Teste de proteção do último owner"); await own.getByRole("button", { name: "Salvar papel", exact: true }).click(); await expect(guest.getByRole("alert")).toContainText("responsável ativo");
+      56 |   expect(await guest.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(guest.viewportSize()!.width);
+      57 | });
+        at /workspace/Caravana/e2e/team.spec.ts:54:387
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-mobile-320/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-mobile-320/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-mobile-320/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-mobile-320/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/team-resend-changes-genera-f4ce3-the-last-responsible-member-mobile-320/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop-1440] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member 
+    [mobile-320] › e2e/team.spec.ts:50:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member 
+  6 passed (2.0m)
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/team.spec.ts --project desktop-1440 --project mobile-320" exited with code 1

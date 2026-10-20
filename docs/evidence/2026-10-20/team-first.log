@@ -1,0 +1,218 @@
+
+> caravana-77@0.1.0 test:team
+> node scripts/run-local-tests.mjs team
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/team-invitations.integration.test.ts --reporter verbose
+
+ RUN  v5.0.1 /workspace/Caravana
+
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > issues without granting access, accepts once, keeps membership/directory/inbox/counters consistent 550ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects the wrong UID, role and a complete SDK privilege-escalation batch 249ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > resends in a new generation, rejects stale acceptance and preserves both immutable issue receipts 138ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > revokes idempotently, prevents acceptance, then permits a genuinely new generation 94ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects expired invitation through service and SDK; records expiry and allows owner reissue 91ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > serializes two guests at the final team slot and leaves the loser pending until a member is revoked 108ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > does not reactivate a revoked member by replaying historical acceptance; requires a new invitation 83ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > enforces authoritative suspension even if public policy/projection are stale and retains pending invitations 85ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > blocks acceptance after downgrade/quota exhaustion while permitting revocation and retaining history 73ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+ × tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery 66ms
+   → Sem conexão. Aguarde para confirmar a operação de equipe.
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > issues without granting access, accepts once, keeps membership/directory/inbox/counters consistent
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ tests/team-invitations.integration.test.ts:50:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects the wrong UID, role and a complete SDK privilege-escalation batch
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:64:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > resends in a new generation, rejects stale acceptance and preserves both immutable issue receipts
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:72:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > revokes idempotently, prevents acceptance, then permits a genuinely new generation
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:81:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > rejects expired invitation through service and SDK; records expiry and allows owner reissue
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:89:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > serializes two guests at the final team slot and leaves the loser pending until a member is revoked
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:98:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > does not reactivate a revoked member by replaying historical acceptance; requires a new invitation
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:108:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > enforces authoritative suspension even if public policy/projection are stale and retains pending invitations
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:116:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > blocks acceptance after downgrade/quota exhaustion while permitting revocation and retaining history
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:125:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL  tests/team-invitations.integration.test.ts > UID-bound tenant invitations with transactional consent and quotas > isolates A/B/global/staff and rejects inbox or audit forgery
+Error: Sem conexão. Aguarde para confirmar a operação de equipe.
+ ❯ context src/lib/team-invitations.ts:21:68
+     19| function context() {
+     20|   if (!db || !auth?.currentUser) throw new Error("Entre com sua conta …
+     21|   if (typeof navigator !== "undefined" && !navigator.onLine) throw new…
+       |                                                                    ^
+     22|   return { database: db, actorUid: auth.currentUser.uid };
+     23| }
+ ❯ src/lib/team-invitations.ts:39:36
+ ❯ trackWrite src/lib/pending-writes.ts:11:22
+ ❯ Module.issueTeamInvitation src/lib/team-invitations.ts:38:10
+ ❯ invite tests/team-invitations.integration.test.ts:33:91
+ ❯ tests/team-invitations.integration.test.ts:133:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  10 failed (10)
+   Start at  00:33:54
+   Duration  10.08s (tests 96%, import 2%, transform 2%)
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/team-invitations.integration.test.ts --reporter verbose" exited with code 1

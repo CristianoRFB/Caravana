@@ -1,27 +1,41 @@
-# F7 — preparação segura, sem implantação
+# F7 — auditoria e preparação de release
 
-Estado: TODO infraestrutura/staging/release; este documento é preparação, não gate F7 PASS. F6 permanece IN_PROGRESS por equipe/convites não sincronizados. Nenhum serviço real foi configurado ou alterado.
+IN_PROGRESS para preparação; publicação no ambiente existente BLOCKED. A instrução de 2026-10-20 autoriza publicação sem confirmação adicional **somente** com todos os 14 gates comprovados. Não autoriza migração real do Ítalo, custos novos nem dados presumidos. Não há autorização rotineira pendente: faltam acesso efetivo e evidências.
 
-## Candidato e verificação
+## Auditoria real em leitura — 2026-10-20
 
-O candidato deve ser identificado por SHA e tree SHA na branch codex/caravana77-commercial-v1-20261016. Builds de produção são somente artefatos locais de inspeção; não executá-los contra dados reais nem publicá-los. O runtime de desenvolvimento e Playwright usam projeto demo-caravana77-test, Auth/Firestore em loopback e Rules candidatas.
+| Item solicitado | Resultado atual | Evidência/limite |
+|---|---|---|
+| Aplicação publicada | VERIFIED em leitura | Cloudflare GET: produção `4d069e0a-344a-415a-ae41-aa314df10ace`, sucesso, criada2026-09-29; trigger ad_hoc, commit10f30a0c, dirty=true. Git não prova versão publicada. |
+| Projeto Firebase | VERIFIED no bundle público | `caravana-af306`; manifesto production-public-readonly.json. Não é prova de acesso administrativo ou integridade dos dados. |
+| Firestore/Storage Rules implantadas | BLOCKED atualização | Captura histórica Firestore2026-10-16 fe594614… disponível; não houve GET administrativo atual. Storage/IAM/tokens antigos não auditados. |
+| Auth real | BLOCKED | Firebase CLI: nenhuma conta autorizada; gcloud ausente; runtime sem credenciais/identidades administrativas. Sem inventário de UIDs, provedores ou domínios Auth atuais. |
+| Índices reais | BLOCKED | Candidatos versionados, incluindo novo índice de auditoria da equipe; implantação/paridade não verificadas. |
+| Cloudflare | VERIFIED metadados do projeto | `caravana-77`, direct upload, source=null, production_branch=main, sem nomes de env vars em preview/production; nenhum PATCH/deploy. Outros projetos não alterados. |
+| Domínios e URLs | VERIFIED Pages | https://caravana-77.pages.dev e deployment imutável; único domínio listado. Preview anterior0141fb45, alias caravanasitalo; não homologado como staging desta versão. |
+| Dependências históricas | BLOCKED comprovação real | Contratos e fixtures legadas disponíveis; memberships/baselines/namespaces reais não inferidos nem criados. A candidata Storage exige memberships e permanece bloqueada para legado não conferido. |
+| Versões/hashes | VERIFIED assets públicos | JS principal90677dd6…; HTML525591aa…; outros hashes no manifesto. Coincidem com auditoria anterior. Sem leitura de documentos, links privados ou comprovantes. |
+| Backup/restore/rollback | BLOCKED real | Não há export protegido/completude/integridade/restore isolado comprovados. Código/assets não são backup Firestore/Auth/Storage. Procedimentos em RELEASE_AND_ROLLBACK.md; disponibilidade de deployment antigo não prova rollback coordenado testado. |
 
-Sequência de regressão do candidato: npm ci; npm run lint; npm run typecheck; npm run build; npm test; npm run test:demo; npm run test:storage; npm run test:e2e. Executar suites de emuladores em sequência, sem npm run demo concorrente e sem reutilizar instâncias preexistentes. Node24/Java21 usados no Cloud. Gate de convites exige código e casos sincronizados além destas suites.
+A auditoria cobre fatos observáveis, não é homologação de produção. Cinco categorias integralmente identificadas (aplicação, projeto no bundle, Pages, URLs e assets), cinco com bloqueadores (Rules, Auth, índices, legado e backup/rollback): **5/10, 50% da identificação**, não 50% de prontidão de release.
 
-O CI existente executa lint/typecheck/Rules/build em main/PR; a branch de trabalho não dispara esse workflow por push. Não houve alteração dos gatilhos nem execução de Actions real nesta retomada. Auth, Storage e E2E precisam ser adicionados/conferidos em revisão futura de CI antes de alegar cobertura remota equivalente. Nunca disponibilizar credenciais de produção a jobs sintéticos. O runner Storage agora pré-carrega um tratamento estrito de GET local para o projeto demo quando Firebase CLI ignora NO_PROXY; CLOUD_REGRESSION.md documenta diagnóstico e13+6 testes, sem modificar Rules.
+## Staging e gate aplicável
 
-## Pré-condições de staging e release
+Staging backend independente BLOCKED: nenhum projeto Firebase isolado administrativo conectado para implantar Auth/Rules/Storage/índices, nenhuma restauração real comprovada. Os emuladores usam exclusivamente `demo-caravana77-test`; não se publicam emuladores nem configuração demo em domínio remoto. A demonstração local funciona com dados fictícios e marcas/planos A×B. Uma prévia pública estática isolada, se publicada, será identificada separadamente e não contará como STAGING_VERIFIED do SaaS.
 
-1. Obter autorização específica para criar/configurar staging isolado e implantar candidatos; acesso ao Cloud não concede essa autorização.
-2. Definir projeto separado, identidades sintéticas e política de retenção; não copiar PII/comprovantes do cliente.
-3. Planejar versão coordenada de frontend, Rules e índices. Não aplicar baseline comercial, memberships ou namespaces do legado pelo cliente.
-4. Conferir inventário/marker de namespace e schema por export administrativo autorizado. Não inferir inventário completo nem backup de dados a partir de Git/bundle/ZIP de código.
-5. Documentar backup autorizado dos dados reais e ensaio de restore em destino isolado antes de qualquer migração/release que os afete.
-6. Validar compatibilidade dos links, IDs, administradores, Pix, financeiro e documentos reais em procedimento autorizado e sem operações financeiras reais de teste.
-7. Fazer revisão dos gates e aprovar janela/canário/rollback. Um rollback só do frontend não desfaz dados nem garante compatibilidade de Rules.
+Frontend, Firestore Rules, Storage Rules e índices precisam ser validados juntos em destino separado. O cliente não cria inventários comerciais de tenants existentes. Não aplicar a candidata sobre o legado enquanto UIDs, admins, memberships, links, comprovantes e baselines não estiverem comprovados. Não relaxar segurança para contornar o bloqueio.
 
-## Operação e evidência mínima futura
+## Verificação reproduzível e CI
 
-Métricas e logs devem distinguir falha de autenticação/autorização, quota/suspensão e disponibilidade, sem conteúdo de comprovante, CPF, tokens privados ou PII em logs. Alertas/canal/destinatários reais não foram configurados. Custos, billing, DNS/TLS, Auth administrativo e políticas/IAM devem ser conferidos no ambiente autorizado, não presumidos pela aplicação local.
+Node24/Java21. `npm ci`, `npm run lint`, `npm run typecheck`, `npm run build`, `npm test`, `npm run test:demo`, `npm run test:storage`, `npm run test:e2e`. Executar emuladores em sequência. O tratamento de proxy Storage limita a exceção ao GET exato de Firestore demo local e mantém proxies externos/Rules.
 
-A homologação F8 requer aceite do responsável sobre jornadas em staging e preservação do cliente, evidência dos gates, lista explícita de deferred/BLOCKED e aprovação específica para eventual publicação. Ver RELEASE_AND_ROLLBACK.md e F6_ACCEPTANCE.md. Não há autorização atual para deploy, migração, merge ou escrita em Firebase real.
+CI ampliado para Auth, Storage e Chromium/E2E das quatro larguras, retenção de artefatos sintéticos7 dias e workflow_dispatch. Gatilhos antigos main/PR preservados; nenhum job/deploy remoto é presumido ou disparado nesta retomada. Nenhum segredo de produção deve entrar no job sintético.
+
+## Backup e retorno obrigatórios antes do release
+
+1. Export administrativo autorizado e protegido de Firestore, identidades/configuração Auth e objetos relevantes do Storage, incluindo metadados de links/tokens conforme risco, com escopo e instante identificados. Não versionar PII nem logs com conteúdo privado.
+2. Conferir manifestos, quantidade/completude, hashes e permissões do destino; restauração em projeto separado, sem sobrescrever produção. Registrar evidência de leitura e funcionamento no destino isolado.
+3. Conservar frontend anterior por deployment ID/hash; capturar Rules atuais e índices/Auth separadamente. Testar retorno coordenado em staging. Rollback de frontend não desfaz Rules, índices, Auth nem dados.
+4. Dados reais não serão migrados neste fluxo. Regressão exige parar rollout e retornar somente artefatos/configurações previamente testados; nenhuma reversão improvisada de dados.
+
+Os 14 gates e o estado F8 serão consolidados no fechamento. Até lá, nenhuma publicação no projeto existente nem afirmação de preservação real baseada apenas em testes sintéticos.

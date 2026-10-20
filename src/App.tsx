@@ -139,6 +139,8 @@ const isAuthorizationPending = (registration: Registration) =>
             registration.authorizationStatus || "not_sent",
           ))),
   );
+const TeamManagement = lazy(() => import("./TeamManagement"));
+const InvitationInbox = lazy(() => import("./InvitationInbox"));
 const CommercialLanding = lazy(() => import("./CommercialLanding"));
 const paymentProcessCopy =
   "Este site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual.";
@@ -1485,6 +1487,7 @@ function PassengerAccount() {
   return <><Topbar /><main className="center-page"><section className="empty-box">
     <Ticket /><h1>{profile?.displayName || "Sua conta"}</h1><p>{user.email}</p>
     {error && <p role="alert">{error}</p>}
+    <p><Link to="/conta/convites">Meus convites e identificador de acesso</Link></p>
     <h2>Minhas inscrições</h2>
     {profile?.registrationIds.length ? profile.registrationIds.map((id) => <p key={id}><Link className="button button-outline" to={`/minha-inscricao/${id}`}>Abrir inscrição {id.slice(0, 8).toUpperCase()}</Link></p>) : <p>Nenhuma inscrição vinculada a esta conta.</p>}
     <button className="button button-outline" onClick={() => void logout()}>Sair da conta</button>
@@ -1659,6 +1662,7 @@ function AdminShell({
           <Link to="/admin/identidade"><span>◈</span> Identidade pública</Link>
           <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
           <Link to="/admin/plano"><span>◇</span> Plano e limites</Link>
+          <Link to="/admin/equipe"><span>♧</span> Equipe e convites</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
@@ -3690,6 +3694,11 @@ function TenantPlan() {
   const role = useContext(TenantRoleContext);
   return <TenantCommercial organizationId={organizationId} canManage={role === "tenant_owner"} />;
 }
+function TenantTeam() {
+  const organizationId = useContext(OrganizationContext);
+  const role = useContext(TenantRoleContext);
+  return <Suspense fallback={<Loading />}><TeamManagement organizationId={organizationId} canManage={role === "tenant_owner"} /></Suspense>;
+}
 function TenantSupport() {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
@@ -3724,6 +3733,8 @@ export default function App() {
       <Route path="/admin/identidade" element={<AdminGuard><TenantIdentity /></AdminGuard>} />
       <Route path="/admin/documentos" element={<AdminGuard><TenantDocuments /></AdminGuard>} />
       <Route path="/admin/plano" element={<AdminGuard><TenantPlan /></AdminGuard>} />
+      <Route path="/admin/equipe" element={<AdminGuard><TenantTeam /></AdminGuard>} />
+      <Route path="/conta/convites" element={<Suspense fallback={<Loading />}><InvitationInbox /></Suspense>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
       <Route

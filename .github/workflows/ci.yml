@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -19,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Set up Java for Firebase emulators
@@ -37,8 +38,31 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Test Firebase rules
+      - name: Unit, integration and Firestore Rules
         run: npm test
+
+      - name: Auth emulator integration
+        run: npm run test:demo
+
+      - name: Storage Rules with Auth
+        run: npm run test:storage
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Desktop and mobile E2E (synthetic only)
+        run: npm run test:e2e
+
+      - name: Retain synthetic browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-e2e
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Build
         run: npm run build
