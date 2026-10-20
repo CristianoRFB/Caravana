@@ -1,0 +1,229 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/operational-tools.test.ts tests/operational-tools.integration.test.ts tests/commercial-data.integration.test.ts tests/platform.integration.test.ts --reporter verbose
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > projects the canonical capabilities without private price overrides and denies self-grants
+[2026-10-20T17:56:34.201Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede64d5 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L210:32 for 'update' @ L210, false for 'update' @ L210
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > projects the canonical capabilities without private price overrides and denies self-grants 933ms
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > saves one Pro report under concurrent exact retries, redacts passengers and keeps audit immutable
+[2026-10-20T17:56:34.939Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede64e4 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L264
+
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > saves one Pro report under concurrent exact retries, redacts passengers and keeps audit immutable
+[2026-10-20T17:56:34.963Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede64e5 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L307
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > saves one Pro report under concurrent exact retries, redacts passengers and keeps audit immutable 697ms
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > blocks Essential service and a forged complete SDK report/audit, without hiding existing finance
+[2026-10-20T17:56:35.192Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede64ed error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L265:24 for 'create' @ L265, false for 'update' @ L264, evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, false for 'create' @ L310, false for 'create' @ L265
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > blocks Essential service and a forged complete SDK report/audit, without hiding existing finance 467ms
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > creates Premium templates, applies them to a trip, reverses tasks and preserves every revision 494ms
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > serializes stale editors, keeps a committed retry idempotent and audits archive/reopen 332ms
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > preserves reports/tasks after downgrade while refusing growth, suspension, cross-tenant and revoked access
+[2026-10-20T17:56:36.656Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede6534 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L265:24 for 'create' @ L265, false for 'update' @ L264, evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, false for 'create' @ L310, false for 'create' @ L265
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > preserves reports/tasks after downgrade while refusing growth, suspension, cross-tenant and revoked access 632ms
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > rejects malformed snapshots, invented dates and forged financial totals through the direct SDK
+[2026-10-20T17:56:37.030Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede6545 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L265:24 for 'create' @ L265, false for 'update' @ L264, evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, false for 'create' @ L310, Date is not valid. year: 2026, month: 2 day: 30. for 'create' @ L265
+
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > rejects malformed snapshots, invented dates and forged financial totals through the direct SDK
+[2026-10-20T17:56:37.045Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede6546 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L265:24 for 'create' @ L265, false for 'update' @ L264, evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, false for 'create' @ L265
+
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > rejects malformed snapshots, invented dates and forged financial totals through the direct SDK
+[2026-10-20T17:56:37.067Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede6547 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L265:24 for 'create' @ L265, false for 'update' @ L264, evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, false for 'create' @ L310, Property passengerCount is undefined on object. for 'create' @ L265
+
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > rejects malformed snapshots, invented dates and forged financial totals through the direct SDK
+[2026-10-20T17:56:37.094Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede6548 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L265:24 for 'create' @ L265, false for 'update' @ L264, evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, false for 'create' @ L265
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > rejects malformed snapshots, invented dates and forged financial totals through the direct SDK 223ms
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > denies Pro worklists, foreign trips and unaudited direct task updates
+[2026-10-20T17:56:37.491Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede655d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L287:24 for 'update' @ L287, false for 'update' @ L287
+
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > denies Pro worklists, foreign trips and unaudited direct task updates
+[2026-10-20T17:56:37.499Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede655e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L283
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > denies Pro worklists, foreign trips and unaudited direct task updates 395ms
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > accepts the maximum twenty-task payload with valid audit and reverses its full state 235ms
+stderr | tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > supports the original legacy admin at maximum payload without weakening atomic audit
+[2026-10-20T17:56:38.055Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x1ede657a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L310:24 for 'create' @ L310, false for 'update' @ L307, Null value error. for 'create' @ L310
+
+ ✓ tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > supports the original legacy admin at maximum payload without weakening atomic audit 327ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > blocks onboarding without a trusted complete inventory and forbids client bootstrap publication
+[2026-10-20T17:56:39.921Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6925 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L75, false for 'update' @ L75
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > blocks onboarding without a trusted complete inventory and forbids client bootstrap publication 260ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > reserves orphan historical namespaces even when their root organization is absent
+[2026-10-20T17:56:40.167Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6935 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'update' @ L79
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > reserves orphan historical namespaces even when their root organization is absent 189ms
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > creates organization, availability, owner membership and audit atomically, then safely replays 425ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.045Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d694f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, false for 'create' @ L559, false for 'create' @ L543, false for 'create' @ L544, false for 'create' @ L492, Null value error. for 'create' @ L574
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.112Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6952 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, Null value error. for 'create' @ L638
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.171Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6953 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, false for 'create' @ L559, false for 'create' @ L543, false for 'create' @ L544, false for 'create' @ L80, false for 'create' @ L492, false for 'create' @ L574, false for 'create' @ L138, false for 'create' @ L598, false for 'create' @ L610, Null value error. for 'create' @ L613
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.225Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6954 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, false for 'create' @ L559, false for 'create' @ L543, false for 'create' @ L544, false for 'create' @ L80, Null value error. for 'create' @ L574
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.268Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6955 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, Null value error. for 'create' @ L559
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.319Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6956 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, false for 'create' @ L543, false for 'create' @ L544, false for 'create' @ L80, false for 'create' @ L492, Null value error. for 'create' @ L574
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.368Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6957 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, false for 'create' @ L559, false for 'create' @ L543, false for 'create' @ L544, false for 'create' @ L80, false for 'create' @ L492, Null value error. for 'create' @ L574
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.425Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6958 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638, false for 'create' @ L559, false for 'create' @ L543, false for 'create' @ L544, false for 'create' @ L80, false for 'create' @ L492, false for 'create' @ L574, Property lastQuotaOperationId is undefined on object. for 'create' @ L473, false for 'create' @ L483, false for 'create' @ L598, false for 'create' @ L610, false for 'create' @ L613, Null value error. for 'create' @ L167
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.474Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6959 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, Null value error. for 'create' @ L638
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing
+[2026-10-20T17:56:41.524Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d695a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L80:24 for 'create' @ L80, false for 'update' @ L79, evaluation error at L610:24 for 'create' @ L610, evaluation error at L613:24 for 'create' @ L613, evaluation error at L623:24 for 'update' @ L623, evaluation error at L626:24 for 'update' @ L626, evaluation error at L473:32 for 'create' @ L473, evaluation error at L483:24 for 'create' @ L483, evaluation error at L473:32 for 'update' @ L473, evaluation error at L492:24 for 'create' @ L492, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L167:24 for 'create' @ L167, evaluation error at L168:24 for 'update' @ L168, evaluation error at L138:24 for 'create' @ L138, false for 'update' @ L137, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, Null value error. for 'create' @ L559
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a complete-looking raw onboarding when any required companion is missing 905ms
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > changes status with audit and public projection while preserving legacy IDs, admins and financial history 410ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges
+[2026-10-20T17:56:42.133Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6978 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L587:24 for 'update' @ L587, Null value error. for 'update' @ L587
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > denies a booking at the Rules layer even with a stale public active projection 128ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges
+[2026-10-20T17:56:42.206Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d697f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L637
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges
+[2026-10-20T17:56:42.212Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6980 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L637
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges
+[2026-10-20T17:56:42.221Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6981 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L593
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges
+[2026-10-20T17:56:42.228Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6982 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L633, false for 'update' @ L633
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges
+[2026-10-20T17:56:42.234Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6983 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L587:24 for 'update' @ L587, false for 'update' @ L587
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > requires the companion audit and rejects mutation/deletion of audit, organization and platform privileges 204ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > legacy-owner cannot onboard, alter platform status or fabricate audit
+[2026-10-20T17:56:42.415Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6989 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > legacy-owner cannot onboard, alter platform status or fabricate audit 142ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > unassigned cannot onboard, alter platform status or fabricate audit
+[2026-10-20T17:56:42.538Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d698e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a partial onboarding without its owner membership and cannot smuggle a plan or passenger data
+[2026-10-20T17:56:42.606Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6990 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638
+
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a partial onboarding without its owner membership and cannot smuggle a plan or passenger data
+[2026-10-20T17:56:42.632Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d6992 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L574:24 for 'create' @ L574, evaluation error at L587:24 for 'update' @ L587, evaluation error at L598:32 for 'create' @ L598, evaluation error at L598:32 for 'update' @ L598, evaluation error at L638:24 for 'create' @ L638, false for 'update' @ L637, false for 'create' @ L638
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > unassigned cannot onboard, alter platform status or fabricate audit 123ms
+stderr | tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a partial onboarding without its owner membership and cannot smuggle a plan or passenger data
+[2026-10-20T17:56:42.727Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x544d699b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L587:24 for 'update' @ L587, false for 'update' @ L587
+
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > rejects a partial onboarding without its owner membership and cannot smuggle a plan or passenger data 192ms
+ ✓ tests/platform.integration.test.ts > platform operations enforce server-side authority and immutable atomic audit > revoked platform authority cannot reuse a session to perform new operations 111ms
+ ✓ tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > blocks a second stale manual editor while retaining exact operation replay 258ms
+ ✓ tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > atomically assigns canonical catalog and public limits with private audit and replay 299ms
+ ✓ tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > keeps promotional Pro90 temporary and downgrade/status do not rewrite customer records or counters 285ms
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > denies tenant owners/staff/B/guest assignment and protects counters and audits even from platform client resets
+[2026-10-20T17:56:45.235Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad01 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L497, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L504, false for 'update' @ L497, Property lastQuotaOperationId is undefined on object. for 'update' @ L504
+
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > denies tenant owners/staff/B/guest assignment and protects counters and audits even from platform client resets
+[2026-10-20T17:56:45.242Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad02 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L491
+
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > denies tenant owners/staff/B/guest assignment and protects counters and audits even from platform client resets
+[2026-10-20T17:56:45.249Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad03 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L569
+
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > denies tenant owners/staff/B/guest assignment and protects counters and audits even from platform client resets
+[2026-10-20T17:56:45.257Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad04 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L543:32 for 'update' @ L543, false for 'update' @ L543
+
+ ✓ tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > denies tenant owners/staff/B/guest assignment and protects counters and audits even from platform client resets 356ms
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > rejects forged complete SDK audit with invalid catalog, limits, override, setup or trusted actor
+[2026-10-20T17:56:45.413Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad0c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L564:24 for 'create' @ L564, false for 'update' @ L569, false for 'create' @ L543, false for 'create' @ L544
+
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > rejects forged complete SDK audit with invalid catalog, limits, override, setup or trusted actor
+[2026-10-20T17:56:45.428Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad0d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L564:24 for 'create' @ L564, false for 'update' @ L569, false for 'create' @ L564, false for 'create' @ L543, false for 'create' @ L559
+
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > rejects forged complete SDK audit with invalid catalog, limits, override, setup or trusted actor
+[2026-10-20T17:56:45.447Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad0e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L564:24 for 'create' @ L564, false for 'update' @ L569, false for 'create' @ L543, false for 'create' @ L544
+
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > rejects forged complete SDK audit with invalid catalog, limits, override, setup or trusted actor
+[2026-10-20T17:56:45.463Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad0f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L564:24 for 'create' @ L564, false for 'update' @ L569, false for 'create' @ L564, false for 'create' @ L543, false for 'create' @ L544
+
+ ✓ tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > refuses existing tenant assignment without a trusted baseline instead of inventing an empty count 101ms
+stderr | tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > rejects forged complete SDK audit with invalid catalog, limits, override, setup or trusted actor
+[2026-10-20T17:56:45.477Z]  @firebase/firestore: Firestore (11.10.0): GrpcConnection RPC 'Write' stream 0x59f1ad10 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L543:32 for 'create' @ L543, evaluation error at L544:24 for 'create' @ L544, evaluation error at L543:32 for 'update' @ L543, evaluation error at L559:32 for 'create' @ L559, evaluation error at L559:32 for 'update' @ L559, evaluation error at L564:24 for 'create' @ L564, false for 'update' @ L569, false for 'create' @ L564, false for 'create' @ L543, false for 'create' @ L544
+
+ ✓ tests/commercial-data.integration.test.ts > manual commercial assignment actual SDK/candidate Rules > rejects forged complete SDK audit with invalid catalog, limits, override, setup or trusted actor 142ms
+ ✓ tests/operational-tools.test.ts > cumulative commercial tools with the entire existing core preserved > keeps prices, all original core rights and differentiates actual tool capabilities 4ms
+ ✓ tests/operational-tools.test.ts > cumulative commercial tools with the entire existing core preserved > blocks new commercial tools on suspension/expiry without disabling core finance or promoting a price override 0ms
+ ✓ tests/operational-tools.test.ts > cumulative commercial tools with the entire existing core preserved > builds a trip-date cohort, includes cancelled receipts in history and excludes voided expenses 3ms
+ ✓ tests/operational-tools.test.ts > cumulative commercial tools with the entire existing core preserved > rejects invalid dates, ranges, overflows, invalid worklists and duplicate tasks 1ms
+
+ Test Files  4 passed (4)
+      Tests  31 passed (31)
+   Start at  14:56:29
+   Duration  16.46s (tests 92%, import 5%, transform 3%)
+
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+Stopped test emulator started by this run (PID 7820).

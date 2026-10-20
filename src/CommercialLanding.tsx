@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { COMMERCIAL_POLICY, PlanCatalog } from "./lib/plan-catalog";
+import { COMMERCIAL_FEATURE_LABELS, PLAN_PRESENTATION } from "./lib/commercial-presentation";
 import { money } from "./lib/types";
 import "./commercial-landing.css";
 
@@ -212,27 +213,24 @@ export default function CommercialLanding() {
           <div className="saas-container">
             <div className="saas-section-heading">
               <p className="saas-eyebrow">ESPAÇO PARA A SUA OPERAÇÃO</p>
-              <h2>Escolha o tamanho da próxima etapa.</h2>
+              <h2>Mais capacidade. Mais formas de organizar.</h2>
               <p>
-                Os mesmos recursos, com limites adequados ao seu volume de
-                viagens.
+                Comece com a operação completa, ganhe relatórios no Pro e
+                organize o trabalho da equipe no Premium.
               </p>
             </div>
             <div className="saas-plan-grid">
               {Object.values(PlanCatalog).map((plan) => (
                 <article
                   key={plan.id}
-                  className={`saas-plan${plan.id === "pro" ? " saas-plan-pro" : ""}`}
+                  className={`saas-plan saas-plan-${plan.id}`}
                   aria-labelledby={`plan-${plan.id}`}
                 >
                   <p className="saas-plan-label">
-                    {plan.id === "essencial"
-                      ? "PARA COMEÇAR"
-                      : plan.id === "pro"
-                        ? "PARA EXPANDIR"
-                        : "PARA IR MAIS LONGE"}
+                    {plan.id === "pro" ? "RECOMENDADO · PARA CRESCER" : plan.id === "essencial" ? "COMEÇAR A OPERAR" : "ORGANIZAR EM MAIOR ESCALA"}
                   </p>
                   <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
+                  <p className="saas-plan-audience">{PLAN_PRESENTATION[plan.id].audience}</p>
                   <p className="saas-price">
                     {money(plan.monthlyCents)}
                     <span>/mês</span>
@@ -259,10 +257,11 @@ export default function CommercialLanding() {
                         internos
                       </span>
                     </li>
-                    <li>
-                      <Check size={17} />
-                      <span>Todos os recursos apresentados</span>
-                    </li>
+                  </ul>
+                  <p className="saas-plan-inheritance">{PLAN_PRESENTATION[plan.id].previous}</p>
+                  <ul className="saas-plan-benefits">
+                    {PLAN_PRESENTATION[plan.id].features.map(feature => <li key={feature}><Check size={17} /><strong>{COMMERCIAL_FEATURE_LABELS[feature]}</strong></li>)}
+                    {PLAN_PRESENTATION[plan.id].benefits.map(benefit => <li key={benefit}><Check size={17} /><span>{benefit}</span></li>)}
                   </ul>
                   <a
                     className={`saas-button ${plan.id === "pro" ? "saas-primary" : "saas-secondary"}`}
@@ -282,6 +281,11 @@ export default function CommercialLanding() {
               acompanhamento assistido. Sem cobrança automática ou teste público
               gratuito.
             </p>
+            <div className="saas-comparison" role="region" aria-label="Comparação detalhada dos planos" tabIndex={0}>
+              <table><caption>Recursos cumulativos, com limites do catálogo</caption><thead><tr><th scope="col">Recurso</th>{Object.values(PlanCatalog).map(plan=><th key={plan.id} scope="col">{plan.name}</th>)}</tr></thead>
+                <tbody>{Object.entries(COMMERCIAL_FEATURE_LABELS).map(([feature,label])=><tr key={feature}><th scope="row">{label}</th>{Object.values(PlanCatalog).map(plan=><td key={plan.id}>{(plan.features as readonly string[]).includes(feature) ? "Incluído" : "Não incluído"}</td>)}</tr>)}</tbody>
+              </table>
+            </div>
           </div>
         </section>
         <section
@@ -352,6 +356,10 @@ export default function CommercialLanding() {
         >
           <h2 id="saas-faq-title">Antes de embarcar.</h2>
           <details>
+            <summary>Qual é a diferença entre os três planos?</summary>
+            <p>O Essencial já inclui a operação, o Financeiro Geral e a importação CSV. O Pro acrescenta relatórios operacionais salvos, compartilhados com a equipe e exportáveis. O Premium inclui tudo do Pro e acrescenta roteiros de tarefas e modelos reutilizáveis, além da maior capacidade.</p>
+          </details>
+          <details>
             <summary>A Caravana 77 recebe o pagamento dos passageiros?</summary>
             <p>
               Não. A organizadora informa a forma de pagamento e recebe fora da
@@ -371,7 +379,10 @@ export default function CommercialLanding() {
             <p>
               O histórico é preservado. Se o uso já ultrapassar o novo limite,
               novas operações de crescimento ficam bloqueadas até haver espaço
-              no plano.
+              no plano. Relatórios e roteiros anteriores continuam consultáveis
+              pelos acessos autorizados. Novas capturas e alterações de roteiros
+              dependem das funcionalidades do plano atual; a operação principal
+              e os controles de segurança permanecem disponíveis.
             </p>
           </details>
         </section>

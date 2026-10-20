@@ -1,0 +1,53 @@
+{
+  "scope": "Actual synthetic E2E screenshots; no real client data",
+  "files": [
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/desktop-1440/saas-landing.png",
+      "sha256": "d5b1d0b340ec4f18ffbabb1b6f6b4f81f82d4174baf3a2b2f559d5a068f046f5"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/mobile-320/saas-landing.png",
+      "sha256": "cc53013513e797df0165ac07c96fcff0c0be60b3f56ae3aed562787b7050358b"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/mobile-375/saas-landing.png",
+      "sha256": "dc16c752d281823f7b5aea5cabde60d93429fa86d5e2a8fc49680546340ec214"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/tablet-768/saas-landing.png",
+      "sha256": "62f0ad76713410992f61dfd2d5022937f259bff33872fc6e637457ca94d824c1"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/desktop-1440/premium-worklists.png",
+      "sha256": "a27b42a00059fa49a4284a3a4728527f772b61d2e17144ea67eae3a03fc6f4a8"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/mobile-320/premium-worklists.png",
+      "sha256": "f7600ef381293bd31d7df1178728922551155a9e0a7a9aa3a65962f2e8cd8616"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/mobile-375/premium-worklists.png",
+      "sha256": "73c710c031f8c1e3957dd114dcf1bd1c5b78451f5e9a1ca0e4169cee3f8e4b36"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/tablet-768/premium-worklists.png",
+      "sha256": "aa58ac89e5c1fe53a60dadcdf6d26c909dc177ab5641fdd0db957fbd1ea48d46"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/desktop-1440/report-history-downgrade.png",
+      "sha256": "2610fb4f91393bf39b5cd60672777807b05a1ac0211f9869527fc7b26bd64fcc"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/mobile-320/report-history-downgrade.png",
+      "sha256": "667f8eb2f3b31e813bf7e3b3a1c914766ba951b4ecc46599db04c5420f3bfc2d"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/mobile-375/report-history-downgrade.png",
+      "sha256": "c939cf3666c92313f53a8c388a5b379eb1144acd65716a196d608491908222f5"
+    },
+    {
+      "path": "docs/evidence/2026-10-20/final-ui/tablet-768/report-history-downgrade.png",
+      "sha256": "6ac5387338a3ebba36efbc8e427340d3413ce8b230a442923859eaed0efab9c8"
+    }
+  ]
+}

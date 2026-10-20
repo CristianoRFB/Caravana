@@ -1,0 +1,280 @@
+{
+  "base": "13fe987",
+  "scope": "36 targeted backend tests plus sixteen local compiled E2E; not yet staging",
+  "stats": {
+    "startTime": "2026-10-20T18:02:59.728Z",
+    "duration": 89110.093,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "name": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "file": "commercial-landing.spec.ts",
+      "line": 20,
+      "project": "desktop-1440",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7927,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "file": "commercial-landing.spec.ts",
+      "line": 20,
+      "project": "tablet-768",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4131,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "file": "commercial-landing.spec.ts",
+      "line": 20,
+      "project": "mobile-375",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4025,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo",
+      "file": "commercial-landing.spec.ts",
+      "line": 20,
+      "project": "mobile-320",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3896,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Pro saves a shared operational report, exports without passengers and preserves it after downgrade",
+      "file": "functional-tools.spec.ts",
+      "line": 14,
+      "project": "desktop-1440",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4850,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu",
+      "file": "functional-tools.spec.ts",
+      "line": 23,
+      "project": "desktop-1440",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4721,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots",
+      "file": "functional-tools.spec.ts",
+      "line": 33,
+      "project": "desktop-1440",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4252,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Pro saves a shared operational report, exports without passengers and preserves it after downgrade",
+      "file": "functional-tools.spec.ts",
+      "line": 14,
+      "project": "tablet-768",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4051,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu",
+      "file": "functional-tools.spec.ts",
+      "line": 23,
+      "project": "tablet-768",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4430,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots",
+      "file": "functional-tools.spec.ts",
+      "line": 33,
+      "project": "tablet-768",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4175,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Pro saves a shared operational report, exports without passengers and preserves it after downgrade",
+      "file": "functional-tools.spec.ts",
+      "line": 14,
+      "project": "mobile-375",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3969,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu",
+      "file": "functional-tools.spec.ts",
+      "line": 23,
+      "project": "mobile-375",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4605,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots",
+      "file": "functional-tools.spec.ts",
+      "line": 33,
+      "project": "mobile-375",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4094,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Pro saves a shared operational report, exports without passengers and preserves it after downgrade",
+      "file": "functional-tools.spec.ts",
+      "line": 14,
+      "project": "mobile-320",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3908,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu",
+      "file": "functional-tools.spec.ts",
+      "line": 23,
+      "project": "mobile-320",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4639,
+          "retry": 0
+        }
+      ]
+    },
+    {
+      "name": "Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots",
+      "file": "functional-tools.spec.ts",
+      "line": 33,
+      "project": "mobile-320",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4090,
+          "retry": 0
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "firestore.rules",
+      "sha256": "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81"
+    },
+    {
+      "path": "src/lib/plan-catalog.ts",
+      "sha256": "1f7f7725062a421d961dbac1b2cb33c1fcd0a7a8e9f3ee10c8b0e387ce5ff9a4"
+    },
+    {
+      "path": "src/lib/commercial-data.ts",
+      "sha256": "10f1c611583479de6c3b8fee583dd090fe3a60ae0424025a343efa237d6d5975"
+    },
+    {
+      "path": "src/lib/platform.ts",
+      "sha256": "278a8f7d898d6b2b55215dc45727ff40109f55dd0fa1119149097a59d9c48a0f"
+    },
+    {
+      "path": "src/lib/operational-tools-data.ts",
+      "sha256": "c367d9ad63bb3bb695033e0160391f9909e8b2aff90dcecb1eef1e92c80bd547"
+    },
+    {
+      "path": "src/lib/operational-tools.ts",
+      "sha256": "cd5998eb402348e99ea3c12794eaa4adecc8b693a281b29dab832326f58f708e"
+    },
+    {
+      "path": "src/OperationalTools.tsx",
+      "sha256": "9f52150648e630da71066f991f0ea6653422465b4e3cf73c8e8e1ee309743836"
+    },
+    {
+      "path": "src/ToolAudit.tsx",
+      "sha256": "9a74c96cb207a2880eb8e33793867d8ddd522e252f7ae5cdcd48f10a41cb7c04"
+    },
+    {
+      "path": "src/CommercialLanding.tsx",
+      "sha256": "b58e553ef0c1f2433e111298665ff645dce91d56333590df8296f4b0fe0ae0ad"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "6a156f7e53c48f8d9636d6e745e6f1ac130c4fc76459846b51f3bbae9dcb3d3e"
+    }
+  ]
+}

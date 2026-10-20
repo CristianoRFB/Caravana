@@ -29,6 +29,13 @@ test("separate SaaS landing uses the approved catalog, assisted onboarding and f
     await expect(card).toContainText(`${plan.limits.internalUsers} integrantes internos`);
     await expect(card.getByRole("link")).toHaveAttribute("href", "#implantacao");
   }
+  await expect(page.getByRole("article",{name:"Pro",exact:true})).toContainText("RECOMENDADO");
+  await expect(page.getByRole("article",{name:"Pro",exact:true})).toContainText("Tudo do Essencial");
+  await expect(page.getByRole("article",{name:"Pro",exact:true})).toContainText("Central de relatórios operacionais");
+  await expect(page.getByRole("article",{name:"Premium",exact:true})).toContainText("Tudo do Pro");
+  await expect(page.getByRole("article",{name:"Premium",exact:true})).toContainText("Roteiros da equipe e modelos reutilizáveis");
+  await expect(page.getByRole("region",{name:"Comparação detalhada dos planos"})).toBeVisible();
+  await expect(page.locator(".saas-page")).not.toContainText("Os mesmos recursos");
   await expect(page.locator(".saas-pricing-note")).toContainText(money(COMMERCIAL_POLICY.setupCents));
   await expect(page.locator(".saas-page")).not.toContainText("AnimeSFest");
   await expect(page.locator(".saas-page")).not.toContainText("UID");

@@ -14,7 +14,8 @@ export function commercialDocuments(input: ManualPlanAssignment, operationId: st
     overrideMonthlyCents: input.override?.monthlyCents ?? null, overrideExpiresAt: input.override ? Timestamp.fromMillis(input.override.expiresAtMillis) : null, overrideReason: input.override?.reason || "", trialEndsAt, revision, reason: input.reason,
     updatedAt: time, updatedBy: actorUid, lastCommercialOperationId: operationId };
   const entitlements = { organizationId: input.organizationId, limits: { ...plan.limits }, growthEnabled: ["active", "trial", "demo"].includes(input.status), growthUntil: trialEndsAt, updatedAt: time, lastCommercialOperationId: operationId };
-  return { subscription, entitlements };
+  const features = { organizationId: input.organizationId, version: "features-v1", planId: input.planId, features: [...plan.features], status: input.status, validUntil: trialEndsAt, updatedAt: time, lastCommercialOperationId: operationId };
+  return { subscription, entitlements, features };
 }
 export function watchPublicEntitlements(organizationId: string, callback: (value: PublicEntitlements | null) => void, fail: (error: Error) => void): Unsubscribe {
   if (!db) throw new Error("Firebase não está configurado.");
@@ -47,8 +48,9 @@ export async function assignTenantPlan(input: ManualPlanAssignment, operationId 
         const revision = current.exists() ? current.data().revision + 1 : 1;
         if (expectedRevision !== undefined && revision !== expectedRevision + 1) throw new Error("O plano mudou desde a conferência. Recarregue a condição atual antes de alterar.");
         if (!Number.isSafeInteger(revision) || revision < 1) throw new Error("Histórico comercial inconsistente; confira antes de alterar.");
-        const { subscription, entitlements } = commercialDocuments(data, operationId, actorUid, revision);
+        const { subscription, entitlements, features } = commercialDocuments(data, operationId, actorUid, revision);
         tx.set(subscriptionRef, subscription); tx.set(doc(database, "tenantEntitlements", data.organizationId), entitlements);
+        tx.set(doc(database, "organizations", data.organizationId, "commercialFeatures", "current"), features);
         tx.set(audit, { organizationId: data.organizationId, actorUid, at: serverTimestamp(), action: "plan_assigned", payloadHash, previous: current.exists() ? current.data() : null, subscription });
         return revision;
       });

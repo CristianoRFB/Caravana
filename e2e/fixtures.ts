@@ -4,7 +4,7 @@ import { collection, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, 
 import type { Caravan, Registration } from "../src/lib/types";
 import { seedSyntheticEntitlements } from "../tests/fixtures/commercial-policy";
 import { seedSyntheticNamespaceBootstrap } from "../tests/fixtures/namespace-bootstrap";
-import type { PlanId } from "../src/lib/plan-catalog";
+import { PlanCatalog, type PlanId } from "../src/lib/plan-catalog";
 
 export const testAccount = { email: "admin-a@example.test", password: "Synthetic-Only-2026" };
 let syntheticAdminUid: string | undefined;
@@ -15,6 +15,16 @@ function assertSyntheticEndpoints() {
   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
     throw new Error("E2E seeding is restricted to the configured local demo emulators.");
   }
+}
+export async function seedSyntheticFunctionalPlan(planId: PlanId, enabled = true) {
+  assertSyntheticEndpoints(); const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });
+  try { await env.withSecurityRulesDisabled(async context => {
+    const database = context.firestore(), organizationId = "org-a", at = Timestamp.now(), operationId = crypto.randomUUID().replaceAll("-", ""), plan = PlanCatalog[planId];
+    await seedSyntheticEntitlements(database, organizationId, planId);
+    await updateDoc(doc(database,"tenantEntitlements",organizationId),{growthEnabled:enabled});
+    await setDoc(doc(database,"subscriptions",organizationId),{organizationId,planId,status:enabled?"active":"suspended",monthlyCatalogCents:plan.monthlyCents,setupWaived:true,setupFeeCents:0,overrideMonthlyCents:null,overrideExpiresAt:null,overrideReason:"",trialEndsAt:null,revision:1,reason:"Fixture específica de UI",updatedAt:at,updatedBy:syntheticAdminUid,lastCommercialOperationId:operationId});
+    await setDoc(doc(database,"organizations",organizationId,"commercialFeatures","current"),{organizationId,version:"features-v1",planId,features:[...plan.features],status:enabled?"active":"suspended",validUntil:null,updatedAt:at,lastCommercialOperationId:operationId});
+  }); } finally { await env.cleanup(); }
 }
 
 export async function patchSyntheticTrip(fields: Partial<Caravan>) {

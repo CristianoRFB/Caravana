@@ -57,7 +57,7 @@ export async function onboardTenant(input: OnboardTenant, operationId: string): 
     if (!bootstrap.exists() || bootstrap.data().version !== "namespace-v1" || bootstrap.data().coverageVersion !== NAMESPACE_INVENTORY_VERSION || bootstrap.data().inventoryComplete !== true || !/^[a-f0-9]{64}$/.test(bootstrap.data().manifestHash)) throw new Error("Onboarding bloqueado: inventário de namespaces históricos ainda não validado. Nenhum dado foi criado.");
     if (protectedId.exists() || publicSlug.exists()) throw new Error("Identificador histórico reservado ou endereço público já utilizado. Nenhum dado foi substituído.");
     const time = serverTimestamp();
-    const { subscription, entitlements } = commercialDocuments(payload.assignment, operationId, actorUid, 1);
+    const { subscription, entitlements, features } = commercialDocuments(payload.assignment, operationId, actorUid, 1);
     const branding = { ...payload.branding, updatedAt: time, lastBrandOperationId: operationId };
     transaction.set(namespace, { namespace: slug, organizationId: slug, state: "active", version: "namespace-v1", createdAt: time, actorUid, lastPlatformOperationId: operationId });
     transaction.set(organization, { name, slug, ownerUid, status: "active", createdAt: time, createdBy: actorUid, updatedAt: time, updatedBy: actorUid, lastPlatformOperationId: operationId });
@@ -66,6 +66,7 @@ export async function onboardTenant(input: OnboardTenant, operationId: string): 
     transaction.set(doc(database, "tenantUsage", slug), { organizationId: slug, version: "commercial-v1", publishedCaravans: 0, activeMembers: 1, activeOwners: 1, updatedAt: time, lastPlatformOperationId: operationId });
     transaction.set(doc(database, "subscriptions", slug), subscription);
     transaction.set(doc(database, "tenantEntitlements", slug), entitlements);
+    transaction.set(doc(database, "organizations", slug, "commercialFeatures", "current"), features);
     transaction.set(doc(database, "publicTenantSettings", slug), branding);
     transaction.set(doc(database, "tenantSlugs", slug), { slug, organizationId: slug });
     transaction.set(doc(database, "organizationAvailability", slug), { organizationId: slug, status: "active", updatedAt: time, lastPlatformOperationId: operationId });

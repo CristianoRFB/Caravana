@@ -1,5 +1,13 @@
 # F6 — landing SaaS separada
 
+## GOAL FINAL — diferenciação aditiva vigente
+
+Agora os cartões usam PLAN_PRESENTATION/PlanCatalog, com Pro recomendado, listas cumulativas e comparação detalhada. Essencial conserva todos os recursos originais, inclusive Financeiro Geral, CSV/exportação, check-in e identidade. Pro adiciona relatórios salvos/compartilhados/exportáveis; Premium inclui Pro e adiciona roteiros e modelos de tarefas. Preços/quotas anteriores preservados. FAQ explica diferenças, downgrade/histórico e pagamentos externos. Sem contato inventado ou promessa de trial/anual/checkout.
+
+36 testes direcionados e16 E2E nas quatro larguras PASS local. Capturas reais em evidence/2026-10-20/final-ui; matriz/segurança em COMMERCIAL_FEATURE_MATRIX.md e FUNCTIONAL_TOOLS_CONTRACT.md. Código de landing não equivale a feature entregue sozinho: casos SDK/Rules negam Essential/Pro indevidos e preservam direitos anteriores. Staging e CI da candidata nova ainda pendentes neste checkpoint.
+
+## Histórico anterior ao GOAL FINAL
+
 Atualização2026-10-20: contato neutro configurável foi expressamente aceito pelo usuário; ausência de contato oficial não bloqueia F6 local. Não reutilizar contatos do Ítalo nem inventar destinos. Publicação continua condicionada aos gates reais.
 
 Rota nova `/saas`, sem substituir o catálogo `/`, links históricos ou páginas `/o/:tenantSlug`. Identidade neutra da Caravana 77, recursos existentes, comparação de planos e processo de ativação assistida. A ilustração do painel está identificada como exemplo com dados fictícios, sem alegar métricas de clientes reais.

@@ -142,6 +142,7 @@ const isAuthorizationPending = (registration: Registration) =>
 const TeamManagement = lazy(() => import("./TeamManagement"));
 const InvitationInbox = lazy(() => import("./InvitationInbox"));
 const CommercialLanding = lazy(() => import("./CommercialLanding"));
+const OperationalTools = lazy(() => import("./OperationalTools"));
 const paymentProcessCopy =
   "Este site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual.";
 const resolveFaqAnswer = (
@@ -1616,6 +1617,8 @@ function AdminShell({
             className="mobile-menu admin-menu-button"
             onClick={() => setOpen(!open)}
             aria-label="Menu"
+            aria-expanded={open}
+            aria-controls="admin-navigation"
           >
             <Menu />
           </button>
@@ -1627,7 +1630,7 @@ function AdminShell({
             </button>
           </div>
         </header>
-        <aside className={`admin-sidebar ${open ? "sidebar-open" : ""}`}>
+        <aside id="admin-navigation" className={`admin-sidebar ${open ? "sidebar-open" : ""}`} onClick={event => { if (event.target instanceof Element && event.target.closest("a")) setOpen(false); }}>
           <span className="sidebar-label">ESPAÇO DA ORGANIZAÇÃO</span>
           {access.length > 1 && (
             <label className="tenant-switcher">
@@ -1664,6 +1667,8 @@ function AdminShell({
           <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
           <Link to="/admin/plano"><span>◇</span> Plano e limites</Link>
           <Link to="/admin/equipe"><span>♧</span> Equipe e convites</Link>
+          <Link to="/admin/relatorios"><span aria-hidden="true">▥</span> Relatórios</Link>
+          <Link to="/admin/roteiros"><span aria-hidden="true">☷</span> Roteiros da equipe</Link>
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
@@ -3695,6 +3700,11 @@ function TenantPlan() {
   const role = useContext(TenantRoleContext);
   return <TenantCommercial organizationId={organizationId} canManage={role === "tenant_owner"} />;
 }
+function TenantOperationalTools({ mode }: { mode: "reports" | "worklists" }) {
+  const organizationId = useContext(OrganizationContext);
+  const role = useContext(TenantRoleContext);
+  return <Suspense fallback={<Loading />}><OperationalTools organizationId={organizationId} mode={mode} canManageTemplates={role === "tenant_owner"} /></Suspense>;
+}
 function TenantTeam() {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
@@ -3735,6 +3745,8 @@ export default function App() {
       <Route path="/admin/documentos" element={<AdminGuard><TenantDocuments /></AdminGuard>} />
       <Route path="/admin/plano" element={<AdminGuard><TenantPlan /></AdminGuard>} />
       <Route path="/admin/equipe" element={<AdminGuard><TenantTeam /></AdminGuard>} />
+      <Route path="/admin/relatorios" element={<AdminGuard><TenantOperationalTools mode="reports" /></AdminGuard>} />
+      <Route path="/admin/roteiros" element={<AdminGuard><TenantOperationalTools mode="worklists" /></AdminGuard>} />
       <Route path="/conta/convites" element={<Suspense fallback={<Loading />}><InvitationInbox /></Suspense>} />
       <Route path="/conta/entrar" element={<AdminLogin passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />

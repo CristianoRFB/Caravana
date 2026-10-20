@@ -1,5 +1,15 @@
 # Estado atual — Caravana 77
 
+## GOAL FINAL vigente — 2026-10-20
+
+Fonte integral GOAL_FINAL_2026-10-20.md, hash externoB663E4AC…; execução em FINAL_GOAL_EXECUTION.md. Retomada865b803 limpa/pull atualizado, branch preservada. CI remoto de13fe987 PASS: https://github.com/CristianoRFB/Caravana/actions/runs/39466150457, padrão Ubuntu público, sem cache/artifacts/deploy e sem credencial nova. Bloqueio de login Actions superado por trigger da branch autorizada; não alegar gate da nova candidata ainda.
+
+Diferenciação aditiva implementada: Pro relatórios operacionais privados salvos/compartilhados/CSV; Premium roteiros por caravana/modelos, tarefas reversíveis, revisão concorrente, arquivar/reabrir e auditoria consultável. Essencial mantém TODOS os recursos anteriores e preços/quotas originais. Catálogo, resolvedor, atribuição/onboarding, projeção privada, operações, Rules, painel e landing foram ligados.36 testes direcionados+16 E2E nas quatro larguras PASS; casos/hash e capturas reais preservados. Falhas RED e rodadas abortadas documentadas, sem perda de validações/20 tarefas/compatibilidade do admin legado. Regra de auditoria exige mutação do alvo protegido, before/after exatos e evento novo, evitando avaliação redundante que excedia orçamento.
+
+Próximo: ajuste visual pequeno de legibilidade/quebra de UID nas capturas, gate de regressão remoto da nova candidata, staging das novas capacidades e três planos sintéticos. Depois F7 observabilidade/abuso/Auth/advisories/sessões e F8 inventário REAL somente leitura, estratégia, backup privado, ensaio fiel/interrupção/retomada/retorno, plano de corte e MIGRATION_READINESS_FINAL.md (17 gates +14 originais). Nunca copiar PII para staging/Git/computador compartilhado desprotegido. Produção continua sem modificação autorizada. Não finalizar missão nem declarar migração pronta com os gates apenas locais.
+
+O staging abaixo ainda é19c6564 até publicação da candidata nova; histórico continua válido no seu escopo.
+
 ## Atualização vigente — staging funcional em 2026-10-20
 
 **Checkpoint de implementação publicado19c6564**, deployment9244cf5a-f7c8-41cb-a3b8-da4f5d5e5d85. GitHub atualizado; bundle completo de fonte/evidências verificado em C:/xampp/77/Caravana-audit-20261020/staging-19c6564.bundle. Os11 assets são byte a byte iguais ao runtime8b0dad3 do aceite abaixo; o novo upload atualizou somente release.json. Sessão fictícia B encerrada, viewport restaurado e aba de login do staging entregue. Sessões Google/CLI/Cloudflare não foram encerradas; orientação de revogação/logout está em STAGING_BDALL.md.

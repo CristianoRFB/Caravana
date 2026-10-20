@@ -1,10 +1,11 @@
 export type PlanId = "essencial" | "pro" | "premium";
 export type SubscriptionStatus = "trial" | "active" | "past_due" | "suspended" | "cancelled" | "demo";
 export interface Limits { activeCaravans: number; passengersPerCaravan: number; internalUsers: number }
-export const IMPLEMENTED_FEATURES = ["caravans", "registrations", "proofs", "checkin", "csv_import", "finance", "branding"] as const;
+export const CORE_FEATURES = ["caravans", "registrations", "proofs", "checkin", "csv_import", "finance", "branding"] as const;
+export const IMPLEMENTED_FEATURES = [...CORE_FEATURES, "report_library", "worklists"] as const;
 export type CommercialFeature = typeof IMPLEMENTED_FEATURES[number];
 export interface Plan { id: PlanId; name: string; monthlyCents: number; annualCents: number; annualDeferred: true; limits: Readonly<Limits>; features: readonly CommercialFeature[] }
-const plan = (id: PlanId, name: string, monthlyCents: number, annualCents: number, activeCaravans: number, passengersPerCaravan: number, internalUsers: number): Readonly<Plan> => Object.freeze({ id, name, monthlyCents, annualCents, annualDeferred: true, limits: Object.freeze({ activeCaravans, passengersPerCaravan, internalUsers }), features: Object.freeze([...IMPLEMENTED_FEATURES]) });
+const plan = (id: PlanId, name: string, monthlyCents: number, annualCents: number, activeCaravans: number, passengersPerCaravan: number, internalUsers: number): Readonly<Plan> => Object.freeze({ id, name, monthlyCents, annualCents, annualDeferred: true, limits: Object.freeze({ activeCaravans, passengersPerCaravan, internalUsers }), features: Object.freeze([...CORE_FEATURES, ...(id !== "essencial" ? ["report_library" as const] : []), ...(id === "premium" ? ["worklists" as const] : [])]) });
 export const PlanCatalog: Readonly<Record<PlanId, Readonly<Plan>>> = Object.freeze({
   essencial: plan("essencial", "Essencial", 8900, 89000, 2, 60, 2),
   pro: plan("pro", "Pro", 14900, 149000, 5, 200, 5),
@@ -35,6 +36,7 @@ export const EntitlementService = {
     return { planId: assignment.planId, status: assignment.status, limits: catalog.limits, growthAllowed, monthlyCents: promotional ? assignment.override!.monthlyCents : catalog.monthlyCents, promotional };
   },
   featureAllowed(entitlements: Entitlements, feature: CommercialFeature, configured: boolean, implemented = IMPLEMENTED_FEATURES.includes(feature)): boolean {
-    return Boolean(entitlements.planId && PlanCatalog[entitlements.planId].features.includes(feature) && configured && implemented);
+    const core = (CORE_FEATURES as readonly string[]).includes(feature);
+    return Boolean(entitlements.planId && PlanCatalog[entitlements.planId].features.includes(feature) && configured && implemented && (core || entitlements.growthAllowed));
   },
 };

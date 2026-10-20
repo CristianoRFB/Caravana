@@ -188,6 +188,127 @@ service cloud.firestore {
       let policy = get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data;
       return acceptsReservations(orgId) && policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
     }
+    function functionalFeatures(planId) {
+      return planId == 'premium' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library', 'worklists']
+        : planId == 'pro' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library']
+        : ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding'];
+    }
+    // New commercial tools never gate the existing core, security or historical reads.
+    function functionalGrowth(orgId, feature) {
+      let subscription = get(/databases/$(database)/documents/subscriptions/$(orgId)).data;
+      let projection = get(/databases/$(database)/documents/organizations/$(orgId)/commercialFeatures/current).data;
+      return exists(/databases/$(database)/documents/organizations/$(orgId)) && isAdmin(orgId) && acceptsReservations(orgId)
+        && subscription.status in ['active', 'trial', 'demo']
+        && (subscription.trialEndsAt == null || request.time < subscription.trialEndsAt)
+        && feature in functionalFeatures(subscription.planId)
+        && projection.lastCommercialOperationId == subscription.lastCommercialOperationId
+        && projection.planId == subscription.planId && projection.status == subscription.status;
+    }
+    match /organizations/{orgId}/commercialFeatures/{id} {
+      allow get: if isAdmin(orgId) || isPlatformOwner();
+      allow list, delete: if false;
+      allow create, update: if id == 'current' && isPlatformOwner()
+        && existsAfter(/databases/$(database)/documents/organizations/$(orgId))
+        && request.resource.data == {
+          'organizationId': orgId, 'version': 'features-v1',
+          'planId': getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.planId,
+          'features': functionalFeatures(getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.planId),
+          'status': getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.status,
+          'validUntil': getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.trialEndsAt,
+          'updatedAt': request.time,
+          'lastCommercialOperationId': getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.lastCommercialOperationId
+        } && getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.updatedAt == request.time;
+    }
+    function toolEnvelope(orgId, kind, entityId, data) {
+      let event = getAfter(/databases/$(database)/documents/organizations/$(orgId)/toolEvents/$(data.lastToolOperationId)).data;
+      return data.organizationId == orgId && data.updatedAt == request.time && data.updatedBy == request.auth.uid
+        && data.lastToolOperationId.matches('^[a-f0-9]{32}$')
+        && !exists(/databases/$(database)/documents/organizations/$(orgId)/toolEvents/$(data.lastToolOperationId))
+        && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
+        && event.kind == kind && event.entityId == entityId;
+    }
+    function validReportFinance(value) {
+      return value is map && value.keys().hasOnly(['passengerCount', 'paidPassengerCount', 'partialPassengerCount', 'pendingPassengerCount', 'reportedPassengerCount', 'unknownFareCount', 'expectedCents', 'receivedCents', 'receivableCents', 'uncertainReceivableCount', 'expenseCents', 'recordedBalanceCents', 'projectedResultCents'])
+ && value.passengerCount is int && value.passengerCount >= 0 && value.passengerCount <= 9000000000000
+ && value.paidPassengerCount is int && value.paidPassengerCount >= 0 && value.paidPassengerCount <= 9000000000000
+ && value.partialPassengerCount is int && value.partialPassengerCount >= 0 && value.partialPassengerCount <= 9000000000000
+ && value.pendingPassengerCount is int && value.pendingPassengerCount >= 0 && value.pendingPassengerCount <= 9000000000000
+ && value.reportedPassengerCount is int && value.reportedPassengerCount >= 0 && value.reportedPassengerCount <= 9000000000000
+ && value.unknownFareCount is int && value.unknownFareCount >= 0 && value.unknownFareCount <= 9000000000000
+ && value.expectedCents is int && value.expectedCents >= 0 && value.expectedCents <= 9000000000000
+ && value.receivedCents is int && value.receivedCents >= 0 && value.receivedCents <= 9000000000000
+ && value.receivableCents is int && value.receivableCents >= 0 && value.receivableCents <= 9000000000000
+ && value.uncertainReceivableCount is int && value.uncertainReceivableCount >= 0 && value.uncertainReceivableCount <= 9000000000000
+ && value.expenseCents is int && value.expenseCents >= 0 && value.expenseCents <= 9000000000000
+ && value.recordedBalanceCents is int && value.recordedBalanceCents >= -9000000000000 && value.recordedBalanceCents <= 9000000000000
+ && value.projectedResultCents is int && value.projectedResultCents >= -9000000000000 && value.projectedResultCents <= 9000000000000
+        && value.recordedBalanceCents == value.receivedCents - value.expenseCents
+        && value.projectedResultCents == value.expectedCents - value.expenseCents;
+    }
+    match /organizations/{orgId}/reports/{reportId} {
+      function validReport(data) {
+        let summary = data.summary;
+        return data.keys().hasOnly(['organizationId', 'revision', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'lastToolOperationId', 'title', 'from', 'to', 'caravanId', 'summary'])
+          && data.title is string && data.title.size() >= 3 && data.title.size() <= 100
+          && data.from is string && data.from.matches('^([0-9]{4}-[0-9]{2}-[0-9]{2})?$')
+          && data.to is string && data.to.matches('^([0-9]{4}-[0-9]{2}-[0-9]{2})?$')
+          && (data.from == '' || validCalendarDate(data.from)) && (data.to == '' || validCalendarDate(data.to))
+          && (data.from == '' || data.to == '' || data.from <= data.to)
+          && data.caravanId is string && data.caravanId.size() <= 128 && !data.caravanId.matches('.*[/].*')
+          && summary.keys().hasOnly(['trips', 'capacity', 'boarded', 'pendingAuthorizations', 'finance'])
+          && money(summary.trips) && summary.trips <= 50 && money(summary.capacity) && money(summary.boarded) && money(summary.pendingAuthorizations)
+          && validReportFinance(summary.finance)
+          && data.revision == 1 && data.createdAt == request.time && data.createdBy == request.auth.uid && data.lastToolOperationId == reportId;
+      }
+      allow get, list: if isAdmin(orgId);
+      allow update, delete: if false;
+      allow create: if reportId.matches('^[a-f0-9]{32}$') && functionalGrowth(orgId, 'report_library')
+        && validReport(request.resource.data)
+        && toolEnvelope(orgId, 'report', reportId, request.resource.data);
+    }
+    function validWorklist(orgId, data) {
+      return data.keys().hasOnly(['organizationId', 'revision', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'lastToolOperationId', 'title', 'kind', 'caravanId', 'tasksText', 'doneMask', 'archived'])
+        && data.title is string && data.title.size() >= 3 && data.title.size() <= 100 && data.archived is bool
+        && data.tasksText is string && data.tasksText.size() <= 2419
+        && data.tasksText.matches('^[^\\r\\n]{1,120}(\\n[^\\r\\n]{1,120}){0,19}$')
+        && data.doneMask is string && data.doneMask.matches('^[01]{1,20}$')
+        && data.doneMask.size() == data.tasksText.split('\\n').size()
+        && data.revision is int && data.revision >= 1 && data.revision <= 1000000
+        && ((data.kind == 'template' && data.caravanId == null && isTenantOwner(orgId))
+          || (data.kind == 'trip' && data.caravanId is string && data.caravanId.size() >= 1 && data.caravanId.size() <= 128
+            && !data.caravanId.matches('.*[/].*') && get(/databases/$(database)/documents/caravans/$(data.caravanId)).data.organizationId == orgId));
+    }
+    match /organizations/{orgId}/worklists/{worklistId} {
+      allow get, list: if isAdmin(orgId);
+      allow delete: if false;
+      allow create: if worklistId.matches('^[a-f0-9]{32}$') && functionalGrowth(orgId, 'worklists')
+        && validWorklist(orgId, request.resource.data) && toolEnvelope(orgId, 'worklist', worklistId, request.resource.data)
+        && request.resource.data.revision == 1 && request.resource.data.createdAt == request.time && request.resource.data.createdBy == request.auth.uid;
+      allow update: if functionalGrowth(orgId, 'worklists') && validWorklist(orgId, request.resource.data)
+        && toolEnvelope(orgId, 'worklist', worklistId, request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.kind == resource.data.kind && request.resource.data.caravanId == resource.data.caravanId
+        && request.resource.data.revision == resource.data.revision + 1;
+    }
+    match /organizations/{orgId}/toolEvents/{operationId} {
+      function validToolEvent(data) {
+        let collectionName = data.kind == 'report' ? 'reports' : 'worklists';
+        let target = /databases/$(database)/documents/organizations/$(orgId)/$(collectionName)/$(data.entityId);
+        let existed = exists(target);
+        let before = existed ? get(target).data : {};
+        return data.keys().hasOnly(['organizationId', 'actorUid', 'at', 'kind', 'entityId', 'payloadHash', 'before', 'after'])
+          && operationId.matches('^[a-f0-9]{32}$') && data.entityId.matches('^[a-f0-9]{32}$') && data.kind in ['report', 'worklist']
+          && data.organizationId == orgId && data.actorUid == request.auth.uid && data.at == request.time && data.payloadHash.matches('^[a-f0-9]{64}$')
+          && ((existed && data.before == before) || (!existed && data.before == null))
+          && (!existed || getAfter(target).data != before)
+          && getAfter(target).data == data.after && data.after.organizationId == orgId && data.after.lastToolOperationId == operationId && data.after.updatedAt == request.time;
+      }
+      allow get, list: if isAdmin(orgId);
+      allow update, delete: if false;
+      // Actual target mutation is required. Its rule enforces ACL/feature; this
+      // event binds the exact before/after and actor, without evaluating ACL twice.
+      allow create: if signedIn() && validToolEvent(request.resource.data);
+    }
     function quotaSeats(orgId, seats) {
       return quotaGrowth(orgId) && seats is int && seats >= 0
         && seats <= get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data.limits.passengersPerCaravan;

@@ -388,6 +388,8 @@
   gap: 20px;
 }
 .saas-plan {
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border: 1px solid #dce0d9;
   border-radius: 12px;
@@ -397,6 +399,15 @@
   border: 2px solid var(--saas-orange);
   padding: 28px 23px;
 }
+.saas-plan-premium { border-color: #293d54; background: #f6f8fc; }
+.saas-plan-audience { min-height: 4.5em; color: var(--saas-muted); font-size: 13px; line-height: 1.5; margin: 0 0 20px; }
+.saas-plan-inheritance { font-weight: 700; color: #233f31; margin: 0; font-size: 13px; }
+.saas-plan ul.saas-plan-benefits { border-top: 0; padding-top: 15px; }
+.saas-comparison { max-width: 100%; overflow-x: auto; margin-top: 32px; border: 1px solid #c7cfbf; border-radius: 10px; background: white; }
+.saas-comparison table { width: 100%; border-collapse: collapse; min-width: 540px; font-size: 13px; }
+.saas-comparison caption { text-align: left; font-weight: 700; padding: 16px; }
+.saas-comparison th, .saas-comparison td { padding: 14px; border-top: 1px solid #dde4d9; text-align: left; }
+.saas-comparison tbody th { font-weight: 500; }
 .saas-plan-label {
   font-size: 9px;
   letter-spacing: 1.5px;
@@ -443,6 +454,7 @@
   margin-top: 2px;
 }
 .saas-plan .saas-button {
+  margin-top: auto;
   width: 100%;
   font-size: 12px;
   gap: 8px;

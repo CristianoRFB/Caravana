@@ -25,6 +25,18 @@
 html {
   scroll-behavior: smooth;
 }
+.tool-form fieldset { display: grid; gap: 1rem; border: 1px solid #d8d9e5; border-radius: 12px; padding: 1rem; min-width: 0; }
+.tool-form label { display: grid; gap: .35rem; min-width: 0; }
+.tool-form input, .tool-form select, .tool-form textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid #bcc0d0; border-radius: 8px; font: inherit; }
+.tool-cards { display: grid; gap: 1rem; }
+.tool-cards article { min-width: 0; overflow-wrap: anywhere; }
+.tool-cards dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .4rem 1rem; }
+.tool-cards dd { margin: 0; font-weight: 600; }
+.tool-checkbox { display: flex; align-items: baseline; gap: .6rem; }
+.tool-checkbox input { flex: 0 0 auto; }
+.tool-task-list { list-style: none; padding: 0; display: grid; gap: .6rem; }
+.tool-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.operational-tools fieldset:disabled { opacity: .7; }
 body {
   margin: 0;
   min-width: min(320px, 100%);
@@ -1463,6 +1475,7 @@ button:disabled {
 .tenant-switcher { display: grid; gap: 6px; margin: 0 20px 14px; font-size: 12px; }
 .tenant-switcher select { max-width: 100%; min-width: 0; padding: 8px; border: 1px solid #dddce8; border-radius: 8px; background: white; color: #10132e; }
 .admin-sidebar {
+  overflow-y: auto;
   position: fixed;
   z-index: 11;
   left: 0;
@@ -1483,6 +1496,7 @@ button:disabled {
   padding: 0 10px 13px;
 }
 .admin-sidebar > a {
+  flex-shrink: 0;
   display: flex;
   gap: 11px;
   align-items: center;
