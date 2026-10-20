@@ -52,7 +52,8 @@
     "test:quota-downgrade": "node scripts/run-local-tests.mjs quota-downgrade",
     "test:namespace-guard": "node scripts/run-local-tests.mjs namespace-guard",
     "test:public-seats": "node scripts/run-local-tests.mjs public-availability",
-    "test:public-seats:e2e": "node scripts/run-local-tests.mjs public-availability-e2e"
+    "test:public-seats:e2e": "node scripts/run-local-tests.mjs public-availability-e2e",
+    "test:landing:e2e": "node scripts/run-local-tests.mjs landing-e2e"
   },
   "dependencies": {
     "firebase": "^11.10.0",

@@ -1,0 +1,8 @@
+
+ RUN  v5.0.1 /workspace/Caravana
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  00:05:21
+   Duration  503ms (transform 54%, setup 32%, import 6%, tests 5%, worker 3%)

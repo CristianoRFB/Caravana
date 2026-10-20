@@ -1,6 +1,6 @@
-# F6 — preparação e próximos módulos (não homologados)
+# F6 — plano de implementação (histórico e pendências)
 
-Catálogo puro inicial em plan-catalog.ts; ainda não integrado ao servidor/painel. Preços e limites vêm do MASTER: Essencial89/890,2/60/2; Pro149/1490,5/200/5; Premium219/2190,15/500/15. Anual aprovado mas lançamento deferred; setup100 com dispensa opcional, sem trial público ou billing automático. Override temporário Pro90 pertence ao tenant, não ao catálogo nem à tarifa85 do passageiro.
+Estado atual em F6_ACCEPTANCE.md. Catálogo, atribuição, quotas, onboarding e painel foram integrados e validados incrementalmente no emulador. A sequência abaixo preserva o plano original; equipe/convites estão BLOCKED por sincronização do LAB04-PC23. Preços e limites vêm do MASTER: Essencial89/890,2/60/2; Pro149/1490,5/200/5; Premium219/2190,15/500/15. Anual aprovado mas lançamento deferred; setup100 com dispensa opcional, sem trial público ou billing automático. Override temporário Pro90 pertence ao tenant, não ao catálogo nem à tarifa85 do passageiro.
 
 ## Ordem proposta
 
@@ -17,4 +17,4 @@ Catálogo puro inicial em plan-catalog.ts; ainda não integrado ao servidor/pain
 
 “Caravana ativa” será publicada; rascunho/arquivo não contam como publicada, mas novo cadastro ainda exige plano apto. Passageiros por caravana usam inscrições reservadas não canceladas, inclusive importadas; histórico cancelado/financeiro não é apagado. Internos são memberships ativas. Limites menores após downgrade bloqueiam crescimento e não reduzem/expulsam dados existentes.
 
-Catálogo puro não torna limites confiáveis: enquanto a integração transacional/Rules não estiver pronta, F6 fica IN_PROGRESS e não há declaração comercial. Modificações de Rules, migração real de baseline, provider Auth, DNS ou deploy continuam BLOCKED sem autorização específica.
+A integração transacional/Rules já tem evidências incrementais nos documentos dos módulos, mas equipe/convites e gate conjunto continuam pendentes: F6 fica IN_PROGRESS e não há declaração comercial. Modificações de Rules, migração real de baseline, provider Auth, DNS ou deploy continuam BLOCKED sem autorização específica.

@@ -1,0 +1,50 @@
+
+> caravana-77@0.1.0 test
+> node scripts/run-local-tests.mjs
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run
+
+ RUN  v5.0.1 /workspace/Caravana
+
+ ❯ tests/tenant-branding.integration.test.ts (6 tests | 4 failed) 1321ms
+   ❯ public tenant branding and authoritative route mapping (6)
+     × validates content against a forged complete SDK audit, not merely the absence of an audit 74ms
+     × saves public fields and private immutable audit, replays safely and resolves a trusted slug 67ms
+     × preserves stable URLs and atomically prevents two tenants claiming the same slug 58ms
+     × denies unauthorized config/mapping and direct SDK CSS, SVG, credentials and timestamp forgery 63ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/tenant-branding.integration.test.ts > public tenant branding and authoritative route mapping > validates content against a forged complete SDK audit, not merely the absence of an audit
+ FAIL  tests/tenant-branding.integration.test.ts > public tenant branding and authoritative route mapping > saves public fields and private immutable audit, replays safely and resolves a trusted slug
+FirebaseError: 7 PERMISSION_DENIED:
+evaluation error at L167:24 for 'create' @ L167, evaluation error at L138:24 for 'create' @ L138, evaluation error at L173:24 for 'create' @ L173, false for 'create' @ L173, false for 'create' @ L167
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/tenant-branding.integration.test.ts > public tenant branding and authoritative route mapping > preserves stable URLs and atomically prevents two tenants claiming the same slug
+ FAIL  tests/tenant-branding.integration.test.ts > public tenant branding and authoritative route mapping > denies unauthorized config/mapping and direct SDK CSS, SVG, credentials and timestamp forgery
+FirebaseError: 7 PERMISSION_DENIED:
+evaluation error at L167:24 for 'create' @ L167, evaluation error at L138:24 for 'create' @ L138, evaluation error at L173:24 for 'create' @ L173, false for 'create' @ L167
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed | 34 passed (35)
+      Tests  4 failed | 211 passed (215)
+   Start at  23:59:28
+   Duration  65.04s (tests 94%, import 4%, transform 1%)
+
+    Isolate  35 workers spawned · ~116ms startup each (spawn + environment, per file)
+             at least ~3.95s faster with isolate: false — reuses workers across files instead of one per file
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run" exited with code 1

@@ -82,3 +82,6 @@ npm run test:branding / npm run test:branding:e2e — configuração pública, i
 npm run test:branding:all —12 jornadas de marca nas quatro larguras; test:branding:visual —4 casos específicos de layout/limites do texto.
 
 npm run test:public-seats / npm run test:public-seats:e2e — disponibilidade física/comercial, downgrade, suspensão/expiração ao vivo, rascunho/retry e regressões de marcas/demo/reservas.
+
+Landing comercial local: http://127.0.0.1:5173/saas. Catálogo/planos e implantação assistida; sem contato oficial, links levam à explicação do processo. npm run test:landing:e2e verifica as quatro larguras.
+Storage em Cloud com proxy: runner trata apenas GET de documentos do Firestore demo em127.0.0.1:18080; não remover proxies externos nem alterar Rules para fazer testes passarem. CLOUD_REGRESSION.md.

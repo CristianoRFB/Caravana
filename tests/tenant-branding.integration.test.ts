@@ -15,6 +15,7 @@ afterEach(async () => { expect(pendingWrites()).toBe(0); runtime.db = null; runt
 async function seed() {
   await env.withSecurityRulesDisabled(async (context) => {
     for (const org of ["a", "b"]) {
+      await setDoc(doc(context.firestore(), `organizations/${org}`), { name: `Organização sintética ${org}`, status: "active" });
       await setDoc(doc(context.firestore(), `memberships/owner-${org}/organizations/${org}`), { organizationId: org, uid: `owner-${org}`, role: "tenant_owner", status: "active" });
       await setDoc(doc(context.firestore(), `caravans/ride-${org}`), { organizationId: org, slug: "same-slug", name: "Mesmo nome", status: "published" });
     }
@@ -22,6 +23,16 @@ async function seed() {
   }); runtime.db = env.authenticatedContext("owner-a").firestore();
 }
 describe("public tenant branding and authoritative route mapping", () => {
+  it("does not bootstrap an orphan organization through an otherwise valid branding write", async () => {
+    await seed();
+    await env.withSecurityRulesDisabled(async (context) => { await deleteDoc(doc(context.firestore(), "organizations/a")); });
+    await expect(saveTenantBranding(brand("a"))).rejects.toBeDefined();
+    expect(await resolveTenantSlug(brand("a").slug)).toBeNull();
+    await env.withSecurityRulesDisabled(async (context) => {
+      expect((await getDoc(doc(context.firestore(), "publicTenantSettings/a"))).exists()).toBe(false);
+      expect((await getDoc(doc(context.firestore(), "organizations/a"))).exists()).toBe(false);
+    });
+  });
   it("cannot claim another historical organization or orphan namespace as a new public slug", async () => {
     await seed(); await env.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), "organizations/historical-root"), { name: "Raiz histórica fictícia B" });

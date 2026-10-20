@@ -1,6 +1,6 @@
 # Progresso — fonte única
 
-Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT não equivalem a TESTED/RUNTIME_CONFIRMED.
+Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT não equivalem a TESTED/RUNTIME_CONFIRMED. Linhas de fase abaixo refletem o estado consolidado; linhas RED/WIP preservam a trilha histórica. Matriz atual da F6 em F6_ACCEPTANCE.md.
 
 | ID | Prioridade | Estado | Base/alteração | Evidência/teste | Risco/dependência/próximo passo |
 |---|---|---|---|---|---|
@@ -10,7 +10,7 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F0-04 | P0 | PASS | Recuperação em worktree isolada baseada em fa4d138 | SOURCE_RECONCILIATION.md; fonte TS original, sem decompilação | Checkout original intacto |
 | F0-05 | P0 | PASS para Rules; UNKNOWN para registros reais | Rules implantadas capturadas somente leitura e idênticas às recuperadas | live-rules-manifest.json; SHA256 fe594614... | Nenhuma PII consultada; não equivale a homologação |
 | F0-09 | P0 | PASS | Build reproduzível com financeiro | f0-build-parity.json: seis arquivos idênticos; 26 testes; lint/typecheck/build | Não publicar dist; nenhuma garantia de operação bancária |
-| F1 | P0 | IN_PROGRESS | Checkpoint F0 69abd6f; regressão pela função real de reserva | Fixtures sem id, id legado, concorrência, cancelamento, ledger e upload | Primeiro capturar falha do bug publicado, depois corrigir |
+| F1 | P0 | PASS local / BLOCKED homologação real | Correções e preservação operacional concluídas no corpus histórico | CURRENT.md e gate F3/F4; logs F1 preservados | Não reabrir sem regressão |
 | F1-ID-RED | P0 | FAIL (baseline; corrigindo) | 4 de 8 novos testes reproduzem erro real da fonte publicada | f1-before-id-fix-isolated.log; 30 PASS/4 FAIL | Undefined, id legado errado e última vaga; corrigir ambas as escritas e leitura canônica |
 | F1-TEST-ISOLATION | P0 | IN_PROGRESS | Porta 8080 ocupada; configuração de testes separada 18080, projeto demo-caravana77-test | f1-before-id-fix.log registra falha de infraestrutura; rerun isolado executou 34 testes | Nenhum processo de terceiro encerrado; serviços reais não recebem testes |
 | F1-ID-GREEN | P0 | PASS | Ambas as escritas usam caravanRef.id; leituras priorizam snapshot.id | f1-id-final-tests.log: 34 PASS; lint/typecheck/build PASS | Fonte financeira e layout preservados; fix ainda local |
@@ -21,7 +21,7 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | CLIENT-PRESERVATION | P0 | PASS para auditoria atual; obrigação futura | Cinco confirmações registradas antes de F2 | CLIENT_PRESERVATION_ITALO_2026-10-16.md | Nenhuma escrita real autorizada; continuar localmente |
 | F1-LOCAL-SAFETY | P0 | PASS | Guard antes do SDK, dev sintético por padrão e E2E sobre dist-e2e compilado | 8 casos de ambiente; f1-environment-unit.log 51 PASS; f1-compiled-e2e.log 12 PASS | Build real recusa loopback; nenhum bypass para produção |
 | F1-PORTAL | P0 | PASS local | Revogação aditiva, limpeza do portal, no-referrer; recusa/reenvio/cancelamento e Pix incompleto | f1-portal-unit.log 52 PASS; f1-portal-e2e-green.log 20 PASS; lint/typecheck/build PASS | Primeiros E2E falharam por seleção de heading, commit assíncrono e texto esperado; corrigidos sem skip/retry |
-| F2 | P0 | IN_PROGRESS | Modelo/migração sintética aditiva concluídos; runtime/RBAC ainda pendentes | MULTITENANT_MIGRATION.md | Nunca migrar produção |
+| F2 | P0 | PASS local / BLOCKED homologação real | Core, isolamento, suporte e segurança no emulador | F2_ACCEPTANCE.md | Bootstrap/migração/backup reais não executados |
 | F2-MIGRATION | P0 | PASS sintético | Planner sem I/O, manifesto before/after, conflitos, idempotência e restore local | f2-migration-final-tests.log 64 PASS; f2-migration-rehearsal.log aplica 2 memberships, preserva 8 docs, restore SHA256 idêntico | Compatibilidade com admins preservada; nenhuma migração real |
 | F2-RBAC | P0 | PASS parcial local | Membership/roles em Rules e org/caravan imutáveis; global separado; compatibilidade legada configurável | f2-context-unit.log 75 PASS, f2-context-e2e.log 28 PASS | Storage e backend/Platform Owner completo pendentes |
 | F2-RESOLVER | P0 | PASS local | Revogação observada, remount ao trocar org/papel, rascunhos/filtros limpos e bloqueio de troca durante writes | E2E contexto28 PASS anterior; f2-pending-e2e.log4 PASS com Write retido | Não cancela commit já aceito; operações futuras devem usar SDK rastreado |
@@ -32,13 +32,13 @@ Estados: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED. SOURCE_PRESENT/BUNDLE_PRESENT n
 | F2-SUPPORT | P0 | PASS local | Consentimento do owner, escopo configuração somente leitura, início explícito, sessão única, prazo1h e audit imutável | f2-support-tests.log9 PASS inicial; f2-support-e2e.log4 PASS; casos adicionais no gate | SUPPORT_ACCESS.md; sem passageiros/proofs/financeiro e sem escrita real |
 | F2-ACCEPTANCE | P0 | PASS sintético / BLOCKED homologação real | Matriz dos10 requisitos em F2_ACCEPTANCE.md; regressão do conjunto |101 unit/Rules/integration,4 Auth,6 Storage,56 E2E,lint/typecheck/build e2e PASS; teste estático anterior corrigido | Tokens/IAM/backup/migração reais BLOCKED; próxima fase local F3 |
 | WORKFLOW-EFFICIENCY | P1 | PASS aplicado ao bloco demo | Suites específicas após mudanças; sem regenerar screenshots ou reiniciar auditoria; push na branch autorizado | Testes de risco auth/Rules incluídos; checkpoint funcional | Full gates na conclusão de fase |
-| F3 | P0/P1 | IN_PROGRESS | Primeiro módulo reserva idempotente com tentativa persistida | RESERVATION_RETRIES.md;56 testes afetados e4 E2E desktop/mobile320 PASS;lint/typecheck/build e2e | Estados/capacidade, CSV, check-in/auditoria e documentos/retention seguem pendentes |
+| F3 | P0/P1 | PASS local / BLOCKED homologação real | Reservas/operações/CSV/documentos/check-in concluídos no corpus | F3_ACCEPTANCE.md | Regressão quando afetado; preservar IDs/histórico |
 | F3-RETRY | P0 | PASS local | Tokens persistidos na aba; replay/hash/caravana/nonce; confirmação do servidor após erro; identidade imutável e cancelamento sem reabertura | f3-reservation-tests-final.log56 PASS; f3-reservation-e2e-final.log4 PASS | Dedupe entre novas tentativas/dispositivos e CSV entre lotes ainda TODO; não equivale a teste de perda real de ACK |
 | F3-OPERATIONS | P0 | PASS incremental local | Estados/revisão/check-in/reversão/cancelamento com audit imutável e timestamp; vaga liberada uma vez; contador inválido bloqueia; terminal não reabre |55 testes direcionados PASS;4 E2E legados+4 histórico/A×B/reload/offline PASS;lint/typecheck/build e2e | REGISTRATION_STATES.md; incremento de import ainda será vinculado a manifesto no CSV; não é gate F3 completo |
 | F3-CSV | P0 | PASS incremental local | Registry privado de identidades, manifestos/snapshots, retry/report por linha, Rules vinculam contador, rollback só intacto e auditado |69 testes direcionados e4 E2E PASS;lint/typecheck/build E2E | CSV_IMPORT_ROLLBACK.md; teste400 e gate F3 TODO; nenhuma migração de registros legados reais |
-| F4 | P0 | TODO | Financeiro preservado e consolidado | Invariantes, ledger, isolamento | Não movimentar dinheiro real |
-| F5 | P1 | TODO | White-label e rotas | A×B e links legados | Sem DNS/domínio novo |
-| F6 | P1 | TODO | Planos e onboarding assistido | Limites servidor e overrides | Sem billing/gateway |
+| F4 | P0 | PASS local / BLOCKED homologação real | Ledger e Financeiro Geral preservados | F4_ACCEPTANCE.md | Nenhuma movimentação financeira real |
+| F5 | P1 | PASS local / BLOCKED externo | White-label/rotas e contratos de domínios | F5_ACCEPTANCE.md | Domínios/aliases reais deferred/BLOCKED |
+| F6 | P1 | IN_PROGRESS / BLOCKED equipe-sync | Comercial/quotas/onboarding/demo/vagas com aceites incrementais | F6_ACCEPTANCE.md | Recuperar convites do LAB04-PC23 e concluir gate conjunto |
 | F7 | P1 | TODO | CI, observabilidade e release local | E2E/docs/runbook | Publicação bloqueada por autorização |
 | F8 | P1 | TODO | Relatório de aceite | Gates e checkpoint | Sem merge/deploy/PR; pushes de checkpoints autorizados na branch de trabalho |
 
@@ -63,3 +63,7 @@ Gate F0 PASS de fonte recuperada/reconciliável: financeiro e recursos avançado
 | F6-demo-commercial | P1 | PASS incremental local | Duas marcas/owners/planos distintos, contratos demo e usage, fixtures aditivas |8 Auth/Rules+10 E2E1440/320, lint/typecheck/build E2E PASS; F6_DEMO.md | Vagas públicas/landing/gate F6 ainda pendentes |
 
 | F6-public-commercial-seats | P1 | PASS incremental local | Disponibilidade comercial confirmada/live no catálogo/detalhe/FAQ/formulário; rascunho e retry preservados |45 testes+26 E2E1440/320, lint/typecheck/build E2E PASS; PUBLIC_COMMERCIAL_AVAILABILITY.md | Landing e gate F6 pendentes; equipe BLOCKED de sync |
+
+| F6-landing | P1 | PASS incremental / IN_PROGRESS regressão final | /saas separada, catálogo canônico e implantação assistida, chunk próprio |4 E2E nas quatro larguras, visual1440/320; COMMERCIAL_LANDING.md | Contato oficial BLOCKED;148 E2E gerais em execução |
+| CLOUD-candidate-regression | P0 | IN_PROGRESS | Fixture histórica de branding corrigida sem relaxar Rules; runner Storage trata apenas GET sintético local |216 SDK/Rules+13 proxy+8 Auth+6 Storage PASS; CLOUD_REGRESSION.md | E2E final e gate dos convites ainda pendentes |
+| F7-safe-preparation | P1 | PASS documento / TODO infraestrutura | Runbook sem alterações reais, CI atual conferido, critérios de staging/restore/release | F7_PREPARATION.md; nenhum CI remoto/deploy executado | F6 geral pendente, ações reais BLOCKED |

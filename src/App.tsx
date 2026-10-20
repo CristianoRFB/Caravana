@@ -6,6 +6,8 @@ import { useTenantBrand } from "./lib/tenant-brand-context";
 import { tenantCaravanPath, tenantHomePath } from "./lib/tenant-branding";
 import {
   createContext,
+  lazy,
+  Suspense,
   useContext,
   useEffect,
   useMemo,
@@ -137,6 +139,7 @@ const isAuthorizationPending = (registration: Registration) =>
             registration.authorizationStatus || "not_sent",
           ))),
   );
+const CommercialLanding = lazy(() => import("./CommercialLanding"));
 const paymentProcessCopy =
   "Este site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual.";
 const resolveFaqAnswer = (
@@ -3696,6 +3699,7 @@ function TenantSupport() {
 export default function App() {
   return (
     <Routes>
+      <Route path="/saas" element={<Suspense fallback={<Loading />}><CommercialLanding /></Suspense>} />
       <Route
         path="/"
         element={

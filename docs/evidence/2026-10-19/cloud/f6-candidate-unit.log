@@ -1,0 +1,27 @@
+
+> caravana-77@0.1.0 test
+> node scripts/run-local-tests.mjs
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run
+
+ RUN  v5.0.1 /workspace/Caravana
+
+
+ Test Files  35 passed (35)
+      Tests  216 passed (216)
+   Start at  00:00:52
+   Duration  65.54s (tests 94%, import 4%, transform 1%)
+
+    Isolate  35 workers spawned · ~117ms startup each (spawn + environment, per file)
+             at least ~3.99s faster with isolate: false — reuses workers across files instead of one per file
+
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

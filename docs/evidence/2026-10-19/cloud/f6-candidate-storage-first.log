@@ -1,0 +1,47 @@
+
+> caravana-77@0.1.0 test:storage
+> node scripts/run-local-tests.mjs storage
+
+i  emulators: Starting emulators: auth, firestore, storage
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  storage: downloading cloud-storage-rules-runtime-v1.1.3.jar...
+
+i  Running script: vitest run --config vitest.storage.config.ts
+
+ RUN  v5.0.1 /workspace/Caravana
+
+ ❯ storage-tests/private-proofs.test.ts (6 tests | 3 failed) 10495ms
+   ❯ legacy Storage paths under active membership authority (6)
+     × reads the existing original path with owner A while denying B metadata/content 338ms
+     × owner B can read B without private access to A 35ms
+     × staff reads its organization's original file, but cannot list a bucket or delete history 160ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  storage-tests/private-proofs.test.ts > legacy Storage paths under active membership authority > reads the existing original path with owner A while denying B metadata/content
+ FAIL  storage-tests/private-proofs.test.ts > legacy Storage paths under active membership authority > staff reads its organization's original file, but cannot list a bucket or delete history
+FirebaseError: Firebase Storage: User does not have permission to access 'proofs/demo-org-a/demo-ride-a/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/historico.pdf'. (storage/unauthorized)
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  storage-tests/private-proofs.test.ts > legacy Storage paths under active membership authority > owner B can read B without private access to A
+FirebaseError: Firebase Storage: User does not have permission to access 'proofs/demo-org-b/demo-ride-b/ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff/historico.pdf'. (storage/unauthorized)
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Start at  00:02:48
+   Duration  10.98s (tests 97%, import 2%, transform 1%)
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run --config vitest.storage.config.ts" exited with code 1
