@@ -136,6 +136,38 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(str(caught.exception), "project_http_403")
         self.assertIsNone(audit.NoRedirect().redirect_request(None, None, 302, "", {}, "https://example.invalid"))
 
+    def test_index_request_matches_cli_without_optional_parameters(self):
+        self.assertEqual(audit.ROUTES["indexes"], "https://firestore.googleapis.com/v1/projects/bdall-e3585/databases/(default)/collectionGroups/-/indexes")
+        self.assertFalse(audit.allowed_url(audit.ROUTES["indexes"] + "?pageSize=100"))
+
+    def test_structured_http_diagnostic_drops_messages_metadata_and_unknown_fields(self):
+        body = {"error": {"status": "INVALID_ARGUMENT", "message": "PRIVATE_RESPONSE", "details": [
+            {"@type": "type.googleapis.com/google.rpc.BadRequest", "fieldViolations": [{"field": "page_size", "description": "PRIVATE_RESPONSE"}, {"field": "PRIVATE_RESPONSE"}]},
+            {"@type": "type.googleapis.com/google.rpc.ErrorInfo", "reason": "SERVICE_DISABLED", "metadata": {"token": "PRIVATE_RESPONSE"}},
+            {"@type": "type.googleapis.com/google.rpc.ErrorInfo", "reason": "PRIVATE_RESPONSE"},
+        ]}}
+        opener = Mock()
+        opener.open.side_effect = urllib.error.HTTPError(audit.ROUTES["indexes"], 400, "PRIVATE_RESPONSE", {}, io.BytesIO(json.dumps(body).encode()))
+        reader = audit.Reader("SYNTHETIC_TOKEN", opener)
+        with self.assertRaisesRegex(audit.Blocked, "indexes_http_400"):
+            reader.read("indexes", audit.ROUTES["indexes"])
+        self.assertEqual(reader.diagnostics, [{"resource": "indexes", "httpStatus": 400, "googleStatus": "INVALID_ARGUMENT", "invalidFields": ["page_size"], "googleReasons": ["SERVICE_DISABLED"]}])
+        self.assertNotIn("PRIVATE_RESPONSE", json.dumps(reader.diagnostics))
+
+    def test_malformed_large_or_untrusted_error_payload_is_not_reported(self):
+        for body in [b"PRIVATE_RESPONSE", b"x" * 32769, b'{"error":{"status":"PRIVATE_RESPONSE"}}', b'[]']:
+            error = urllib.error.HTTPError(audit.ROUTES["indexes"], 400, "PRIVATE_RESPONSE", {}, io.BytesIO(body))
+            self.assertEqual(audit.http_diagnostic("indexes", error), {"resource": "indexes", "httpStatus": 400})
+
+    def test_line_ending_difference_is_reported_but_does_not_bypass_gate(self):
+        data, report = fixture(), {}
+        data["ruleset"]["source"]["files"][0]["content"] = data["ruleset"]["source"]["files"][0]["content"].replace("\n", "\r\n")
+        with self.assertRaisesRegex(audit.Blocked, "deployed_rules_or_indexes"):
+            audit.audit(FakeReader(data), report)
+        self.assertFalse(report["firestoreRules"]["candidateMatch"])
+        self.assertTrue(report["firestoreRules"]["lfNormalizedCandidateMatch"])
+        self.assertNotIn("status", report)
+
     def test_gcloud_uses_exact_account_and_project_without_exposing_output(self):
         with patch.object(audit.subprocess, "run") as run:
             run.return_value.stdout = "SYNTHETIC_TOKEN\n"

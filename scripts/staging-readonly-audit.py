@@ -31,7 +31,8 @@ ROUTES = {
     "billing": f"https://cloudbilling.googleapis.com/v1/projects/{PROJECT}/billingInfo",
     "database": f"https://firestore.googleapis.com/v1/projects/{PROJECT}/databases/(default)",
     "release": f"https://firebaserules.googleapis.com/v1/projects/{PROJECT}/releases/cloud.firestore",
-    "indexes": f"https://firestore.googleapis.com/v1/projects/{PROJECT}/databases/(default)/collectionGroups/-/indexes?pageSize=100",
+    # Match the official Firebase CLI listIndexes request (no optional query).
+    "indexes": f"https://firestore.googleapis.com/v1/projects/{PROJECT}/databases/(default)/collectionGroups/-/indexes",
     "auth": f"https://identitytoolkit.googleapis.com/admin/v2/projects/{PROJECT}/config",
 }
 
@@ -43,6 +44,38 @@ class Blocked(Exception):
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
+def http_diagnostic(resource, error):
+    """Expose only fixed enums; never echo remote messages, metadata or URLs."""
+    result = {"resource": resource, "httpStatus": error.code}
+    try:
+        payload = error.read(32769)
+        if len(payload) > 32768:
+            return result
+        body = json.loads(payload).get("error", {})
+        status = body.get("status")
+        if status in {"INVALID_ARGUMENT", "PERMISSION_DENIED", "UNAUTHENTICATED", "NOT_FOUND", "FAILED_PRECONDITION", "RESOURCE_EXHAUSTED", "UNAVAILABLE", "INTERNAL"}:
+            result["googleStatus"] = status
+        fields = set()
+        reasons = set()
+        for detail in body.get("details", []):
+            if detail.get("@type") == "type.googleapis.com/google.rpc.BadRequest":
+                for violation in detail.get("fieldViolations", []):
+                    field = violation.get("field")
+                    if field in {"page_size", "pageSize", "page_token", "pageToken", "parent", "filter"}:
+                        fields.add(field)
+            elif detail.get("@type") == "type.googleapis.com/google.rpc.ErrorInfo":
+                reason = detail.get("reason")
+                if reason in {"SERVICE_DISABLED", "ACCESS_TOKEN_SCOPE_INSUFFICIENT", "IAM_PERMISSION_DENIED", "BILLING_DISABLED", "RATE_LIMIT_EXCEEDED", "CONSUMER_INVALID"}:
+                    reasons.add(reason)
+        if fields:
+            result["invalidFields"] = sorted(fields)
+        if reasons:
+            result["googleReasons"] = sorted(reasons)
+    except Exception:
+        pass  # Malformed/oversized bodies remain a sanitized HTTP status only.
+    return result
 
 
 def ruleset_url(name):
@@ -72,6 +105,7 @@ class Reader:
         self._token = token
         self._opener = opener or urllib.request.build_opener(NoRedirect)
         self.calls = []
+        self.diagnostics = []
 
     def read(self, resource, url):
         if not allowed_url(url):
@@ -92,6 +126,7 @@ class Reader:
                     raise Blocked(f"{resource}_invalid_json_object")
                 return result
         except urllib.error.HTTPError as error:
+            self.diagnostics.append(http_diagnostic(resource, error))
             raise Blocked(f"{resource}_http_{error.code}") from None
         except Blocked:
             raise
@@ -196,7 +231,12 @@ def audit(reader, report):
     if len(files) != 1 or not isinstance(files[0].get("content"), str):
         raise Blocked("firestore_rules_source_requires_review")
     rules_hash = hashlib.sha256(files[0]["content"].encode()).hexdigest()
-    report["firestoreRules"] = {"sha256": rules_hash, "candidateMatch": rules_hash == RULES_SHA256}
+    normalized = files[0]["content"].replace("\r\n", "\n").replace("\r", "\n")
+    report["firestoreRules"] = {
+        "sha256": rules_hash, "candidateMatch": rules_hash == RULES_SHA256,
+        "lfNormalizedSha256": hashlib.sha256(normalized.encode()).hexdigest(),
+        "lfNormalizedCandidateMatch": hashlib.sha256(normalized.encode()).hexdigest() == RULES_SHA256,
+    }
     result = reader.read("indexes", ROUTES["indexes"])
     if result.get("nextPageToken"):
         raise Blocked("index_inventory_incomplete_no_partial_approval")
@@ -251,6 +291,8 @@ def main(argv=None):
     except Exception:
         report["reason"] = "unexpected_local_audit_failure_details_suppressed"
     report["requests"] = reader.calls if reader else []
+    if reader and reader.diagnostics:
+        report["httpDiagnostics"] = reader.diagnostics
     if arguments.output:
         write_report(arguments.output, report)
     print(json.dumps(report, indent=2))

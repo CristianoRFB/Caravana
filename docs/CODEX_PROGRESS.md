@@ -1,5 +1,9 @@
 # Progresso — fonte única
 
+## Evidência Android — auditoria somente leitura parcial
+
+A captura do operador confirma autenticação gerenciada no Cloud Shell e identidade/projeto staging verificados, billing desativado e Standard/freeTier. Execução antiga BLOCKED em indexes_http_400; Rules candidateMatch=false; Auth ainda não lido. Não confundir com falha de login ou conceder IAM. A causa do400 é desconhecida. Ferramenta ajustada para consulta igual ao CLI oficial, diagnóstico HTTP restrito a enums e hash LF das Rules sem liberar divergências.20 testes offline PASS. Nova execução real pelo Android pendente; nenhum projeto modificado e Codex sem identidade GCP própria. Ver FIREBASE_READONLY_ANDROID.md. Produção permanece fora dos destinos.
+
 ## Checkpoint de staging — 2026-10-20
 
 | ID | Estado | Implementação/evidência | Próximo gate |

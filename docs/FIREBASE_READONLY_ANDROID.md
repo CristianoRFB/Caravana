@@ -2,6 +2,12 @@
 
 Restrição vigente: identidade indicada `crisf.bueno10@gmail.com`, exclusivamente leitura do staging **bdall-e3585** (número146882624278). Produção **caravana-af306** fica fora dos destinos. Não conceder IAM, criar projetos/chaves, habilitar APIs/billing, alterar Auth/Rules/índices ou executar jornadas SDK com escritas nesta fase. Esta restrição prevalece sobre permissões históricas de administração de staging.
 
+## Resultado recebido pelo Android e ajuste da consulta
+
+A captura enviada pelo operador mostra identidade e projeto verificados, billing desativado, Standard/freeTier confirmado e leitura do ruleset concluída. Portanto, a autenticação no **Cloud Shell** funcionou; o Codex continua sem identidade GCP própria. Evidência parcial do operador, não auditoria integral: execução antiga interrompida com **indexes_http_400**, Rules candidateMatch=false e Auth ainda não consultado. Não é evidência de falta de IAM, nem motivo para pedir Owner ou fazer novo login.
+
+A consulta de índices foi alinhada ao Firebase CLI15.34.0, removendo o parâmetro opcional pageSize. A API discovery pública documenta esse parâmetro; sua presença não comprova a causa do400. A causa exata permanece pendente da nova execução. O relatório agora inclui somente status/razões/campos de erro de listas fixas; nunca inclui mensagens brutas, tokens ou metadados arbitrários. A impressão digital LF-normalizada das Rules ajuda a distinguir quebra de linha, mas **não substitui candidateMatch nem libera o gate**. Nenhuma correção remota é automática.
+
 ## Diagnóstico do login anterior
 
 A orientação anterior pressupunha um terminal do Cloud acessível ao usuário; essa disponibilidade não foi comprovada. O PTY das ferramentas do agente não é uma interface de entrada do usuário Android. Não pedir autorização/códigos pelo chat, nem substituir o prompt por `firebase login '<código>'`.
@@ -20,11 +26,12 @@ Este caminho executa a leitura no Google Cloud Shell e entrega ao Codex somente 
 
 1. No Chrome Android, entrar como crisf.bueno10@gmail.com em **https://shell.cloud.google.com/?project=bdall-e3585**. Se o terminal não aparecer, ativar **Site para computador** no menu do Chrome. Abrir o terminal do Cloud Shell, não o editor. Se a conta não tiver Cloud Shell disponível, registrar a limitação; não habilitar billing nem criar projeto para contorná-la.
 2. Concluir a autorização **Authorize Cloud Shell**, apresentada pelo Google para permitir o uso da sessão existente. Não enviar códigos/tokens ao chat. Essa autorização não concede novas permissões IAM ao usuário. Selecionar o projeto existente bdall-e3585; não criar projetos ou recursos. Cloud Shell é gratuito segundo a documentação oficial, sujeito às quotas/condições do serviço.
-3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão fixa6ee1bb27f1348c035435c250942239da46d2ecf6; código testado localmente em16 casos. O SHA identifica o código, não uma credencial:
+3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão com20 testes locais PASS. O download abaixo usa a branch autorizada e exige o SHA256 exato desta ferramenta antes da execução; se o arquivo mudar, a verificação falha e Python não roda:
 
 ```bash
 umask 077
-curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/6ee1bb27f1348c035435c250942239da46d2ecf6/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
+curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/codex/caravana77-commercial-v1-20261016/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
+printf '%s  %s\n' '363c307dd8ec839a4cc7b77622c3710d9d51178aefa037978c2aa57caa16c88f' '/tmp/caravana-staging-readonly.py' | sha256sum -c - &&
 python3 /tmp/caravana-staging-readonly.py --output /tmp/caravana-staging-readonly.json
 ```
 
@@ -42,7 +49,7 @@ Esse JSON pode ser apresentado ao Codex como evidência do operador. Não enviar
 
 Antes de ler qualquer projeto, verifica a conta ativa do gcloud e a identidade com email verificado no endpoint oficial Google. Tokens de curta duração são obtidos internamente da sessão gerenciada, em memória/pipe privado; nunca são exibidos, aceitos como argumento, gravados em relatório ou enviados pelo chat. No caminho Cloud Shell, permanecem nesse ambiente.
 
-O cliente só faz GET para uma allowlist fixa: identidade do operador, Firebase project, billingInfo, banco(default), release/ruleset Firestore atual, até100 índices compostos e configuração Auth. Rejeita redirects e nomes de ruleset/índice externos ao projeto. Confere número/estado do projeto, billing=false/sem conta vinculada, Standard/freeTier, hashes de Rules e índices READY, Email/Password, enumeração, política de senha e domínio de staging. Paginação incompleta, divergência,403 ou identidade errada bloqueiam o aceite; não há tentativa automática de corrigir a configuração remota.
+O cliente só faz GET para uma allowlist fixa: identidade do operador, Firebase project, billingInfo, banco(default), release/ruleset Firestore atual, índices compostos (resposta limitada a2MB; paginação bloqueia aceite parcial) e configuração Auth. Rejeita redirects e nomes de ruleset/índice externos ao projeto. Confere número/estado do projeto, billing=false/sem conta vinculada, Standard/freeTier, hashes de Rules e índices READY, Email/Password, enumeração, política de senha e domínio de staging. Paginação incompleta, divergência,403 ou identidade errada bloqueiam o aceite; não há tentativa automática de corrigir a configuração remota.
 
 Não lê passageiros/documentos de negócio, usuários Auth, hashes de senha, comprovantes, objetos Storage, finanças ou produção. Não possui POST/PATCH/PUT/DELETE para Firebase. A renovação normal de credenciais pelo provedor OAuth é autenticação, não alteração de projeto. O relatório não certifica isolamento/backup/compatibilidade de produção e não fecha os17 gates do GOAL.
 
@@ -80,7 +87,7 @@ O nome do alias é configuração não secreta; o principal é confirmado pelo e
 
 ## Validação independente concluída
 
-16 testes offline: identidade/projeto divergentes, produção e rotas não permitidas, redirect, ruleset adulterado, billing/banco, Rules/índices/paginação, Auth, ausência de setup, chave privada recusada, erros sanitizados, sessão gcloud e arquivo de relatório privado0600. Dependências ADC importadas no Linux; nenhum teste faz autenticação real ou consulta Firebase. CI ganhou essa suíte antes da regressão existente; a etapa dos16 guards concluiu PASS no run39511925824, fonte6ee1bb2. O workflow integral ainda estava em execução na observação registrada; não foi declarado PASS nem equivalente à autenticação Firebase real. Não reexecutar toda a regressão frontend local para uma ferramenta de leitura separada.
+20 testes offline (16 anteriores e4 novos para consulta sem parâmetros, diagnóstico sanitizado, corpos de erro inválidos/grandes e Rules CRLF sem bypass): identidade/projeto divergentes, produção e rotas não permitidas, redirect, ruleset adulterado, billing/banco, Rules/índices/paginação, Auth, ausência de setup, chave privada recusada, erros sanitizados, sessão gcloud e arquivo de relatório privado0600. Dependências ADC importadas no Linux; nenhum teste faz autenticação real ou consulta Firebase. CI ganhou essa suíte antes da regressão existente; a etapa dos16 guards concluiu PASS no run39511925824, fonte6ee1bb2. O workflow integral ainda estava em execução na observação registrada; não foi declarado PASS nem equivalente à autenticação Firebase real. Não reexecutar toda a regressão frontend local para uma ferramenta de leitura separada.
 
 Evidências: evidence/2026-10-20/auth-recovery/. Preflights reais do Codex: gcloud indisponível e conexão GCP não configurada, ambos com lista de requisições vazia. A aplicação e Rules permanecem sem alteração.
 

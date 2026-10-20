@@ -1,0 +1,25 @@
+test_auth_policy_drift_does_not_receive_pass (test_staging_readonly.AuditTests.test_auth_policy_drift_does_not_receive_pass) ... ok
+test_complete_readonly_audit_and_sanitized_report (test_staging_readonly.AuditTests.test_complete_readonly_audit_and_sanitized_report) ... ok
+test_contract_hashes_match_repository_and_server_implicit_fields (test_staging_readonly.AuditTests.test_contract_hashes_match_repository_and_server_implicit_fields) ... ok
+test_failure_report_masks_exceptions_and_atomic_file_is_private (test_staging_readonly.AuditTests.test_failure_report_masks_exceptions_and_atomic_file_is_private) ... ok
+test_foreign_ruleset_never_receives_authorization (test_staging_readonly.AuditTests.test_foreign_ruleset_never_receives_authorization) ... ok
+test_gcloud_uses_exact_account_and_project_without_exposing_output (test_staging_readonly.AuditTests.test_gcloud_uses_exact_account_and_project_without_exposing_output) ... ok
+test_http_is_get_and_errors_never_echo_secrets (test_staging_readonly.AuditTests.test_http_is_get_and_errors_never_echo_secrets) ... ok
+test_identity_checked_before_any_project_request (test_staging_readonly.AuditTests.test_identity_checked_before_any_project_request) ... ok
+test_index_request_matches_cli_without_optional_parameters (test_staging_readonly.AuditTests.test_index_request_matches_cli_without_optional_parameters) ... ok
+test_legacy_token_and_emulators_are_rejected (test_staging_readonly.AuditTests.test_legacy_token_and_emulators_are_rejected) ... ok
+test_line_ending_difference_is_reported_but_does_not_bypass_gate (test_staging_readonly.AuditTests.test_line_ending_difference_is_reported_but_does_not_bypass_gate) ... ok
+test_malformed_large_or_untrusted_error_payload_is_not_reported (test_staging_readonly.AuditTests.test_malformed_large_or_untrusted_error_payload_is_not_reported) ... ok
+test_managed_adc_rejects_private_key_credentials_before_refresh (test_staging_readonly.AuditTests.test_managed_adc_rejects_private_key_credentials_before_refresh) ... ok
+test_managed_manifest_must_select_one_complete_gcp_connection (test_staging_readonly.AuditTests.test_managed_manifest_must_select_one_complete_gcp_connection) ... ok
+test_no_managed_identity_or_wrong_account_fails_without_network (test_staging_readonly.AuditTests.test_no_managed_identity_or_wrong_account_fails_without_network) ... ok
+test_no_production_or_unlisted_route_is_allowed (test_staging_readonly.AuditTests.test_no_production_or_unlisted_route_is_allowed) ... ok
+test_paid_or_wrong_database_stops_early (test_staging_readonly.AuditTests.test_paid_or_wrong_database_stops_early) ... ok
+test_rules_or_index_drift_is_blocked_without_fixing_remote_resources (test_staging_readonly.AuditTests.test_rules_or_index_drift_is_blocked_without_fixing_remote_resources) ... ok
+test_structured_http_diagnostic_drops_messages_metadata_and_unknown_fields (test_staging_readonly.AuditTests.test_structured_http_diagnostic_drops_messages_metadata_and_unknown_fields) ... ok
+test_wrong_project_number_stops_before_billing (test_staging_readonly.AuditTests.test_wrong_project_number_stops_before_billing) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.092s
+
+OK

@@ -1,0 +1,26 @@
+{
+  "source": "operator_android_screenshot",
+  "attachment": "1000176675.jpg",
+  "previousScriptCommit": "6ee1bb27f1348c035435c250942239da46d2ecf6",
+  "observed": {
+    "identityVerified": true,
+    "projectIdentityVerified": true,
+    "billingEnabled": false,
+    "standardFreeTierVerified": true,
+    "firestoreRulesCandidateMatch": false,
+    "status": "BLOCKED",
+    "reason": "indexes_http_400",
+    "projectWrites": 0,
+    "productionAccess": false,
+    "businessDocumentsRead": false,
+    "credentialsExported": false
+  },
+  "notVerified": [
+    "full_rules_hash_from_original_json",
+    "indexes_inventory",
+    "auth_configuration",
+    "direct_codex_authentication"
+  ],
+  "http400Cause": "UNKNOWN_PENDING_RERUN",
+  "note": "Screenshot is partial operator evidence, not a full remote acceptance. No credentials requested or project changes performed."
+}

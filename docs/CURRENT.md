@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Evidência Android — auditoria somente leitura parcial
+
+A captura do operador confirma autenticação gerenciada no Cloud Shell e identidade/projeto staging verificados, billing desativado e Standard/freeTier. Execução antiga BLOCKED em indexes_http_400; Rules candidateMatch=false; Auth ainda não lido. Não confundir com falha de login ou conceder IAM. A causa do400 é desconhecida. Ferramenta ajustada para consulta igual ao CLI oficial, diagnóstico HTTP restrito a enums e hash LF das Rules sem liberar divergências.20 testes offline PASS. Nova execução real pelo Android pendente; nenhum projeto modificado e Codex sem identidade GCP própria. Ver FIREBASE_READONLY_ANDROID.md. Produção permanece fora dos destinos.
+
 ## Autenticação — restrição atual de somente leitura
 
 Conta indicada: crisf.bueno10@gmail.com. O fluxo anterior foi encerrado. CLI15.34 detectava agente e escolhia nonInteractive mesmo com PTY; nova sessão oficial --no-localhost --interactive alcançou o prompt, parâmetros completos e HTTP302 Google, depois foi cancelada sem código. Não há terminal do Codex exposto ao usuário Android e não será pedido código/token/senha no chat. Causa específica do invalid_request antigo não comprovada; não atribuir ao Android.
