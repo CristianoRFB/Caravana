@@ -1,5 +1,13 @@
 # F8 — homologação e barreiras de publicação
 
+## Relatório real recebido — 2026-10-21
+
+Relatório do operador executado no Cloud Shell em2026-10-20T23:57:26Z, scriptdb99675/SHA363c307d…, validado em auth-recovery/operator-staging-readonly.json e operator-report-validation.json. Identidade/projeto corretos, billing=false, Standard/freeTier;11/11 índices READY/hash compatível. Rules hash bruto41388c5f… difere, LF-normalizado8acafe75… igual à candidata: diferença compatível com quebras de linha, sem alteração ou bypass do guard estrito.
+
+Auditoria parcial BLOCKED em Auth403/PERMISSION_DENIED/SERVICE_DISABLED. O relatório não inclui consumidor/serviço do ErrorInfo; não comprova API desativada no projeto-alvo nem falta de firebaseauth.configs.get. Não habilitar APIs, conceder IAM ou repetir login automaticamente. Próximo bloqueio externo: GET da configuração Auth, com firebaseauth.configs.get e serviço disponível no consumidor correto; diagnosticar consumidor antes de propor configuração. Sessão gerenciada, alvo fixo bdall-e3585, sem códigos/chaves compartilhados. Autorização vigente somente leitura.
+
+CI integral db99675 PASS (run39513331460):20 guards,282 backend/Rules,8Auth,6Storage,184 E2E; lint/typechecks/build PASS. Run39511925824 anterior terminou cancelled, não PASS. Código da aplicação/Rules não mudou. Nenhum deploy, custo, leitura de documentos de negócio ou modificação de projeto. F6 mantém PASS local; F7/F8/produção BLOCKED. Matrizes5/14 e6/17 preservadas. Cloud Shell não autentica o Codex; duas consultas atuais ao runtime retornaram configuration changed, sem readiness GCP comprovada.
+
 ## GOAL FINAL e transferência Cloud — parecer vigente
 
 **NOT_READY_FOR_MIGRATION / BLOCKED.** O novo GOAL exige 17 gates, mantidos separadamente em MIGRATION_READINESS_FINAL.md (6 PASS de escopo definido /11 BLOCKED). A matriz de14 gates é mantida abaixo, com avaliação da candidata atual e histórico separado; não é aprovação de migração. F6 permanece PASS local; CI integral da candidata51cf4f5 PASS (282+8Auth+6Storage+184 E2E), staging público 8c1340d conferido novamente. Nenhuma homologação real de dados/Auth/Storage do Ítalo, backup/restauração real ou rollback coordenado foi comprovada. Produção não alterada.

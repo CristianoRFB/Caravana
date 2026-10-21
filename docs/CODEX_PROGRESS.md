@@ -1,5 +1,13 @@
 # Progresso — fonte única
 
+## Relatório real recebido — 2026-10-21
+
+Relatório do operador executado no Cloud Shell em2026-10-20T23:57:26Z, scriptdb99675/SHA363c307d…, validado em auth-recovery/operator-staging-readonly.json e operator-report-validation.json. Identidade/projeto corretos, billing=false, Standard/freeTier;11/11 índices READY/hash compatível. Rules hash bruto41388c5f… difere, LF-normalizado8acafe75… igual à candidata: diferença compatível com quebras de linha, sem alteração ou bypass do guard estrito.
+
+Auditoria parcial BLOCKED em Auth403/PERMISSION_DENIED/SERVICE_DISABLED. O relatório não inclui consumidor/serviço do ErrorInfo; não comprova API desativada no projeto-alvo nem falta de firebaseauth.configs.get. Não habilitar APIs, conceder IAM ou repetir login automaticamente. Próximo bloqueio externo: GET da configuração Auth, com firebaseauth.configs.get e serviço disponível no consumidor correto; diagnosticar consumidor antes de propor configuração. Sessão gerenciada, alvo fixo bdall-e3585, sem códigos/chaves compartilhados. Autorização vigente somente leitura.
+
+CI integral db99675 PASS (run39513331460):20 guards,282 backend/Rules,8Auth,6Storage,184 E2E; lint/typechecks/build PASS. Run39511925824 anterior terminou cancelled, não PASS. Código da aplicação/Rules não mudou. Nenhum deploy, custo, leitura de documentos de negócio ou modificação de projeto. F6 mantém PASS local; F7/F8/produção BLOCKED. Matrizes5/14 e6/17 preservadas. Cloud Shell não autentica o Codex; duas consultas atuais ao runtime retornaram configuration changed, sem readiness GCP comprovada.
+
 ## Evidência Android — auditoria somente leitura parcial
 
 A captura do operador confirma autenticação gerenciada no Cloud Shell e identidade/projeto staging verificados, billing desativado e Standard/freeTier. Execução antiga BLOCKED em indexes_http_400; Rules candidateMatch=false; Auth ainda não lido. Não confundir com falha de login ou conceder IAM. A causa do400 é desconhecida. Ferramenta ajustada para consulta igual ao CLI oficial, diagnóstico HTTP restrito a enums e hash LF das Rules sem liberar divergências.20 testes offline PASS. Nova execução real pelo Android pendente; nenhum projeto modificado e Codex sem identidade GCP própria. Ver FIREBASE_READONLY_ANDROID.md. Produção permanece fora dos destinos.

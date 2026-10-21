@@ -1,0 +1,15 @@
+{
+  "source": "operator_uploaded_cloud_shell_report",
+  "reportSha256": "a3a0f9c6434684b623ed511479778b5f24a55a59b5641776ba901b53ba5442df",
+  "scriptCommit": "db9967544a0832262c3b70f96915ae937efdaf31",
+  "localChecks": "PASS: script SHA, Rules LF SHA, 11 READY matching indexes, report scope",
+  "classification": "PARTIAL_STAGING_READONLY_VERIFIED",
+  "blocked": "AUTH_CONFIG_READ_SERVICE_DISABLED",
+  "notEstablished": [
+    "error consumer project",
+    "current Auth policy",
+    "direct Codex authentication",
+    "production integrity"
+  ],
+  "projectMutationsPerformed": false
+}

@@ -1,0 +1,108 @@
+{
+  "sourceCommit": "db9967544a0832262c3b70f96915ae937efdaf31",
+  "runId": 39513331460,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/39513331460",
+  "status": "completed",
+  "conclusion": "success",
+  "jobId": 118939525190,
+  "mandatorySteps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout",
+      "conclusion": "success"
+    },
+    {
+      "name": "Set up Node.js",
+      "conclusion": "success"
+    },
+    {
+      "name": "Set up Java for Firebase emulators",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install dependencies",
+      "conclusion": "success"
+    },
+    {
+      "name": "Audit runtime dependencies",
+      "conclusion": "success"
+    },
+    {
+      "name": "Lint",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Read-only staging audit guards (no credentials or remote audit)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Unit, integration and Firestore Rules",
+      "conclusion": "success"
+    },
+    {
+      "name": "Auth emulator integration",
+      "conclusion": "success"
+    },
+    {
+      "name": "Storage Rules with Auth",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install Chromium",
+      "conclusion": "success"
+    },
+    {
+      "name": "Desktop and mobile E2E (synthetic only)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Record synthetic browser summary without artifact storage",
+      "conclusion": "success"
+    },
+    {
+      "name": "Build",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Set up Java for Firebase emulators",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Set up Node.js",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Checkout",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success"
+    }
+  ],
+  "testCountsFromJobLog": {
+    "readOnlyGuards": 20,
+    "unitIntegrationFirestoreRules": 282,
+    "authEmulator": 8,
+    "storageEmulator": 6,
+    "e2e": 184
+  },
+  "previousRun": {
+    "id": 39511925824,
+    "sourceCommit": "6ee1bb27f1348c035435c250942239da46d2ecf6",
+    "conclusion": "cancelled",
+    "notWholeWorkflowApproval": true
+  },
+  "firebaseProjectOperations": false
+}

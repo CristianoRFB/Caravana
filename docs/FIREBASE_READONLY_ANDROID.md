@@ -1,5 +1,13 @@
 # Firebase somente leitura — Codex Cloud e Android
 
+## Relatório real recebido — 2026-10-21
+
+Relatório do operador executado no Cloud Shell em2026-10-20T23:57:26Z, scriptdb99675/SHA363c307d…, validado em auth-recovery/operator-staging-readonly.json e operator-report-validation.json. Identidade/projeto corretos, billing=false, Standard/freeTier;11/11 índices READY/hash compatível. Rules hash bruto41388c5f… difere, LF-normalizado8acafe75… igual à candidata: diferença compatível com quebras de linha, sem alteração ou bypass do guard estrito.
+
+Auditoria parcial BLOCKED em Auth403/PERMISSION_DENIED/SERVICE_DISABLED. O relatório não inclui consumidor/serviço do ErrorInfo; não comprova API desativada no projeto-alvo nem falta de firebaseauth.configs.get. Não habilitar APIs, conceder IAM ou repetir login automaticamente. Próximo bloqueio externo: GET da configuração Auth, com firebaseauth.configs.get e serviço disponível no consumidor correto; diagnosticar consumidor antes de propor configuração. Sessão gerenciada, alvo fixo bdall-e3585, sem códigos/chaves compartilhados. Autorização vigente somente leitura.
+
+CI integral db99675 PASS (run39513331460):20 guards,282 backend/Rules,8Auth,6Storage,184 E2E; lint/typechecks/build PASS. Run39511925824 anterior terminou cancelled, não PASS. Código da aplicação/Rules não mudou. Nenhum deploy, custo, leitura de documentos de negócio ou modificação de projeto. F6 mantém PASS local; F7/F8/produção BLOCKED. Matrizes5/14 e6/17 preservadas. Cloud Shell não autentica o Codex; duas consultas atuais ao runtime retornaram configuration changed, sem readiness GCP comprovada.
+
 Restrição vigente: identidade indicada `crisf.bueno10@gmail.com`, exclusivamente leitura do staging **bdall-e3585** (número146882624278). Produção **caravana-af306** fica fora dos destinos. Não conceder IAM, criar projetos/chaves, habilitar APIs/billing, alterar Auth/Rules/índices ou executar jornadas SDK com escritas nesta fase. Esta restrição prevalece sobre permissões históricas de administração de staging.
 
 ## Resultado recebido pelo Android e ajuste da consulta
@@ -40,10 +48,11 @@ Se o download falhar, não executar arquivo antigo de outra sessão: conferir o 
 4. O resultado deverá ser PASS_STAGING_READONLY_CONFIGURATION ou BLOCKED com motivo sanitizado. Só após execução real pode-se considerar esse aceite remoto. Para baixar **apenas o relatório sanitizado**, usar no próprio Cloud Shell:
 
 ```bash
-cloudshell download /tmp/caravana-staging-readonly.json
+cp /tmp/caravana-staging-readonly.json ~/caravana-staging-readonly.json
+cloudshell download ~/caravana-staging-readonly.json
 ```
 
-Esse JSON pode ser apresentado ao Codex como evidência do operador. Não enviar caches gcloud/ADC/Firebase, tokens, senhas, URLs OAuth ou chaves. Sem relatório real, a auditoria remota continua BLOCKED; testes locais do script não são homologação do Firebase.
+Cloud Shell exige que o arquivo baixado esteja na pasta pessoal; a cópia acima contém somente o relatório sanitizado. Esse JSON pode ser apresentado ao Codex como evidência do operador. Não enviar caches gcloud/ADC/Firebase, tokens, senhas, URLs OAuth ou chaves. Sem relatório real, a auditoria remota continua BLOCKED; testes locais do script não são homologação do Firebase.
 
 ## O que a auditoria pode fazer
 
