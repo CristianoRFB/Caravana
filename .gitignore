@@ -19,3 +19,6 @@ storage-debug.log
 ui-debug.log
 
 dist-public-preview/
+
+# Firebase CLI may leave a raw temporary export when local export fails.
+/firebase-export-*/

@@ -1,0 +1,113 @@
+{
+  "sourceCommit": "e4939db824db46443d5c1f7eacd37f17c1434ce7",
+  "runId": 39537954805,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/39537954805",
+  "status": "completed",
+  "conclusion": "success",
+  "jobId": 119018881586,
+  "mandatorySteps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "Checkout",
+      "conclusion": "success"
+    },
+    {
+      "name": "Set up Node.js",
+      "conclusion": "success"
+    },
+    {
+      "name": "Set up Java for Firebase emulators",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install dependencies",
+      "conclusion": "success"
+    },
+    {
+      "name": "Audit runtime dependencies",
+      "conclusion": "success"
+    },
+    {
+      "name": "Lint",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Read-only staging audit guards (no credentials or remote audit)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Unit, integration and Firestore Rules",
+      "conclusion": "success"
+    },
+    {
+      "name": "Auth emulator integration",
+      "conclusion": "success"
+    },
+    {
+      "name": "Storage Rules with Auth",
+      "conclusion": "success"
+    },
+    {
+      "name": "Coordinated Auth Firestore Storage recovery (synthetic emulator only)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Install Chromium",
+      "conclusion": "success"
+    },
+    {
+      "name": "Desktop and mobile E2E (synthetic only)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Record synthetic browser summary without artifact storage",
+      "conclusion": "success"
+    },
+    {
+      "name": "Build",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Set up Java for Firebase emulators",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Set up Node.js",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Checkout",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success"
+    }
+  ],
+  "testCountsFromJobLog": {
+    "readOnlyPythonGuards": 20,
+    "unitIntegrationFirestoreRules": 287,
+    "authEmulator": 8,
+    "storageEmulator": 6,
+    "e2e": 184
+  },
+  "coordinatedSyntheticRecovery": "PASS",
+  "localE2ESmoke": {
+    "passed": 48,
+    "overlapsCiFullSuite": true
+  },
+  "runtimeAuditVulnerabilities": 0,
+  "firebaseProjectWrites": false,
+  "productionAccess": false
+}

@@ -1,0 +1,82 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/finance-ledger.spec.ts e2e/team.spec.ts e2e/responsive-gutter.spec.ts e2e/functional-tools.spec.ts e2e/commercial-landing.spec.ts
+[WebServer] (node:12755) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer]
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:12787) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 48 tests using 1 worker
+
+(node:12804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop-1440] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (10.6s)
+  ✓   2 [desktop-1440] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (7.2s)
+  ✓   3 [desktop-1440] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (5.7s)
+  ✓   4 [desktop-1440] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (3.3s)
+  ✓   5 [desktop-1440] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (4.7s)
+  ✓   6 [desktop-1440] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (6.1s)
+  ✓   7 [desktop-1440] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (4.9s)
+  ✓   8 [desktop-1440] › e2e/responsive-gutter.spec.ts:5:1 › finance fits the actual client width with a reserved classic scrollbar gutter (5.0s)
+  ✓   9 [desktop-1440] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (7.6s)
+  ✓  10 [desktop-1440] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (8.2s)
+  ✓  11 [desktop-1440] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (7.9s)
+  ✓  12 [desktop-1440] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (5.2s)
+(node:13452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 [tablet-768] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (5.0s)
+  ✓  14 [tablet-768] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (4.4s)
+  ✓  15 [tablet-768] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.6s)
+  ✓  16 [tablet-768] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.9s)
+  ✓  17 [tablet-768] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (4.4s)
+  ✓  18 [tablet-768] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (5.1s)
+  ✓  19 [tablet-768] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (4.8s)
+  ✓  20 [tablet-768] › e2e/responsive-gutter.spec.ts:5:1 › finance fits the actual client width with a reserved classic scrollbar gutter (1.9s)
+  ✓  21 [tablet-768] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (8.2s)
+  ✓  22 [tablet-768] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (6.9s)
+  ✓  23 [tablet-768] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (7.2s)
+  ✓  24 [tablet-768] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (5.2s)
+(node:14151) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  25 [mobile-375] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (5.1s)
+  ✓  26 [mobile-375] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (3.5s)
+  ✓  27 [mobile-375] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (2.8s)
+  ✓  28 [mobile-375] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.2s)
+  ✓  29 [mobile-375] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (5.0s)
+  ✓  30 [mobile-375] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (6.9s)
+  ✓  31 [mobile-375] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (4.9s)
+  ✓  32 [mobile-375] › e2e/responsive-gutter.spec.ts:5:1 › finance fits the actual client width with a reserved classic scrollbar gutter (1.6s)
+  ✓  33 [mobile-375] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (7.7s)
+  ✓  34 [mobile-375] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (8.9s)
+  ✓  35 [mobile-375] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (7.6s)
+  ✓  36 [mobile-375] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (7.4s)
+(node:14766) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  37 [mobile-320] › e2e/commercial-landing.spec.ts:20:1 › separate SaaS landing uses the approved catalog, assisted onboarding and functional local demo (5.6s)
+  ✓  38 [mobile-320] › e2e/finance-ledger.spec.ts:21:1 › finance preserves aggregates while correcting and voiding legacy expense with private audit and redacted export (4.7s)
+  ✓  39 [mobile-320] › e2e/finance-ledger.spec.ts:40:1 › finance retries a committed payment after reload using the persisted attempt without receiving twice (3.0s)
+  ✓  40 [mobile-320] › e2e/finance-ledger.spec.ts:56:1 › finance corrects a historical expected fare with audit and preserves the recorded receipts (2.2s)
+  ✓  41 [mobile-320] › e2e/functional-tools.spec.ts:14:1 › Pro saves a shared operational report, exports without passengers and preserves it after downgrade (4.1s)
+  ✓  42 [mobile-320] › e2e/functional-tools.spec.ts:23:1 › Premium reuses templates, reverses tasks, archives and retains history with an accessible mobile menu (5.2s)
+  ✓  43 [mobile-320] › e2e/functional-tools.spec.ts:33:1 › Essential cannot enable new tools by URL and suspended Pro cannot generate new snapshots (4.4s)
+  ✓  44 [mobile-320] › e2e/responsive-gutter.spec.ts:5:1 › finance fits the actual client width with a reserved classic scrollbar gutter (2.0s)
+  ✓  45 [mobile-320] › e2e/team.spec.ts:39:1 › owner invites the exact Auth UID, staff accepts once and revocation removes an open panel immediately (6.8s)
+  ✓  46 [mobile-320] › e2e/team.spec.ts:51:1 › resend changes generation and role; an accepted owner cannot demote the last responsible member (10.0s)
+  ✓  47 [mobile-320] › e2e/team.spec.ts:59:1 › two real invited accounts race for the final slot, the loser remains pending and tenant B keeps its access (8.4s)
+  ✓  48 [mobile-320] › e2e/team.spec.ts:70:1 › expired, revoked and commercially blocked invitations never grant access and drafts survive errors (6.1s)
+
+  48 passed (4.6m)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

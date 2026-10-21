@@ -1,0 +1,93 @@
+{
+  "sourceCommit": "e4939db824db46443d5c1f7eacd37f17c1434ce7",
+  "runtimeRevision": "42",
+  "networkDownloadBlock": "RESOLVED_FRESH_DOWNLOADS_VERIFIED",
+  "implementationScope": "No src, deployed Rules, indexes or Firebase configuration changes",
+  "localTests": {
+    "baselineBackendRules": 282,
+    "newGuardTests": 5,
+    "targetedGuardsIncludingOverlap": 18,
+    "auth": 8,
+    "storage": 6,
+    "readOnlyPythonGuards": 20,
+    "responsiveE2E": 48,
+    "widths": [
+      320,
+      375,
+      768,
+      1440
+    ]
+  },
+  "newRehearsal": {
+    "status": "LOCAL_TESTED",
+    "authSignInsAndUids": 3,
+    "selectedFirestoreDocuments": 10,
+    "storageObjects": 2,
+    "realClientRecoveryVerified": false
+  },
+  "phaseProgress": {
+    "F0-F5": {
+      "status": "LOCAL_TESTED_PREVIOUS_ACCEPTANCE_PRESERVED",
+      "percent": 100
+    },
+    "F6": {
+      "status": "LOCAL_TESTED",
+      "acceptedCriteria": 12,
+      "totalCriteria": 12,
+      "percent": 100
+    },
+    "F7": {
+      "status": "BLOCKED_REAL_RELEASE",
+      "isolatedPreparationCriteria": 9,
+      "totalIsolatedCriteria": 10,
+      "percentIsolatedOnly": 90
+    },
+    "F8": {
+      "status": "BLOCKED",
+      "productionGatesPassedInDefinedScope": 5,
+      "productionGatesTotal": 14,
+      "percentRounded": 36
+    },
+    "GOAL_FINAL": {
+      "status": "NOT_READY_FOR_MIGRATION",
+      "gatesPassedInDefinedScope": 6,
+      "gatesTotal": 17,
+      "percentRounded": 35
+    }
+  },
+  "remote": {
+    "stagingPublicSource": "8c1340da2d7e110194bf64aecd6955313d5a79e9",
+    "stagingPublicHealth": "PASS_12_EXACT_ASSETS_AND_HEADERS",
+    "managedGcpIdentity": "NOT_CONFIGURED",
+    "firebaseCliAccounts": "NONE",
+    "firebaseToolsConnected": false,
+    "authConfiguration": "BLOCKED_SERVICE_DISABLED_CONSUMER_UNKNOWN",
+    "productionDeploymentPerformed": false,
+    "productionWrites": 0,
+    "realMigrationPerformed": false,
+    "blazeEnabled": false,
+    "newPaidResourcesCreated": false,
+    "realClientIntegrityVerified": false
+  },
+  "ci": {
+    "sourceRunId": 39537954805,
+    "status": "PASS",
+    "sourceCommit": "e4939db824db46443d5c1f7eacd37f17c1434ce7",
+    "unitIntegrationRules": 287,
+    "auth": 8,
+    "storage": 6,
+    "readOnlyPythonGuards": 20,
+    "e2e": 184,
+    "coordinatedSyntheticRecovery": "PASS",
+    "lintTypechecksBuild": "PASS"
+  },
+  "remainingBlockers": [
+    "Managed read-only Firebase identity unavailable in this Cloud",
+    "Auth real 403 SERVICE_DISABLED consumer not identified",
+    "Coordinated current-candidate staging including Storage not verified",
+    "Real legacy inventory and compatibility unknown",
+    "Protected complete real backup and isolated restore not verified",
+    "Coordinated production rollback not verified",
+    "Operational abuse protection and alerts incomplete; known tooling advisories remain documented"
+  ]
+}

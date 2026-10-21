@@ -1,5 +1,9 @@
 # Continuidade Cloud / LAB04-PC23
 
+## Retomada atual — Cloud com rede liberada
+
+Checkpoint de implementaçãoe4939db na branch obrigatória; aplicação/Rules/índices iguais à base852606e. Ver CLOUD_RECOVERY_2026-10-21.md: downloads novos PASS, ensaio conjunto de recuperação emulada PASS,48 E2E locais nas quatro larguras PASS, sem produção/Blaze/migração. CI39537954805 concluído PASS:287 backend/Rules,8Auth,6Storage,20 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; final-ci.json registra as etapas e contagens. Runtime42 ready, rede enforced; nenhuma identidade GCP/conta CLI/tool Firebase conectado. Auth real403/SERVICE_DISABLED continua BLOCKED, sem consumidor identificado. Relatório Android anterior é evidência do operador, não login do Codex. Read-only remoto mantido; snapshots brutos apenas em .firebase ignorado; não transferir caches/credenciais.
+
 ## Autenticação — restrição atual de somente leitura
 
 Conta indicada: crisf.bueno10@gmail.com. O fluxo anterior foi encerrado. CLI15.34 detectava agente e escolhia nonInteractive mesmo com PTY; nova sessão oficial --no-localhost --interactive alcançou o prompt, parâmetros completos e HTTP302 Google, depois foi cancelada sem código. Não há terminal do Codex exposto ao usuário Android e não será pedido código/token/senha no chat. Causa específica do invalid_request antigo não comprovada; não atribuir ao Android.

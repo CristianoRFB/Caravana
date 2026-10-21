@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "e4939db824db46443d5c1f7eacd37f17c1434ce7",
+  "suite": "recovery-smoke-e2e",
+  "stats": {
+    "startTime": "2026-10-21T03:17:44.317Z",
+    "duration": 277418.50100000005,
+    "expected": 48,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "widths": [
+    320,
+    375,
+    768,
+    1440
+  ],
+  "files": [
+    "commercial-landing.spec.ts",
+    "finance-ledger.spec.ts",
+    "functional-tools.spec.ts",
+    "responsive-gutter.spec.ts",
+    "team.spec.ts"
+  ],
+  "syntheticOnly": true,
+  "productionAccess": false
+}
