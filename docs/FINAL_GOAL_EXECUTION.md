@@ -1,20 +1,27 @@
 # GOAL FINAL — execução vigente
 
-## Retomada Cloud — estado reconciliado em ab4aff1
+Fonte original preservada em GOAL_FINAL_2026-10-20.md. Branch obrigatória codex/caravana77-commercial-v1-20261016. Parecer operacional atual: [COMMERCIAL_READINESS_2026-10-21.md](COMMERCIAL_READINESS_2026-10-21.md). Segurança/compatibilidade do Ítalo prevalecem; nenhuma alteração de produção, migração real, Blaze, serviço pago, merge main ou force push autorizados neste fluxo.
 
-Esta atualização prevalece sobre a lista histórica abaixo: itens 1–3 IMPLEMENTED / LOCAL_TESTED, com ferramentas Pro/Premium também exercitadas em staging; CI do próprio ab4aff1 PASS (run39476952320). Diagnóstico local/health e política Auth de staging implementados; proteção contra abuso e segurança operacional integral BLOCKED. Inventário/backup/restauração reais BLOCKED. Cutover sintético limitado executado, sem equivalência ao schema real ou backfill comercial integral. Parecer de 17 gates concluído em [MIGRATION_READINESS_FINAL.md](MIGRATION_READINESS_FINAL.md): NOT_READY_FOR_MIGRATION. Somente staging autorizado; nenhuma mudança em produção.
+## Estado reconciliado
 
-Fonte autorizada: `C:/xampp/77/prompts/goalfinal.txt`, recebida em2026-10-20, preservada em GOAL_FINAL_2026-10-20.md. Substitui limites/ordem antigos quando houver divergência; produção continua somente leitura. Branch codex/caravana77-commercial-v1-20261016, retomada865b803 limpa e remoto conferido/pull sem alterações. Não reiniciar aceites F0–F6.
+| Item existente do GOAL | Estado atual | Evidência / próxima condição |
+|---|---|---|
+| Inventário funcional e catálogo comercial | IMPLEMENTED/LOCAL_TESTED | COMMERCIAL_FEATURE_MATRIX.md; preservar preços/limites e CORE concedido |
+| Diferenciais reais Pro/Premium | IMPLEMENTED/LOCAL_TESTED, staging histórico | Relatórios operacionais e roteiros/modelos; não reimplementar |
+| Cartões/FAQ/landing/painel/mobile | IMPLEMENTED/LOCAL_TESTED | Quatro larguras; E2E do checkpoint próprio |
+| CI remoto | PASS nova revisão | a7b5785/run39540369156 PASS:290+8Auth+6Storage+23 guards Python+recuperação conjunta+184 E2E; lint/typechecks/build PASS |
+| Observabilidade/abuso/Auth/advisories | IN_PROGRESS/BLOCKED real | Diagnósticos/health implementados; audit tooling7→5; Auth403/SERVICE_DISABLED sem consumidor real identificado |
+| Inventário e recuperação reais do Ítalo | BLOCKED | Sem prova legítima/completa em ambiente privado adequado; não copiar PII para Git/chat/staging |
+| Ensaio de recuperação/retorno sintético | LOCAL_TESTED | Auth/Firestore/Storage, UIDs/bytes/ACL e interrupção/retomada; não substitui legado real |
+| Parecer17 gates e matriz F8 | DOCUMENTED/BLOCKED | MIGRATION_READINESS_FINAL.md6/17, F8_ACCEPTANCE.md5/14; NOT_READY_FOR_MIGRATION |
 
-## Ordem de execução
+## Próxima execução exata
 
-1. IN_PROGRESS — inventário funcional/matriz CORE/GROWTH/PREMIUM_CANDIDATE/DEFERRED/NOT_IMPLEMENTED, preservando tudo já concedido e catálogo89/149/219 e2/60/2,5/200/5,15/500/15.
-2. TODO — implementar diferenças reais pequenas, cumulativas, com operação protegida e entitlements/Rules/testes; nenhuma perda de segurança ou histórico.
-3. TODO — cartões/FAQ/comparação e painel, quatro larguras, testes contra promessas inexistentes.
-4. IN_PROGRESS — CI remoto sem nova credencial: repositório público confirmado via conector, trigger somente branch autorizada/main; runner padrão Ubuntu, sem cache/artifact upload nem deploy. Logs e summary como evidência; verificar execução real após push.
-5. TODO — observabilidade/abuso/Auth/advisories/sessões, sem recursos pagos.
-6. TODO — inventário real legítimo em memória e somente leitura; não salvar PII em computador compartilhado, Git ou staging. Backup real depende de ambiente privado adequado e permissão efetiva, nunca presumir.
-7. TODO — estratégia definitiva, ensaio sintético fiel/interrupção/retomada/rollback e plano de corte sem execução real.
-8. TODO — MIGRATION_READINESS_FINAL.md com17 gates, matriz original F8 preservada e parecer fundamentado.
+1. Fetch/HEAD/working tree da branch; preservar WIP e checkpoints remotos. Não trocar por main.
+2. Ler COMMERCIAL_READINESS_2026-10-21.md, F7_CLOSURE_2026-10-21.md e evidência final do CI antes de testar novamente. Reusar somente aceites do mesmo código; testes de e4939db não aprovam o override novo de a7b5785.
+3. Conferir ambiente/identidade gerenciada atual. Runtime49 observado sem GCP; não pedir segredos pelo chat nem repetir um login sem entrada segura.
+4. Com leitura legítima de bdall-e3585 e identidade/projeto/billing conferidos, executar auditoria fixa somente leitura; diagnosticar serviço/consumidor do403. Sem acesso, registrar BLOCKED e usar o checklist externo existente.
+5. Somente com autorização/configuração/permissões efetivas, homologar candidata e jornadas fictícias no staging. Não criar papéis amplos, habilitar APIs por suposição, usar produção como laboratório ou ativar Blaze.
+6. Rever provas privadas de inventário/backup/restore/compatibilidade/retorno reais antes de alterar qualquer gate do Ítalo. Não executar migração real neste GOAL.
 
-Não copiar dados pessoais para bdall-e3585. Não alterar dados/Auth/Rules/índices/produção/DNS, não fazer merge, não migrar nem operar bancos. Publicação somente em caravana77-staging; pushes seguros incrementais. Testes direcionados durante implementação e gates integrais quando pertinentes. Não chamar catálogo quantitativo anterior de diferenciação funcional concluída.
+Funcionalidades essenciais e emuladores já aprovados não são uma fila de trabalho nova. Não repetir regressões extensas para o mesmo código nem criar funcionalidades para substituir dependências externas. Implementação técnica estimada85% (17/20 grupos existentes); GOAL final35% (6/17 gates), com métodos e limites explícitos no parecer. Nenhum percentual é autorização de publicação.

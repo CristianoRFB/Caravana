@@ -10,7 +10,11 @@
   "cliVersion": "15.34.0",
   "cliConsumerCompatibilityTests": 3,
   "pythonGuards": 23,
-  "fullCi": "PENDING_NEW_CHECKPOINT",
+  "fullCi": {
+    "status": "PASS",
+    "sourceCommit": "a7b5785e8ab3b67c45f8f5b1916d68580ae61298",
+    "runId": 39540369156
+  },
   "productionWrites": 0,
   "realMigrationPerformed": false
 }

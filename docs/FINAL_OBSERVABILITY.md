@@ -1,5 +1,9 @@
 # Diagnóstico e verificação gratuita — 2026-10-20
 
+## Estado atual de operação — 2026-10-21
+
+Health e diagnósticos mínimos implementados; manifesto público de staging8c1340d reconfirmado nesta execução, mesmos12 descritores do último health integral. Não houve nova jornada autenticada nem refetch dos bytes de todos os assets. Diagnóstico de API agora classifica serviço/consumidor/permissão sem dados arbitrários (23 guards). Alertas remotos proativos e proteção de abuso ainda BLOCKED: não há canal/provedor/rollout efetivo comprovado. CI de push é verificação pontual, não monitoramento de tráfego; não criar canal/contato fictício nem chamar frontend throttle de proteção de backend. Ações externas mínimas em COMMERCIAL_READINESS_2026-10-21.md.
+
 PASS local: diagnóstico temporário em memória, no máximo 50 códigos padronizados/categorias/minutos, sem mensagem, payload, UID, organização, link, credencial ou envio automático. Limpa ao trocar contexto/sair; falhas tardias de writes anteriores são descartadas. Exportação JSON explícita e local. Error boundary orienta conferir histórico antes de repetir; não inventa rollback de operação confirmada.
 
 8 testes puros/pendências/health PASS; 39 regressões de writes PASS; 8 E2E de landing/diagnóstico nas quatro larguras PASS, incluindo exportação sem conteúdo privado e limpeza após logout. Capturas sintéticas em evidence/2026-10-20/final-ui. Primeira tentativa de teste falhou por PATH sem vitest ao executar Node diretamente; repetida via npm e aprovada, log anterior preservado. Não há falha funcional encoberta.

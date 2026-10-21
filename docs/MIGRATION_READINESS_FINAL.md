@@ -1,5 +1,11 @@
 # Parecer final de preparação para migração
 
+## Continuidade consolidada — código a7b5785, runtime49
+
+Override isolado do UUID do CLI e diagnóstico sanitizado de consumidor Auth implementados/testados; audit de ferramentas7→5, runtime0. Compatibilidade HTTP3 testes, guards Python23,Auth8,Storage6 e recuperação conjunta locais PASS. CI39540369156 da própria revisão PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; preservar a evidência anterior apenas para seu código. Aplicação/Rules/índices e staging não alterados. Desenvolvimento técnico estimado85% (17/20 grupos existentes), GOAL final35% (6/17 gates), F7 preparação9/10 e F8 gates5/14; metodologia e limites no parecer abaixo.
+
+Parecer e checklist mínimo: [COMMERCIAL_READINESS_2026-10-21.md](COMMERCIAL_READINESS_2026-10-21.md). Comercialização geral e migração do Ítalo BLOCKED. Runtime sem identidade GCP/conta CLI; preflight novo sem requisições reais. Sem novos trabalhos de produto a inventar: próxima ação é leitura legítima de configuração staging, diagnosticar serviço/consumidor e viabilizar homologação/provas privadas reais, sem chaves/códigos/PII no chat. Estimativa2–4 ciclos após acessos/provas externas disponíveis, condicionada a descobertas reais.
+
 ## Retomada validada com rede atualizada — 2026-10-21
 
 Fontee4939db: downloads novos Firestore1.22/Storage1.1.3 PASS, hashes/tamanhos conferidos.282 backend/Rules+8Auth+6Storage,18 guards direcionados (5 novos) e48 E2E em320/375/768/1440 PASS; lint/typechecks/build/audit runtime0. Nova exportação/restauração conjunta LOCAL_TESTED:3 logins/UIDs,10 documentos e2 PDFs; A×B, passageiro, list/delete e revogação após restore PASS. CI39537954805 PASS:287 backend/Rules+8Auth+6Storage+20 guards Python+recuperação conjunta+184 E2E e lint/typechecks/build. Relatório e evidências em CLOUD_RECOVERY_2026-10-21.md e evidence/2026-10-21/cloud-recovery/.

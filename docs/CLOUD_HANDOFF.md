@@ -1,5 +1,11 @@
 # Continuidade Cloud / LAB04-PC23
 
+## Continuidade consolidada — código a7b5785, runtime49
+
+Override isolado do UUID do CLI e diagnóstico sanitizado de consumidor Auth implementados/testados; audit de ferramentas7→5, runtime0. Compatibilidade HTTP3 testes, guards Python23,Auth8,Storage6 e recuperação conjunta locais PASS. CI39540369156 da própria revisão PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; preservar a evidência anterior apenas para seu código. Aplicação/Rules/índices e staging não alterados. Desenvolvimento técnico estimado85% (17/20 grupos existentes), GOAL final35% (6/17 gates), F7 preparação9/10 e F8 gates5/14; metodologia e limites no parecer abaixo.
+
+Parecer e checklist mínimo: [COMMERCIAL_READINESS_2026-10-21.md](COMMERCIAL_READINESS_2026-10-21.md). Comercialização geral e migração do Ítalo BLOCKED. Runtime sem identidade GCP/conta CLI; preflight novo sem requisições reais. Sem novos trabalhos de produto a inventar: próxima ação é leitura legítima de configuração staging, diagnosticar serviço/consumidor e viabilizar homologação/provas privadas reais, sem chaves/códigos/PII no chat. Estimativa2–4 ciclos após acessos/provas externas disponíveis, condicionada a descobertas reais.
+
 ## Retomada atual — Cloud com rede liberada
 
 Checkpoint de implementaçãoe4939db na branch obrigatória; aplicação/Rules/índices iguais à base852606e. Ver CLOUD_RECOVERY_2026-10-21.md: downloads novos PASS, ensaio conjunto de recuperação emulada PASS,48 E2E locais nas quatro larguras PASS, sem produção/Blaze/migração. CI39537954805 concluído PASS:287 backend/Rules,8Auth,6Storage,20 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; final-ci.json registra as etapas e contagens. Runtime42 ready, rede enforced; nenhuma identidade GCP/conta CLI/tool Firebase conectado. Auth real403/SERVICE_DISABLED continua BLOCKED, sem consumidor identificado. Relatório Android anterior é evidência do operador, não login do Codex. Read-only remoto mantido; snapshots brutos apenas em .firebase ignorado; não transferir caches/credenciais.

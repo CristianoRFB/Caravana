@@ -1,5 +1,9 @@
 # Auditoria de dependências — 2026-10-20
 
+## Remediação incremental — 2026-10-21
+
+Códigoa7b5785: override gaxios6.7.1 > uuid11.1.1, única mudança de pacote no lockfile, dev-only. CJS/v4, multipart e transporte Google Auth reais testados sem rede; Auth/Storage e recuperação conjunta revalidados localmente. Audit completo7→5 (3altas/2moderadas), runtime0. CLI15.34 preservado; braces/core major continuam sem mudança forçada. Ver F7_CLOSURE_2026-10-21.md para evidências e limitações. CI39540369156 PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build. Nenhuma dependência ou artefato implantado alterado.
+
 `npm audit --omit=dev --json` identificou quatro entradas altas da mesma cadeia: firebase → @firebase/firestore/compat → @grpc/grpc-js1.9.16. Não são quatro falhas independentes. Fontes oficiais: [GHSA-m9gg-hp2v-232j](https://github.com/grpc/grpc-node/security/advisories/GHSA-m9gg-hp2v-232j) e [GHSA-f596-whhp-79r4](https://github.com/grpc/grpc-node/security/advisories/GHSA-f596-whhp-79r4). A primeira trata de certificados não autorizados retornados por getAuthContext em certas configurações de servidor; a segunda, de mensagens de erro de handlers expostas pelo servidor. Ambas têm correção1.13.6, também1.14.5.
 
 Este aplicativo não publica servidor gRPC. O achado no pacote Node não comprova exploração do frontend estático. Ainda assim, o lockfile foi corrigido para não conservar a versão vulnerável: override **somente no filho de @firebase/firestore** para @grpc/grpc-js1.13.6. Firebase11.10.0, APIs do app e gRPC1.14.5 do CLI permanecem. Não usar `npm audit fix --force`, cuja sugestão neste caso era downgrade para Firebase9.14.0.
