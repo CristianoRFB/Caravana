@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-21T04:10:23.682Z",
+  "status": "PASS_PUBLIC_STAGING_AUTH_READS",
+  "projectId": "bdall-e3585",
+  "projectNumber": "146882624278",
+  "requests": [
+    "published_manifest",
+    "published_entry",
+    "public_auth_project",
+    "public_password_policy"
+  ],
+  "projectWrites": 0,
+  "productionAccess": false,
+  "administrativeCredentialsUsed": false,
+  "userCredentialsUsed": false,
+  "publicWebConfigurationUsed": true,
+  "privateDataRead": false,
+  "administrativeConfigVerified": false,
+  "signInJourneyVerified": false,
+  "providerEnablementVerified": false,
+  "emailEnumerationProtectionVerified": false,
+  "administrativeServiceDisabledCause": "UNRESOLVED_REQUIRES_MANAGED_IDENTITY_AND_ERRORINFO",
+  "publishedSource": "8c1340da2d7e110194bf64aecd6955313d5a79e9",
+  "publishedEntrySha256": "b98e6904bbfd1276c2e8c5420dc42b93486620ad3d7f033de103325c66307fa5",
+  "publishedEntryIntegrityVerified": true,
+  "publicAuthProjectNumberVerified": true,
+  "stagingDomainAuthorized": true,
+  "passwordPolicyEnforcement": "ENFORCE",
+  "passwordMinimumLength": 12,
+  "publicBuildEnvironmentPrepared": true
+}

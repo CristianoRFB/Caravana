@@ -1,0 +1,12 @@
+{
+  "applicationRulesIndexesDependenciesUnchangedFrom": "a7b5785e8ab3b67c45f8f5b1916d68580ae61298",
+  "fullCiRun": 39540369156,
+  "newHelperTests": 10,
+  "offlineCandidateUiChecks": 8,
+  "fullRegressionRepeated": false,
+  "checkpointCiSkippedIntentionally": true,
+  "reason": "Only isolated staging diagnostic helpers/tests/docs changed. New helpers validated separately; prior CI applies only to unchanged application/Rules/dependencies.",
+  "productionAccess": false,
+  "firebaseWrites": 0,
+  "deployments": 0
+}

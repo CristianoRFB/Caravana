@@ -1,5 +1,11 @@
 # F7 — auditoria e preparação de release
 
+## Convergência vigente — staging público e candidata preparada
+
+Fonte recuperada cb321f5; checkpoint remoto253067b. Auth público real200 no projeto correto, domínio staging autorizado, senha ENFORCE/min12. Build staging253067b e oito verificações UI offline PASS;10 testes direcionados/lint PASS. Nenhum deploy, escrita Firebase ou acesso de produção. SERVICE_DISABLED administrativo continua sem causa comprovada: falta identidade gerenciada e ErrorInfo do consumidor. Staging publicado permanece8c1340d. Matrizes mantidas: F7 preparação9/10, F8 publicação5/14, GOAL6/17; técnico85% não significa produção pronta.
+
+Continuidade e evidências: [STAGING_CONVERGENCE_2026-10-21.md](STAGING_CONVERGENCE_2026-10-21.md). Pareceres distintos: [COMMERCIAL_GO_NO_GO_2026-10-21.md](COMMERCIAL_GO_NO_GO_2026-10-21.md). Novos clientes não dependem automaticamente da migração do Ítalo; ainda faltam homologação/controles operacionais próprios. Não repetir CI integral do aplicativo inalterado nem declarar configuração administrativa validada por Auth público200.
+
 ## Continuidade consolidada — código a7b5785, runtime49
 
 Override isolado do UUID do CLI e diagnóstico sanitizado de consumidor Auth implementados/testados; audit de ferramentas7→5, runtime0. Compatibilidade HTTP3 testes, guards Python23,Auth8,Storage6 e recuperação conjunta locais PASS. CI39540369156 da própria revisão PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; preservar a evidência anterior apenas para seu código. Aplicação/Rules/índices e staging não alterados. Desenvolvimento técnico estimado85% (17/20 grupos existentes), GOAL final35% (6/17 gates), F7 preparação9/10 e F8 gates5/14; metodologia e limites no parecer abaixo.

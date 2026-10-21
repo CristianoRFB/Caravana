@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-21T04:14:32.801Z",
+  "candidateSource": "253067b5b7c9efb38da13f1e012585f892b24938",
+  "publishedSource": "8c1340da2d7e110194bf64aecd6955313d5a79e9",
+  "candidateFiles": 15,
+  "publishedFiles": 15,
+  "exactFiles": 13,
+  "differentCandidateFiles": [
+    "_redirects",
+    "index.html"
+  ],
+  "comparison": "MANIFEST_METADATA_ONLY_NOT_A_NEW_ASSET_DOWNLOAD",
+  "candidateDeployed": false,
+  "authenticatedJourneysVerified": false,
+  "htmlLfNormalizedIdentical": false,
+  "publishedHtmlSha256": "92940c57160708f636d05b1240f68dfc93e62111ed37f27f466d93b4ec42f741"
+}

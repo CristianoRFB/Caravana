@@ -1,5 +1,11 @@
 # GOAL FINAL — execução vigente
 
+## Convergência vigente — staging público e candidata preparada
+
+Fonte recuperada cb321f5; checkpoint remoto253067b. Auth público real200 no projeto correto, domínio staging autorizado, senha ENFORCE/min12. Build staging253067b e oito verificações UI offline PASS;10 testes direcionados/lint PASS. Nenhum deploy, escrita Firebase ou acesso de produção. SERVICE_DISABLED administrativo continua sem causa comprovada: falta identidade gerenciada e ErrorInfo do consumidor. Staging publicado permanece8c1340d. Matrizes mantidas: F7 preparação9/10, F8 publicação5/14, GOAL6/17; técnico85% não significa produção pronta.
+
+Continuidade e evidências: [STAGING_CONVERGENCE_2026-10-21.md](STAGING_CONVERGENCE_2026-10-21.md). Pareceres distintos: [COMMERCIAL_GO_NO_GO_2026-10-21.md](COMMERCIAL_GO_NO_GO_2026-10-21.md). Novos clientes não dependem automaticamente da migração do Ítalo; ainda faltam homologação/controles operacionais próprios. Não repetir CI integral do aplicativo inalterado nem declarar configuração administrativa validada por Auth público200.
+
 Fonte original preservada em GOAL_FINAL_2026-10-20.md. Branch obrigatória codex/caravana77-commercial-v1-20261016. Parecer operacional atual: [COMMERCIAL_READINESS_2026-10-21.md](COMMERCIAL_READINESS_2026-10-21.md). Segurança/compatibilidade do Ítalo prevalecem; nenhuma alteração de produção, migração real, Blaze, serviço pago, merge main ou force push autorizados neste fluxo.
 
 ## Estado reconciliado
