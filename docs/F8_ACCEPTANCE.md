@@ -1,5 +1,9 @@
 # F8 — homologação e barreiras de publicação
 
+## Subresultado Auth administrativo recuperado
+
+Relatório real do operador PASS_AUTH_ADMIN_READ_ONLY; não comprova política integral nem fecha gate de compatibilidade. Ferramenta39c2b95 e26 guards PASS; guard bruto Rules preservado. Continuidade em [AUTH_READ_RECOVERED_2026-10-21.md](AUTH_READ_RECOVERED_2026-10-21.md). F8 permanece5/14, F7 preparação9/10, GOAL6/17; sem deploy ou escritas remotas.
+
 ## Convergência vigente — staging público e candidata preparada
 
 Fonte recuperada cb321f5; checkpoint remoto253067b. Auth público real200 no projeto correto, domínio staging autorizado, senha ENFORCE/min12. Build staging253067b e oito verificações UI offline PASS;10 testes direcionados/lint PASS. Nenhum deploy, escrita Firebase ou acesso de produção. SERVICE_DISABLED administrativo continua sem causa comprovada: falta identidade gerenciada e ErrorInfo do consumidor. Staging publicado permanece8c1340d. Matrizes mantidas: F7 preparação9/10, F8 publicação5/14, GOAL6/17; técnico85% não significa produção pronta.

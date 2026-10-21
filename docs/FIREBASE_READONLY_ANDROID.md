@@ -1,5 +1,9 @@
 # Firebase somente leitura — Codex Cloud e Android
 
+## Leitura Auth recuperada — evidência do operador
+
+PASS_AUTH_ADMIN_READ_ONLY recebido e validado; seleção explícita resolveu o GET nessa sessão, sem comprovar causa raiz histórica ou políticas Auth. Ferramenta39c2b95 integra cabeçalho apenas à URL Auth staging e diagnóstico de line endings,26 guards PASS. [AUTH_READ_RECOVERED_2026-10-21.md](AUTH_READ_RECOVERED_2026-10-21.md) contém o único procedimento Android atualizado e o escopo futuro de homologação com escritas, ainda não autorizado. Guard bruto Rules mantido; sem gate integral novo (F7 9/10,F8 5/14,GOAL6/17). Produção intocada.
+
 ## Diagnóstico sanitizado do consumidor — atualização F7
 
 A ferramenta agora registra somente serviços Google de lista fixa, permissões mínimas reconhecidas e classificação do consumidor STAGING_PROJECT/OTHER_PROJECT/UNRECOGNIZED. Não publica outro ID de projeto, activationUrl, mensagem bruta, token ou metadados arbitrários.23 guards offline PASS. Isso prepara o diagnóstico do403 sem habilitar API, alterar quota project, conceder IAM ou repetir OAuth. O relatório anterior não continha esses campos: sua causa exata continua desconhecida; não reinterpretá-lo como autenticação resolvida.

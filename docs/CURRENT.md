@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Leitura Auth recuperada — evidência do operador
+
+PASS_AUTH_ADMIN_READ_ONLY recebido e validado; seleção explícita resolveu o GET nessa sessão, sem comprovar causa raiz histórica ou políticas Auth. Ferramenta39c2b95 integra cabeçalho apenas à URL Auth staging e diagnóstico de line endings,26 guards PASS. [AUTH_READ_RECOVERED_2026-10-21.md](AUTH_READ_RECOVERED_2026-10-21.md) contém o único procedimento Android atualizado e o escopo futuro de homologação com escritas, ainda não autorizado. Guard bruto Rules mantido; sem gate integral novo (F7 9/10,F8 5/14,GOAL6/17). Produção intocada.
+
 ## F9 vigente — ponto de intervenção externa
 
 [F9_OPERATIONAL_HANDOFF.md](F9_OPERATIONAL_HANDOFF.md): remoto recuperado b15011c; runtime61 sem GCP/ADC/gcloud. Download fixado e hash da auditoria Android PASS; audit atual runtime0/tooling5, sem patch compatível novo comprovado. Sem alteração funcional/CI novo, escrita remota ou deploy. GO funcional local para novos tenants; lançamento operacional e migração legada seguem NO-GO por critérios próprios. Próximo passo único: rodar auditoria somente leitura no Cloud Shell Android e devolver JSON sanitizado. Gates/percentuais preservados.

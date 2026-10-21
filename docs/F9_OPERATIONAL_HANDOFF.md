@@ -1,5 +1,9 @@
 # F9 — desbloqueio operacional e homologação real
 
+## Leitura Auth recuperada — evidência do operador
+
+PASS_AUTH_ADMIN_READ_ONLY recebido e validado; seleção explícita resolveu o GET nessa sessão, sem comprovar causa raiz histórica ou políticas Auth. Ferramenta39c2b95 integra cabeçalho apenas à URL Auth staging e diagnóstico de line endings,26 guards PASS. [AUTH_READ_RECOVERED_2026-10-21.md](AUTH_READ_RECOVERED_2026-10-21.md) contém o único procedimento Android atualizado e o escopo futuro de homologação com escritas, ainda não autorizado. Guard bruto Rules mantido; sem gate integral novo (F7 9/10,F8 5/14,GOAL6/17). Produção intocada.
+
 ## Recuperação e conclusão desta execução
 
 Remoto recuperado b15011c, branch codex/caravana77-commercial-v1-20261016; posterior a cb321f5. Nenhuma implementação funcional nova necessária identificada. Runtime61 current/running/connected, rede unrestricted/enforced, sem identities/secrets/runtime variables; OIC_MANIFEST_PATH e seletores ADC/GCP ausentes, gcloud indisponível. Nenhum fluxo OAuth, cache antigo ou credencial de produção utilizado. Esse é o bloqueio de acesso atual, distinto do403 histórico do Cloud Shell.
