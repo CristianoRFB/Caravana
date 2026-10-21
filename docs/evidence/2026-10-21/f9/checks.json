@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-21T04:19:55.225271+00:00",
+  "recoveredHead": "b15011c08f46e04e454c3daa527264c7f9649b53",
+  "runtimeRevision": "61",
+  "runtimeObservationsCurrent": true,
+  "managedIdentities": 0,
+  "gcloudAvailable": false,
+  "adcSelectorsPresent": false,
+  "auditRuntime": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "auditAll": {
+    "info": 0,
+    "low": 0,
+    "moderate": 2,
+    "high": 3,
+    "critical": 0,
+    "total": 5
+  },
+  "toolingEntries": [
+    "@google-cloud/pubsub",
+    "@opentelemetry/core",
+    "braces",
+    "chokidar",
+    "firebase-tools"
+  ],
+  "officialAuditDownloadHash": "7139bd458f893bc1bb6abc4bebc53794614b50ee4e68712fd1f31fcdd2b7df10",
+  "downloadMatchesLocal": true,
+  "firebaseWrites": 0,
+  "productionAccess": false,
+  "newApplicationTestsExecuted": 0,
+  "newCiExecuted": false
+}

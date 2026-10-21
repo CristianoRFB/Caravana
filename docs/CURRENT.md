@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## F9 vigente — ponto de intervenção externa
+
+[F9_OPERATIONAL_HANDOFF.md](F9_OPERATIONAL_HANDOFF.md): remoto recuperado b15011c; runtime61 sem GCP/ADC/gcloud. Download fixado e hash da auditoria Android PASS; audit atual runtime0/tooling5, sem patch compatível novo comprovado. Sem alteração funcional/CI novo, escrita remota ou deploy. GO funcional local para novos tenants; lançamento operacional e migração legada seguem NO-GO por critérios próprios. Próximo passo único: rodar auditoria somente leitura no Cloud Shell Android e devolver JSON sanitizado. Gates/percentuais preservados.
+
 ## Convergência vigente — staging público e candidata preparada
 
 Fonte recuperada cb321f5; checkpoint remoto253067b. Auth público real200 no projeto correto, domínio staging autorizado, senha ENFORCE/min12. Build staging253067b e oito verificações UI offline PASS;10 testes direcionados/lint PASS. Nenhum deploy, escrita Firebase ou acesso de produção. SERVICE_DISABLED administrativo continua sem causa comprovada: falta identidade gerenciada e ErrorInfo do consumidor. Staging publicado permanece8c1340d. Matrizes mantidas: F7 preparação9/10, F8 publicação5/14, GOAL6/17; técnico85% não significa produção pronta.

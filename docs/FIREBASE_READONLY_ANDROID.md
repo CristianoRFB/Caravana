@@ -38,11 +38,11 @@ Este caminho executa a leitura no Google Cloud Shell e entrega ao Codex somente 
 
 1. No Chrome Android, entrar como crisf.bueno10@gmail.com em **https://shell.cloud.google.com/?project=bdall-e3585**. Se o terminal não aparecer, ativar **Site para computador** no menu do Chrome. Abrir o terminal do Cloud Shell, não o editor. Se a conta não tiver Cloud Shell disponível, registrar a limitação; não habilitar billing nem criar projeto para contorná-la.
 2. Concluir a autorização **Authorize Cloud Shell**, apresentada pelo Google para permitir o uso da sessão existente. Não enviar códigos/tokens ao chat. Essa autorização não concede novas permissões IAM ao usuário. Selecionar o projeto existente bdall-e3585; não criar projetos ou recursos. Cloud Shell é gratuito segundo a documentação oficial, sujeito às quotas/condições do serviço.
-3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão com23 testes locais PASS. O download abaixo usa a branch autorizada e exige o SHA256 exato desta ferramenta antes da execução; se o arquivo mudar, a verificação falha e Python não roda:
+3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão com23 testes locais PASS. O download abaixo fixa o commit a7b5785 da branch autorizada e exige o SHA256 exato desta ferramenta antes da execução; se o arquivo mudar, a verificação falha e Python não roda:
 
 ```bash
 umask 077
-curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/codex/caravana77-commercial-v1-20261016/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
+curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/a7b5785e8ab3b67c45f8f5b1916d68580ae61298/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
 printf '%s  %s\n' '7139bd458f893bc1bb6abc4bebc53794614b50ee4e68712fd1f31fcdd2b7df10' '/tmp/caravana-staging-readonly.py' | sha256sum -c - &&
 python3 /tmp/caravana-staging-readonly.py --output /tmp/caravana-staging-readonly.json
 ```
