@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Retomada com rede atualizada — 2026-10-21
+
+Base852606e recuperada; runtime42 confirmado. Downloads novos Firestore/Storage PASS,282 backend/Rules+8Auth+6Storage e restauração conjunta local Auth/Firestore/Storage PASS.18 guards direcionados incluem5 novos. Smoke nas quatro larguras em execução no checkpoint. Evidências e limites em [CLOUD_RECOVERY_2026-10-21.md](CLOUD_RECOVERY_2026-10-21.md). Nenhuma identidade GCP configurada; Auth remoto403/SERVICE_DISABLED e gates reais permanecem BLOCKED. Sem alterações de produção, Blaze ou migração real.
+
 ## Relatório real recebido — 2026-10-21
 
 Relatório do operador executado no Cloud Shell em2026-10-20T23:57:26Z, scriptdb99675/SHA363c307d…, validado em auth-recovery/operator-staging-readonly.json e operator-report-validation.json. Identidade/projeto corretos, billing=false, Standard/freeTier;11/11 índices READY/hash compatível. Rules hash bruto41388c5f… difere, LF-normalizado8acafe75… igual à candidata: diferença compatível com quebras de linha, sem alteração ou bypass do guard estrito.

@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-21T03:14:16.918668+00:00",
+  "projectId": "bdall-e3585",
+  "expectedPrincipal": "crisf.bueno10@gmail.com",
+  "authSource": "managed-adc",
+  "scriptSha256": "363c307dd8ec839a4cc7b77622c3710d9d51178aefa037978c2aa57caa16c88f",
+  "status": "BLOCKED",
+  "projectWrites": 0,
+  "productionAccess": false,
+  "businessDocumentsRead": false,
+  "credentialsExported": false,
+  "reason": "managed_gcp_connection_not_configured",
+  "requests": []
+}

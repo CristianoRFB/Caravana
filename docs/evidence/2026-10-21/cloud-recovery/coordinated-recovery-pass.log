@@ -1,0 +1,64 @@
+
+> caravana-77@0.1.0 test:recovery
+> node scripts/rehearse-emulator-recovery.mjs
+
+i  emulators: Starting emulators: auth, firestore, storage
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: node scripts/verify-emulator-recovery.mjs seed
+✔  Script exited successfully (code 0)
+i  Automatically exporting data using --export-on-exit "/workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot" please wait for the export to finish...
+i  Found running emulator hub for project demo-caravana77-test at http://127.0.0.1:14400
+i  Creating export directory /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot
+i  Exporting data to: /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot
+i  emulators: Received export request. Exporting data to /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot.
+✔  emulators: Export complete.
+✔  Export complete
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+i  emulators: Starting emulators: auth, firestore, storage
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Importing data from /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot/firestore_export/firestore_export.overall_export_metadata
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  auth: Importing config from /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot/auth_export/config.json
+i  auth: Importing accounts from /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-tLxZJ6/snapshot/auth_export/accounts.json
+i  Running script: node scripts/verify-emulator-recovery.mjs verify
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+{
+  "checkedAt": "2026-10-21T03:17:27.209Z",
+  "status": "PASS_SYNTHETIC_EMULATOR_RECOVERY",
+  "projectId": "demo-caravana77-test",
+  "authPasswordSignInAndUidPreserved": 3,
+  "firestoreDocumentsCompared": 10,
+  "firestoreFieldsSha256": "e69b13fd0a02bc7e3fab37b60b9ae4aad90e3330d18323fde6e7b9027463e713",
+  "restoredStorageObjectsVerified": 2,
+  "storageBytesSha256": "3a106ae504069cc11e9f1cfade8688e68d3e4a841a936e14e74fb79bbb2c22ed",
+  "mimePreserved": true,
+  "crossTenantDenial": true,
+  "passengerDenial": true,
+  "listAndDeleteDenied": true,
+  "immediateRevocationAfterRestore": true,
+  "candidateRulesLoadedFromRepository": true,
+  "productionAccess": false,
+  "realClientRecoveryVerified": false,
+  "limitations": [
+    "Rules loaded from the repository, not recovered from the export.",
+    "Synthetic emulator exports only; no real Auth provider/password-hash, Storage IAM/download-token inventory or production backup/rollback verification."
+  ]
+}
+
+Private synthetic export retained under .firebase/recovery-rehearsal (ignored by Git).

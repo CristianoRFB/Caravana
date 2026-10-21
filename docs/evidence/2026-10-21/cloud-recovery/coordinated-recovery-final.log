@@ -1,0 +1,40 @@
+
+> caravana-77@0.1.0 test:recovery
+> node scripts/rehearse-emulator-recovery.mjs
+
+i  emulators: Starting emulators: auth, firestore, storage
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: node scripts/verify-emulator-recovery.mjs seed
+✔  Script exited successfully (code 0)
+i  Automatically exporting data using --export-on-exit "/workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot" please wait for the export to finish...
+i  Found running emulator hub for project demo-caravana77-test at http://127.0.0.1:14400
+i  Creating export directory /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot
+i  Exporting data to: /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot
+i  emulators: Received export request. Exporting data to /workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot.
+⚠  emulators: Export failed: Failed to make request to http://127.0.0.1:19199/internal/export
+⚠  FirebaseError: Export request failed, see emulator logs for more information.
+⚠  Automatic export to "/workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot" failed, going to exit now...
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+node:fs:484
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot/firebase-export-metadata.json'
+    at readFileSync (node:fs:484:20)
+    at file:///workspace/Caravana/scripts/rehearse-emulator-recovery.mjs:31:29
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/workspace/Caravana/.firebase/recovery-rehearsal/synthetic-hf6foU/snapshot/firebase-export-metadata.json'
+}
+
+Node.js v24.19.0

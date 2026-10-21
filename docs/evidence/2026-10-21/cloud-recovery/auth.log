@@ -1,0 +1,25 @@
+
+> caravana-77@0.1.0 test:demo
+> node scripts/run-local-tests.mjs demo-auth
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run --config vitest.auth.config.ts
+
+ RUN  v5.0.1 /workspace/Caravana
+
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  03:13:36
+   Duration  11.67s (tests 98%, import 1%, transform 1%)
+
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

@@ -20,6 +20,7 @@
     "test:security": "node scripts/run-local-tests.mjs security",
     "test:demo": "node scripts/run-local-tests.mjs demo-auth",
     "test:storage": "node scripts/run-local-tests.mjs storage",
+    "test:recovery": "node scripts/rehearse-emulator-recovery.mjs",
     "test:platform": "node scripts/run-local-tests.mjs platform",
     "test:support": "node scripts/run-local-tests.mjs support",
     "test:booking": "node scripts/run-local-tests.mjs booking",

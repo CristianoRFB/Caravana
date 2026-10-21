@@ -1,0 +1,28 @@
+
+> caravana-77@0.1.0 build
+> tsc -b && vite build
+
+vite v6.4.4 building for production...
+transforming...
+✓ 1673 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               0.90 kB │ gzip:   0.45 kB
+dist/assets/team-DO-9gEyi.css                 1.32 kB │ gzip:   0.54 kB
+dist/assets/CommercialLanding-0uZpc247.css   10.51 kB │ gzip:   2.60 kB
+dist/assets/index-WxrywgLI.css               49.35 kB │ gzip:  11.88 kB
+dist/assets/InvitationInbox-CzOYqOHy.js       3.19 kB │ gzip:   1.45 kB
+dist/assets/TeamManagement-C26ms3Wz.js        8.71 kB │ gzip:   3.20 kB
+dist/assets/team-BKBsBNVL.js                  8.95 kB │ gzip:   3.02 kB
+dist/assets/react-vendor-Cy33O35p.js          9.06 kB │ gzip:   3.42 kB
+dist/assets/CommercialLanding-CoYuo3sN.js    13.60 kB │ gzip:   4.28 kB
+dist/assets/OperationalTools-DyjL00YJ.js     18.13 kB │ gzip:   6.62 kB
+dist/assets/firebase-auth-9-_4xxym.js       123.69 kB │ gzip:  25.28 kB
+dist/assets/firebase-firestore-B8X3RQXa.js  364.56 kB │ gzip:  90.71 kB
+dist/assets/index-BJNhtP8q.js               508.02 kB │ gzip: 151.37 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.19s

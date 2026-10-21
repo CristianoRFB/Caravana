@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-21T03:17:27.209Z",
+  "status": "PASS_SYNTHETIC_EMULATOR_RECOVERY",
+  "projectId": "demo-caravana77-test",
+  "authPasswordSignInAndUidPreserved": 3,
+  "firestoreDocumentsCompared": 10,
+  "firestoreFieldsSha256": "e69b13fd0a02bc7e3fab37b60b9ae4aad90e3330d18323fde6e7b9027463e713",
+  "restoredStorageObjectsVerified": 2,
+  "storageBytesSha256": "3a106ae504069cc11e9f1cfade8688e68d3e4a841a936e14e74fb79bbb2c22ed",
+  "mimePreserved": true,
+  "crossTenantDenial": true,
+  "passengerDenial": true,
+  "listAndDeleteDenied": true,
+  "immediateRevocationAfterRestore": true,
+  "candidateRulesLoadedFromRepository": true,
+  "productionAccess": false,
+  "realClientRecoveryVerified": false,
+  "limitations": [
+    "Rules loaded from the repository, not recovered from the export.",
+    "Synthetic emulator exports only; no real Auth provider/password-hash, Storage IAM/download-token inventory or production backup/rollback verification."
+  ]
+}
