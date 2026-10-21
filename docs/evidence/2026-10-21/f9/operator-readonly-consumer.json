@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-10-21T04:20:03.348426+00:00",
+  "projectId": "bdall-e3585",
+  "expectedPrincipal": "crisf.bueno10@gmail.com",
+  "authSource": "gcloud",
+  "scriptSha256": "7139bd458f893bc1bb6abc4bebc53794614b50ee4e68712fd1f31fcdd2b7df10",
+  "status": "BLOCKED",
+  "projectWrites": 0,
+  "productionAccess": false,
+  "businessDocumentsRead": false,
+  "credentialsExported": false,
+  "identityVerified": true,
+  "projectIdentityVerified": true,
+  "billingEnabled": false,
+  "standardFreeTierVerified": true,
+  "firestoreRules": {
+    "sha256": "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81",
+    "candidateMatch": false,
+    "lfNormalizedSha256": "8acafe757210277ea96c3700813c064537622d44f0cfd7f6a141de059ed58c0f",
+    "lfNormalizedCandidateMatch": true
+  },
+  "compositeIndexes": {
+    "count": 11,
+    "ready": 11,
+    "sha256": "63d6eb0d3ccae2def9399f9a4fbe91b1e051ce4bc7373b39e3940f7efc835238",
+    "candidateMatch": true
+  },
+  "reason": "auth_http_403",
+  "requests": [
+    "identity",
+    "project",
+    "billing",
+    "database",
+    "release",
+    "ruleset",
+    "indexes",
+    "auth"
+  ],
+  "httpDiagnostics": [
+    {
+      "resource": "auth",
+      "httpStatus": 403,
+      "googleStatus": "PERMISSION_DENIED",
+      "googleReasons": [
+        "SERVICE_DISABLED"
+      ],
+      "googleServices": [
+        "identitytoolkit.googleapis.com"
+      ],
+      "consumerProjects": [
+        "OTHER_PROJECT"
+      ]
+    }
+  ]
+}
