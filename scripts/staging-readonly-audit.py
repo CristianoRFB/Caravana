@@ -59,6 +59,9 @@ def http_diagnostic(resource, error):
             result["googleStatus"] = status
         fields = set()
         reasons = set()
+        services = set()
+        consumers = set()
+        permissions = set()
         for detail in body.get("details", []):
             if detail.get("@type") == "type.googleapis.com/google.rpc.BadRequest":
                 for violation in detail.get("fieldViolations", []):
@@ -69,10 +72,32 @@ def http_diagnostic(resource, error):
                 reason = detail.get("reason")
                 if reason in {"SERVICE_DISABLED", "ACCESS_TOKEN_SCOPE_INSUFFICIENT", "IAM_PERMISSION_DENIED", "BILLING_DISABLED", "RATE_LIMIT_EXCEEDED", "CONSUMER_INVALID"}:
                     reasons.add(reason)
+                metadata = detail.get("metadata", {})
+                if not isinstance(metadata, dict):
+                    continue
+                service = metadata.get("service")
+                if isinstance(service, str) and service in {"identitytoolkit.googleapis.com", "firebase.googleapis.com", "firebaserules.googleapis.com", "firestore.googleapis.com", "cloudbilling.googleapis.com", "serviceusage.googleapis.com"}:
+                    services.add(service)
+                consumer = metadata.get("consumer")
+                if consumer in (f"projects/{PROJECT}", f"projects/{PROJECT_NUMBER}"):
+                    consumers.add("STAGING_PROJECT")
+                elif isinstance(consumer, str) and re.fullmatch(r"projects/[0-9]{1,20}", consumer):
+                    consumers.add("OTHER_PROJECT")
+                elif consumer is not None:
+                    consumers.add("UNRECOGNIZED")
+                permission = metadata.get("permission")
+                if isinstance(permission, str) and permission in {"firebaseauth.configs.get", "serviceusage.services.use", "datastore.indexes.list", "datastore.databases.get", "firebase.projects.get", "resourcemanager.projects.get", "firebaserules.releases.get", "firebaserules.rulesets.get"}:
+                    permissions.add(permission)
         if fields:
             result["invalidFields"] = sorted(fields)
         if reasons:
             result["googleReasons"] = sorted(reasons)
+        if services:
+            result["googleServices"] = sorted(services)
+        if consumers:
+            result["consumerProjects"] = sorted(consumers)
+        if permissions:
+            result["googlePermissions"] = sorted(permissions)
     except Exception:
         pass  # Malformed/oversized bodies remain a sanitized HTTP status only.
     return result

@@ -1,0 +1,16 @@
+{
+  "baseCommit": "d7cd9c6c906e81e9fba337aa9cd16f5bcbc6f3ff",
+  "changedLockfilePackages": [
+    "node_modules/uuid"
+  ],
+  "uuidBefore": "9.0.1",
+  "uuidAfter": "11.1.1",
+  "scope": "gaxios@6.7.1 > uuid only",
+  "runtimeDependencyPackagesUnchanged": true,
+  "cliVersion": "15.34.0",
+  "cliConsumerCompatibilityTests": 3,
+  "pythonGuards": 23,
+  "fullCi": "PENDING_NEW_CHECKPOINT",
+  "productionWrites": 0,
+  "realMigrationPerformed": false
+}

@@ -71,6 +71,9 @@
     "react-router-dom": "^7.6.2"
   },
   "overrides": {
+    "gaxios@6.7.1": {
+      "uuid": "11.1.1"
+    },
     "@firebase/firestore": {
       "@grpc/grpc-js": "1.13.6"
     }

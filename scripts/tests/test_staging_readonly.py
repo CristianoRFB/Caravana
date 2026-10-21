@@ -159,6 +159,31 @@ class AuditTests(unittest.TestCase):
             error = urllib.error.HTTPError(audit.ROUTES["indexes"], 400, "PRIVATE_RESPONSE", {}, io.BytesIO(body))
             self.assertEqual(audit.http_diagnostic("indexes", error), {"resource": "indexes", "httpStatus": 400})
 
+    def test_disabled_service_identifies_target_consumer_without_exposing_metadata(self):
+        for consumer in [f"projects/{audit.PROJECT}", f"projects/{audit.PROJECT_NUMBER}"]:
+            body = {"error": {"status": "PERMISSION_DENIED", "details": [{"@type": "type.googleapis.com/google.rpc.ErrorInfo", "reason": "SERVICE_DISABLED", "metadata": {"service": "identitytoolkit.googleapis.com", "consumer": consumer, "activationUrl": "PRIVATE_URL", "token": "PRIVATE_TOKEN"}}]}}
+            error = urllib.error.HTTPError(audit.ROUTES["auth"], 403, "PRIVATE_MESSAGE", {}, io.BytesIO(json.dumps(body).encode()))
+            diagnostic = audit.http_diagnostic("auth", error)
+            self.assertEqual(diagnostic["googleServices"], ["identitytoolkit.googleapis.com"])
+            self.assertEqual(diagnostic["consumerProjects"], ["STAGING_PROJECT"])
+            self.assertNotIn("PRIVATE", json.dumps(diagnostic))
+
+    def test_other_project_and_minimum_permission_are_classified_not_disclosed(self):
+        body = {"error": {"details": [{"@type": "type.googleapis.com/google.rpc.ErrorInfo", "reason": "IAM_PERMISSION_DENIED", "metadata": {"service": "identitytoolkit.googleapis.com", "consumer": "projects/123456789012", "permission": "serviceusage.services.use"}}]}}
+        error = urllib.error.HTTPError(audit.ROUTES["auth"], 403, "", {}, io.BytesIO(json.dumps(body).encode()))
+        diagnostic = audit.http_diagnostic("auth", error)
+        self.assertEqual(diagnostic["consumerProjects"], ["OTHER_PROJECT"])
+        self.assertEqual(diagnostic["googlePermissions"], ["serviceusage.services.use"])
+        self.assertNotIn("123456789012", json.dumps(diagnostic))
+
+    def test_hostile_or_malformed_error_metadata_cannot_leak_values(self):
+        for metadata in [None, [], "PRIVATE_SECRET", {"service": "PRIVATE_SECRET", "consumer": "https://private.invalid/PRIVATE_SECRET", "permission": "PRIVATE_SECRET"}]:
+            body = {"error": {"details": [{"@type": "type.googleapis.com/google.rpc.ErrorInfo", "metadata": metadata}]}}
+            error = urllib.error.HTTPError(audit.ROUTES["auth"], 403, "", {}, io.BytesIO(json.dumps(body).encode()))
+            diagnostic = audit.http_diagnostic("auth", error)
+            self.assertNotIn("PRIVATE_SECRET", json.dumps(diagnostic))
+            self.assertNotIn("googleServices", diagnostic)
+
     def test_line_ending_difference_is_reported_but_does_not_bypass_gate(self):
         data, report = fixture(), {}
         data["ruleset"]["source"]["files"][0]["content"] = data["ruleset"]["source"]["files"][0]["content"].replace("\n", "\r\n")

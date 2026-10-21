@@ -1,5 +1,9 @@
 # Firebase somente leitura — Codex Cloud e Android
 
+## Diagnóstico sanitizado do consumidor — atualização F7
+
+A ferramenta agora registra somente serviços Google de lista fixa, permissões mínimas reconhecidas e classificação do consumidor STAGING_PROJECT/OTHER_PROJECT/UNRECOGNIZED. Não publica outro ID de projeto, activationUrl, mensagem bruta, token ou metadados arbitrários.23 guards offline PASS. Isso prepara o diagnóstico do403 sem habilitar API, alterar quota project, conceder IAM ou repetir OAuth. O relatório anterior não continha esses campos: sua causa exata continua desconhecida; não reinterpretá-lo como autenticação resolvida.
+
 ## Relatório real recebido — 2026-10-21
 
 Relatório do operador executado no Cloud Shell em2026-10-20T23:57:26Z, scriptdb99675/SHA363c307d…, validado em auth-recovery/operator-staging-readonly.json e operator-report-validation.json. Identidade/projeto corretos, billing=false, Standard/freeTier;11/11 índices READY/hash compatível. Rules hash bruto41388c5f… difere, LF-normalizado8acafe75… igual à candidata: diferença compatível com quebras de linha, sem alteração ou bypass do guard estrito.
@@ -34,12 +38,12 @@ Este caminho executa a leitura no Google Cloud Shell e entrega ao Codex somente 
 
 1. No Chrome Android, entrar como crisf.bueno10@gmail.com em **https://shell.cloud.google.com/?project=bdall-e3585**. Se o terminal não aparecer, ativar **Site para computador** no menu do Chrome. Abrir o terminal do Cloud Shell, não o editor. Se a conta não tiver Cloud Shell disponível, registrar a limitação; não habilitar billing nem criar projeto para contorná-la.
 2. Concluir a autorização **Authorize Cloud Shell**, apresentada pelo Google para permitir o uso da sessão existente. Não enviar códigos/tokens ao chat. Essa autorização não concede novas permissões IAM ao usuário. Selecionar o projeto existente bdall-e3585; não criar projetos ou recursos. Cloud Shell é gratuito segundo a documentação oficial, sujeito às quotas/condições do serviço.
-3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão com20 testes locais PASS. O download abaixo usa a branch autorizada e exige o SHA256 exato desta ferramenta antes da execução; se o arquivo mudar, a verificação falha e Python não roda:
+3. Executar o script versionado `scripts/staging-readonly-audit.py` em uma revisão fixa da branch autorizada. Revisão com23 testes locais PASS. O download abaixo usa a branch autorizada e exige o SHA256 exato desta ferramenta antes da execução; se o arquivo mudar, a verificação falha e Python não roda:
 
 ```bash
 umask 077
 curl -fsS 'https://raw.githubusercontent.com/CristianoRFB/Caravana/codex/caravana77-commercial-v1-20261016/scripts/staging-readonly-audit.py' -o /tmp/caravana-staging-readonly.py &&
-printf '%s  %s\n' '363c307dd8ec839a4cc7b77622c3710d9d51178aefa037978c2aa57caa16c88f' '/tmp/caravana-staging-readonly.py' | sha256sum -c - &&
+printf '%s  %s\n' '7139bd458f893bc1bb6abc4bebc53794614b50ee4e68712fd1f31fcdd2b7df10' '/tmp/caravana-staging-readonly.py' | sha256sum -c - &&
 python3 /tmp/caravana-staging-readonly.py --output /tmp/caravana-staging-readonly.json
 ```
 
