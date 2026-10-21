@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, MagicMock
 import urllib.error
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -135,6 +135,57 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(request.get_method(), "GET")
         self.assertEqual(str(caught.exception), "project_http_403")
         self.assertIsNone(audit.NoRedirect().redirect_request(None, None, 302, "", {}, "https://example.invalid"))
+
+    def test_consumer_header_is_fixed_only_for_exact_staging_auth_get(self):
+        urls = [audit.IDENTITY_URL, *audit.ROUTES.values(),
+                audit.ruleset_url(f"projects/{audit.PROJECT}/rulesets/test")]
+        for url in urls:
+            with self.subTest(url=url):
+                opener = MagicMock()
+                response = opener.open.return_value.__enter__.return_value
+                response.status = 200
+                response.read.return_value = b'{}'
+                audit.Reader("SYNTHETIC_TOKEN", opener).read("arbitrary_label", url)
+                request = opener.open.call_args.args[0]
+                headers = {k.lower(): v for k, v in request.header_items()}
+                self.assertEqual(request.get_method(), "GET")
+                self.assertEqual(headers.get("x-goog-user-project"),
+                                 audit.PROJECT if url == audit.ROUTES["auth"] else None)
+                self.assertEqual(headers["authorization"], "Bearer SYNTHETIC_TOKEN")
+
+    def test_auth_consumer_cannot_be_redirected_or_overridden_by_environment(self):
+        opener = Mock()
+        urls = [audit.ROUTES["auth"].replace(audit.PROJECT, "caravana-af306"),
+                audit.ROUTES["auth"] + "?project=other", audit.ROUTES["auth"] + "/users"]
+        with patch.dict(os.environ, {"GOOGLE_CLOUD_QUOTA_PROJECT": "other-project"}):
+            for url in urls:
+                with self.assertRaises(audit.Blocked):
+                    audit.Reader("SYNTHETIC_TOKEN", opener).read("auth", url)
+            opener.open.assert_not_called()
+            opener.open.side_effect = urllib.error.HTTPError(audit.ROUTES["auth"], 403, "PRIVATE", {}, io.BytesIO(b'{}'))
+            with self.assertRaisesRegex(audit.Blocked, "auth_http_403"):
+                audit.Reader("SYNTHETIC_TOKEN", opener).read("auth", audit.ROUTES["auth"])
+            headers = dict((k.lower(), v) for k, v in opener.open.call_args.args[0].header_items())
+            self.assertEqual(headers["x-goog-user-project"], audit.PROJECT)
+
+    def test_rules_line_ending_counts_preserve_strict_integrity_and_auth_validation(self):
+        for mode in ["crlf", "mixed"]:
+            data, report = fixture(), {}
+            original = data["ruleset"]["source"]["files"][0]["content"]
+            content = original.replace("\n", "\r\n") if mode == "crlf" else original.replace("\n", "\r", 1)
+            data["ruleset"]["source"]["files"][0]["content"] = content
+            with self.assertRaisesRegex(audit.Blocked, "deployed_rules_or_indexes"):
+                audit.audit(FakeReader(data), report)
+            rules = report["firestoreRules"]
+            self.assertFalse(rules["candidateMatch"])
+            self.assertTrue(rules["lfNormalizedCandidateMatch"])
+            self.assertEqual(rules["utf8Bytes"], len(content.encode()))
+            self.assertEqual(rules["lineEndings"]["crlf"], content.count("\r\n"))
+            self.assertEqual(rules["lineEndings"]["loneCr"], 1 if mode == "mixed" else 0)
+            self.assertTrue(report["auth"]["emailPasswordEnabled"])
+            self.assertEqual(report["requestedAuthConsumer"], "STAGING_PROJECT")
+            self.assertNotIn("status", report)
+            self.assertNotIn(original, json.dumps(report))
 
     def test_index_request_matches_cli_without_optional_parameters(self):
         self.assertEqual(audit.ROUTES["indexes"], "https://firestore.googleapis.com/v1/projects/bdall-e3585/databases/(default)/collectionGroups/-/indexes")

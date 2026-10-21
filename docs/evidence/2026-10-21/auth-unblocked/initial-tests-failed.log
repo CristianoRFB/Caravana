@@ -1,0 +1,135 @@
+test_auth_consumer_cannot_be_redirected_or_overridden_by_environment (test_staging_readonly.AuditTests.test_auth_consumer_cannot_be_redirected_or_overridden_by_environment) ... ok
+test_auth_policy_drift_does_not_receive_pass (test_staging_readonly.AuditTests.test_auth_policy_drift_does_not_receive_pass) ... ok
+test_complete_readonly_audit_and_sanitized_report (test_staging_readonly.AuditTests.test_complete_readonly_audit_and_sanitized_report) ... ok
+test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) ...
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://openidconnect.googleapis.com/v1/userinfo') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firebase.googleapis.com/v1beta1/projects/bdall-e3585') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://cloudbilling.googleapis.com/v1/projects/bdall-e3585/billingInfo') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firestore.googleapis.com/v1/projects/bdall-e3585/databases/(default)') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firebaserules.googleapis.com/v1/projects/bdall-e3585/releases/cloud.firestore') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firestore.googleapis.com/v1/projects/bdall-e3585/databases/(default)/collectionGroups/-/indexes') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://identitytoolkit.googleapis.com/admin/v2/projects/bdall-e3585/config') ... ERROR
+  test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firebaserules.googleapis.com/v1/projects/bdall-e3585/rulesets/test') ... ERROR
+test_contract_hashes_match_repository_and_server_implicit_fields (test_staging_readonly.AuditTests.test_contract_hashes_match_repository_and_server_implicit_fields) ... ok
+test_disabled_service_identifies_target_consumer_without_exposing_metadata (test_staging_readonly.AuditTests.test_disabled_service_identifies_target_consumer_without_exposing_metadata) ... ok
+test_failure_report_masks_exceptions_and_atomic_file_is_private (test_staging_readonly.AuditTests.test_failure_report_masks_exceptions_and_atomic_file_is_private) ... ok
+test_foreign_ruleset_never_receives_authorization (test_staging_readonly.AuditTests.test_foreign_ruleset_never_receives_authorization) ... ok
+test_gcloud_uses_exact_account_and_project_without_exposing_output (test_staging_readonly.AuditTests.test_gcloud_uses_exact_account_and_project_without_exposing_output) ... ok
+test_hostile_or_malformed_error_metadata_cannot_leak_values (test_staging_readonly.AuditTests.test_hostile_or_malformed_error_metadata_cannot_leak_values) ... ok
+test_http_is_get_and_errors_never_echo_secrets (test_staging_readonly.AuditTests.test_http_is_get_and_errors_never_echo_secrets) ... ok
+test_identity_checked_before_any_project_request (test_staging_readonly.AuditTests.test_identity_checked_before_any_project_request) ... ok
+test_index_request_matches_cli_without_optional_parameters (test_staging_readonly.AuditTests.test_index_request_matches_cli_without_optional_parameters) ... ok
+test_legacy_token_and_emulators_are_rejected (test_staging_readonly.AuditTests.test_legacy_token_and_emulators_are_rejected) ... ok
+test_line_ending_difference_is_reported_but_does_not_bypass_gate (test_staging_readonly.AuditTests.test_line_ending_difference_is_reported_but_does_not_bypass_gate) ... ok
+test_malformed_large_or_untrusted_error_payload_is_not_reported (test_staging_readonly.AuditTests.test_malformed_large_or_untrusted_error_payload_is_not_reported) ... ok
+test_managed_adc_rejects_private_key_credentials_before_refresh (test_staging_readonly.AuditTests.test_managed_adc_rejects_private_key_credentials_before_refresh) ... ERROR
+test_managed_manifest_must_select_one_complete_gcp_connection (test_staging_readonly.AuditTests.test_managed_manifest_must_select_one_complete_gcp_connection) ... ok
+test_no_managed_identity_or_wrong_account_fails_without_network (test_staging_readonly.AuditTests.test_no_managed_identity_or_wrong_account_fails_without_network) ... ok
+test_no_production_or_unlisted_route_is_allowed (test_staging_readonly.AuditTests.test_no_production_or_unlisted_route_is_allowed) ... ok
+test_other_project_and_minimum_permission_are_classified_not_disclosed (test_staging_readonly.AuditTests.test_other_project_and_minimum_permission_are_classified_not_disclosed) ... ok
+test_paid_or_wrong_database_stops_early (test_staging_readonly.AuditTests.test_paid_or_wrong_database_stops_early) ... ok
+test_rules_line_ending_counts_preserve_strict_integrity_and_auth_validation (test_staging_readonly.AuditTests.test_rules_line_ending_counts_preserve_strict_integrity_and_auth_validation) ... ok
+test_rules_or_index_drift_is_blocked_without_fixing_remote_resources (test_staging_readonly.AuditTests.test_rules_or_index_drift_is_blocked_without_fixing_remote_resources) ... ok
+test_structured_http_diagnostic_drops_messages_metadata_and_unknown_fields (test_staging_readonly.AuditTests.test_structured_http_diagnostic_drops_messages_metadata_and_unknown_fields) ... ok
+test_wrong_project_number_stops_before_billing (test_staging_readonly.AuditTests.test_wrong_project_number_stops_before_billing) ... ok
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://openidconnect.googleapis.com/v1/userinfo')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firebase.googleapis.com/v1beta1/projects/bdall-e3585')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://cloudbilling.googleapis.com/v1/projects/bdall-e3585/billingInfo')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firestore.googleapis.com/v1/projects/bdall-e3585/databases/(default)')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firebaserules.googleapis.com/v1/projects/bdall-e3585/releases/cloud.firestore')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firestore.googleapis.com/v1/projects/bdall-e3585/databases/(default)/collectionGroups/-/indexes')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://identitytoolkit.googleapis.com/admin/v2/projects/bdall-e3585/config')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_consumer_header_is_fixed_only_for_exact_staging_auth_get (test_staging_readonly.AuditTests.test_consumer_header_is_fixed_only_for_exact_staging_auth_get) (url='https://firebaserules.googleapis.com/v1/projects/bdall-e3585/rulesets/test')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 145, in test_consumer_header_is_fixed_only_for_exact_staging_auth_get
+    response = opener.open.return_value.__enter__.return_value
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 662, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+======================================================================
+ERROR: test_managed_adc_rejects_private_key_credentials_before_refresh (test_staging_readonly.AuditTests.test_managed_adc_rejects_private_key_credentials_before_refresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Caravana/scripts/tests/test_staging_readonly.py", line 283, in test_managed_adc_rejects_private_key_credentials_before_refresh
+    import google.auth
+ModuleNotFoundError: No module named 'google'
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.095s
+
+FAILED (errors=9)

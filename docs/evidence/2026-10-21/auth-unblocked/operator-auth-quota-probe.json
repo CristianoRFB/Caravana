@@ -1,0 +1,14 @@
+{
+  "kind": "TARGETED_AUTH_QUOTA_PROBE",
+  "projectId": "bdall-e3585",
+  "requestedAuthConsumer": "STAGING_PROJECT",
+  "status": "PASS_AUTH_ADMIN_READ_ONLY",
+  "projectWrites": 0,
+  "productionAccess": false,
+  "requests": [
+    "identity",
+    "project",
+    "auth"
+  ],
+  "httpDiagnostics": []
+}

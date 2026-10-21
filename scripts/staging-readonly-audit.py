@@ -138,6 +138,10 @@ class Reader:
         request = urllib.request.Request(
             url, headers={"Authorization": "Bearer " + self._token}, method="GET"
         )
+        # Explicit user-approved selection, limited to the exact staging Auth GET.
+        # No persistent gcloud/ADC quota configuration is changed.
+        if url == ROUTES["auth"]:
+            request.add_header("x-goog-user-project", PROJECT)
         self.calls.append(resource)
         try:
             with self._opener.open(request, timeout=20) as response:
@@ -256,11 +260,16 @@ def audit(reader, report):
     if len(files) != 1 or not isinstance(files[0].get("content"), str):
         raise Blocked("firestore_rules_source_requires_review")
     rules_hash = hashlib.sha256(files[0]["content"].encode()).hexdigest()
-    normalized = files[0]["content"].replace("\r\n", "\n").replace("\r", "\n")
+    content = files[0]["content"]
+    normalized = content.replace("\r\n", "\n").replace("\r", "\n")
+    crlf = content.count("\r\n")
     report["firestoreRules"] = {
         "sha256": rules_hash, "candidateMatch": rules_hash == RULES_SHA256,
         "lfNormalizedSha256": hashlib.sha256(normalized.encode()).hexdigest(),
         "lfNormalizedCandidateMatch": hashlib.sha256(normalized.encode()).hexdigest() == RULES_SHA256,
+        "utf8Bytes": len(content.encode()),
+        "lineEndings": {"crlf": crlf, "loneCr": content.count("\r") - crlf,
+                        "loneLf": content.count("\n") - crlf},
     }
     result = reader.read("indexes", ROUTES["indexes"])
     if result.get("nextPageToken"):
@@ -269,6 +278,7 @@ def audit(reader, report):
     signature = index_fingerprint(indexes)
     ready = sum(index.get("state") == "READY" for index in indexes)
     report["compositeIndexes"] = {"count": len(indexes), "ready": ready, "sha256": signature, "candidateMatch": signature == INDEXES_SHA256}
+    report["requestedAuthConsumer"] = "STAGING_PROJECT"
     auth = reader.read("auth", ROUTES["auth"])
     policy = auth.get("passwordPolicyConfig", {})
     versions = policy.get("passwordPolicyVersions", [])
