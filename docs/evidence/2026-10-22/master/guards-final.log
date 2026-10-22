@@ -1,3 +1,7 @@
+test_http_failure_does_not_disclose_payload_or_token (test_production_readonly.ProductionMetadataTests.test_http_failure_does_not_disclose_payload_or_token) ... ok
+test_only_exact_metadata_routes_can_receive_credentials (test_production_readonly.ProductionMetadataTests.test_only_exact_metadata_routes_can_receive_credentials) ... ok
+test_wrong_identity_stops_before_project_or_business_data (test_production_readonly.ProductionMetadataTests.test_wrong_identity_stops_before_project_or_business_data) ... ok
+test_wrong_project_stops_before_billing_or_rules (test_production_readonly.ProductionMetadataTests.test_wrong_project_stops_before_billing_or_rules) ... ok
 test_auth_consumer_cannot_be_redirected_or_overridden_by_environment (test_staging_readonly.AuditTests.test_auth_consumer_cannot_be_redirected_or_overridden_by_environment) ... ok
 test_auth_policy_drift_does_not_receive_pass (test_staging_readonly.AuditTests.test_auth_policy_drift_does_not_receive_pass) ... ok
 test_complete_readonly_audit_and_sanitized_report (test_staging_readonly.AuditTests.test_complete_readonly_audit_and_sanitized_report) ... ok
@@ -33,6 +37,6 @@ test_modified_or_additional_rules_cannot_be_deployed (test_staging_rules_reconci
 test_write_failure_suppresses_sensitive_remote_error (test_staging_rules_reconcile.ReconcileTests.test_write_failure_suppresses_sensitive_remote_error) ... ok
 
 ----------------------------------------------------------------------
-Ran 33 tests in 0.286s
+Ran 37 tests in 0.319s
 
 OK

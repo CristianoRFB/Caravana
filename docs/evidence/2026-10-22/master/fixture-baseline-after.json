@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-22T19:23:46.117Z",
+  "projectId": "bdall-e3585",
+  "phase": "after",
+  "classification": "GET",
+  "sourceWrites": 0,
+  "productionAccess": false,
+  "tenants": [
+    {
+      "organizationId": "staging-org-a",
+      "caravans": 5,
+      "registrations": 18,
+      "reservedSeats": 3,
+      "paymentTotalCents": 7500,
+      "historicalFinancialOperations": 13
+    },
+    {
+      "organizationId": "staging-org-b",
+      "caravans": 1,
+      "registrations": 0,
+      "reservedSeats": 0,
+      "paymentTotalCents": 0,
+      "historicalFinancialOperations": 0
+    }
+  ],
+  "originalFinancialOperationsUnchanged": true,
+  "operationalTotalsRestored": true
+}

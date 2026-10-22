@@ -1,0 +1,11 @@
+
+ RUN  v5.0.1 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ✓ staging-tests/readonly.test.ts > verifies refreshed Node dependencies against existing synthetic staging without document writes 3049ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:17:05
+   Duration  3.64s (tests 87%, import 11%, transform 1%)
+
+JSON report written to C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana/.firebase/staging-vitest-report.json

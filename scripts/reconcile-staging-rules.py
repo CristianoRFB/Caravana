@@ -18,6 +18,7 @@ SPEC.loader.exec_module(audit)
 OLD_HASH = "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81"
 CREATE_URL = f"https://firebaserules.googleapis.com/v1/projects/{audit.PROJECT}/rulesets"
 RELEASE_NAME = f"projects/{audit.PROJECT}/releases/cloud.firestore"
+WRITE_STATE = {"rulesetCreateAttempted": False, "releaseUpdateAttempted": False}
 
 
 def sha(content):
@@ -53,6 +54,7 @@ def write_request(token, method, url, body):
         raise audit.Blocked("write_outside_fixed_rules_scope")
     request = urllib.request.Request(url, data=json.dumps(body).encode(), headers={
         "Authorization": "Bearer " + token, "Content-Type": "application/json"}, method=method)
+    WRITE_STATE["rulesetCreateAttempted" if method == "POST" else "releaseUpdateAttempted"] = True
     try:
         with urllib.request.build_opener(audit.NoRedirect).open(request, timeout=30) as response:
             data = response.read(2_000_001)
@@ -124,6 +126,8 @@ def main():
         saved["afterRuleset"] = target
         audit.write_report(checkpoint, saved)
         point_release(token, reader, current, target)
+        saved["releaseVerified"] = True
+        audit.write_report(checkpoint, saved)
         verified = {}
         audit.audit(reader, verified)
         print(json.dumps({"status": "PASS_RULES_RECONCILED", "beforeRuleset": current, "afterRuleset": target,
@@ -138,8 +142,10 @@ if __name__ == "__main__":
     try:
         main()
     except audit.Blocked as error:
-        print(json.dumps({"status": "BLOCKED", "reason": str(error)}))
+        print(json.dumps({"status": "BLOCKED", "reason": str(error), **WRITE_STATE,
+                          "retryRequiresReadonlyReleaseCheck": WRITE_STATE["releaseUpdateAttempted"]}))
         raise SystemExit(1)
     except Exception:
-        print(json.dumps({"status": "BLOCKED", "reason": "unexpected_failure_raw_details_suppressed"}))
+        print(json.dumps({"status": "BLOCKED", "reason": "unexpected_failure_raw_details_suppressed", **WRITE_STATE,
+                          "retryRequiresReadonlyReleaseCheck": WRITE_STATE["releaseUpdateAttempted"]}))
         raise SystemExit(1)

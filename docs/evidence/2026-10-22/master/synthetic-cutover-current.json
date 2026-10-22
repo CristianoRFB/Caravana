@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-22T19:26:25.916Z",
+  "source": "SYNTHETIC_ONLY",
+  "projectId": "demo-caravana77-test",
+  "originalDocuments": 17,
+  "additiveDocuments": 6,
+  "manifest": "71dc82d543e3fe92293f1f5674ee1719d65b8378dfd73fceed052b76e0117f89",
+  "fieldsAndIdsPreserved": true,
+  "financialAndProofBytesPreserved": true,
+  "concurrentTransactions": "PASS",
+  "interruptionResume": "PASS",
+  "replayCreated": 0,
+  "rollbackBeforeTraffic": "PASS",
+  "rollbackAfterTraffic": "PRESERVE_FORWARD_DATA_NO_DELETE",
+  "tenantIsolation": "PASS",
+  "encryptedSyntheticRoundtrip": "PASS",
+  "realStructuralInventoryAvailable": false,
+  "realAuthOrStorageRestoreProved": false,
+  "commercialFullBackfillProved": false,
+  "productionWrites": 0,
+  "limitations": [
+    "Real structural inventory unavailable: not a faithful real-client rehearsal",
+    "Commercial documents/team directory/bootstrap require a separately audited full backfill before any real cutover",
+    "Auth/Storage recovery is not proved by a Firestore state machine"
+  ]
+}

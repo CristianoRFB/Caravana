@@ -1,0 +1,14 @@
+{
+  "target": "bdall-e3585",
+  "originalRuleset": "projects/bdall-e3585/rulesets/3ef0e36d-c0cb-4646-9cac-bf6c593f0107",
+  "firstCandidateRuleset": "projects/bdall-e3585/rulesets/9933d617-02eb-4f52-a4c4-f9563d837665",
+  "restoredOriginal": "PASS_RULES_ROLLBACK",
+  "finalCandidateRuleset": "projects/bdall-e3585/rulesets/a1f3db69-af56-41d4-8010-89b7c1e40c21",
+  "strictFinalAudit": "PASS_STAGING_READONLY_CONFIGURATION",
+  "postAdvanceAuth503": true,
+  "retryBlockedBeforeAnyNewWrite": true,
+  "businessDocumentWrites": 0,
+  "productionWrites": 0,
+  "sameEffectivePolicy": true,
+  "oldImmutableRulesetsPreserved": true
+}

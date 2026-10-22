@@ -1,0 +1,67 @@
+
+> caravana-77@0.1.0 test
+> node scripts/run-local-tests.mjs
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run
+
+ RUN  v5.0.3 C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana
+
+ ❯ tests/staging-public-auth.test.ts (8 tests | 2 failed) 43ms
+   ❯ public fixed-target staging Auth reads and candidate preparation (8)
+     × writes only validated public staging values with exclusive create and private mode 4ms
+     × preserves an existing build environment and propagates writer failure without retrying 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/staging-public-auth.test.ts > public fixed-target staging Auth reads and candidate preparation > writes only validated public staging values with exclusive create and private mode
+Error: inherited_build_configuration_conflict
+ ❯ preparePublicBuildEnvironment scripts/staging-public-auth.mjs:96:91
+     94|   for (const name of names) {
+     95|     if (typeof environment[name] !== "string" || !/^[A-Za-z0-9_.:-]+$/…
+     96|     if (process.env[name] !== undefined && process.env[name] !== envir…
+       |                                                                                           ^
+     97|   }
+     98|   // wx preserves any existing setup; no cached credentials or private…
+ ❯ tests/staging-public-auth.test.ts:84:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/staging-public-auth.test.ts > public fixed-target staging Auth reads and candidate preparation > preserves an existing build environment and propagates writer failure without retrying
+AssertionError: expected [Function] to throw error including 'EXISTING_FILE' but got 'inherited_build_configuration_conflict'
+
+Expected: "EXISTING_FILE"
+Received: "inherited_build_configuration_conflict"
+
+ ❯ tests/staging-public-auth.test.ts:93:98
+     91|   it("preserves an existing build environment and propagates writer fa…
+     92|     const writer = vi.fn(async () => { throw Error("EXISTING_FILE"); }…
+     93|     await expect(preparePublicBuildEnvironment(extractPublicBuildEnvir…
+       |                                                                                                  ^
+     94|     expect(writer).toHaveBeenCalledTimes(1);
+     95|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 46 passed (47)
+      Tests  2 failed | 296 passed (298)
+   Start at  16:25:37
+   Duration  78.26s (tests 91%, import 7%, transform 1%)
+
+    Isolate  47 workers spawned · ~127ms startup each (spawn + environment, per file)
+             at least ~5.85s faster with isolate: false — reuses workers across files instead of one per file
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run" exited with code 1
+Stopped test emulator started by this run (PID 5788).

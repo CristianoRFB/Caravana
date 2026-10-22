@@ -12,10 +12,10 @@ vi.mock("../src/lib/firebase", () => runtime);
 import { reserveSeat, setPortalAccessRevoked, uploadProof, loadProof } from "../src/lib/data";
 import { uploadMinorAuthorization, loadMinorAuthorization, reviewAuthorization } from "../src/lib/documents";
 import { createReservationAttempt } from "../src/lib/reservation-attempt";
-import { onboardTenant } from "../src/lib/platform";
+import { onboardTenant, changeTenantStatus } from "../src/lib/platform";
 import { createLimitedCaravan, updateLimitedCaravan, saveInternalMember } from "../src/lib/quota-operations";
 import { issueTeamInvitation, acceptTeamInvitation } from "../src/lib/team-invitations";
-import { recordPassengerPayment, createCaravanExpense, voidCaravanExpense } from "../src/lib/financial-operations";
+import { recordPassengerPayment, voidPassengerPayment, createCaravanExpense, voidCaravanExpense } from "../src/lib/financial-operations";
 import { reviewPayment, toggleCheckin, cancelRegistration } from "../src/lib/registration-operations";
 import { importLegacyRegistrationsDetailed, rollbackImportBatch } from "../src/lib/import-operations";
 import { assignTenantPlan } from "../src/lib/commercial-data";
@@ -23,6 +23,8 @@ interface Account { email: string; password: string; uid: string }
 interface Client { app: FirebaseApp; auth: Auth; db: Firestore }
 const clients = new Map<string, Client>(); let accounts: Record<string, Account>; let config: Record<string, string>;
 let tripA: Caravan; let regId: string; let cancelledId: string; const runId = randomUUID().replaceAll("-", "");
+let paymentId: string; let createdOrganization: string;
+const minorIds: string[] = [];
 const operation = () => randomUUID().replaceAll("-", "");
 function syntheticPdf() {
   const content = "BT /F1 12 Tf 40 760 Td (COMPROVANTE FICTICIO STAGING - SEM VALOR BANCARIO) Tj ET";
@@ -58,7 +60,30 @@ beforeAll(async () => {
   if (contract.status === "past_due" && contract.reason === "Homologação fictícia de suspensão comercial") await assignTenantPlan({ organizationId: "staging-org-a", planId: "essencial", status: "active", setupWaived: true, reason: "Retomada do teste fictício interrompido" }, operation(), contract.revision);
   writeFileSync(".firebase/staging-last-run.json", JSON.stringify({ projectId: "bdall-e3585", runId, status: "IN_PROGRESS", startedAt: new Date().toISOString() }));
 });
-afterAll(async () => { for (const item of clients.values()) { await signOut(item.auth); await terminate(item.db); await deleteApp(item.app); } runtime.db = null; runtime.auth = null; });
+afterAll(async () => {
+  try {
+    if (accounts && regId) {
+      await as("ownerA");
+      if (paymentId && (await getDocFromServer(doc(runtime.db!, `registrations/${regId}/payments/${paymentId}`))).exists()) {
+        await voidPassengerPayment(regId, paymentId, "Compensação da rodada fictícia sem apagar ledger", operation());
+      }
+      for (const id of [regId, cancelledId, ...minorIds].filter(Boolean)) {
+        const current = { ...await read(`registrations/${id}`), id } as Registration;
+        if (current.checkedInAt) await toggleCheckin(current, false, operation());
+        if (current.registrationStatus !== "cancelled") await cancelRegistration(current, operation());
+        await setPortalAccessRevoked(id, true);
+      }
+    }
+    if (createdOrganization) {
+      await as("platform");
+      await changeTenantStatus(createdOrganization, "suspended", operation());
+    }
+    writeFileSync(".firebase/staging-last-run.json", JSON.stringify({ projectId: "bdall-e3585", runId, regId, cancelledId, minorIds, createdOrganization, status: "COMPENSATED_HISTORY_PRESERVED", finishedAt: new Date().toISOString() }));
+  } finally {
+    for (const item of clients.values()) { await signOut(item.auth); await terminate(item.db); await deleteApp(item.app); }
+    runtime.db = null; runtime.auth = null;
+  }
+});
 
 describe("real isolated Spark staging — synthetic SDK journeys only", () => {
   it("authenticates the synthetic owner and verifies server-backed plans, brands and counters", async () => {
@@ -95,7 +120,7 @@ describe("real isolated Spark staging — synthetic SDK journeys only", () => {
   it("creates a complete organization with the real Rules and safely replays onboarding", async () => {
     await as("platform"); const id = operation(); const slug = `staging-nova-${runId.slice(0, 10)}`;
     const input = { name: "Nova Organizadora Fictícia STAGING", slug, ownerUid: accounts.ownerA.uid, ownerUidConfirmed: true, planId: "pro" as const, setupWaived: true };
-    expect(await onboardTenant(input, id)).toBe(slug); expect(await onboardTenant(input, id)).toBe(slug);
+    expect(await onboardTenant(input, id)).toBe(slug); createdOrganization = slug; expect(await onboardTenant(input, id)).toBe(slug);
     expect((await read(`tenantUsage/${slug}`))).toMatchObject({ publishedCaravans: 0, activeMembers: 1, activeOwners: 1 });
     await as("ownerA"); expect((await read(`subscriptions/${slug}`)).planId).toBe("pro");
     await as("guest"); expect((await read(`tenantSlugs/${slug}`)).organizationId).toBe(slug);
@@ -109,7 +134,7 @@ describe("real isolated Spark staging — synthetic SDK journeys only", () => {
     expect((await read("tenantUsage/staging-org-a")).publishedCaravans).toBe(1); expect((await read(`caravans/${winner}`)).status).toBe("archived");
   });
   it("records only fictitious ledger entries, reviews and reverses an audited idempotent check-in", async () => {
-    await as("ownerA"); const reg = await registration(); const payment = operation();
+    await as("ownerA"); const reg = await registration(); const payment = operation(); paymentId = payment;
     const input = { amountCents: 2500, method: "other" as const, paymentDate: "2026-10-20", notes: "LANÇAMENTO FICTÍCIO. Nenhuma transação bancária." };
     await recordPassengerPayment(reg, input, payment); await recordPassengerPayment(reg, input, payment);
     expect((await registration()).paymentTotalCents).toBe(2500);
@@ -157,7 +182,7 @@ describe("real isolated Spark staging — synthetic SDK journeys only", () => {
     await as("ownerA"); await updateLimitedCaravan(tripA.id, { requiresMinorAuthorization: true });
     try {
       await as("passenger"); const id = await reserveSeat(tripA, { ...publicForm, passengerName: "Pessoa Fictícia Menor STAGING", birthDate: "2010-01-01", guardianName: "Responsável Fictício STAGING", guardianPhone: "00000000000" });
-      const minor = { ...await read(`registrations/${id}`), id } as Registration; expect(minor.isMinor).toBe(true);
+      minorIds.push(id); const minor = { ...await read(`registrations/${id}`), id } as Registration; expect(minor.isMinor).toBe(true);
       await expect(uploadMinorAuthorization(minor, syntheticPdf(), false)).rejects.toThrow("Confirme"); await uploadMinorAuthorization(minor, syntheticPdf(), true);
       for (const key of ["guest", "ownerB", "platform"]) { await as(key); await deny(loadMinorAuthorization(id)); }
       await as("ownerA"); expect(await (await loadMinorAuthorization(id)).text()).toContain("FICTICIO STAGING"); await reviewPayment(minor, true, "Confirmação fictícia");

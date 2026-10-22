@@ -2,3 +2,4 @@
 firestore.rules text eol=lf
 scripts/staging-readonly-audit.py text eol=lf
 scripts/reconcile-staging-rules.py text eol=lf
+scripts/production-readonly-preflight.py text eol=lf

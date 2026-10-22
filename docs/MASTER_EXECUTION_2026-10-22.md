@@ -2,6 +2,18 @@
 
 Estado: WIP. Mandato externo `CARAVANA_77_GOAL_MASTER_ENCERRAMENTO_TOTAL_2026-10-22.txt`, lido nesta execução. A instrução atual do proprietário autoriza staging sintético, publicações e preparação/inventário de produção; cutover somente após todos os requisitos reais. Essa autorização substitui limites históricos de somente leitura, sem substituir seus gates técnicos ou de privacidade. R$0, sem main/reset/force, sem backup bruto no computador compartilhado.
 
+## Checkpoint operacional atualizado
+
+Commit7b99a47 enviado. Rules publicadas exclusivamente no staging, retorno real à release anterior3ef0e36d… PASS e avanço à releasea1f3db69… confirmado. Auditoria estrita final2026-10-22T19:21:09Z PASS: hash bruto8acafe75…/126808bytes/1434LF,11índicesREADY e todas as políticas Auth. O503 Auth ocorreu na auditoria **depois** do segundo avanço; nova leitura confirmou a publicação, sem repetir a mutação. Ferramenta agora registra tentativas de escrita e exige conferência readonly após resultado incerto. Fonte das Rules, release anterior e checkpoint de retorno preservados no Cloud Shell privado; sem alteração efetiva de política ou documento de negócio nessa reconciliação.
+
+17/17 jornadas SDK reais PASS sobre bdall-e3585 (Vitest5.0.1, SDK/Rules reais, sem bypass administrativo). Compensação adicional da rodada: pagamento fictício anulado com novo evento, reservas criadas canceladas e links revogados, nova organizadora suspensa; eventos/documentos históricos preservados. Baseline de A voltou a3vagas ocupadas/R$75 fictícios, B0/0;9operações financeiras anteriores intactas,13após adicionar operações e compensação. Arquivo fixture-baseline-after.json comprova totais restaurados e hashes anteriores idênticos. 1SDK readonly real também PASS.
+
+Drive de navegador na identidade Google esperada:387,13GB disponíveis de400GB. Pasta vazia exclusiva criada pelo proprietário da sessão e painel confirmou “Só você tem acesso a este arquivo”. ID/URL e captura ficam fora do relatório público; nenhum arquivo real enviado. Conector Drive de outra identidade não utilizado para gravação. Ainda falta custódia segura da chave e ensaio de recuperação antes do backup real.
+
+Audit atual runtime0/tooling8; patches compatíveis Vitest5.0.1→5.0.3 e ip-address10.7.2→10.7.4 reduziram tooling8→5 (3high/2moderate conhecidos), runtime inalterado. Fontes: advisories oficiais [Vitest](https://github.com/vitest-dev/vitest/security/advisories/GHSA-qxg6-89mg-rqv8) e [ip-address](https://github.com/beaugunderson/ip-address/security/advisories/GHSA-rxp7-6hxx-x8q5). Sem downgrade major/force. Gate tooling permanece BLOCKED, com superfície CLI/emuladores privada e loopback.
+
+Regressão local após patches:296PASS/2FAIL em298casos. Falhas estavam no teste que herdava VITE_* do .env.local da máquina; guard de produção corretamente recusava valores sintéticos conflitantes. Isolado ambiente apenas no teste e acrescentada negativa de conflito:9/9PASS direcionados. Não alegar rodada integral verde antes do CI novo. Guards Python37/37PASS, lint e tipos dos harnesses PASS. Novo preflight de produção só lê metadados com identidade exata, sem documentos/usuários/objetos e sem quota override;4negativas offline próprias PASS. Inventário real ainda não executado.
+
 ## Recuperação
 
 Checkout original `C:/xampp/77/Caravana` na main10f30a0 com alterações locais extensas, preservado sem checkout/stash/reset. Reutilizado checkout limpo `C:/Users/Aluno/.codex/worktrees/caravana77-commercial-v1-20261016/Caravana`, branch autorizada, inicial ab4aff1; fetch e fast-forward até2ceea1b. Remoto exato CristianoRFB/Caravana.

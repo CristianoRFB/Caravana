@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { extractPublicBuildEnvironment, preparePublicBuildEnvironment, publicStagingAuth } from "../scripts/staging-public-auth.mjs";
 
 const key = "AIza" + "x".repeat(35); // Public-format synthetic value; never a real API key.
@@ -19,6 +19,12 @@ const json = (value: unknown) => new Response(JSON.stringify(value));
 function successfulReads() { return [json(release), new Response(source), json(project), json(policy)]; }
 
 describe("public fixed-target staging Auth reads and candidate preparation", () => {
+  beforeEach(() => {
+    // Vite may load the operator's ignored .env.local. These tests use only
+    // synthetic public values and must not depend on that machine's setup.
+    for (const name of Object.keys(extractPublicBuildEnvironment(source))) vi.stubEnv(name, undefined);
+  });
+  afterEach(() => vi.unstubAllEnvs());
   it("confirms project/domain/password policy without sign-in and never reports the key or extra data", async () => {
     const fetcher = mockReads(successfulReads()), result = await publicStagingAuth({ fetcher });
     expect(result.report.status).toBe("PASS_PUBLIC_STAGING_AUTH_READS");
@@ -92,5 +98,11 @@ describe("public fixed-target staging Auth reads and candidate preparation", () 
     const writer = vi.fn(async () => { throw Error("EXISTING_FILE"); });
     await expect(preparePublicBuildEnvironment(extractPublicBuildEnvironment(source), { writer })).rejects.toThrow("EXISTING_FILE");
     expect(writer).toHaveBeenCalledTimes(1);
+  });
+  it("rejects an inherited environment conflict before the writer is called", async () => {
+    vi.stubEnv("VITE_FIREBASE_PROJECT_ID", "caravana-af306");
+    const writer = vi.fn(async () => {});
+    await expect(preparePublicBuildEnvironment(extractPublicBuildEnvironment(source), { writer })).rejects.toThrow("inherited_build_configuration_conflict");
+    expect(writer).not.toHaveBeenCalled();
   });
 });

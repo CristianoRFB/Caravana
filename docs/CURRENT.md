@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Mandato vigente e execução local — 22/10/2026
+
+Continuidade em [MASTER_EXECUTION_2026-10-22.md](MASTER_EXECUTION_2026-10-22.md). O proprietário autorizou execução integral, staging sintético/deploy e cutover do Ítalo condicionado aos gates reais; restrições históricas de autorização abaixo não substituem esse mandato. Checkout original main/WIP preservado; branch comercial recuperada por fast-forward2ceea1b, checkpoint7b99a47 enviado. Auditoria administrativa real de staging PASS após reconciliação LF estrita e ensaio remoto de retorno/avanço das Rules. Auth integral e11índicesREADY confirmados.17jornadas SDK reais PASS, compensações preservam vagas/totais e todo o ledger anterior. Frontend ainda8c1340d até nova publicação comprovada. Patches tooling8→5/runtime0, regressão final/CI pendentes;37guardsPythonPASS. Drive privado vazio e capacidade confirmados; nenhum backup bruto ou migração de produção. Não confundir esses subresultados com lançamento operacional ou migração pronta.
+
 ## Leitura Auth recuperada — evidência do operador
 
 PASS_AUTH_ADMIN_READ_ONLY recebido e validado; seleção explícita resolveu o GET nessa sessão, sem comprovar causa raiz histórica ou políticas Auth. Ferramenta39c2b95 integra cabeçalho apenas à URL Auth staging e diagnóstico de line endings,26 guards PASS. [AUTH_READ_RECOVERED_2026-10-21.md](AUTH_READ_RECOVERED_2026-10-21.md) contém o único procedimento Android atualizado e o escopo futuro de homologação com escritas, ainda não autorizado. Guard bruto Rules mantido; sem gate integral novo (F7 9/10,F8 5/14,GOAL6/17). Produção intocada.
