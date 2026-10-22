@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-22T19:45:57.090957+00:00",
+  "target": "caravana-af306",
+  "operation": "bounded_structural_inventory",
+  "identity": "managed_exact_account",
+  "classification": "read-only GET and listCollectionIds POST",
+  "projectWrites": 0,
+  "rawFilesCreated": 0,
+  "rawValuesReported": false,
+  "backupCreated": false,
+  "documentCount": 24,
+  "collectionCounts": {
+    "UNRECOGNIZED_COLLECTION": 1,
+    "admins": 2,
+    "caravans": 1,
+    "organizations": 1,
+    "payments": 8,
+    "proofs": 1,
+    "registrations": 10
+  },
+  "relationships": {
+    "missingOrganizationReferences": 0,
+    "missingCaravanReferences": 0,
+    "crossOrganizationReferences": 0
+  },
+  "invalidCentFields": 0,
+  "externalStorageReferenceOccurrences": 0,
+  "inlinePdfOccurrences": 0,
+  "authUidContinuityVerified": false,
+  "storageObjectsVerified": false,
+  "financialTotalsVerified": false,
+  "status": "PASS_BOUNDED_FIRESTORE_STRUCTURAL_INVENTORY",
+  "estimatedFirestorePayloadBytes": 125278,
+  "readRequests": 39,
+  "consistentSnapshotVerified": false
+}

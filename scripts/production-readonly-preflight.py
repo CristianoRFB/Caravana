@@ -68,6 +68,11 @@ class Reader:
             raise Blocked("production_metadata_allowlist_rejected")
         self.calls.append(resource)
         request = urllib.request.Request(url, headers={"Authorization": "Bearer " + self.token}, method="GET")
+        # Diagnosed SERVICE_DISABLED belonged to OTHER_PROJECT. Select the
+        # already verified production consumer for this exact Auth metadata GET
+        # only; never change gcloud quota configuration, IAM or API enablement.
+        if url == URLS["authConfig"]:
+            request.add_header("x-goog-user-project", PROJECT)
         try:
             with self.opener.open(request, timeout=30) as response:
                 data = response.read(2_000_001)
@@ -131,9 +136,11 @@ def preflight(reader, report):
             elif key == "indexes":
                 report["indexes"] = {"count": len(value.get("indexes", [])), "ready": sum(i.get("state") == "READY" for i in value.get("indexes", [])), "complete": not bool(value.get("nextPageToken"))}
             elif key == "authConfig":
+                report["requestedAuthConsumer"] = "PRODUCTION_PROJECT"
                 report["auth"] = {"emailPasswordEnabled": value.get("signIn", {}).get("email", {}).get("enabled") is True,
                                   "anonymousEnabled": value.get("signIn", {}).get("anonymous", {}).get("enabled") is True,
-                                  "enumerationProtection": value.get("emailPrivacyConfig", {}).get("enableImprovedEmailPrivacy") is True}
+                                  "enumerationProtection": value.get("emailPrivacyConfig", {}).get("enableImprovedEmailPrivacy") is True,
+                                  "passwordHashConfigurationReadable": bool(value.get("signIn", {}).get("hashConfig", {}).get("signerKey"))}
             else:
                 report["storage"] = {"bucketCount": len(value.get("buckets", [])), "complete": not bool(value.get("nextPageToken"))}
         except Blocked as error:

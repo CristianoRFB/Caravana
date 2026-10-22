@@ -44,6 +44,18 @@ class ProductionMetadataTests(unittest.TestCase):
         self.assertEqual(request.method, "GET")
         self.assertNotIn("X-goog-user-project", request.headers)
 
+    def test_fixed_consumer_header_is_limited_to_exact_production_auth_config(self):
+        opener = Mock()
+        opener.open.side_effect = ValueError("PRIVATE_RESPONSE")
+        for resource, url in production.URLS.items():
+            with self.assertRaises(production.Blocked):
+                production.Reader("SYNTHETIC", opener).read(resource, url)
+            headers = {k.lower(): v for k, v in opener.open.call_args.args[0].header_items()}
+            if resource == "authConfig":
+                self.assertEqual(headers["x-goog-user-project"], "caravana-af306")
+            else:
+                self.assertNotIn("x-goog-user-project", headers)
+
 
 if __name__ == "__main__":
     unittest.main()

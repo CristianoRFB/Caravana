@@ -20,6 +20,9 @@ SPEC.loader.exec_module(production)
 PREFIX = "projects/caravana-af306/databases/(default)/documents"
 API = "https://firestore.googleapis.com/v1/"
 KNOWN = {"organizations", "caravans", "registrations", "admins", "payments", "expenses", "proofs", "authorizations", "financialOperations", "registrationEvents", "memberships", "users", "settings", "publicTenantSettings", "tenantSlugs", "tenantUsage", "tenantEntitlements", "subscriptions", "platformAudit", "platformAdmins", "legacyTripAliases", "legacyNamespaces", "namespaceBootstrap", "namespaceClaims", "organizationAvailability", "tenantDirectory", "tenantInvitations", "invitationInboxes", "reports", "worklists", "toolEvents", "checkinEvents", "importBatches", "importRows", "reservationAttempts", "supportSessions"}
+KNOWN.add("reservationReceipts")  # Present in the recovered legacy Rules.
+AUTH_METADATA_URL = "https://identitytoolkit.googleapis.com/v1/projects/caravana-af306/accounts:batchGet?" + urllib.parse.urlencode({
+    "maxResults": 1000, "fields": "users(localId,disabled,providerUserInfo(providerId)),nextPageToken"})
 
 
 def private_runtime():
@@ -141,7 +144,71 @@ def summarize(documents):
     return {"documentCount": len(documents), "collectionCounts": dict(sorted(counts.items())),
             "relationships": {"missingOrganizationReferences": missing_org, "missingCaravanReferences": missing_trip, "crossOrganizationReferences": crossed},
             "invalidCentFields": invalid_money, "externalStorageReferenceOccurrences": external_refs, "inlinePdfOccurrences": inline_pdf,
+            "financialReconciliation": financial_reconciliation(documents),
             "authUidContinuityVerified": False, "storageObjectsVerified": False, "financialTotalsVerified": False}
+
+
+def financial_reconciliation(documents):
+    def cents(value):
+        raw = value.get("integerValue") if isinstance(value, dict) else None
+        return int(raw) if isinstance(raw, str) and re.fullmatch(r"[0-9]{1,16}", raw) else None
+    regs = {n: f for n, f in documents.items() if n.startswith(PREFIX + "/registrations/") and len(n[len(PREFIX) + 1:].split("/")) == 2}
+    paid = collections.Counter()
+    bad_payments, orphan_payments, missing_totals, matches, mismatches = 0, 0, 0, 0, 0
+    for name, fields in documents.items():
+        parts = name[len(PREFIX) + 1:].split("/")
+        if len(parts) == 4 and parts[0] == "registrations" and parts[2] == "payments":
+            parent = PREFIX + "/" + "/".join(parts[:2])
+            if parent not in regs:
+                orphan_payments += 1
+            amount = cents(fields.get("amountCents"))
+            status = string(fields, "status")
+            if amount is None or status not in {None, "active", "voided"}:
+                bad_payments += 1
+            elif status != "voided":
+                paid[parent] += amount
+    for name, fields in regs.items():
+        total = cents(fields.get("paymentTotalCents"))
+        if total is None:
+            missing_totals += 1
+        elif total == paid[name]:
+            matches += 1
+        else:
+            mismatches += 1
+    return {"registrationCount": len(regs), "storedTotalsMatchPaymentRecords": matches, "storedTotalsMismatchPaymentRecords": mismatches,
+            "registrationsWithoutVerifiableStoredTotal": missing_totals, "paymentsWithoutParent": orphan_payments,
+            "unverifiablePaymentRecords": bad_payments, "individualAndAggregateAmountsDisclosed": False,
+            "bankSettlementVerified": False, "migrationPreservationVerified": False}
+
+
+def auth_metadata(token, documents, opener=None):
+    # UID/provider metadata only. This exact projection excludes email, password
+    # hashes, salts, names, phone numbers and refresh tokens at the API boundary.
+    req = urllib.request.Request(AUTH_METADATA_URL, headers={"Authorization": "Bearer " + token,
+                                "x-goog-user-project": "caravana-af306"}, method="GET")
+    try:
+        with (opener or urllib.request.build_opener(production.NoRedirect)).open(req, timeout=30) as response:
+            raw = response.read(2_000_001)
+            if response.status != 200 or len(raw) > 2_000_000:
+                raise production.Blocked("auth_metadata_response_bound")
+            data = json.loads(raw)
+        if data.get("nextPageToken"):
+            raise production.Blocked("auth_metadata_inventory_incomplete")
+        users = data.get("users", [])
+        uids = {u["localId"] for u in users}
+        admins = {n.split("/")[-1] for n in documents if n.startswith(PREFIX + "/admins/") and len(n[len(PREFIX) + 1:].split("/")) == 2}
+        providers = collections.Counter()
+        for user in users:
+            for provider in user.get("providerUserInfo", []):
+                name = provider.get("providerId")
+                providers[name if name in {"password", "google.com", "facebook.com", "apple.com", "github.com", "phone", "microsoft.com"} else "OTHER_PROVIDER"] += 1
+        return {"status": "PASS_AUTH_UID_METADATA_ONLY", "authUserCount": len(users), "disabledCount": sum(u.get("disabled") is True for u in users),
+                "providerCounts": dict(providers), "adminDocumentCount": len(admins), "adminUidsPresentInAuth": len(admins & uids), "adminUidsMissingFromAuth": len(admins - uids),
+                "passwordRecoveryVerified": False, "authRestoreVerified": False}
+    except production.Blocked:
+        raise
+    except Exception:
+        raise production.Blocked("auth_metadata_read_failed_raw_details_suppressed") from None
 
 
 if __name__ == "__main__":
@@ -158,6 +225,10 @@ if __name__ == "__main__":
         inventory = Inventory(token)
         inventory.walk()
         report.update(summarize(inventory.documents))
+        try:
+            report["authUidMetadata"] = auth_metadata(token, inventory.documents)
+        except production.Blocked as error:
+            report["authUidMetadata"] = {"status": "BLOCKED", "reason": str(error)}
         report.update(status="PASS_BOUNDED_FIRESTORE_STRUCTURAL_INVENTORY", estimatedFirestorePayloadBytes=inventory.bytes, readRequests=inventory.calls, consistentSnapshotVerified=False)
     except production.Blocked as error:
         report.update(status="BLOCKED", reason=str(error))
