@@ -61,6 +61,7 @@ class Reader:
         self.token = token
         self.opener = opener or urllib.request.build_opener(NoRedirect)
         self.calls = []
+        self.diagnostics = []
 
     def read(self, resource, url):
         if not allowed(url):
@@ -74,6 +75,27 @@ class Reader:
                     raise Blocked(resource + "_unexpected_response")
                 return json.loads(data)
         except urllib.error.HTTPError as error:
+            diagnostic = {"resource": resource, "httpStatus": error.code}
+            try:
+                payload = error.read(32769)
+                if len(payload) <= 32768:
+                    details = json.loads(payload).get("error", {}).get("details", [])
+                    for detail in details:
+                        if detail.get("@type") != "type.googleapis.com/google.rpc.ErrorInfo":
+                            continue
+                        if detail.get("reason") in {"SERVICE_DISABLED", "IAM_PERMISSION_DENIED", "ACCESS_TOKEN_SCOPE_INSUFFICIENT", "BILLING_DISABLED", "CONSUMER_INVALID"}:
+                            diagnostic["reason"] = detail["reason"]
+                        metadata = detail.get("metadata", {})
+                        if metadata.get("service") in {"identitytoolkit.googleapis.com", "firebasestorage.googleapis.com", "storage.googleapis.com"}:
+                            diagnostic["service"] = metadata["service"]
+                        consumer = metadata.get("consumer")
+                        if consumer in {f"projects/{PROJECT}", "projects/742921744156"}:
+                            diagnostic["consumer"] = "PRODUCTION_PROJECT"
+                        elif isinstance(consumer, str) and re.fullmatch(r"projects/[0-9]{1,20}", consumer):
+                            diagnostic["consumer"] = "OTHER_PROJECT"
+            except Exception:
+                pass
+            self.diagnostics.append(diagnostic)
             raise Blocked(resource + "_http_" + str(error.code)) from None
         except Blocked:
             raise
@@ -90,6 +112,7 @@ def preflight(reader, report):
     if project.get("projectId") != PROJECT or project.get("state") != "ACTIVE" or not str(project.get("projectNumber", "")).isdigit():
         raise Blocked("production_project_identity_mismatch")
     report["projectNumber"] = str(project["projectNumber"])
+    report["defaultStorageBucketConfigured"] = bool(project.get("resources", {}).get("storageBucket"))
     billing = reader.read("billing", URLS["billing"])
     report["billingEnabled"] = billing.get("billingEnabled")
     report["billingAccountLinked"] = bool(billing.get("billingAccountName"))
@@ -132,5 +155,6 @@ if __name__ == "__main__":
     except Exception:
         report.update(status="BLOCKED", reason="unexpected_error_raw_details_suppressed")
     report["requests"] = reader.calls if reader else []
+    report["httpDiagnostics"] = reader.diagnostics if reader else []
     print(json.dumps(report, separators=(",", ":")))
     raise SystemExit(0 if report.get("status") == "PASS_PRODUCTION_METADATA_PREFLIGHT" else 1)
