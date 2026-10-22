@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-22T19:09:42.241989+00:00",
+  "projectId": "bdall-e3585",
+  "authSource": "gcloud",
+  "scriptSha256": "6f7e8b48b4979083c870a75e088bc4bf42311fd81dca9b295c99fd11566dd8f4",
+  "status": "BLOCKED",
+  "projectWrites": 0,
+  "productionAccess": false,
+  "businessDocumentsRead": false,
+  "credentialsExported": false,
+  "identityVerified": true,
+  "projectIdentityVerified": true,
+  "billingEnabled": false,
+  "standardFreeTierVerified": true,
+  "firestoreRules": {
+    "sha256": "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81",
+    "candidateMatch": false,
+    "lfNormalizedSha256": "8acafe757210277ea96c3700813c064537622d44f0cfd7f6a141de059ed58c0f",
+    "lfNormalizedCandidateMatch": true,
+    "utf8Bytes": 128242,
+    "lineEndings": {
+      "crlf": 1434,
+      "loneCr": 0,
+      "loneLf": 0
+    }
+  },
+  "compositeIndexes": {
+    "count": 11,
+    "ready": 11,
+    "sha256": "63d6eb0d3ccae2def9399f9a4fbe91b1e051ce4bc7373b39e3940f7efc835238",
+    "candidateMatch": true
+  },
+  "requestedAuthConsumer": "STAGING_PROJECT",
+  "auth": {
+    "emailPasswordEnabled": true,
+    "anonymousEnabled": false,
+    "emailEnumerationProtection": true,
+    "passwordPolicyEnforced": true,
+    "passwordMinimumLength": 12,
+    "stagingDomainAuthorized": true
+  },
+  "reason": "deployed_rules_or_indexes_require_comparison",
+  "requests": [
+    "identity",
+    "project",
+    "billing",
+    "database",
+    "release",
+    "ruleset",
+    "indexes",
+    "auth"
+  ],
+  "evidenceCapture": "Sanitized JSON observed directly in authenticated Cloud Shell browser terminal; account omitted from committed copy."
+}

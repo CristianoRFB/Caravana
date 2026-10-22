@@ -1,0 +1,4 @@
+# Rules are release artifacts: preserve their reviewed bytes on Windows and Linux.
+firestore.rules text eol=lf
+scripts/staging-readonly-audit.py text eol=lf
+scripts/reconcile-staging-rules.py text eol=lf

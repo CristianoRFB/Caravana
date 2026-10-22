@@ -17,7 +17,7 @@ SPEC.loader.exec_module(audit)
 
 
 def fixture():
-    indexes = json.loads((ROOT / "firestore.indexes.json").read_text())["indexes"]
+    indexes = json.loads((ROOT / "firestore.indexes.json").read_text(encoding="utf-8"))["indexes"]
     remote = [{"name": f"projects/{audit.PROJECT}/databases/(default)/collectionGroups/{item['collectionGroup']}/indexes/test-{index}", "state": "READY", "queryScope": item["queryScope"], "fields": item["fields"] + [{"fieldPath": "__name__", "order": "ASCENDING"}]} for index, item in enumerate(indexes)]
     return {
         "identity": {"email": audit.PRINCIPAL, "email_verified": True, "name": "DO_NOT_REPORT_IDENTITY_PROFILE"},
@@ -25,7 +25,7 @@ def fixture():
         "billing": {"billingEnabled": False},
         "database": {"name": f"projects/{audit.PROJECT}/databases/(default)", "databaseEdition": "STANDARD", "freeTier": True},
         "release": {"rulesetName": f"projects/{audit.PROJECT}/rulesets/synthetic-rules"},
-        "ruleset": {"source": {"files": [{"name": "firestore.rules", "content": (ROOT / "firestore.rules").read_text()}]}},
+        "ruleset": {"source": {"files": [{"name": "firestore.rules", "content": (ROOT / "firestore.rules").read_text(encoding="utf-8")}]}},
         "indexes": {"indexes": remote},
         "auth": {"signIn": {"email": {"enabled": True, "passwordRequired": True}}, "emailPrivacyConfig": {"enableImprovedEmailPrivacy": True}, "passwordPolicyConfig": {"passwordPolicyEnforcementState": "ENFORCE", "passwordPolicyVersions": [{"customStrengthOptions": {"minPasswordLength": 12}}]}, "authorizedDomains": ["caravana77-staging.pages.dev", "DO_NOT_REPORT_EXTRA_DOMAIN"]},
     }

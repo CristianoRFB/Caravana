@@ -1,0 +1,19 @@
+{
+  "scope": "local source bytes only; no remote mutation",
+  "before": {
+    "sha256": "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81",
+    "bytes": 128242,
+    "crlf": 1434,
+    "lf": 1434,
+    "cr": 1434
+  },
+  "after": {
+    "sha256": "8acafe757210277ea96c3700813c064537622d44f0cfd7f6a141de059ed58c0f",
+    "bytes": 126808,
+    "crlf": 0,
+    "lf": 1434,
+    "cr": 0
+  },
+  "gitBlobExact": true,
+  "strictRemoteGateUnchanged": true
+}
