@@ -12,7 +12,7 @@ from pathlib import Path
 import re
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 SPEC = importlib.util.spec_from_file_location("production", Path(__file__).with_name("production-readonly-preflight.py"))
 production = importlib.util.module_from_spec(SPEC)
@@ -42,8 +42,11 @@ def safe_name(name):
 
 
 class Inventory:
-    def __init__(self, token):
+    def __init__(self, token, read_time=None):
         self.token, self.documents, self.calls, self.bytes = token, {}, 0, 0
+        if read_time is not None and not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}Z", read_time):
+            raise production.Blocked("invalid_consistent_read_timestamp")
+        self.read_time = read_time
 
     def request(self, parent, collection=None, page=None):
         if parent != PREFIX:
@@ -52,12 +55,12 @@ class Inventory:
         body = None
         if collection is None:
             url, method = API + path + ":listCollectionIds", "POST"
-            body = json.dumps({"pageSize": 100, **({"pageToken": page} if page else {})}).encode()
+            body = json.dumps({"pageSize": 100, **({"pageToken": page} if page else {}), **({"readTime": self.read_time} if self.read_time else {})}).encode()
         else:
             if not isinstance(collection, str) or not collection or collection in {".", ".."} or "/" in collection:
                 raise production.Blocked("invalid_collection_identifier")
             url, method = API + path + "/" + urllib.parse.quote(collection, safe=""), "GET"
-            url += "?" + urllib.parse.urlencode({"pageSize": 100, "showMissing": "true", **({"pageToken": page} if page else {})})
+            url += "?" + urllib.parse.urlencode({"pageSize": 100, "showMissing": "true", **({"pageToken": page} if page else {}), **({"readTime": self.read_time} if self.read_time else {})})
         self.calls += 1
         if self.calls > 10000:
             raise production.Blocked("inventory_request_bound_exceeded_no_partial_approval")
@@ -222,14 +225,15 @@ if __name__ == "__main__":
         production.preflight(production.Reader(token), metadata)
         if not metadata.get("identityVerified") or metadata.get("projectNumber") != "742921744156" or metadata.get("billingEnabled") is not False or metadata.get("billingAccountLinked") or metadata.get("database", {}).get("freeTier") is not True:
             raise production.Blocked("production_identity_or_zero_cost_preflight_failed")
-        inventory = Inventory(token)
+        snapshot_time = (datetime.now(timezone.utc) - timedelta(seconds=5)).isoformat(timespec="microseconds").replace("+00:00", "Z")
+        inventory = Inventory(token, snapshot_time)
         inventory.walk()
         report.update(summarize(inventory.documents))
         try:
             report["authUidMetadata"] = auth_metadata(token, inventory.documents)
         except production.Blocked as error:
             report["authUidMetadata"] = {"status": "BLOCKED", "reason": str(error)}
-        report.update(status="PASS_BOUNDED_FIRESTORE_STRUCTURAL_INVENTORY", estimatedFirestorePayloadBytes=inventory.bytes, readRequests=inventory.calls, consistentSnapshotVerified=False)
+        report.update(status="PASS_BOUNDED_FIRESTORE_STRUCTURAL_INVENTORY", estimatedFirestorePayloadBytes=inventory.bytes, readRequests=inventory.calls, consistentSnapshotVerified=True, firestoreReadTime=snapshot_time)
     except production.Blocked as error:
         report.update(status="BLOCKED", reason=str(error))
     except Exception:

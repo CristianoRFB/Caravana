@@ -87,6 +87,23 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(report["paymentsWithoutParent"], 1)
         self.assertFalse(report["migrationPreservationVerified"])
 
+    def test_consistent_timestamp_is_sent_to_both_discovery_and_document_listing(self):
+        timestamp = "2026-10-22T19:00:00.000000Z"
+        response = MagicMock()
+        response.status = 200
+        response.read.return_value = b'{}'
+        with patch.object(inventory.urllib.request, "build_opener") as opener:
+            opener.return_value.open.return_value.__enter__.return_value = response
+            client = inventory.Inventory("SYNTHETIC", timestamp)
+            client.request(inventory.PREFIX)
+            request = opener.return_value.open.call_args.args[0]
+            self.assertEqual(json.loads(request.data)["readTime"], timestamp)
+            self.assertEqual(request.method, "POST")
+            client.request(inventory.PREFIX, "registrations")
+            request = opener.return_value.open.call_args.args[0]
+            self.assertEqual(inventory.urllib.parse.parse_qs(inventory.urllib.parse.urlsplit(request.full_url).query)["readTime"], [timestamp])
+            self.assertEqual(request.method, "GET")
+
 
 if __name__ == "__main__":
     unittest.main()

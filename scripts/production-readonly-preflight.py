@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import subprocess
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
@@ -26,6 +27,7 @@ URLS = {
     "indexes": f"https://firestore.googleapis.com/v1/{BASE}/databases/(default)/collectionGroups/-/indexes",
     "authConfig": f"https://identitytoolkit.googleapis.com/admin/v2/{BASE}/config",
     "storageBuckets": f"https://firebasestorage.googleapis.com/v1beta/{BASE}/buckets",
+    "gcsBuckets": "https://storage.googleapis.com/storage/v1/b?" + urllib.parse.urlencode({"project": PROJECT, "fields": "items(name),nextPageToken"}),
 }
 
 
@@ -125,7 +127,7 @@ def preflight(reader, report):
     if database.get("name") != f"{BASE}/databases/(default)":
         raise Blocked("production_database_identity_mismatch")
     report["database"] = {"edition": database.get("databaseEdition"), "freeTier": database.get("freeTier"), "type": database.get("type")}
-    for key in ["rulesRelease", "indexes", "authConfig", "storageBuckets"]:
+    for key in ["rulesRelease", "indexes", "authConfig", "storageBuckets", "gcsBuckets"]:
         try:
             value = reader.read(key, URLS[key])
             if key == "rulesRelease":
@@ -141,8 +143,10 @@ def preflight(reader, report):
                                   "anonymousEnabled": value.get("signIn", {}).get("anonymous", {}).get("enabled") is True,
                                   "enumerationProtection": value.get("emailPrivacyConfig", {}).get("enableImprovedEmailPrivacy") is True,
                                   "passwordHashConfigurationReadable": bool(value.get("signIn", {}).get("hashConfig", {}).get("signerKey"))}
-            else:
+            elif key == "storageBuckets":
                 report["storage"] = {"bucketCount": len(value.get("buckets", [])), "complete": not bool(value.get("nextPageToken"))}
+            else:
+                report["gcsStorage"] = {"bucketCount": len(value.get("items", [])), "complete": not bool(value.get("nextPageToken"))}
         except Blocked as error:
             report[key] = {"status": "BLOCKED", "reason": str(error)}
     report["allMetadataReadsPassed"] = not any(isinstance(v, dict) and v.get("status") == "BLOCKED" for v in report.values())
