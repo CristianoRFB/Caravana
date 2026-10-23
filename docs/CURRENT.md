@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Orçamento máximo e total: R$ 0
+
+Instrução direta do proprietário em23/10: sem upgrades, vínculo de cobrança ou excedentes faturáveis. Painel Workers conferido em Free/$0; Email Sending indisponível nesse plano. Nenhuma alteração de billing ou novo recurso. App Check permanece desativado enquanto custo zero efetivo não estiver comprovado. [Restrição, prova e impacto nas pendências](ZERO_BUDGET_2026-10-23.md). Alertas de deploy já entregues continuam com seu escopo próprio; uptime periódico ainda pendente.
+
 ## Preparação App Check — revisão local ainda não publicada
 
 Integração opt-in implementada antes de Auth/Firestore, restrita a projeto/domínio canônico de staging; padrão desativado, sem debug bypass.4 testes de configuração/CSP e3 de bootstrap PASS, lint/tipos e builds sintético-on/default-off PASS. Nenhuma chave real, provider, enforcement, assessment ou deploy. [Escopo, provas e rollout pendente](STAGING_APPCHECK_PREPARATION_2026-10-23.md). CI integral novo será conferido pelo SHA próprio; não atribuir o CIee3f5b5 à revisão nova. Staging publicado permanecebc5dd40 com seu aceite anterior. Gates reais não promovidos.
