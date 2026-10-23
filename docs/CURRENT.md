@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Entrega de falha/recuperação confirmada; pré-condição App Check
+
+Os e-mails reais START/END da sonda foram conferidos na conta aprovada; ainda falta resolução automática do sinal de vida após correção do filtro JSON. Google Cloud staging reconferido sem billing vinculado. API reCAPTCHA ainda requer ativação com termos apresentados; confirmação específica do proprietário solicitada, sem clicar Ativar/aceitar contrato. [Prova](evidence/2026-10-23/desktop/staging-billing-and-provider-prerequisite.json). App Check segue desativado e backup/migração reais pendentes. Não promover os gates por essas pré-condições.
+
 ## Monitor instalado — ocorrência de filtro corrigida
 
 [Operação real e pendências](STAGING_MONITOR_OPERATION_2026-10-23.md): Worker Free com fonte revisada, sem endpoint público/bindings; Cron e dois monitores normalizados para15m. Falha controlada gerou START/END na plataforma; recebimento final ainda pendente. Seletor inicial de sinal de vida era incorreto para logs JSON e gerou lembretes falsos; corrigido para `attributes['event']`. Consulta corrigida43sucessos recentes/0antes da recuperação; resolução automática ainda deve ser comprovada. Não fechar F7 pelo agendamento ou alerta inicial. Configuração e evidências enviadas sem credenciais/dados privados.

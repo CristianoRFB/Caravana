@@ -1,5 +1,7 @@
 # Monitor público ativo — validação operacional ainda parcial
 
+Atualização de entrega: pesquisa restrita na conta destinatária aprovada confirmou também os e-mails `[Alert] Custom Alert 'Caravana77 staging - falha da sonda publica' triggered`, recebido14:10local, e `[Resolved] ... resolved`, recebido14:25local. Correspondem aos START/END do histórico da plataforma abaixo. Nenhuma mensagem alheia foi aberta. Isso encerra a pendência de recebimento desses dois eventos; permanece a verificação de resolução da política de sinal de vida após corrigir o seletor JSON.
+
 Worker `caravana77-staging-monitor` criado no plano Free em23/10. Nenhum binding, credencial, rota pública ou preview. Código original testado de67ce032 restaurado17:05:35Z, deployment `c811092d02994866858acdc3ad979723`; etag `01f270fea9dce8542003327ab1a4bb6f2477a6a2251018c20a414e2f26c7bb1d`, idêntico ao primeiro upload revisado. Sonda limitada aos dois GET públicos do staging; produção/Firebase/dados do Ítalo não acessados.
 
 Cron normal `*/15 * * * *` e avaliação dos dois monitores a cada15minutos reconferidos21:07Z. Configuração Wrangler reconciliada com esse agendamento. Políticas habilitadas, um destinatário conferido contra a escolha expressa do proprietário, repetição1h:

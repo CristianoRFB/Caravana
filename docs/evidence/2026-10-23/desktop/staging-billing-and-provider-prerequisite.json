@@ -1,0 +1,27 @@
+{
+  "checkedOn": "2026-10-23",
+  "projectId": "bdall-e3585",
+  "operation": "Read-only official Google Cloud console",
+  "identityMatchesExpectedStagingAccount": true,
+  "billingLinkedAccountPage": {
+    "projectMatchesExpected": true,
+    "noBillingAccountLinked": true,
+    "observedText": "Este projeto não está vinculado a uma conta de faturamento.",
+    "billingMutation": false
+  },
+  "providerPrerequisite": {
+    "service": "recaptchaenterprise.googleapis.com",
+    "enableButtonDisplayed": true,
+    "enableButtonClicked": false,
+    "termsDisplayed": true,
+    "termsAcceptedByAgent": false,
+    "specificOwnerConfirmation": "REQUESTED_PENDING",
+    "providerRegistered": false,
+    "appCheckEnabled": false,
+    "enforcementEnabled": false
+  },
+  "budgetBRLMaximumTotal": 0,
+  "productionAccess": false,
+  "realBackupExported": false,
+  "privateScreenshotsExcludedFromGit": true
+}

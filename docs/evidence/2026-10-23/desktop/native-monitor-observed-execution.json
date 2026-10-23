@@ -43,5 +43,14 @@
       "window": "15m"
     }
   ],
-  "limitation": "Dispatch from platform confirmed; mailbox receipt for failure/recovery still to verify. Initial missing-heartbeat message selector invalid for structured event; corrected to attributes['event'] on23/10 after false reminders. Corrected selector zero/nonzero counts verified, automatic resolution remains to verify."
+  "mailboxReceipt": {
+    "identityMatchesApprovedRecipient": true,
+    "query": "in:anywhere from:(cloudflare.com) newer_than:1d Caravana77",
+    "failureSubject": "[Alert] Custom Alert 'Caravana77 staging - falha da sonda publica' triggered",
+    "failureReceivedLocal": "2026-10-23 14:10 America/Sao_Paulo",
+    "recoverySubject": "[Resolved] Custom Alert 'Caravana77 staging - falha da sonda publica' resolved",
+    "recoveryReceivedLocal": "2026-10-23 14:25 America/Sao_Paulo",
+    "verification": "Authorized scoped browser search DOM; no unrelated message opened"
+  },
+  "limitation": "Initial missing-heartbeat message selector invalid for structured event; corrected to attributes['event'] on23/10 after false reminders. Corrected selector zero/nonzero counts verified, automatic resolution remains to verify."
 }
