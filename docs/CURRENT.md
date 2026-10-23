@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Monitor instalado — ocorrência de filtro corrigida
+
+[Operação real e pendências](STAGING_MONITOR_OPERATION_2026-10-23.md): Worker Free com fonte revisada, sem endpoint público/bindings; Cron e dois monitores normalizados para15m. Falha controlada gerou START/END na plataforma; recebimento final ainda pendente. Seletor inicial de sinal de vida era incorreto para logs JSON e gerou lembretes falsos; corrigido para `attributes['event']`. Consulta corrigida43sucessos recentes/0antes da recuperação; resolução automática ainda deve ser comprovada. Não fechar F7 pelo agendamento ou alerta inicial. Configuração e evidências enviadas sem credenciais/dados privados.
+
 ## Publicação e retorno real de23/10 — fonte67ce032
 
 [Candidata publicada](STAGING_RELEASE_2026-10-23.md) em `caravana77-staging`, deployment4ed92f3b, App Check desativado. Pacote/manifesto/HTML/12assets e bootstrap público PASS; rollback real para6e1a652a/bc5dd40 e retorno a4ed92f3b/67ce032 PASS. Alerta Pages desse evento real enviado e recebido na conta aprovada. CI77e5f94 cobre o código do aplicativo sem diferenças até67ce032; não cobre o Worker posterior. Não declarar provider/enforcement ou novas jornadas SDK remotas validados. Pareceres anteriores abaixo preservam seu escopo; F7/F8/GOAL não promovidos.

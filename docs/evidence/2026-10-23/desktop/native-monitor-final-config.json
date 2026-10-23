@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-10-23T21:08:43.608Z",
+  "target": "caravana77-staging-monitor",
+  "policies": [
+    {
+      "id": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "name": "Caravana77 staging - sinal de vida ausente",
+      "enabled": true,
+      "alert_type": "custom_analytics",
+      "filters": {
+        "alert_trigger_preferences": [
+          "threshold"
+        ],
+        "alert_trigger_preferences_operator": [
+          "<="
+        ],
+        "alert_trigger_preferences_short_window": [
+          "45m"
+        ],
+        "alert_trigger_preferences_value": [
+          "0"
+        ],
+        "execution_interval": [
+          "15m"
+        ],
+        "selectors": [
+          "SELECT COUNT(*) AS value FROM logs.workersLogs WHERE accountTag = '80a4c951d716d79fa10fffcf648d3288' AND scriptName = 'caravana77-staging-monitor' AND attributes['event'] = 'STAGING_PROBE_PASS'"
+        ],
+        "source": [
+          "sql_api"
+        ]
+      },
+      "alert_interval": "1h",
+      "recipientCount": 1,
+      "recipientMatchesApproved": true
+    },
+    {
+      "id": "90f8a607522e48cbaa33588d0b532c5f",
+      "name": "Caravana77 staging - falha da sonda publica",
+      "enabled": true,
+      "alert_type": "custom_analytics",
+      "filters": {
+        "alert_trigger_preferences": [
+          "threshold"
+        ],
+        "alert_trigger_preferences_operator": [
+          ">"
+        ],
+        "alert_trigger_preferences_short_window": [
+          "15m"
+        ],
+        "alert_trigger_preferences_value": [
+          "0"
+        ],
+        "execution_interval": [
+          "15m"
+        ],
+        "selectors": [
+          "SELECT COUNT(*) AS value FROM logs.workersLogs WHERE accountTag = '80a4c951d716d79fa10fffcf648d3288' AND scriptName = 'caravana77-staging-monitor' AND level = 'error'"
+        ],
+        "source": [
+          "sql_api"
+        ]
+      },
+      "alert_interval": "1h",
+      "recipientCount": 1,
+      "recipientMatchesApproved": true
+    }
+  ],
+  "schedules": {
+    "schedules": [
+      {
+        "cron": "*/15 * * * *",
+        "created_on": "2026-10-23T21:07:36.432261Z",
+        "modified_on": "2026-10-23T21:07:36.432261Z"
+      }
+    ]
+  },
+  "subdomain": {
+    "enabled": false,
+    "previews_enabled": false
+  },
+  "productionAccess": false,
+  "privateDataRead": false
+}

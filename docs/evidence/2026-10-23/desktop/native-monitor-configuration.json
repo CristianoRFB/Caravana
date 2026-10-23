@@ -1,0 +1,109 @@
+{
+  "target": "caravana77-staging-monitor",
+  "operation": "GET own two policies",
+  "checkedAt": "2026-10-23T16:52:28.954Z",
+  "policies": [
+    {
+      "status": 200,
+      "id": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "name": "Caravana77 staging - sinal de vida ausente",
+      "enabled": true,
+      "alert_type": "custom_analytics",
+      "filters": {
+        "alert_trigger_preferences": [
+          "threshold"
+        ],
+        "alert_trigger_preferences_operator": [
+          "<="
+        ],
+        "alert_trigger_preferences_short_window": [
+          "45m"
+        ],
+        "alert_trigger_preferences_value": [
+          "0"
+        ],
+        "execution_interval": [
+          "15m"
+        ],
+        "selectors": [
+          "SELECT COUNT(*) AS \"value\"\nFROM \"logs\".\"workersLogs\"\nWHERE ((\"accountTag\" = '80a4c951d716d79fa10fffcf648d3288') AND ((\"scriptName\" = 'caravana77-staging-monitor') AND (\"message\" LIKE '%STAGING_PROBE_PASS%')))"
+        ],
+        "source": [
+          "sql_api"
+        ]
+      },
+      "alert_interval": "1h",
+      "recipientCount": 1,
+      "recipientMatchesApproved": true
+    },
+    {
+      "status": 200,
+      "id": "90f8a607522e48cbaa33588d0b532c5f",
+      "name": "Caravana77 staging - falha da sonda publica",
+      "enabled": true,
+      "alert_type": "custom_analytics",
+      "filters": {
+        "alert_trigger_preferences": [
+          "threshold"
+        ],
+        "alert_trigger_preferences_operator": [
+          ">"
+        ],
+        "alert_trigger_preferences_short_window": [
+          "15m"
+        ],
+        "alert_trigger_preferences_value": [
+          "0"
+        ],
+        "execution_interval": [
+          "15m"
+        ],
+        "selectors": [
+          "SELECT COUNT(*) AS value FROM logs.workersLogs WHERE accountTag = '80a4c951d716d79fa10fffcf648d3288' AND scriptName = 'caravana77-staging-monitor' AND level = 'error'"
+        ],
+        "source": [
+          "sql_api"
+        ]
+      },
+      "alert_interval": "1h",
+      "recipientCount": 1,
+      "recipientMatchesApproved": true
+    }
+  ],
+  "scope": "Historical initial configuration at checkedAt; message selector was later found invalid for structured events. Current configuration and execution have separate evidence files.",
+  "worker": {
+    "name": "caravana77-staging-monitor",
+    "firstDeploymentId": "7980f8f3754d4557a87fa4acaf812b0b",
+    "firstDeployedAt": "2026-10-23T16:53:04.11507Z",
+    "sourceCommit": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+    "publicEndpoints": false,
+    "bindings": [],
+    "stagingFrontendChanged": false,
+    "productionAccess": false
+  },
+  "cost": {
+    "workersPlan": "Free",
+    "existingAccountCronsBefore": 0,
+    "freeAccountCronLimit": 5,
+    "additionalQueriesDashboardsAlertsCharge": false,
+    "freeIngestionStopsAtLimit": true,
+    "source": "https://developers.cloudflare.com/observability/pricing/",
+    "checkedOn": "2026-10-23"
+  },
+  "drill": {
+    "deploymentId": "7f23d5d187e94db0adaad818195ccd4a",
+    "startedAt": "2026-10-23T16:56:16.491168Z",
+    "initialAutomaticFailureExpiry": "2026-10-23T17:02:00Z",
+    "extendedAutomaticFailureExpiry": "2026-10-23T17:15:00Z",
+    "extendedDrillDeploymentId": "f515a4e42cf4488791616f28ab5a2638",
+    "normalSourceRestoredAt": "2026-10-23T17:05:35.426Z",
+    "normalSourceDeploymentId": "c811092d02994866858acdc3ad979723",
+    "normalIntervalsRestoredAt": "2026-10-23T21:07:41.673Z",
+    "temporaryCron": "* * * * *",
+    "temporaryMonitorEvaluation": "1m",
+    "conditionsUnchanged": true,
+    "restoreCron": "*/15 * * * *",
+    "restoreEvaluation": "15m",
+    "deliveryProof": "Failure START/END dispatched by platform; initial missing alert received but selector was defective. See native-monitor-observed-execution.json and native-monitor-final-config.json."
+  }
+}

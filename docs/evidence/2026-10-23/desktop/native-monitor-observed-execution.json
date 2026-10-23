@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-10-23T21:08:08.664Z",
+  "counts": [
+    {
+      "label": "healthy_now",
+      "status": 200,
+      "time_range": {
+        "start": "2026-10-23T20:23:06.881Z"
+      },
+      "data": [
+        {
+          "value": 43
+        }
+      ]
+    },
+    {
+      "label": "before_recovery",
+      "status": 200,
+      "time_range": {
+        "start": "2026-10-23T16:56:16Z",
+        "end": "2026-10-23T17:05:00Z"
+      },
+      "data": [
+        {
+          "value": 0
+        }
+      ]
+    }
+  ],
+  "failureAlerts": [
+    {
+      "sent": "2026-10-23T17:25:49.571767Z",
+      "stateEvent": "ALERT_STATE_EVENT_END",
+      "result": "0",
+      "executionInterval": "1m",
+      "window": "15m"
+    },
+    {
+      "sent": "2026-10-23T17:10:48.806728Z",
+      "stateEvent": "ALERT_STATE_EVENT_START",
+      "result": "0.3",
+      "executionInterval": "1m",
+      "window": "15m"
+    }
+  ],
+  "limitation": "Dispatch from platform confirmed; mailbox receipt for failure/recovery still to verify. Initial missing-heartbeat message selector invalid for structured event; corrected to attributes['event'] on23/10 after false reminders. Corrected selector zero/nonzero counts verified, automatic resolution remains to verify."
+}

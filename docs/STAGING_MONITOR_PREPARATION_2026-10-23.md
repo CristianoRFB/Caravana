@@ -1,5 +1,7 @@
 # Sonda de disponibilidade — implementação testada, ainda não ativa
 
+**Atualização posterior:** sonda publicada/agendada, dois monitores configurados e testes reais parciais executados. [Relatório operacional vigente](STAGING_MONITOR_OPERATION_2026-10-23.md) registra correção do seletor JSON, alertas falsos anteriores e verificações ainda pendentes. As declarações NOT_DEPLOYED/NOT_SCHEDULED abaixo são históricas da preparação67ce032.
+
 Preparada em `operations/staging-monitor/`: Worker dedicado `caravana77-staging-monitor`, exclusivamente para GET de `/admin/login` e `/release.json` em `https://caravana77-staging.pages.dev`. Não usa credenciais, Firebase, dados do Ítalo, armazenamento, e-mail pago ou URLs configuráveis. HTTP retorna404 sem iniciar sonda. `workers_dev=false`, previews desligados, nenhuma rota e **crons vazios**: não foi publicado nem agendado.
 
 Verifica HTTP200, MIME, cabeçalhos de segurança, shell React e identidade exata do manifesto `bdall-e3585`/`caravana77-staging`. Cada corpo é limitado durante o streaming a65536bytes; timeout10s por GET; não segue redirects. Logs contêm somente evento fixo e SHA público em caso de sucesso. Falha emite evento fixo e rejeita a execução com mensagem constante, sem registrar payload ou erro arbitrário. Logs/traces configurados explicitamente; sem bindings ou segredos.

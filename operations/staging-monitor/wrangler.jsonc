@@ -7,9 +7,9 @@
   "workers_dev": false,
   "preview_urls": false,
   "routes": [],
-  // Deliberately unarmed until Free entitlement, notification delivery and
-  // missing-heartbeat alert behavior have been verified. Intended: */15 * * * *.
-  "triggers": { "crons": [] },
+  // Dedicated staging public probe. Free plan required; no route or secret.
+  // Remote configuration reconciled on 2026-10-23 after controlled alert drill.
+  "triggers": { "crons": ["*/15 * * * *"] },
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,
