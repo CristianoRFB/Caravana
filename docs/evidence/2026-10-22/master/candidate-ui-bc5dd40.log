@@ -1,0 +1,58 @@
+{
+  "status": "PASS_OFFLINE_CANDIDATE_UI",
+  "source": "bc5dd40e3e885ecea6a668203b7a6407db5a7b46",
+  "kind": "OFFLINE_CANDIDATE_UI_ONLY",
+  "deployed": false,
+  "backendJourneysVerified": false,
+  "actualNetworkRequests": 0,
+  "checks": [
+    {
+      "path": "/saas",
+      "width": 320,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/admin/login",
+      "width": 320,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/saas",
+      "width": 375,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/admin/login",
+      "width": 375,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/saas",
+      "width": 768,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/admin/login",
+      "width": 768,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/saas",
+      "width": 1440,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    },
+    {
+      "path": "/admin/login",
+      "width": 1440,
+      "status": "PASS",
+      "noHorizontalOverflow": true
+    }
+  ]
+}

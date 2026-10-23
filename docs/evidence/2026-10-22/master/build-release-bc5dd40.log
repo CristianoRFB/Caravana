@@ -1,0 +1,29 @@
+
+> caravana-77@0.1.0 build:staging
+> tsc -b && node scripts/build-staging.mjs
+
+vite v6.4.4 building for staging...
+transforming...
+✓ 1673 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-staging/index.html                               0.91 kB │ gzip:   0.46 kB
+dist-staging/assets/team-DO-9gEyi.css                 1.32 kB │ gzip:   0.54 kB
+dist-staging/assets/CommercialLanding-0uZpc247.css   10.51 kB │ gzip:   2.60 kB
+dist-staging/assets/index-WxrywgLI.css               49.35 kB │ gzip:  11.88 kB
+dist-staging/assets/InvitationInbox-Czy1rk4v.js       3.19 kB │ gzip:   1.45 kB
+dist-staging/assets/TeamManagement-BH74Z2Yz.js        8.71 kB │ gzip:   3.20 kB
+dist-staging/assets/team-CEY4jTpc.js                  8.95 kB │ gzip:   3.02 kB
+dist-staging/assets/react-vendor-Cy33O35p.js          9.06 kB │ gzip:   3.42 kB
+dist-staging/assets/CommercialLanding-C9m9vmhj.js    13.60 kB │ gzip:   4.28 kB
+dist-staging/assets/OperationalTools-BX-RK0hT.js     18.13 kB │ gzip:   6.62 kB
+dist-staging/assets/firebase-auth-DriciRFR.js       123.69 kB │ gzip:  25.28 kB
+dist-staging/assets/firebase-firestore-B1ljOV07.js  365.16 kB │ gzip:  90.72 kB
+dist-staging/assets/index-DMQ32K0f.js               508.21 kB │ gzip: 151.49 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.49s
+Staging build verified for bdall-e3585; 15 files. No deploy executed.

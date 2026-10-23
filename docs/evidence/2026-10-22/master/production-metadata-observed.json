@@ -1,0 +1,38 @@
+{
+  "evidenceType": "sanitized_terminal_observation_transcribed",
+  "sourceCommit": "ee3f5b5bb28b640b2569fe65dbadc59f7a2fbbed",
+  "checkedAt": "2026-10-22T20:01:59.768507+00:00",
+  "projectId": "caravana-af306",
+  "projectNumber": "742921744156",
+  "identityVerified": true,
+  "projectWrites": 0,
+  "billingEnabled": false,
+  "billingAccountLinked": false,
+  "database": {
+    "edition": "STANDARD",
+    "freeTier": true,
+    "type": "FIRESTORE_NATIVE"
+  },
+  "defaultStorageBucketConfigured": false,
+  "indexes": {
+    "count": 2,
+    "ready": 2,
+    "complete": true
+  },
+  "auth": {
+    "emailPasswordEnabled": true,
+    "anonymousEnabled": false,
+    "enumerationProtection": true,
+    "passwordHashConfigurationReadable": true
+  },
+  "storageBuckets": {
+    "status": "BLOCKED",
+    "reason": "storageBuckets_http_403_SERVICE_DISABLED_PRODUCTION_PROJECT"
+  },
+  "gcsStorage": {
+    "bucketCount": 0,
+    "complete": true
+  },
+  "status": "PARTIAL_PRODUCTION_METADATA_PREFLIGHT",
+  "backupCreated": false
+}

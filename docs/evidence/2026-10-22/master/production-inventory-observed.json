@@ -1,0 +1,56 @@
+{
+  "evidenceType": "sanitized_terminal_observation_transcribed",
+  "sourceCommit": "ee3f5b5bb28b640b2569fe65dbadc59f7a2fbbed",
+  "observedAt": "2026-10-22T20:02:04.792158+00:00",
+  "target": "caravana-af306",
+  "operation": "bounded_structural_inventory",
+  "projectWrites": 0,
+  "rawFilesCreated": 0,
+  "backupCreated": false,
+  "documentCount": 24,
+  "collectionCounts": {
+    "admins": 2,
+    "caravans": 1,
+    "organizations": 1,
+    "payments": 8,
+    "proofs": 1,
+    "registrations": 10,
+    "reservationReceipts": 1
+  },
+  "relationships": {
+    "missingOrganizationReferences": 0,
+    "missingCaravanReferences": 0,
+    "crossOrganizationReferences": 0
+  },
+  "invalidCentFields": 0,
+  "externalStorageReferenceOccurrences": 0,
+  "inlinePdfOccurrences": 0,
+  "financialReconciliation": {
+    "registrationCount": 10,
+    "storedTotalsMatchPaymentRecords": 8,
+    "storedTotalsMismatchPaymentRecords": 0,
+    "registrationsWithoutVerifiableStoredTotal": 2,
+    "paymentsWithoutParent": 0,
+    "unverifiablePaymentRecords": 0,
+    "bankSettlementVerified": false,
+    "migrationPreservationVerified": false
+  },
+  "authUidMetadata": {
+    "authUserCount": 2,
+    "disabledCount": 0,
+    "providerCounts": {
+      "password": 2
+    },
+    "adminDocumentCount": 2,
+    "adminUidsPresentInAuth": 2,
+    "adminUidsMissingFromAuth": 0,
+    "passwordRecoveryVerified": false,
+    "authRestoreVerified": false
+  },
+  "estimatedFirestorePayloadBytes": 125278,
+  "readRequests": 39,
+  "consistentSnapshotVerified": true,
+  "firestoreReadTime": "2026-10-22T20:02:04.649774Z",
+  "status": "PASS_BOUNDED_FIRESTORE_STRUCTURAL_INVENTORY",
+  "migrationInventoryApproved": false
+}

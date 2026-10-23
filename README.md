@@ -1,8 +1,11 @@
 # Caravana 77
 
+**Checkpoint de23/10/2026:** staging homologado (`bc5dd40`), CI integral PASS (`ee3f5b5`). GOAL incompleto: F7 preparação9/10, F8 6/14, GOAL7/17; produção e migração do Ítalo ainda bloqueadas pelas provas reais. [Todas as telas —32 rotas, perfis e galeria](README_TELAS.md) · [O que foi feito, por que falta e próximos passos](docs/ENCERRAMENTO_PARCIAL_2026-10-22.md).
+
+
 Plataforma para publicar caravanas, organizar inscrições, conferir comprovantes, acompanhar financeiro e fazer check-in. React, TypeScript, Vite e Firebase, com desenvolvimento isolado por emuladores.
 
-Branch de continuidade: `codex/caravana77-commercial-v1-20261016`, repositório `CristianoRFB/Caravana`. Estado consolidado em [CURRENT.md](docs/CURRENT.md), [CODEX_PROGRESS.md](docs/CODEX_PROGRESS.md) e [F6_ACCEPTANCE.md](docs/F6_ACCEPTANCE.md). Os aceites F2–F5 são locais/sintéticos; F6 PASS local/sintético, incluindo equipe/convites; F7/F8 e produção permanecem BLOCKED por gates reais. O WIP inacessível do LAB04-PC23 não foi recuperado.
+Branch de continuidade: `codex/caravana77-commercial-v1-20261016`, repositório `CristianoRFB/Caravana`. Estado consolidado em [CURRENT.md](docs/CURRENT.md), [CODEX_PROGRESS.md](docs/CODEX_PROGRESS.md) e [F6_ACCEPTANCE.md](docs/F6_ACCEPTANCE.md). Os aceites F2–F5 são locais/sintéticos; F6 PASS local/sintético, incluindo equipe/convites; F7/F8 e produção permanecem BLOCKED por gates reais. O checkout local original foi localizado e preservado; não foi mesclado automaticamente ao worktree de continuidade.
 
 ## Executar a demonstração local
 
@@ -44,11 +47,11 @@ Executar suites de emuladores em sequência. Elas usam somente `demo-caravana77-
 
 Testes direcionados e contratos estão nos documentos dos módulos. `npm run test:public-seats` e `npm run test:public-seats:e2e` verificam disponibilidade comercial e retry; `npm run test:landing:e2e` verifica a landing nas quatro larguras. O runner Storage preserva proxies externos e trata somente consultas GET ao Firestore sintético local no workaround documentado em [CLOUD_REGRESSION.md](docs/CLOUD_REGRESSION.md).
 
-O workflow atual executa lint/typecheck/Rules/build em main/PR; pushes desta branch não disparam esse workflow. Execuções locais não equivalem a aprovação remota de CI. [F7_PREPARATION.md](docs/F7_PREPARATION.md) contém as pendências de infraestrutura/staging/release.
+O workflow atual executa audit runtime, lint, tipos, guards Python, backend/Rules, Auth, Storage, recuperação sintética conjunta, E2E e build em main/PR e pushes da branch de continuidade. Checkpoints documentais podem usar [skip ci]. Execuções locais não equivalem a aprovação remota de CI. [F7_PREPARATION.md](docs/F7_PREPARATION.md) contém as pendências de infraestrutura/staging/release.
 
 ## Preservação e operação
 
-O cliente Ítalo/Anime Fest, seus IDs, administradores, caravanas, passageiros, comprovantes, documentos e histórico financeiro devem ser preservados. A instrução de2026-10-20 autoriza deploy compatível somente após todos os14 gates comprovados, sem confirmação rotineira adicional. Migração real do cliente, destruição e operações financeiras reais continuam proibidas; staging, backup/restore e compatibilidade não comprovados mantêm produção BLOCKED. Procedimentos antigos de publicação/migração do README foram substituídos pelos gates em [RELEASE_AND_ROLLBACK.md](docs/RELEASE_AND_ROLLBACK.md); o histórico original permanece no Git. Backup de código não prova backup dos dados reais.
+O cliente Ítalo/Anime Fest, seus IDs, administradores, caravanas, passageiros, comprovantes, documentos e histórico financeiro devem ser preservados. A instrução de2026-10-20 autoriza deploy compatível somente após todos os14 gates comprovados, sem confirmação rotineira adicional. O mandato de22/10 autoriza inventário/backup privados e condiciona o cutover a todos os gates reais; enquanto backup/restore, compatibilidade e rollback não forem comprovados, produção permanece BLOCKED. Operações financeiras reais e destruição não fazem parte da homologação. Procedimentos antigos de publicação/migração do README foram substituídos pelos gates em [RELEASE_AND_ROLLBACK.md](docs/RELEASE_AND_ROLLBACK.md); o histórico original permanece no Git. Backup de código não prova backup dos dados reais.
 
 Pix e outros pagamentos acontecem fora da plataforma. O sistema registra lançamentos informados e conferência manual; não cobra, transfere dinheiro, reembolsa ou dispara mensagens automaticamente. Comprovantes atuais são privados no Firestore, até 600 KiB (rótulo legado 600 KB). Storage legado continua com Rules candidatas separadas, sem mutações do cliente. O link privado da inscrição é uma credencial: não o compartilhe.
 

@@ -1,0 +1,136 @@
+{
+  "checkedAt": "2026-10-23T15:54:33.687Z",
+  "runId": 39845244031,
+  "source": "ee3f5b5bb28b640b2569fe65dbadc59f7a2fbbed",
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/39845244031",
+  "status": "completed",
+  "conclusion": "success",
+  "completedAt": "2026-10-22T20:13:35Z",
+  "countsFromDecodedJobLog": {
+    "python": 47,
+    "backendAndRules": 299,
+    "auth": 8,
+    "storage": 6,
+    "e2e": 184
+  },
+  "jobs": [
+    {
+      "id": 120057001368,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node.js",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Java for Firebase emulators",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Audit runtime dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Lint",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Typecheck",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Read-only staging audit guards (no credentials or remote audit)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Unit, integration and Firestore Rules",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Auth emulator integration",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Storage Rules with Auth",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Coordinated Auth Firestore Storage recovery (synthetic emulator only)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Chromium",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Desktop and mobile E2E (synthetic only)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record synthetic browser summary without artifact storage",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Java for Firebase emulators",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Node.js",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "subsequentChanges": "documentation, evidence and independent synthetic Go selftest; no new app build or production approval"
+}

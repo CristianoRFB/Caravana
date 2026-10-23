@@ -1,5 +1,17 @@
 # Estado atual — Caravana 77
 
+## Estado vigente — checkpoint de23/10/2026
+
+Este bloco substitui os pareceres históricos abaixo. Staging `bdall-e3585` / `caravana77-staging` homologado na fonte `bc5dd40`, deployment `6e1a652a-dc4e-412e-9177-909ab35f598f`:17 jornadas SDK,1 readonly,12 verificações de layout, Auth/Rules/11 índices e rollback real de frontend/Rules PASS. CI técnico `ee3f5b5` / [39845244031](https://github.com/CristianoRFB/Caravana/actions/runs/39845244031) integral PASS:299 backend/Rules,8Auth,6Storage,47Python e184E2E.
+
+F0–F6 mantêm aceites locais/sintéticos; F7 preparação9/10; F8 passa a6/14 com o gate4; GOAL passa a7/17 com o gate4; técnico17/20 no método histórico. Inventário real limitado:24 documentos em snapshot consistente,2 usuários Auth e0 buckets GCS; sem escrita de produção e sem exportação bruta. Isso não fecha inventário completo de migração/backup/restore. Dois registros financeiros sem total armazenado verificável exigem reconciliação; oito conferem, nenhuma divergência detectada nesses oito.
+
+Drive privado conferido e vazio; chave privada ainda não estabelecida fora do computador compartilhado. Backup real e restauração real BLOCKED; migração/compatibilidade/rollback coordenado e F7 operacional permanecem pendentes. **DEMO_READY; COMMERCIAL_READY_NEW_TENANTS: NO-GO operacional; READY_FOR_ITALO_MIGRATION: NOT_READY; ITALO_NOT_MIGRATED.** Produção não recebeu deploy nem alteração de dados/configuração. R$0, sem Blaze.
+
+Relatório completo, commits, riscos e proposta única de backup: [ENCERRAMENTO_PARCIAL_2026-10-22.md](ENCERRAMENTO_PARCIAL_2026-10-22.md). Catálogo das32 rotas e galeria parcial: [README_TELAS.md](../README_TELAS.md). O proprietário já autorizou o GOAL e a pasta Drive; não falta autorização genérica. Próxima condição humana do backup: identidade privada criada e guardada no dispositivo pessoal, disponibilizando somente o destinatário público `age1…`.
+
+### Histórico preservado — não representa o estado vigente
+
 ## Mandato vigente e execução local — 22/10/2026
 
 Continuidade em [MASTER_EXECUTION_2026-10-22.md](MASTER_EXECUTION_2026-10-22.md). O proprietário autorizou execução integral, staging sintético/deploy e cutover do Ítalo condicionado aos gates reais; restrições históricas de autorização abaixo não substituem esse mandato. Checkout original main/WIP preservado; branch comercial recuperada por fast-forward2ceea1b, checkpoint7b99a47 enviado. Auditoria administrativa real de staging PASS após reconciliação LF estrita e ensaio remoto de retorno/avanço das Rules. Auth integral e11índicesREADY confirmados.17jornadas SDK reais PASS, compensações preservam vagas/totais e todo o ledger anterior. Frontend ainda8c1340d até nova publicação comprovada. Patches tooling8→5/runtime0, regressão final/CI pendentes;37guardsPythonPASS. Drive privado vazio e capacidade confirmados; nenhum backup bruto ou migração de produção. Não confundir esses subresultados com lançamento operacional ou migração pronta.

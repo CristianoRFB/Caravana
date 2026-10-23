@@ -1,5 +1,17 @@
 # Parecer final de preparação para migração
 
+## Estado vigente — checkpoint de23/10/2026
+
+Este bloco substitui os pareceres históricos abaixo. Staging `bdall-e3585` / `caravana77-staging` homologado na fonte `bc5dd40`, deployment `6e1a652a-dc4e-412e-9177-909ab35f598f`:17 jornadas SDK,1 readonly,12 verificações de layout, Auth/Rules/11 índices e rollback real de frontend/Rules PASS. CI técnico `ee3f5b5` / [39845244031](https://github.com/CristianoRFB/Caravana/actions/runs/39845244031) integral PASS:299 backend/Rules,8Auth,6Storage,47Python e184E2E.
+
+F0–F6 mantêm aceites locais/sintéticos; F7 preparação9/10; F8 passa a6/14 com o gate4; GOAL passa a7/17 com o gate4; técnico17/20 no método histórico. Inventário real limitado:24 documentos em snapshot consistente,2 usuários Auth e0 buckets GCS; sem escrita de produção e sem exportação bruta. Isso não fecha inventário completo de migração/backup/restore. Dois registros financeiros sem total armazenado verificável exigem reconciliação; oito conferem, nenhuma divergência detectada nesses oito.
+
+Drive privado conferido e vazio; chave privada ainda não estabelecida fora do computador compartilhado. Backup real e restauração real BLOCKED; migração/compatibilidade/rollback coordenado e F7 operacional permanecem pendentes. **DEMO_READY; COMMERCIAL_READY_NEW_TENANTS: NO-GO operacional; READY_FOR_ITALO_MIGRATION: NOT_READY; ITALO_NOT_MIGRATED.** Produção não recebeu deploy nem alteração de dados/configuração. R$0, sem Blaze.
+
+Relatório completo, commits, riscos e proposta única de backup: [ENCERRAMENTO_PARCIAL_2026-10-22.md](ENCERRAMENTO_PARCIAL_2026-10-22.md). Catálogo das32 rotas e galeria parcial: [README_TELAS.md](../README_TELAS.md). O proprietário já autorizou o GOAL e a pasta Drive; não falta autorização genérica. Próxima condição humana do backup: identidade privada criada e guardada no dispositivo pessoal, disponibilizando somente o destinatário público `age1…`.
+
+### Histórico preservado — não representa o estado vigente
+
 ## Continuidade consolidada — código a7b5785, runtime49
 
 Override isolado do UUID do CLI e diagnóstico sanitizado de consumidor Auth implementados/testados; audit de ferramentas7→5, runtime0. Compatibilidade HTTP3 testes, guards Python23,Auth8,Storage6 e recuperação conjunta locais PASS. CI39540369156 da própria revisão PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; preservar a evidência anterior apenas para seu código. Aplicação/Rules/índices e staging não alterados. Desenvolvimento técnico estimado85% (17/20 grupos existentes), GOAL final35% (6/17 gates), F7 preparação9/10 e F8 gates5/14; metodologia e limites no parecer abaixo.

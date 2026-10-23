@@ -1,0 +1,105 @@
+{
+  "source": "bc5dd40e3e885ecea6a668203b7a6407db5a7b46",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "authenticated": true,
+  "productionAccess": false,
+  "checks": [
+    {
+      "page": "finance-ownerB",
+      "width": 320,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "finance-ownerB",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "finance-ownerB",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "finance-ownerB",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "reports-ownerB",
+      "width": 320,
+      "noHorizontalOverflow": true,
+      "heading": true,
+      "savedReports": 2
+    },
+    {
+      "page": "reports-ownerB",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "heading": true,
+      "savedReports": 2
+    },
+    {
+      "page": "reports-ownerB",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "heading": true,
+      "savedReports": 2
+    },
+    {
+      "page": "reports-ownerB",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "heading": true,
+      "savedReports": 2
+    },
+    {
+      "page": "worklists-premium",
+      "width": 320,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "worklists-premium",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "worklists-premium",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "heading": true
+    },
+    {
+      "page": "worklists-premium",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "heading": true
+    }
+  ],
+  "csvDownload": {
+    "bytes": 709,
+    "noPassengerFields": true
+  },
+  "reloadPreservedReport": true,
+  "proCannotCreatePremiumWorklist": true,
+  "essentialCoreFinanceRetained": true,
+  "essentialCannotCreateProReport": true,
+  "premiumTaskServerConfirmed": true,
+  "premiumUndoServerConfirmed": true,
+  "archiveConfirmed": true,
+  "reopenConfirmed": true,
+  "premiumReloadPreserved": true,
+  "browserErrorCount": 0,
+  "checkedAt": "2026-10-22T19:41:04.468Z",
+  "visualCaptureLimitation": "Initial screenshots from hidden tabs had stale compositor frames and were discarded. DOM checks remain independent; verified mobile and desktop captures were repeated with browser visible.",
+  "verifiedVisualCaptures": [
+    "staging-premium-mobile-verified.jpg",
+    "staging-premium-desktop-verified.jpg"
+  ]
+}

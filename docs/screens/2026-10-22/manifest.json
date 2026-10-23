@@ -1,0 +1,54 @@
+{
+  "capturedAt": "2026-10-22",
+  "source": "bc5dd40e3e885ecea6a668203b7a6407db5a7b46",
+  "environment": "bdall-e3585 / caravana77-staging",
+  "syntheticOnly": true,
+  "captures": [
+    {
+      "file": "catalogo.jpg",
+      "sha256": "4cf6688dad8b53042b64c2a0ecbd975f1a7e86790937b29169f9f9bc4f34e92d",
+      "bytes": 63194
+    },
+    {
+      "file": "check-in.jpg",
+      "sha256": "4f2313840576d6081ed4f4292be5b18397d91b556623b1f7784cd212f5bbde48",
+      "bytes": 71916
+    },
+    {
+      "file": "comprovantes.jpg",
+      "sha256": "4052d4afba2e31ee5c2a2039cc4bfb6aab569127c0382d404ba13b9ba4395fb2",
+      "bytes": 35509
+    },
+    {
+      "file": "documentos.jpg",
+      "sha256": "94b9a38e586ae0855ea72145fab60780b6a3cf90bca1b02e1ac7e86c3e1b05a6",
+      "bytes": 59220
+    },
+    {
+      "file": "financeiro.jpg",
+      "sha256": "1a73b74533cc1ed3bce17d0989a243429e36ecfb492292b0fdc673a6a68436a8",
+      "bytes": 62148
+    },
+    {
+      "file": "identidade.jpg",
+      "sha256": "21dbc0e20102dcee04dcc8333c478a8dc9378b9828ea9b76d982e3ec3ac2d01d",
+      "bytes": 59435
+    },
+    {
+      "file": "login-equipe.jpg",
+      "sha256": "83f97651ddbd26bf6e02fb024c83eab2820a79449f52873cf5d1188df75e347b",
+      "bytes": 45036
+    },
+    {
+      "file": "saas.jpg",
+      "sha256": "5142797a1390bb68fb6e5fb71ac7e8c3a4c0b7a897111f921bb69361a7db915b",
+      "bytes": 56497
+    },
+    {
+      "file": "viagem.jpg",
+      "sha256": "c3e0a9f7aa8019f1809cdaeaf33afcf8955c4dfe5bef0813cbddf802b9bc8d37",
+      "bytes": 71150
+    }
+  ],
+  "limitations": "partial gallery; JPEG compression; loading/stale captures discarded; historical images separately labelled in README_TELAS.md"
+}
