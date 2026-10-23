@@ -60,7 +60,7 @@ jobs:
         run: npm test
 
       - name: Bounded public health transport (synthetic streams only)
-        run: node --test scripts/tests/staging-health-bounds.test.mjs
+        run: node --test scripts/tests/staging-health-bounds.test.mjs scripts/tests/staging-appcheck.test.mjs
 
       - name: Auth emulator integration
         run: npm run test:demo

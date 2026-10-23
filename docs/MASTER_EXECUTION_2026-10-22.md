@@ -1,5 +1,9 @@
 # Execução do mandato de 22/10/2026
 
+## Preparação App Check — revisão local ainda não publicada
+
+Integração opt-in implementada antes de Auth/Firestore, restrita a projeto/domínio canônico de staging; padrão desativado, sem debug bypass.4 testes de configuração/CSP e3 de bootstrap PASS, lint/tipos e builds sintético-on/default-off PASS. Nenhuma chave real, provider, enforcement, assessment ou deploy. [Escopo, provas e rollout pendente](STAGING_APPCHECK_PREPARATION_2026-10-23.md). CI integral novo será conferido pelo SHA próprio; não atribuir o CIee3f5b5 à revisão nova. Staging publicado permanecebc5dd40 com seu aceite anterior. Gates reais não promovidos.
+
 ## Alertas Pages ativos —23/10/2026
 
 Política de deploy limitada a `caravana77-staging` configurada e enabled, com destinatário definido explicitamente pelo proprietário. Falha/sucesso em preview/canônico do projeto de staging; POST de teste200 e recebimento do e-mail padrão confirmados. Não representa uptime periódico nem erros backend. [Provas, escopo e limites](F7_ALERTS_2026-10-23.md).
