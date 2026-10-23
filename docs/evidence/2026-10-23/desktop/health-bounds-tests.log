@@ -1,0 +1,12 @@
+✔ accepts exact decoded bytes across chunks, including UTF-8 split boundaries (20.565ms)
+✔ cancels a growing stream before consuming remaining chunks despite a false length (1.2939ms)
+✔ rejects one oversized chunk even without Content-Length (0.4695ms)
+✔ fails on a truncated transport instead of reporting a partial successful read (0.411ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 107.3983

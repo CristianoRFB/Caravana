@@ -1,5 +1,9 @@
 # CARAVANA 77 — GOAL FINAL INCOMPLETO
 
+## Continuação independente da chave —23/10
+
+[Relatório F7 atualizado](F7_SECURITY_CONTINUATION_2026-10-23.md): advisory braces retirado, audit tooling3moderadas/0altas sem patch de dependências; cadeia OpenTelemetry/PubSub permanece aberta. Health recebeu limites de streaming,4 testes próprios e GET real12assets PASS; CI passou a incluir os testes de transporte. Não equivale a alerta ativo ou controle de abuso backend. Guia74c1773 preservado; proprietário segue no computador compartilhado, chave/backup reais continuam pendentes, sem improvisar identidade. F7 9/10,F8 6/14,GOAL7/17 mantidos.
+
 ## Estado vigente — checkpoint de23/10/2026
 
 Este bloco substitui os pareceres históricos abaixo. Staging `bdall-e3585` / `caravana77-staging` homologado na fonte `bc5dd40`, deployment `6e1a652a-dc4e-412e-9177-909ab35f598f`:17 jornadas SDK,1 readonly,12 verificações de layout, Auth/Rules/11 índices e rollback real de frontend/Rules PASS. CI técnico `ee3f5b5` / [39845244031](https://github.com/CristianoRFB/Caravana/actions/runs/39845244031) integral PASS:299 backend/Rules,8Auth,6Storage,47Python e184E2E.

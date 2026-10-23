@@ -1,5 +1,9 @@
 # Diagnóstico e verificação gratuita — 2026-10-20
 
+## Continuação independente da chave —23/10
+
+[Relatório F7 atualizado](F7_SECURITY_CONTINUATION_2026-10-23.md): advisory braces retirado, audit tooling3moderadas/0altas sem patch de dependências; cadeia OpenTelemetry/PubSub permanece aberta. Health recebeu limites de streaming,4 testes próprios e GET real12assets PASS; CI passou a incluir os testes de transporte. Não equivale a alerta ativo ou controle de abuso backend. Guia74c1773 preservado; proprietário segue no computador compartilhado, chave/backup reais continuam pendentes, sem improvisar identidade. F7 9/10,F8 6/14,GOAL7/17 mantidos.
+
 ## Estado atual de operação — 2026-10-21
 
 Health e diagnósticos mínimos implementados; manifesto público de staging8c1340d reconfirmado nesta execução, mesmos12 descritores do último health integral. Não houve nova jornada autenticada nem refetch dos bytes de todos os assets. Diagnóstico de API agora classifica serviço/consumidor/permissão sem dados arbitrários (23 guards). Alertas remotos proativos e proteção de abuso ainda BLOCKED: não há canal/provedor/rollout efetivo comprovado. CI de push é verificação pontual, não monitoramento de tráfego; não criar canal/contato fictício nem chamar frontend throttle de proteção de backend. Ações externas mínimas em COMMERCIAL_READINESS_2026-10-21.md.

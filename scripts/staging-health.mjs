@@ -20,12 +20,37 @@ export function verifyHealthAssetResponse(asset, headers, bytes) {
   if (expected && !expected.includes(mime)) return false;
   return bytes.length === asset.bytes && createHash("sha256").update(bytes).digest("hex") === asset.sha256;
 }
+// Bound bytes while receiving, including decoded/chunked responses that omit or
+// misstate Content-Length. Never retain an unbounded arrayBuffer/JSON body.
+export async function readBoundedHealthBody(response, limit) {
+  if (!Number.isSafeInteger(limit) || limit < 0 || limit > 5000000) throw Error("Invalid health body bound.");
+  if (!response.body) return Buffer.alloc(0);
+  const reader = response.body.getReader(), chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > limit) throw Error("Public staging response exceeds its byte bound.");
+      chunks.push(Buffer.from(value));
+    }
+    return Buffer.concat(chunks, total);
+  } catch (error) {
+    await reader.cancel().catch(() => {});
+    throw error;
+  } finally {
+    reader.releaseLock();
+  }
+}
 export async function stagingHealth(expectedSource) {
   const get=async path=>{const response=await fetch(origin+path,{redirect:"error",signal:AbortSignal.timeout(15000)});if(response.status!==200)throw Error(`Public staging resource returned HTTP ${response.status}.`);return response;};
-  const html=await get("/admin/login"),release=await(await get("/release.json")).json(),assets=validateHealthRelease(release,expectedSource);
+  const html=await get("/admin/login");
+  await readBoundedHealthBody(html,524288);
+  const release=JSON.parse((await readBoundedHealthBody(await get("/release.json"),65536)).toString("utf8")),assets=validateHealthRelease(release,expectedSource);
   if(!verifyHealthHeaders(html.headers))throw Error("Required staging security headers missing.");
   const checked=[];
-  for(const asset of assets){const response=await get('/'+asset.path);const bytes=Buffer.from(await response.arrayBuffer());const hash=createHash("sha256").update(bytes).digest("hex");if(!verifyHealthAssetResponse(asset,response.headers,bytes))throw Error("Deployed browser artifact content type or bytes differ from its manifest.");checked.push({path:asset.path,bytes:bytes.length,sha256:hash});}
+  for(const asset of assets){const response=await get('/'+asset.path);const bytes=await readBoundedHealthBody(response,asset.bytes);const hash=createHash("sha256").update(bytes).digest("hex");if(!verifyHealthAssetResponse(asset,response.headers,bytes))throw Error("Deployed browser artifact content type or bytes differ from its manifest.");checked.push({path:asset.path,bytes:bytes.length,sha256:hash});}
   const report={checkedAt:new Date().toISOString(),status:"PASS_PUBLIC_STAGING_ARTIFACTS",source:release.source,projectId:release.projectId,pagesProject:release.pagesProject,securityHeaders:"PASS",assetContentTypesVerified:true,assets:checked,authenticatedJourneysVerified:false,productionAccess:false,credentialsUsed:false,privateDataRead:false};
   await mkdir("docs/evidence/2026-10-20",{recursive:true});await writeFile(`docs/evidence/2026-10-20/staging-health-${release.source.slice(0,7)}.json`,JSON.stringify(report,null,2)+"\n");return report;
 }

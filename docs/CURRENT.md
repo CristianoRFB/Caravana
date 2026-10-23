@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Continuação independente da chave —23/10
+
+[Relatório F7 atualizado](F7_SECURITY_CONTINUATION_2026-10-23.md): advisory braces retirado, audit tooling3moderadas/0altas sem patch de dependências; cadeia OpenTelemetry/PubSub permanece aberta. Health recebeu limites de streaming,4 testes próprios e GET real12assets PASS; CI passou a incluir os testes de transporte. Não equivale a alerta ativo ou controle de abuso backend. Guia74c1773 preservado; proprietário segue no computador compartilhado, chave/backup reais continuam pendentes, sem improvisar identidade. F7 9/10,F8 6/14,GOAL7/17 mantidos.
+
 ### Reconciliação Desktop posterior —23/10/2026
 
 O diagnóstico Cloud foi preservado, sem assumir a causa de diferenças entre ambientes. Novo `npm run build:staging` neste checkout Windows, HEAD de build `d14311328e36eff9d37791c164f5edc39196d916`, gerou os15/15 arquivos com caminhos, tamanhos e SHA256 idênticos ao manifesto publicado `bc5dd40`. `git diff bc5dd40 HEAD -- src public index.html vite.config.ts package.json package-lock.json firestore.rules firestore.indexes.json` vazio. Portanto o frontend efetivamente homologado no Desktop tem procedência local conferida; nenhuma republicação ou repetição de17SDK foi necessária. A razão específica da divergência do build Cloud permanece NOT_DETERMINED, sem apagar a evidência. MIME atual já PASS na própria evidência Cloud. Isso encerra a pendência de paridade do artefato publicado para esta candidata no checkout Windows, sem declarar builds de hosts diferentes reproduzíveis.

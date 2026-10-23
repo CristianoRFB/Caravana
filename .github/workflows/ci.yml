@@ -59,6 +59,9 @@ jobs:
       - name: Unit, integration and Firestore Rules
         run: npm test
 
+      - name: Bounded public health transport (synthetic streams only)
+        run: node --test scripts/tests/staging-health-bounds.test.mjs
+
       - name: Auth emulator integration
         run: npm run test:demo
 
