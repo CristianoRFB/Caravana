@@ -1,5 +1,11 @@
 # Estado atual — Caravana 77
 
+## CI App Check concluído; sonda operacional preparada
+
+CI da fonte `77e5f94` integral PASS:305backend/Rules,8Auth,6Storage,47Python,8nativos e184E2E; lint/tipos/build/recuperação PASS. [Prova do SHA exato](evidence/2026-10-23/desktop/appcheck-final-ci.json). Não houve registro de provider, ativação App Check ou deploy dessa candidata.
+
+[Sonda de disponibilidade](STAGING_MONITOR_PREPARATION_2026-10-23.md) implementada: quatro testes nativos e um teste workerd com sucesso/falha PASS, dry-run/lint e leitura pública real PASS. Sem bindings, credenciais, rotas ou cron ativo; nenhum upload. Ativação depende de comprovar monitores com custo zero, capacidade e entrega/ausência de sinal testadas. O CI77e5f94 não cobre esses arquivos operacionais posteriores; regressão direcionada local comprovada. F7/F8/GOAL e pareceres de migração mantidos.
+
 ## Orçamento máximo e total: R$ 0
 
 Instrução direta do proprietário em23/10: sem upgrades, vínculo de cobrança ou excedentes faturáveis. Painel Workers conferido em Free/$0; Email Sending indisponível nesse plano. Nenhuma alteração de billing ou novo recurso. App Check permanece desativado enquanto custo zero efetivo não estiver comprovado. [Restrição, prova e impacto nas pendências](ZERO_BUDGET_2026-10-23.md). Alertas de deploy já entregues continuam com seu escopo próprio; uptime periódico ainda pendente.

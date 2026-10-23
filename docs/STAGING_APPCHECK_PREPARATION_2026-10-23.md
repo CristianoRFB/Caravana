@@ -1,5 +1,7 @@
 # App Check — integração preparada, desativada por padrão
 
+Atualização: CI integral do commit `77e5f940e19b6a87533ea474ff4facb722eae920`, [run39987163969](https://github.com/CristianoRFB/Caravana/actions/runs/39987163969), concluído success. Contagens dos logs:305backend/Rules,8Auth,6Storage,47Python,8nativos e184E2E; lint/tipos/build/recuperação PASS. [Evidência](evidence/2026-10-23/desktop/appcheck-final-ci.json). Isso substitui a pendência de CI abaixo, sem comprovar provider/enforcement ou homologação remota da candidata.
+
 ## Escopo implementado
 
 Cliente Firebase inicializa `ReCaptchaEnterpriseProvider` e `initializeAppCheck` sincronamente antes de criar Auth/Firestore, somente com opt-in explícito e configuração válida. Sem nova dependência npm: usa o SDK Firebase já presente. Não aceita provider custom/debug nem fallback silencioso para tráfego não atestado quando configurado incorretamente.

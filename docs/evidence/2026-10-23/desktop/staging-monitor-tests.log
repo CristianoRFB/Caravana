@@ -1,0 +1,15 @@
+{"event":"STAGING_PROBE_PASS","source":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+{"event":"STAGING_PROBE_FAIL"}
+✔ scheduled handler runs in workerd with isolated synthetic outbound service (1080.1835ms)
+✔ probe only uses two fixed public GETs, no redirect or credentials (41.0596ms)
+✔ rejects wrong target, MIME, status, headers and non-app HTML (17.7255ms)
+✔ stream byte bound cancels growing body despite false length (2.9083ms)
+✔ network failure is awaited and HTTP cannot initiate probes (0.9318ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1824.2514
