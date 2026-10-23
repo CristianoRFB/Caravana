@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-10-23T15:56:53.558Z",
+  "sourceLocal": "d14311328e36eff9d37791c164f5edc39196d916",
+  "sourcePublished": "bc5dd40e3e885ecea6a668203b7a6407db5a7b46",
+  "total": 15,
+  "checked": [
+    {
+      "path": "assets/CommercialLanding-0uZpc247.css",
+      "match": true
+    },
+    {
+      "path": "assets/CommercialLanding-C9m9vmhj.js",
+      "match": true
+    },
+    {
+      "path": "assets/firebase-auth-DriciRFR.js",
+      "match": true
+    },
+    {
+      "path": "assets/firebase-firestore-B1ljOV07.js",
+      "match": true
+    },
+    {
+      "path": "assets/index-DMQ32K0f.js",
+      "match": true
+    },
+    {
+      "path": "assets/index-WxrywgLI.css",
+      "match": true
+    },
+    {
+      "path": "assets/InvitationInbox-Czy1rk4v.js",
+      "match": true
+    },
+    {
+      "path": "assets/OperationalTools-BX-RK0hT.js",
+      "match": true
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "match": true
+    },
+    {
+      "path": "assets/team-CEY4jTpc.js",
+      "match": true
+    },
+    {
+      "path": "assets/team-DO-9gEyi.css",
+      "match": true
+    },
+    {
+      "path": "assets/TeamManagement-BH74Z2Yz.js",
+      "match": true
+    },
+    {
+      "path": "index.html",
+      "match": true
+    },
+    {
+      "path": "_headers",
+      "match": true
+    },
+    {
+      "path": "_redirects",
+      "match": true
+    }
+  ],
+  "status": "PASS_EXACT_WINDOWS_REBUILD_ARTIFACTS",
+  "sourceRuntimeUnchangedFromPublished": true,
+  "rawCredentialsReported": false,
+  "productionAccess": false,
+  "cloudRebuildDifferenceCause": "NOT_DETERMINED; evidence preserved separately"
+}

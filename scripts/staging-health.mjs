@@ -13,13 +13,20 @@ export function validateHealthRelease(release,expectedSource) {
 export function verifyHealthHeaders(headers) {
   return headers.get("x-robots-tag")?.includes("noindex")===true && headers.get("x-frame-options")==="DENY" && (headers.get("content-security-policy")||"").includes("default-src 'self'") && !(headers.get("content-security-policy")||"").includes("unsafe-eval");
 }
+export function verifyHealthAssetResponse(asset, headers, bytes) {
+  const mime = (headers.get("content-type") || "").split(";", 1)[0].trim().toLowerCase();
+  const expected = asset.path.endsWith(".js") ? ["application/javascript", "text/javascript"]
+    : asset.path.endsWith(".css") ? ["text/css"] : null;
+  if (expected && !expected.includes(mime)) return false;
+  return bytes.length === asset.bytes && createHash("sha256").update(bytes).digest("hex") === asset.sha256;
+}
 export async function stagingHealth(expectedSource) {
   const get=async path=>{const response=await fetch(origin+path,{redirect:"error",signal:AbortSignal.timeout(15000)});if(response.status!==200)throw Error(`Public staging resource returned HTTP ${response.status}.`);return response;};
   const html=await get("/admin/login"),release=await(await get("/release.json")).json(),assets=validateHealthRelease(release,expectedSource);
   if(!verifyHealthHeaders(html.headers))throw Error("Required staging security headers missing.");
   const checked=[];
-  for(const asset of assets){const bytes=Buffer.from(await(await get('/'+asset.path)).arrayBuffer());const hash=createHash("sha256").update(bytes).digest("hex");if(hash!==asset.sha256 || bytes.length!==asset.bytes)throw Error("Deployed browser artifact differs from its manifest.");checked.push({path:asset.path,bytes:bytes.length,sha256:hash});}
-  const report={checkedAt:new Date().toISOString(),status:"PASS_PUBLIC_STAGING_ARTIFACTS",source:release.source,projectId:release.projectId,pagesProject:release.pagesProject,securityHeaders:"PASS",assets:checked,authenticatedJourneysVerified:false,productionAccess:false,credentialsUsed:false,privateDataRead:false};
+  for(const asset of assets){const response=await get('/'+asset.path);const bytes=Buffer.from(await response.arrayBuffer());const hash=createHash("sha256").update(bytes).digest("hex");if(!verifyHealthAssetResponse(asset,response.headers,bytes))throw Error("Deployed browser artifact content type or bytes differ from its manifest.");checked.push({path:asset.path,bytes:bytes.length,sha256:hash});}
+  const report={checkedAt:new Date().toISOString(),status:"PASS_PUBLIC_STAGING_ARTIFACTS",source:release.source,projectId:release.projectId,pagesProject:release.pagesProject,securityHeaders:"PASS",assetContentTypesVerified:true,assets:checked,authenticatedJourneysVerified:false,productionAccess:false,credentialsUsed:false,privateDataRead:false};
   await mkdir("docs/evidence/2026-10-20",{recursive:true});await writeFile(`docs/evidence/2026-10-20/staging-health-${release.source.slice(0,7)}.json`,JSON.stringify(report,null,2)+"\n");return report;
 }
 if(process.argv[1] && resolve(process.argv[1])===fileURLToPath(import.meta.url)){

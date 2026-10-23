@@ -1,0 +1,22 @@
+{
+  "candidateSource": "0460cb2613c90ba9781bdc57a1fb58a6084c72d1",
+  "publishedSource": "bc5dd40e3e885ecea6a668203b7a6407db5a7b46",
+  "candidateFiles": 15,
+  "publishedFiles": 15,
+  "matchingFiles": 5,
+  "differingFiles": [
+    "_redirects",
+    "assets/CommercialLanding-Bk9PjzaX.js",
+    "assets/InvitationInbox-B5ML8ocE.js",
+    "assets/OperationalTools-DWCPX74_.js",
+    "assets/TeamManagement-CPrMbch8.js",
+    "assets/firebase-auth-9-_4xxym.js",
+    "assets/firebase-firestore-B8X3RQXa.js",
+    "assets/index-BJvPpUz4.js",
+    "assets/team-5-4FM6R_.js",
+    "index.html"
+  ],
+  "allCandidateAssetsMatch": false,
+  "candidateManifestSha256": "7b672e85e8b970620765d1823ec1ce80f3906bd2ae945af7422aab8d311d51bc",
+  "deploymentPerformed": false
+}

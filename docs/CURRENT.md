@@ -1,5 +1,11 @@
 # Estado atual — Caravana 77
 
+### Reconciliação Desktop posterior —23/10/2026
+
+O diagnóstico Cloud foi preservado, sem assumir a causa de diferenças entre ambientes. Novo `npm run build:staging` neste checkout Windows, HEAD de build `d14311328e36eff9d37791c164f5edc39196d916`, gerou os15/15 arquivos com caminhos, tamanhos e SHA256 idênticos ao manifesto publicado `bc5dd40`. `git diff bc5dd40 HEAD -- src public index.html vite.config.ts package.json package-lock.json firestore.rules firestore.indexes.json` vazio. Portanto o frontend efetivamente homologado no Desktop tem procedência local conferida; nenhuma republicação ou repetição de17SDK foi necessária. A razão específica da divergência do build Cloud permanece NOT_DETERMINED, sem apagar a evidência. MIME atual já PASS na própria evidência Cloud. Isso encerra a pendência de paridade do artefato publicado para esta candidata no checkout Windows, sem declarar builds de hosts diferentes reproduzíveis.
+
+Provas: [desktop/artifact-parity.json](evidence/2026-10-23/desktop/artifact-parity.json) e [parity-build.log](evidence/2026-10-23/desktop/parity-build.log). F8 gate4 PASS no escopo da candidata publicada,6/14; GOAL gate4 PASS staging coordenado,7/17. Inventário consistente posterior de22/10 e Auth/GCS estão em [produção observada](evidence/2026-10-22/master/production-inventory-observed.json); o resumo estrutural anterior sem snapshot permanece histórico. Gate5 de inventário completo para migração continua BLOCKED, assim como backup/restore reais e demais requisitos.
+
 ## Estado vigente — checkpoint de23/10/2026
 
 Este bloco substitui os pareceres históricos abaixo. Staging `bdall-e3585` / `caravana77-staging` homologado na fonte `bc5dd40`, deployment `6e1a652a-dc4e-412e-9177-909ab35f598f`:17 jornadas SDK,1 readonly,12 verificações de layout, Auth/Rules/11 índices e rollback real de frontend/Rules PASS. CI técnico `ee3f5b5` / [39845244031](https://github.com/CristianoRFB/Caravana/actions/runs/39845244031) integral PASS:299 backend/Rules,8Auth,6Storage,47Python e184E2E.
@@ -11,6 +17,12 @@ Drive privado conferido e vazio; chave privada ainda não estabelecida fora do c
 Relatório completo, commits, riscos e proposta única de backup: [ENCERRAMENTO_PARCIAL_2026-10-22.md](ENCERRAMENTO_PARCIAL_2026-10-22.md). Catálogo das32 rotas e galeria parcial: [README_TELAS.md](../README_TELAS.md). O proprietário já autorizou o GOAL e a pasta Drive; não falta autorização genérica. Próxima condição humana do backup: identidade privada criada e guardada no dispositivo pessoal, disponibilizando somente o destinatário público `age1…`.
 
 ### Histórico preservado — não representa o estado vigente
+
+### Evidência Cloud paralela recebida — preservar e reconciliar
+
+## Continuidade vigente —23/10, Desktop recuperado
+
+[CLOUD_CONTINUITY_2026-10-23.md](CLOUD_CONTINUITY_2026-10-23.md) consolida remoto0460cb2, CIee3f5b5/run39845244031 PASS (299Rules/backend+8Auth+6Storage+47guards+recuperação conjunta+184E2E) e resultados reais22/10. Rules/Auth/11índices/rollback e17SDK remotos já aprovados: não repetir SERVICE_DISABLED. Manifesto público agorabc5dd40,12assets/MIME/headers exatos, sem deploy do Cloud. Candidata local difere em10/15arquivos; paridade segue pendente. Nova negativa MIME do health,14direcionados emulados/47guards/lint/build e8checks crypto sintéticos PASS. Nenhum dado real/produção/Drive acessado nesta rodada; inventário legado parcial22/10 não comprova backup/restore. Métricas:17/20,F0–F6local100%,F7 9/10,F8 5/14,GOAL6/17; comercialNO-GO e migraçãoNOT_READY. Nenhum gate integral adicional fechado. Próximo passo autenticado: reconciliar build/artefatos e concluir operação; sem nova auditoria geral.
 
 ## Mandato vigente e execução local — 22/10/2026
 

@@ -1,0 +1,26 @@
+
+ RUN  v5.0.3 /workspace/Caravana
+
+ ❯ tests/staging-public-auth.test.ts (0 test)
+ ❯ tests/staging-health.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/staging-health.test.ts [ tests/staging-health.test.ts ]
+ FAIL  tests/staging-public-auth.test.ts [ tests/staging-public-auth.test.ts ]
+Error: All tests require the isolated demo Firestore Emulator at 127.0.0.1:18080. Use npm test.
+ ❯ tests/setup-emulators.ts:3:9
+      1| // Run before test imports, including legacy suites. Never silently us…
+      2| if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080") {
+      3|   throw new Error("All tests require the isolated demo Firestore Emula…
+       |         ^
+      4| }
+      5| if (process.env.GCLOUD_PROJECT && process.env.GCLOUD_PROJECT !== "demo…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  no tests
+   Start at  11:08:48
+   Duration  258ms (worker 96%, environment 4%)

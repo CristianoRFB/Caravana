@@ -89,3 +89,7 @@ R$0 em ações executadas: sem Blaze, novo projeto pago ou billing. Proteções 
 ## Evidências
 
 Pasta [evidence/2026-10-22/master](evidence/2026-10-22/master), incluindo Rules antes/depois/rollback,47 guards,17 jornadas SDK,baseline antes/depois,health dos dois retornos frontend,aceite do navegador,inventário transcrito sanitizado,ensaio criptográfico e CI final. [README_TELAS.md](../README_TELAS.md) contém as32 rotas e a galeria. Os relatórios de terminal foram transcritos explicitamente como observações; não são dumps de dados de produção.
+
+## Integração do checkpoint Cloud em23/10
+
+Checkpoint remoto `0d4045f` integrado sem force, preservando testes e correção MIME do health. Rebuild Windows posterior:15/15 arquivos idênticos ao publicado, sem diferença de fonte runtime/dependências/Rules desdebc5dd40. Prova em [artifact-parity.json](evidence/2026-10-23/desktop/artifact-parity.json). A divergência do build Linux permanece registrada com causa não determinada; não invalida os bytes efetivamente reconstruídos e homologados no Desktop. Nenhuma nova publicação.
