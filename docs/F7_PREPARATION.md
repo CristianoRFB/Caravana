@@ -1,5 +1,9 @@
 # F7 — auditoria e preparação de release
 
+## Continuidade vigente —23/10, Desktop recuperado
+
+[CLOUD_CONTINUITY_2026-10-23.md](CLOUD_CONTINUITY_2026-10-23.md) consolida remoto0460cb2, CIee3f5b5/run39845244031 PASS (299Rules/backend+8Auth+6Storage+47guards+recuperação conjunta+184E2E) e resultados reais22/10. Rules/Auth/11índices/rollback e17SDK remotos já aprovados: não repetir SERVICE_DISABLED. Manifesto público agorabc5dd40,12assets/MIME/headers exatos, sem deploy do Cloud. Candidata local difere em10/15arquivos; paridade segue pendente. Nova negativa MIME do health,14direcionados emulados/47guards/lint/build e8checks crypto sintéticos PASS. Nenhum dado real/produção/Drive acessado nesta rodada; inventário legado parcial22/10 não comprova backup/restore. Métricas:17/20,F0–F6local100%,F7 9/10,F8 5/14,GOAL6/17; comercialNO-GO e migraçãoNOT_READY. Nenhum gate integral adicional fechado. Próximo passo autenticado: reconciliar build/artefatos e concluir operação; sem nova auditoria geral.
+
 ## Convergência vigente — staging público e candidata preparada
 
 Fonte recuperada cb321f5; checkpoint remoto253067b. Auth público real200 no projeto correto, domínio staging autorizado, senha ENFORCE/min12. Build staging253067b e oito verificações UI offline PASS;10 testes direcionados/lint PASS. Nenhum deploy, escrita Firebase ou acesso de produção. SERVICE_DISABLED administrativo continua sem causa comprovada: falta identidade gerenciada e ErrorInfo do consumidor. Staging publicado permanece8c1340d. Matrizes mantidas: F7 preparação9/10, F8 publicação5/14, GOAL6/17; técnico85% não significa produção pronta.

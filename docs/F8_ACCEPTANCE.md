@@ -1,5 +1,9 @@
 # F8 — homologação e barreiras de publicação
 
+## Continuidade vigente —23/10, Desktop recuperado
+
+[CLOUD_CONTINUITY_2026-10-23.md](CLOUD_CONTINUITY_2026-10-23.md) consolida remoto0460cb2, CIee3f5b5/run39845244031 PASS (299Rules/backend+8Auth+6Storage+47guards+recuperação conjunta+184E2E) e resultados reais22/10. Rules/Auth/11índices/rollback e17SDK remotos já aprovados: não repetir SERVICE_DISABLED. Manifesto público agorabc5dd40,12assets/MIME/headers exatos, sem deploy do Cloud. Candidata local difere em10/15arquivos; paridade segue pendente. Nova negativa MIME do health,14direcionados emulados/47guards/lint/build e8checks crypto sintéticos PASS. Nenhum dado real/produção/Drive acessado nesta rodada; inventário legado parcial22/10 não comprova backup/restore. Métricas:17/20,F0–F6local100%,F7 9/10,F8 5/14,GOAL6/17; comercialNO-GO e migraçãoNOT_READY. Nenhum gate integral adicional fechado. Próximo passo autenticado: reconciliar build/artefatos e concluir operação; sem nova auditoria geral.
+
 ## Subresultado Auth administrativo recuperado
 
 Relatório real do operador PASS_AUTH_ADMIN_READ_ONLY; não comprova política integral nem fecha gate de compatibilidade. Ferramenta39c2b95 e26 guards PASS; guard bruto Rules preservado. Continuidade em [AUTH_READ_RECOVERED_2026-10-21.md](AUTH_READ_RECOVERED_2026-10-21.md). F8 permanece5/14, F7 preparação9/10, GOAL6/17; sem deploy ou escritas remotas.

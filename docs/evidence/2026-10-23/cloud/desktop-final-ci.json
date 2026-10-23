@@ -1,0 +1,125 @@
+{
+  "sourceCommit": "ee3f5b5bb28b640b2569fe65dbadc59f7a2fbbed",
+  "runId": 39845244031,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/39845244031",
+  "status": "completed",
+  "conclusion": "success",
+  "jobId": 120057001368,
+  "mandatorySteps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1
+    },
+    {
+      "name": "Checkout",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2
+    },
+    {
+      "name": "Set up Node.js",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3
+    },
+    {
+      "name": "Set up Java for Firebase emulators",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4
+    },
+    {
+      "name": "Install dependencies",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5
+    },
+    {
+      "name": "Audit runtime dependencies",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6
+    },
+    {
+      "name": "Lint",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7
+    },
+    {
+      "name": "Typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8
+    },
+    {
+      "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 9
+    },
+    {
+      "name": "Read-only staging audit guards (no credentials or remote audit)",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 10
+    },
+    {
+      "name": "Unit, integration and Firestore Rules",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 11
+    },
+    {
+      "name": "Auth emulator integration",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 12
+    },
+    {
+      "name": "Storage Rules with Auth",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 13
+    },
+    {
+      "name": "Coordinated Auth Firestore Storage recovery (synthetic emulator only)",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 14
+    },
+    {
+      "name": "Install Chromium",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 15
+    },
+    {
+      "name": "Desktop and mobile E2E (synthetic only)",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 16
+    },
+    {
+      "name": "Record synthetic browser summary without artifact storage",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 17
+    },
+    {
+      "name": "Build",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 18
+    }
+  ],
+  "backendRules": 299,
+  "auth": 8,
+  "storage": 6,
+  "pythonGuards": 47,
+  "e2e": 184,
+  "coordinatedRecovery": "PASS",
+  "scope": "ee3f5b5; following0460cb2addsGoSelftestOnly"
+}

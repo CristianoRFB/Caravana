@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "0460cb2613c90ba9781bdc57a1fb58a6084c72d1",
+  "path": "scripts/backup-crypto-selftest.go",
+  "sha256": "8a6d9787e8a6aaa66071801844a3b7ee0fab5d94da4713d99ad5707f32e3e896",
+  "goCompiler": "go1.27.3 linux/amd64",
+  "ageVersion": "v1.3.2",
+  "payload": "synthetic_in_memory_only",
+  "network": "public_Go_module_downloads_before_test",
+  "productionAccess": false,
+  "privateDriveAccess": false
+}

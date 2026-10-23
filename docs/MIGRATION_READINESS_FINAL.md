@@ -1,5 +1,9 @@
 # Parecer final de preparação para migração
 
+## Continuidade vigente —23/10, Desktop recuperado
+
+[CLOUD_CONTINUITY_2026-10-23.md](CLOUD_CONTINUITY_2026-10-23.md) consolida remoto0460cb2, CIee3f5b5/run39845244031 PASS (299Rules/backend+8Auth+6Storage+47guards+recuperação conjunta+184E2E) e resultados reais22/10. Rules/Auth/11índices/rollback e17SDK remotos já aprovados: não repetir SERVICE_DISABLED. Manifesto público agorabc5dd40,12assets/MIME/headers exatos, sem deploy do Cloud. Candidata local difere em10/15arquivos; paridade segue pendente. Nova negativa MIME do health,14direcionados emulados/47guards/lint/build e8checks crypto sintéticos PASS. Nenhum dado real/produção/Drive acessado nesta rodada; inventário legado parcial22/10 não comprova backup/restore. Métricas:17/20,F0–F6local100%,F7 9/10,F8 5/14,GOAL6/17; comercialNO-GO e migraçãoNOT_READY. Nenhum gate integral adicional fechado. Próximo passo autenticado: reconciliar build/artefatos e concluir operação; sem nova auditoria geral.
+
 ## Continuidade consolidada — código a7b5785, runtime49
 
 Override isolado do UUID do CLI e diagnóstico sanitizado de consumidor Auth implementados/testados; audit de ferramentas7→5, runtime0. Compatibilidade HTTP3 testes, guards Python23,Auth8,Storage6 e recuperação conjunta locais PASS. CI39540369156 da própria revisão PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; preservar a evidência anterior apenas para seu código. Aplicação/Rules/índices e staging não alterados. Desenvolvimento técnico estimado85% (17/20 grupos existentes), GOAL final35% (6/17 gates), F7 preparação9/10 e F8 gates5/14; metodologia e limites no parecer abaixo.

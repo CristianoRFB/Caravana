@@ -1,0 +1,11 @@
+{
+  "publishedPath": "assets/firebase-firestore-B1ljOV07.js",
+  "candidatePath": "assets/firebase-firestore-B8X3RQXa.js",
+  "publishedBytes": 365164,
+  "candidateBytes": 364560,
+  "publishedCRLF": 0,
+  "localCRLF": 0,
+  "lfNormalizedEqual": false,
+  "rawEqual": false,
+  "scope": "ONE_VENDOR_CHUNK_NO_GATE_OVERRIDE"
+}
