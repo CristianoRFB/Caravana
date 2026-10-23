@@ -71,7 +71,7 @@ mkdir -p "$stage/caravana-finance-ledger"
 cat > "$stage/caravana-finance-ledger/SKILL.md" <<'CARAVANA_SKILL_caravana_finance_ledger'
 ---
 name: caravana-finance-ledger
-description: Manter integridade financeira da Caravana 77: ledger, pagamentos declarados, estornos, CSV e auditoria; use antes de alterar valores, quotas, conciliação, replay, migração ou rollback.
+description: "Manter integridade financeira da Caravana 77: ledger, pagamentos declarados, estornos, CSV e auditoria; use antes de alterar valores, quotas, conciliação, replay, migração ou rollback."
 ---
 
 # Integridade financeira e histórico
