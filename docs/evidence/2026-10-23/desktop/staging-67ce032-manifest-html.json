@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-23T17:00:12.195Z",
+  "source": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+  "status": "PASS_EXACT_MANIFEST_AND_HTML",
+  "manifestFileCount": 15,
+  "htmlSha256": "e6072dae2d19ca270e72cbbeb6faa4a4912578ef30960196327b20957f3e8a60",
+  "appCheckEnabled": false,
+  "productionAccess": false
+}

@@ -1,5 +1,9 @@
 # App Check — integração preparada, desativada por padrão
 
+Verificação de custo posterior: a [documentação oficial de billing do Fraud Defense](https://docs.cloud.google.com/recaptcha/docs/billing-information) confirma Essentials gratuito sem billing vinculado; após10.000assessments/mês **por organização, somando contas/sites**, CreateAssessment retorna429. [Quotas e comportamento](https://docs.cloud.google.com/recaptcha/quotas) distinguem CreateAssessment fail-closed de SiteVerify fail-open acima da cota. Não adotar fallback SiteVerify como proteção equivalente. Portanto há caminho compatível com R$0, condicionado a reconferir ausência de billing no projeto exato e monitorar a cota compartilhada; não é autorização para ativar billing ou presumir10.000exclusivos para a Caravana. O SDK Enterprise preparado continua desativado. Ainda faltam registro/site key, termos quando apresentados, orçamento de uso/TTL, attestation real e jornadas legítimas antes de enforcement. Esgotamento pode impedir clientes legítimos; isso exige tratamento operacional testado, não compra automática de capacidade.
+
+Publicação posterior: fonte67ce032/deployment4ed92f3b em23/10, mantendo App Check **desativado**. [Artefatos, bootstrap e rollback públicos verificados](STAGING_RELEASE_2026-10-23.md). Nenhum provider, assessment, enforcement ou jornada com attestation real; os trechos abaixo sobre candidata ainda não publicada são históricos da preparação inicial.
+
 Atualização: CI integral do commit `77e5f940e19b6a87533ea474ff4facb722eae920`, [run39987163969](https://github.com/CristianoRFB/Caravana/actions/runs/39987163969), concluído success. Contagens dos logs:305backend/Rules,8Auth,6Storage,47Python,8nativos e184E2E; lint/tipos/build/recuperação PASS. [Evidência](evidence/2026-10-23/desktop/appcheck-final-ci.json). Isso substitui a pendência de CI abaixo, sem comprovar provider/enforcement ou homologação remota da candidata.
 
 ## Escopo implementado

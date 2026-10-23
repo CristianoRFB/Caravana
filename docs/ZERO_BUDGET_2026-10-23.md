@@ -1,5 +1,7 @@
 # Restrição absoluta de orçamento — 23/10/2026
 
+Verificações posteriores: [Cloudflare Observability](https://developers.cloudflare.com/observability/pricing/) declara consultas/dashboards/alertas sem cobrança adicional e interrupção da ingestão no limite Free, inclusive no modelo anunciado para01/12/2026. Workers Free tem limite de execução que interrompe requisições; conta conferida com0/5Crons antes da criação da sonda dedicada. [App Check preparado](STAGING_APPCHECK_PREPARATION_2026-10-23.md) agora tem caminho de custo documentado: Essentials sem billing retorna429 ao exceder quota mensal compartilhada. Essas provas reduzem a incerteza de custo; não comprovam disponibilidade ilimitada, alerta operacional integral ou ativação do provider. Permanecer Free/sem billing é pré-condição contínua.
+
 O proprietário fixou **R$ 0 de orçamento máximo e total**. Essa instrução direta prevalece sobre qualquer proposta técnica anterior. Não autoriza upgrade, assinatura, teste convertido em cobrança, vínculo de faturamento, Blaze ou consumo com excedente faturável. Alertas de orçamento não substituem um teto que interrompa o serviço sem cobrança.
 
 ## Verificação realizada

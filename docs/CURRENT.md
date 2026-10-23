@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## Publicação e retorno real de23/10 — fonte67ce032
+
+[Candidata publicada](STAGING_RELEASE_2026-10-23.md) em `caravana77-staging`, deployment4ed92f3b, App Check desativado. Pacote/manifesto/HTML/12assets e bootstrap público PASS; rollback real para6e1a652a/bc5dd40 e retorno a4ed92f3b/67ce032 PASS. Alerta Pages desse evento real enviado e recebido na conta aprovada. CI77e5f94 cobre o código do aplicativo sem diferenças até67ce032; não cobre o Worker posterior. Não declarar provider/enforcement ou novas jornadas SDK remotas validados. Pareceres anteriores abaixo preservam seu escopo; F7/F8/GOAL não promovidos.
+
 ## CI App Check concluído; sonda operacional preparada
 
 CI da fonte `77e5f94` integral PASS:305backend/Rules,8Auth,6Storage,47Python,8nativos e184E2E; lint/tipos/build/recuperação PASS. [Prova do SHA exato](evidence/2026-10-23/desktop/appcheck-final-ci.json). Não houve registro de provider, ativação App Check ou deploy dessa candidata.

@@ -1,0 +1,75 @@
+{
+  "checkedAt": "2026-10-23T17:02:33.105Z",
+  "status": "PASS_PUBLIC_STAGING_ARTIFACTS",
+  "source": "bc5dd40e3e885ecea6a668203b7a6407db5a7b46",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "securityHeaders": "PASS",
+  "assetContentTypesVerified": true,
+  "assets": [
+    {
+      "path": "assets/CommercialLanding-0uZpc247.css",
+      "bytes": 10506,
+      "sha256": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64"
+    },
+    {
+      "path": "assets/CommercialLanding-C9m9vmhj.js",
+      "bytes": 13600,
+      "sha256": "25cdd451fba8943e6a7124a5e29349a3c245a201ddcf63b24d1d88c570fdc856"
+    },
+    {
+      "path": "assets/firebase-auth-DriciRFR.js",
+      "bytes": 123693,
+      "sha256": "225ef98debc44a0ddf81ab378c4af03b0551c781c404ecae1af13e926a64242b"
+    },
+    {
+      "path": "assets/firebase-firestore-B1ljOV07.js",
+      "bytes": 365164,
+      "sha256": "69200b7ee7140a3eb24f43acc79170fbe4597c2f668023d607e36dccf402fe1b"
+    },
+    {
+      "path": "assets/index-DMQ32K0f.js",
+      "bytes": 508206,
+      "sha256": "081e2f7b099b278fbc1157af6cef299e98bf507c0f016565c45480bc98919f69"
+    },
+    {
+      "path": "assets/index-WxrywgLI.css",
+      "bytes": 49354,
+      "sha256": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf"
+    },
+    {
+      "path": "assets/InvitationInbox-Czy1rk4v.js",
+      "bytes": 3186,
+      "sha256": "870fbf92feda733ead231199dc7b22f3944f9eab875a053dc6774be3eb94f278"
+    },
+    {
+      "path": "assets/OperationalTools-BX-RK0hT.js",
+      "bytes": 18130,
+      "sha256": "3333496bf3376b335ef6222fff4f059e900ee9059c1fc7beaf3e0a94693701a6"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/team-CEY4jTpc.js",
+      "bytes": 8946,
+      "sha256": "a6bb6dfc1ea0acf94b62d316c686153841fb82dbd0ccece3ea8dc986b57ece8b"
+    },
+    {
+      "path": "assets/team-DO-9gEyi.css",
+      "bytes": 1315,
+      "sha256": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8"
+    },
+    {
+      "path": "assets/TeamManagement-BH74Z2Yz.js",
+      "bytes": 8708,
+      "sha256": "276fe4afcc39a7ba46328b6880b0269307657fb20602d098915132ed9b384a4c"
+    }
+  ],
+  "authenticatedJourneysVerified": false,
+  "productionAccess": false,
+  "credentialsUsed": false,
+  "privateDataRead": false
+}

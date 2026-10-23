@@ -1,0 +1,89 @@
+{
+  "checkedAt": "2026-10-23T16:58:13.128Z",
+  "source": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "files": [
+    {
+      "path": "assets/CommercialLanding-0uZpc247.css",
+      "bytes": 10506,
+      "sha256": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64"
+    },
+    {
+      "path": "assets/CommercialLanding-C9yoE-pp.js",
+      "bytes": 13600,
+      "sha256": "f18d1763aa127c8f6b471a5c787a2c58e184a0e64fc3f2a6d50700e827001954"
+    },
+    {
+      "path": "assets/firebase-auth-15q4y3wd.js",
+      "bytes": 123693,
+      "sha256": "acfafcc0245c0faadf164f89d884b62e445507b927bfe3721386b405d9c859e0"
+    },
+    {
+      "path": "assets/firebase-firestore--ETCrPIB.js",
+      "bytes": 365958,
+      "sha256": "04707a9793e4e64faedd707e4bef2b1cc6a667fcf2c8496b8f86ae69ccbb2efc"
+    },
+    {
+      "path": "assets/index-DdvRK0TN.js",
+      "bytes": 530165,
+      "sha256": "1f5f8f3079f646570bfa596d443d0610977795ddf479af72f6925b4bf3de0204"
+    },
+    {
+      "path": "assets/index-WxrywgLI.css",
+      "bytes": 49354,
+      "sha256": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf"
+    },
+    {
+      "path": "assets/InvitationInbox-DWGrJS55.js",
+      "bytes": 3186,
+      "sha256": "a593b274449df4317755b0791ba34d0a8dc08edfe22a5b7caef27a81cceeae1d"
+    },
+    {
+      "path": "assets/OperationalTools-BMxXBAbH.js",
+      "bytes": 18130,
+      "sha256": "7d5c9b11d4fe0ab420cc58c4f6237fdf94926a4758772af31126e8d0e7546dd6"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/team-CJfSL1X2.js",
+      "bytes": 8941,
+      "sha256": "b3da107f0ba05cf368778b61d012dcffe66b65b5b76c7ec14094dd0f654ebfd1"
+    },
+    {
+      "path": "assets/team-DO-9gEyi.css",
+      "bytes": 1315,
+      "sha256": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8"
+    },
+    {
+      "path": "assets/TeamManagement-B9Ag6-YX.js",
+      "bytes": 8703,
+      "sha256": "d548229b228ffad4b3806fbd496f6b5e97c49b2e7883689511c7c8b5f0205355"
+    },
+    {
+      "path": "index.html",
+      "bytes": 913,
+      "sha256": "e6072dae2d19ca270e72cbbeb6faa4a4912578ef30960196327b20957f3e8a60"
+    },
+    {
+      "path": "_headers",
+      "bytes": 716,
+      "sha256": "0b545bccabd7cdc62e3156d0a69b5fcd2599d48b94db0e17f097c3c00dbb2a77"
+    },
+    {
+      "path": "_redirects",
+      "bytes": 20,
+      "sha256": "94f76bf42ffc51f446f54963735cab3da50e9db2eb45d4934da61e45c717d599"
+    }
+  ],
+  "appCheckEnabled": false,
+  "zip": {
+    "bytes": 316907,
+    "sha256": "ed7a26292408e87c1cbc3174dc6575d495e21aceb73479979456611986665368"
+  },
+  "deployment": "NOT_EXECUTED"
+}
