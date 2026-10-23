@@ -1,5 +1,11 @@
 # F7 — auditoria e preparação de release
 
+## Alertas Pages ativos —23/10/2026
+
+Política de deploy limitada a `caravana77-staging` configurada e enabled, com destinatário definido explicitamente pelo proprietário. Falha/sucesso em preview/canônico do projeto de staging; POST de teste200 e recebimento do e-mail padrão confirmados. Não representa uptime periódico nem erros backend. [Provas, escopo e limites](F7_ALERTS_2026-10-23.md).
+
+App Check de `bdall-e3585`: onboarding do console aberto, app não registrado, Firestore/Auth “Não aplicado”; nenhuma chave/provedor/enforcement salvo. Registro exige provedor/cotas/termos; não aceitar termos nem ativar cobrança ou bloquear tráfego por suposição. Nenhuma produção/backup real tocada. F7 9/10,F8 6/14,GOAL7/17 mantidos.
+
 ## Continuação independente da chave —23/10
 
 [Relatório F7 atualizado](F7_SECURITY_CONTINUATION_2026-10-23.md): advisory braces retirado, audit tooling3moderadas/0altas sem patch de dependências; cadeia OpenTelemetry/PubSub permanece aberta. Health recebeu limites de streaming,4 testes próprios e GET real12assets PASS; CI passou a incluir os testes de transporte. Não equivale a alerta ativo ou controle de abuso backend. Guia74c1773 preservado; proprietário segue no computador compartilhado, chave/backup reais continuam pendentes, sem improvisar identidade. F7 9/10,F8 6/14,GOAL7/17 mantidos.

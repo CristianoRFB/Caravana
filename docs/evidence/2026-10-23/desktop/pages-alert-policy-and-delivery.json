@@ -1,0 +1,42 @@
+{
+  "observedAt": "2026-10-23T16:20:17Z",
+  "operation": "configure_staging_pages_deploy_notifications_and_test",
+  "environment": "caravana77-staging",
+  "projectId": "a333a402-de3a-42f4-a6ff-7f16f5132a8d",
+  "policyId": "c1b9d45cd9e843258978d143f2520d20",
+  "policyName": "Caravana77 staging - falha e sucesso de deploy",
+  "enabled": true,
+  "alertType": "pages_event_alert",
+  "filters": {
+    "environment": [
+      "ENVIRONMENT_PRODUCTION",
+      "ENVIRONMENT_PREVIEW"
+    ],
+    "event": [
+      "EVENT_DEPLOYMENT_FAILED",
+      "EVENT_DEPLOYMENT_SUCCESS"
+    ],
+    "project_id": [
+      "a333a402-de3a-42f4-a6ff-7f16f5132a8d"
+    ]
+  },
+  "recipientCount": 1,
+  "approvedRecipientMatched": true,
+  "recipientAuthorization": "explicit_owner_reply_in_chat_2026-10-23",
+  "configurationVerifiedBy": "Cloudflare API GET and dashboard Enabled",
+  "testPostHttpStatus": 200,
+  "testPostResult": true,
+  "mailReceiptVerified": true,
+  "mailReceiptEvidence": "Gmail account identity matched approved recipient; scoped search from:(cloudflare.com) newer_than:1d in:anywhere; one matching received Cloudflare canned test header observed",
+  "testSubject": "[Alert] Pages deployment update for example-project-name",
+  "cannedTestPayload": true,
+  "actualDeploymentTriggered": false,
+  "realEventDispatchVerified": false,
+  "continuousAvailabilityMonitorActive": false,
+  "backendErrorsMonitored": false,
+  "productionClientTargetTouched": false,
+  "customerDataRead": false,
+  "freePlanEvidence": "Cloudflare notification-available: Pages project updates included with all Cloudflare plans",
+  "initialAttempt": "API POST with project filter alone rejected HTTP400/17103; no policy created; exact complete filters subsequently configured via dashboard",
+  "status": "PASS_STAGING_DEPLOY_POLICY_AND_TEST_DELIVERY_ONLY"
+}

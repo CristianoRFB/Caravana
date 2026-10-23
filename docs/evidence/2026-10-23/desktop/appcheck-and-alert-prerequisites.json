@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-10-23T16:20:17Z",
+  "target": "bdall-e3585",
+  "identityMatched": true,
+  "productOnboarding": "Começar clicked; Apps/APIs console subsequently available",
+  "webApp": "Caravana 77 Staging",
+  "providerRegistered": false,
+  "firestoreEnforcement": "NAO_APLICADO",
+  "authEnforcement": "NAO_APLICADO",
+  "siteKeyEntered": false,
+  "providerSaved": false,
+  "termsAccepted": false,
+  "productionAccess": false,
+  "providerForm": "Fraud Defense / reCAPTCHA Enterprise; site key and Google Cloud Terms required",
+  "result": "SETUP_INCOMPLETE_NO_ENFORCEMENT",
+  "cloudflareReadOnlyFindings": {
+    "notificationPoliciesBefore": 0,
+    "caravanaWorkers": 0,
+    "turnstileWidgets": 0,
+    "emailEligible": true,
+    "webhooksEligible": false,
+    "pagerDutyEligible": false,
+    "billingRead": "403 connector lacks Billing Read scope; no new token requested, no retry or grant",
+    "defaultWorkersUsageModel": "standard"
+  },
+  "newWorkerCreated": false
+}
