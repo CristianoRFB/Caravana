@@ -1,5 +1,13 @@
 # Estado atual — Caravana 77
 
+## GOAL X vigente —26/10/2026, laboratório
+
+Branch `codex/caravana77-goal-x-italo-ready-20261026`: exportador REST read-only/streaming age, inventário, manifesto autenticado, verificação Drive e recuperação independente offline agora implementados;17 testes novos de unidade/transporte+1 caso integrado em três emuladores PASS com dados inventados. Não são os7 testes anteriores recontados. [Código, operação pessoal e limites](operations/goal-x-italo/REAL_BACKUP_RESTORE.md).
+
+Ambiente continuaSHARED_UNTRUSTED; modo privado bloqueou antes de abrir configuração. Nenhum payload/backup/restore real, alteração staging/produção, deploy, billing, IAM, API ou termo. Monitor reconferido por GET oficial: seletor correto/15m, histórico semEND de heartbeat e sem campo público state/evaluation. Não promover por ausência de novos alertas.
+
+Mantidos técnico17/20, F7preparação9/10, F8 6/14 e GOAL7/17. **READY_FOR_ITALO_MIGRATION=NO; ITALO_MIGRATED=NO; COMMERCIAL_READY_NEW_TENANTS=NO.** [Matrizes17+14](operations/goal-x-italo/READINESS_MATRIX.md), [roteiro humano único](operations/goal-x-italo/OWNER_ACTIONS.md) e [ledger](operations/goal-x-italo/EXECUTION_LEDGER.json). Próximo bloqueio imediato: Windows pessoal privado/criptografado e custódia age testada; depois provas privadas do inventário/dois totais/backup/recuperação/Auth/links, sem autorização genérica repetida.
+
 ## Rodada vigente — LAB03-PC15, 26/10/2026
 
 [Execução e handoff](operations/desktop-2026-10-26/DESKTOP_EXECUTION_2026-10-26.md): branch isolada sobre6453da4, sem WIP inicial; laboratório UNTRUSTED. Novo ensaio offline com age oficial/manifesto SHA256, recuperação em processo separado, interrupção/replay, compensação e rollback em modelo PASS;7 testes dirigidos/lint PASS. Não é backup/restore/Auth/ACL real. [Gates e roteiro pessoal único](operations/desktop-2026-10-26/CUTOVER_GO_NO_GO.md).

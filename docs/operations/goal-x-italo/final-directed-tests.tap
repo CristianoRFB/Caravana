@@ -1,0 +1,119 @@
+TAP version 13
+# {"status":"PASS_SYNTHETIC_STREAMING_AGE_INDEPENDENT","documents":10,"objects":1,"authMetadata":1,"ownerKeyGenerated":false,"emulatorRoundtrip":false,"realBackup":false,"realRestore":false}
+# Subtest: actual REST exporter to age, signed ciphertext and independent recovery process; corruption/wrong key rejected
+ok 1 - actual REST exporter to age, signed ciphertext and independent recovery process; corruption/wrong key rejected
+  ---
+  duration_ms: 1224.9121
+  type: 'test'
+  ...
+# Subtest: privacy requires private encrypted Windows and refuses laboratory even with all flags
+ok 2 - privacy requires private encrypted Windows and refuses laboratory even with all flags
+  ---
+  duration_ms: 2.3914
+  type: 'test'
+  ...
+# Subtest: real REST adapter traverses paginated collections, nested missing parents and pins readTime without writes
+ok 3 - real REST adapter traverses paginated collections, nested missing parents and pins readTime without writes
+  ---
+  duration_ms: 73.3416
+  type: 'test'
+  ...
+# Subtest: pagination loops and auth revocation fail closed without raw diagnostics
+ok 4 - pagination loops and auth revocation fail closed without raw diagnostics
+  ---
+  duration_ms: 7.0707
+  type: 'test'
+  ...
+# Subtest: financial reconciliation preserves two unknown totals, cancelled receipts and voided history
+ok 5 - financial reconciliation preserves two unknown totals, cancelled receipts and voided history
+  ---
+  duration_ms: 3.0628
+  type: 'test'
+  ...
+# Subtest: inventory detects foreign/dangling references, cross-tenant relations and never follows external URLs
+ok 6 - inventory detects foreign/dangling references, cross-tenant relations and never follows external URLs
+  ---
+  duration_ms: 1.1762
+  type: 'test'
+  ...
+# Subtest: migration reuses existing additive planner and refuses source drift, revoked membership or injected overwrite
+ok 7 - migration reuses existing additive planner and refuses source drift, revoked membership or injected overwrite
+  ---
+  duration_ms: 4.009
+  type: 'test'
+  ...
+# Subtest: archive roundtrip retains typed data, subcollections, original IDs, users, bytes and unknown totals
+ok 8 - archive roundtrip retains typed data, subcollections, original IDs, users, bytes and unknown totals
+  ---
+  duration_ms: 25.3047
+  type: 'test'
+  ...
+# Subtest: archive rejects truncation, trailing records, bad checksums, unknown kinds, missing footer and memory excess
+ok 9 - archive rejects truncation, trailing records, bad checksums, unknown kinds, missing footer and memory excess
+  ---
+  duration_ms: 5.549
+  type: 'test'
+  ...
+# Subtest: export generator rejects missing object bytes, provider checksum mismatch and post-snapshot drift
+ok 10 - export generator rejects missing object bytes, provider checksum mismatch and post-snapshot drift
+  ---
+  duration_ms: 20.006
+  type: 'test'
+  ...
+# Subtest: signed manifest pins identity and bytes; checksum alone or substituted key is insufficient
+ok 11 - signed manifest pins identity and bytes; checksum alone or substituted key is insufficient
+  ---
+  duration_ms: 41.8916
+  type: 'test'
+  ...
+# Subtest: restore defaults to zero writes, resumes after interruption and rejects conflicting concurrent values
+ok 12 - restore defaults to zero writes, resumes after interruption and rejects conflicting concurrent values
+  ---
+  duration_ms: 6.8416
+  type: 'test'
+  ...
+# Subtest: emulator adapter enforces fixed loopback and create-only after-write verification
+ok 13 - emulator adapter enforces fixed loopback and create-only after-write verification
+  ---
+  duration_ms: 1.1859
+  type: 'test'
+  ...
+# Subtest: bounded transport cancels oversized/truncated/private responses without publishing content
+ok 14 - bounded transport cancels oversized/truncated/private responses without publishing content
+  ---
+  duration_ms: 0.7471
+  type: 'test'
+  ...
+# Subtest: Drive preflight refuses wrong identity, extra sharing, wrong parent and arbitrary upload endpoint
+ok 15 - Drive preflight refuses wrong identity, extra sharing, wrong parent and arbitrary upload endpoint
+  ---
+  duration_ms: 2.7971
+  type: 'test'
+  ...
+# Subtest: Drive transfer streams only a signed age envelope and checks remote hash, downloaded bytes and final privacy
+ok 16 - Drive transfer streams only a signed age envelope and checks remote hash, downloaded bytes and final privacy
+  ---
+  duration_ms: 45.8958
+  type: 'test'
+  ...
+# Subtest: migration preview cannot inject privilege changes; unsupported snapshot and path escape never fall back
+ok 17 - migration preview cannot inject privilege changes; unsupported snapshot and path escape never fall back
+  ---
+  duration_ms: 7.5536
+  type: 'test'
+  ...
+# Subtest: CLI dry-run is credential-free and unknown flags cannot activate a production operation
+ok 18 - CLI dry-run is credential-free and unknown flags cannot activate a production operation
+  ---
+  duration_ms: 342.3602
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1405.7231

@@ -1,0 +1,40 @@
+name: Goal X private recovery tools
+on:
+  push:
+    branches: [codex/caravana77-goal-x-italo-ready-20261026]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: goal-x-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  synthetic-recovery:
+    if: github.event.repository.private == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install existing pinned dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Pinned official age (no owner identity)
+        run: |
+          mkdir -p .firebase/tools/age-v1.3.2
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-amd64.tar.gz -o .firebase/tools/age-v1.3.2/archive.tar.gz
+          printf '%s  %s\n' 'cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10' '.firebase/tools/age-v1.3.2/archive.tar.gz' | sha256sum -c -
+          tar -xzf .firebase/tools/age-v1.3.2/archive.tar.gz --no-same-owner -C .firebase/tools/age-v1.3.2
+      - name: New synthetic unit and transport integration tests
+        run: npm run test:private-recovery
+      - name: Credential-free default dry-run
+        run: npm run recovery:private -- --dry-run
+      - name: Signed encrypted artifact to separate process and three demo emulators
+        run: npm run test:private-recovery:emulators
+      - name: Lint
+        run: npm run lint

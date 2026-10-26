@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "sourceProject": "caravana-af306",
+  "ownerAttestedPrivate": false,
+  "noNewBillingOrTerms": false,
+  "custodyAndSecondCopyTested": false,
+  "ownerReviewedReadBudget": false,
+  "crossServiceWriteWindowControlled": false,
+  "ownerRestoreIsolationReviewed": false,
+  "allowPrivateReadOnlyExport": false,
+  "allowPrivateCiphertextUpload": false,
+  "allowDemoOfflineRestore": false,
+  "expectedPrincipal": "OWNER_APPROVED_OFFICIAL_ACCOUNT",
+  "privateDirectory": "D:\\CaravanaPrivate",
+  "ageExecutable": "C:\\PERSONAL_APPROVED_TOOLS\\age.exe",
+  "publicRecipient": "PUBLIC_AGE_RECIPIENT_ONLY",
+  "allowedSignersFile": "D:\\CaravanaPrivate\\allowed_signers",
+  "encryptedIdentityFile": "D:\\PERSONAL_CUSTODY\\encrypted-identity.age",
+  "ciphertextName": "snapshot-UNIQUE.age",
+  "downloadName": "snapshot-UNIQUE.download.age",
+  "approvedDriveFolderId": "APPROVED_PRIVATE_FOLDER_ONLY",
+  "reviewedNonAttachmentUrlHashes": []
+}

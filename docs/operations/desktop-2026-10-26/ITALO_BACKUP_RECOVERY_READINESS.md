@@ -1,5 +1,7 @@
 # Recuperação do cliente — BLOCKED real no laboratório
 
+Atualização GOAL X: o [exportador/inventário/Drive/restore operacional](../goal-x-italo/REAL_BACKUP_RESTORE.md) agora existe e passou com fontes simuladas e três emuladores. A lacuna de implementação abaixo é histórica; a execução/cobertura REAL permaneceBLOCKED. Usar o [único roteiro pessoal vigente](../goal-x-italo/OWNER_ACTIONS.md), sem gerar chave ou copiar dados reais para o laboratório.
+
 | Gate | Estado desta rodada | Condição |
 |---|---|---|
 | Recipient público age | UNKNOWN | Não recebido/validado nesta sessão; formato sozinho não prova custódia |

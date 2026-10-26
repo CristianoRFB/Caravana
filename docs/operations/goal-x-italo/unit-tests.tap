@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: privacy requires private encrypted Windows and refuses laboratory even with all flags
+ok 1 - privacy requires private encrypted Windows and refuses laboratory even with all flags
+  ---
+  duration_ms: 2.3425
+  type: 'test'
+  ...
+# Subtest: real REST adapter traverses paginated collections, nested missing parents and pins readTime without writes
+ok 2 - real REST adapter traverses paginated collections, nested missing parents and pins readTime without writes
+  ---
+  duration_ms: 58.5152
+  type: 'test'
+  ...
+# Subtest: pagination loops and auth revocation fail closed without raw diagnostics
+ok 3 - pagination loops and auth revocation fail closed without raw diagnostics
+  ---
+  duration_ms: 5.0562
+  type: 'test'
+  ...
+# Subtest: financial reconciliation preserves two unknown totals, cancelled receipts and voided history
+ok 4 - financial reconciliation preserves two unknown totals, cancelled receipts and voided history
+  ---
+  duration_ms: 2.1109
+  type: 'test'
+  ...
+# Subtest: inventory detects foreign/dangling references, cross-tenant relations and never follows external URLs
+ok 5 - inventory detects foreign/dangling references, cross-tenant relations and never follows external URLs
+  ---
+  duration_ms: 0.7431
+  type: 'test'
+  ...
+# Subtest: migration reuses existing additive planner and refuses source drift, revoked membership or injected overwrite
+ok 6 - migration reuses existing additive planner and refuses source drift, revoked membership or injected overwrite
+  ---
+  duration_ms: 2.2691
+  type: 'test'
+  ...
+# Subtest: archive roundtrip retains typed data, subcollections, original IDs, users, bytes and unknown totals
+ok 7 - archive roundtrip retains typed data, subcollections, original IDs, users, bytes and unknown totals
+  ---
+  duration_ms: 21.4899
+  type: 'test'
+  ...
+# Subtest: archive rejects truncation, trailing records, bad checksums, unknown kinds, missing footer and memory excess
+ok 8 - archive rejects truncation, trailing records, bad checksums, unknown kinds, missing footer and memory excess
+  ---
+  duration_ms: 4.3405
+  type: 'test'
+  ...
+# Subtest: export generator rejects missing object bytes, provider checksum mismatch and post-snapshot drift
+ok 9 - export generator rejects missing object bytes, provider checksum mismatch and post-snapshot drift
+  ---
+  duration_ms: 15.8906
+  type: 'test'
+  ...
+# Subtest: signed manifest pins identity and bytes; checksum alone or substituted key is insufficient
+ok 10 - signed manifest pins identity and bytes; checksum alone or substituted key is insufficient
+  ---
+  duration_ms: 39.3613
+  type: 'test'
+  ...
+# Subtest: restore defaults to zero writes, resumes after interruption and rejects conflicting concurrent values
+ok 11 - restore defaults to zero writes, resumes after interruption and rejects conflicting concurrent values
+  ---
+  duration_ms: 10.6255
+  type: 'test'
+  ...
+# Subtest: emulator adapter enforces fixed loopback and create-only after-write verification
+ok 12 - emulator adapter enforces fixed loopback and create-only after-write verification
+  ---
+  duration_ms: 1.7745
+  type: 'test'
+  ...
+# Subtest: bounded transport cancels oversized/truncated/private responses without publishing content
+ok 13 - bounded transport cancels oversized/truncated/private responses without publishing content
+  ---
+  duration_ms: 0.7456
+  type: 'test'
+  ...
+# Subtest: Drive preflight refuses wrong identity, extra sharing, wrong parent and arbitrary upload endpoint
+ok 14 - Drive preflight refuses wrong identity, extra sharing, wrong parent and arbitrary upload endpoint
+  ---
+  duration_ms: 2.8917
+  type: 'test'
+  ...
+# Subtest: Drive transfer streams only a signed age envelope and checks remote hash, downloaded bytes and final privacy
+ok 15 - Drive transfer streams only a signed age envelope and checks remote hash, downloaded bytes and final privacy
+  ---
+  duration_ms: 40.2468
+  type: 'test'
+  ...
+# Subtest: migration preview cannot inject privilege changes; unsupported snapshot and path escape never fall back
+ok 16 - migration preview cannot inject privilege changes; unsupported snapshot and path escape never fall back
+  ---
+  duration_ms: 4.9544
+  type: 'test'
+  ...
+# Subtest: CLI dry-run is credential-free and unknown flags cannot activate a production operation
+ok 17 - CLI dry-run is credential-free and unknown flags cannot activate a production operation
+  ---
+  duration_ms: 301.0708
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 699.9898

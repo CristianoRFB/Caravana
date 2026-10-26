@@ -4,6 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "recovery:private": "node scripts/private-recovery.mjs",
+    "test:private-recovery": "node --test scripts/tests/private-recovery.test.mjs",
+    "test:private-recovery:age": "node --test scripts/tests/private-recovery-age.test.mjs",
+    "test:private-recovery:emulators": "node scripts/recovery/run-synthetic-emulators.mjs",
     "test:lab-recovery": "node --test scripts/tests/lab-recovery.test.mjs",
     "recovery:lab": "node scripts/rehearse-lab-recovery.mjs",
     "dev": "vite --mode e2e --host 127.0.0.1",

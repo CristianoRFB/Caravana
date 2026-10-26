@@ -1,0 +1,339 @@
+{
+  "version": 1,
+  "generatedAtUtc": "2026-10-26T17:45:36.744Z",
+  "branch": "codex/caravana77-goal-x-italo-ready-20261026",
+  "initialLocalSha": "b27d9ed703249df89b31797562aa150befeb6203",
+  "initialRemoteSha": "669673b78db8429096133e4009533256721876d6",
+  "testedSourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+  "sourceFiles": [
+    {
+      "path": "scripts/private-recovery.mjs",
+      "sha256": "411e487d93407c8a1b43d552fc775e62f20c3826cf1eeb5794c1fd70529c24cc"
+    },
+    {
+      "path": "scripts/recovery/archive.mjs",
+      "sha256": "c76c32ad1eb1b0dc7d0c32601a07228ead5af17b37c908c0582d00fcb17529ce"
+    },
+    {
+      "path": "scripts/recovery/drive.mjs",
+      "sha256": "1722174afebb2ff655fa6860056690b6cdb4f4bfc1a989fad7249d63a0fbe038"
+    },
+    {
+      "path": "scripts/recovery/google-source.mjs",
+      "sha256": "dfbf1ce203eaccf6322d74616a7139e4c290386c1bb7faa328d9e5b17e146dfd"
+    },
+    {
+      "path": "scripts/recovery/inventory.mjs",
+      "sha256": "5be10dfb40f77b1b9c5d156e1fe13361bb078d86d0417e9f4716d7104bba409e"
+    },
+    {
+      "path": "scripts/recovery/restore.mjs",
+      "sha256": "f3076beb97fca10b6d65be5067f2c053d794125fb361e6db154af0150de3d0c0"
+    },
+    {
+      "path": "scripts/recovery/run-synthetic-emulators.mjs",
+      "sha256": "0f55c9eecfe18a69f63c84caf722e9107f370517113c3296d12c41cc17399b8c"
+    },
+    {
+      "path": "scripts/recovery/safety.mjs",
+      "sha256": "16aed511c470e9f8635696b1fe4542d89558ea39b682bf3e7f7727cf7e3518e2"
+    },
+    {
+      "path": "scripts/recovery/synthetic-restore-child.mjs",
+      "sha256": "5ed4dbfca07ee96d9b46f4414d2405244eb77b6b0a5d5686fe6cd18eb73a98bf"
+    },
+    {
+      "path": "scripts/tests/private-recovery.test.mjs",
+      "sha256": "07d02651a13efddd96c53a0a4123db2af435acee620ec368b957ac3b3bf3c0bd"
+    },
+    {
+      "path": "scripts/tests/private-recovery-age.test.mjs",
+      "sha256": "af8daed92a0fa7a0c2130c86693e539b38e1f32d013238bb6c6abe481c9489ac"
+    },
+    {
+      "path": "scripts/tests/recovery-fixture.mjs",
+      "sha256": "5df6580851ef08f164e0a21f56e4bfec24f698b22249a40c487914e809544453"
+    },
+    {
+      "path": "firebase.recovery.test.json",
+      "sha256": "35022ef9e5358e47aafb31367740a6945fc36f052babd98e842df4220b806298"
+    },
+    {
+      "path": ".github/workflows/goal-x-recovery.yml",
+      "sha256": "0f9a14184cdc94e2514a6713ae5fd71a20895b746766865a6b639af8adebf9ca"
+    }
+  ],
+  "entries": [
+    {
+      "id": "preflight",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "PASS",
+      "timestampUtc": "2026-10-26T17:45:36.735Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "LAB03-PC15",
+      "gates": [
+        15,
+        17
+      ],
+      "proof": "docs/operations/goal-x-italo/preflight.json",
+      "proofSha256": "60180d94080b11731a7303292981ac452dd893e24a1e94a7975a173aee722b62",
+      "claim": "Source branch/trust/tools observed; no real payload or credentials",
+      "limits": "No private configuration was opened; device remains untrusted"
+    },
+    {
+      "id": "directed-tests",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "PASS",
+      "timestampUtc": "2026-10-26T17:45:36.740Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "fake Google REST / fake Drive / synthetic age",
+      "gates": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14
+      ],
+      "proof": "docs/operations/goal-x-italo/final-directed-tests.tap",
+      "proofSha256": "de4412a54ecc3f1243ceb2a53d32f427f0b718488fbee0d4d8aff4c2220d825e",
+      "claim": "18 distinct cases: 17 unit/transport and 1 age process case",
+      "limits": "Real adapters tested with intercepted requests; all data invented. Not real backup/restore; previous7 not re-counted"
+    },
+    {
+      "id": "emulator-recovery",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "PASS",
+      "timestampUtc": "2026-10-26T17:45:36.740Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "demo-caravana77-recovery 127.0.0.1",
+      "gates": [
+        7,
+        8,
+        10,
+        11
+      ],
+      "proof": "docs/operations/goal-x-italo/emulator-tests.log",
+      "proofSha256": "c06c6e6c3276530d472167b1e7de2ef9d6d2ba8d3796f1b79c0e0841857f3122",
+      "claim": "Independent signed age archive to Firestore/Auth/Storage and replay passed",
+      "limits": "Same integrated age case, not an extra case. No passwords/MFA/provider sessions or hosted tokens/ACL/IAM proven"
+    },
+    {
+      "id": "port-blocked-run",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "FAIL",
+      "timestampUtc": "2026-10-26T17:45:36.740Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "dedicated synthetic ports",
+      "gates": [
+        17
+      ],
+      "proof": "docs/operations/goal-x-italo/emulator-reentry-port-blocked.log",
+      "proofSha256": "b7b2a71833e4a59af5bdf9d55f5f397497c21bea7a73e7fb88a1e4e64a068d52",
+      "claim": "A repeat startup failed because our prior JVM retained the port",
+      "limits": "Before tests, no production/staging involved; exact owned process verified and stopped"
+    },
+    {
+      "id": "cleanup-initial-limit",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "UNKNOWN",
+      "timestampUtc": "2026-10-26T17:45:36.741Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "Windows Oracle Java launcher",
+      "gates": [
+        17
+      ],
+      "proof": "docs/operations/goal-x-italo/emulator-jvm-cleanup-before-fix.log",
+      "proofSha256": "53f3882dab63e889ec117da664ee8082830ecb70be8f4aa7f30c80dd34283eb4",
+      "claim": "Functional case passed but parent-PID-only cleanup did not reach orphan JVM",
+      "limits": "Fixed with workspace lock, initially free dedicated ports, creation time and exact jar/project/port checks; final listener check PASS in preflight"
+    },
+    {
+      "id": "monitor",
+      "type": "HOSTED_OPERATIONAL",
+      "result": "UNKNOWN",
+      "timestampUtc": "2026-10-26T17:45:36.741Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "EXISTING_STAGING_METADATA",
+      "target": "caravana77-staging-monitor heartbeat policy",
+      "gates": [
+        16
+      ],
+      "proof": "docs/operations/goal-x-italo/monitor-observation.json",
+      "proofSha256": "fd9f41b02a513761518e67b8ecb3ebf297ace6bb6e0a8addd0c3e7caefa8adc5",
+      "claim": "Official GET confirms enabled JSON selector/15m; no END and no state/evaluation fields",
+      "limits": "No artificial failure, policy mutation, email access, paid API or scope escalation"
+    },
+    {
+      "id": "readiness",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "PASS",
+      "timestampUtc": "2026-10-26T17:45:36.741Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "documented decision",
+      "gates": [
+        17
+      ],
+      "proof": "docs/operations/goal-x-italo/READINESS_MATRIX.md",
+      "proofSha256": "1b2bdbbe8180bdff93243c806f15c7ed69ca276a5a005a610c29769d786adfdd",
+      "claim": "17 GOAL and14 F8 reconciled without promotion",
+      "limits": "7/17,6/14,9/10 and17/20 retain their original methodologies"
+    },
+    {
+      "id": "real-inventory",
+      "type": "NOT_RUN",
+      "result": "SKIPPED",
+      "timestampUtc": "2026-10-26T17:45:36.741Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "trusted personal device required",
+      "gates": [
+        5,
+        6,
+        12
+      ],
+      "proof": "docs/operations/goal-x-italo/REAL_BACKUP_RESTORE.md",
+      "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
+      "claim": "Historical24docs/2Auth/0buckets remains partial; two real totals unresolved",
+      "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    },
+    {
+      "id": "owner-custody",
+      "type": "NOT_RUN",
+      "result": "SKIPPED",
+      "timestampUtc": "2026-10-26T17:45:36.742Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "trusted personal device required",
+      "gates": [
+        9
+      ],
+      "proof": "docs/operations/goal-x-italo/REAL_BACKUP_RESTORE.md",
+      "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
+      "claim": "Owner age/signing custody and recipient not verified here",
+      "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-backup",
+      "type": "NOT_RUN",
+      "result": "SKIPPED",
+      "timestampUtc": "2026-10-26T17:45:36.742Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "trusted personal device required",
+      "gates": [
+        9
+      ],
+      "proof": "docs/operations/goal-x-italo/REAL_BACKUP_RESTORE.md",
+      "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
+      "claim": "No real ciphertext, Drive upload/download or source payload accessed",
+      "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-restore",
+      "type": "NOT_RUN",
+      "result": "SKIPPED",
+      "timestampUtc": "2026-10-26T17:45:36.743Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "trusted personal device required",
+      "gates": [
+        7,
+        8,
+        10
+      ],
+      "proof": "docs/operations/goal-x-italo/REAL_BACKUP_RESTORE.md",
+      "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
+      "claim": "No real private restore/login/ACL/URLs/Storage proof",
+      "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-cutover",
+      "type": "NOT_RUN",
+      "result": "SKIPPED",
+      "timestampUtc": "2026-10-26T17:45:36.743Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "trusted personal device required",
+      "gates": [
+        11,
+        14
+      ],
+      "proof": "docs/operations/goal-x-italo/REAL_BACKUP_RESTORE.md",
+      "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
+      "claim": "No production apply or cutover; no production executor exists in new CLI",
+      "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    },
+    {
+      "id": "current-billing",
+      "type": "NOT_RUN",
+      "result": "SKIPPED",
+      "timestampUtc": "2026-10-26T17:45:36.743Z",
+      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "tool": "Node24 / official CLI or connector as identified in proof",
+      "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
+      "target": "trusted personal device required",
+      "gates": [
+        15,
+        16
+      ],
+      "proof": "docs/operations/goal-x-italo/REAL_BACKUP_RESTORE.md",
+      "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
+      "claim": "Current provider subscriptions not reconfirmed; prior OAuth403 retained, no scope escalation",
+      "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    }
+  ],
+  "remoteActions": [
+    {
+      "provider": "GitHub",
+      "target": "CristianoRFB/Caravana",
+      "action": "fetch and public metadata; sanitized branch publication only, SHA recorded in handoff"
+    },
+    {
+      "provider": "Cloudflare",
+      "account": "80a4c951d716d79fa10fffcf648d3288",
+      "target": "caravana77-staging-monitor heartbeat",
+      "action": "OpenAPI search and GET exact policy/history only",
+      "evidence": "docs/operations/goal-x-italo/monitor-observation.json"
+    }
+  ],
+  "verdict": {
+    "implementationLocal": "PASS_NEW_TOOL_SCOPE",
+    "readyForItaloMigration": false,
+    "italoMigrated": false,
+    "commercialReadyNewTenants": false
+  },
+  "metrics": {
+    "technical": "17/20",
+    "F7Preparation": "9/10",
+    "F8": "6/14",
+    "GOAL": "7/17"
+  },
+  "productionRead": false,
+  "productionWrite": false,
+  "stagingWrite": false,
+  "driveAccess": false,
+  "ownerPrivateKeyAccess": false,
+  "newBillingTermsApiOrPaidService": false
+}
