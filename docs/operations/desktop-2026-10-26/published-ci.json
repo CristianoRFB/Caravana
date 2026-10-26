@@ -1,0 +1,15 @@
+{
+  "sourceSha": "0b9f466476b71207a34d55ef9b01fa6d8bce5e92",
+  "treeSha": "2d59e70e8ea5a04cfe6d91be859275fcb77d6b02",
+  "equivalentLocalCheckpoint": "e56b23a179f097ba360dafe26216beb9866a4145",
+  "runId": 40361808144,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40361808144",
+  "name": "Lab recovery guards",
+  "status": "completed",
+  "conclusion": "success",
+  "scope": "7 native synthetic guard/model tests and default dry-run; no real backup or new full regression",
+  "publicationIdentity": "repository owner via existing GitHub connector",
+  "gitLocalPush": "403_RETAINED_NO_NEW_LOGIN",
+  "productionAccess": false,
+  "infrastructureMutation": false
+}

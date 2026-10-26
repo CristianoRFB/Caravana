@@ -225,6 +225,30 @@
       "proofSha256": "26d917630454836b27547d9fe420dc84e01f70acccefb759cbcedde0eb92c0e0",
       "assertion": "17 GOAL and 14 F8 gates separately recorded",
       "limits": "Documentation PASS is not commercial acceptance"
+    },
+    {
+      "id": "published-ci",
+      "type": "HOSTED_OPERATIONAL",
+      "timestampUtc": "2026-10-26T16:44:47.198Z",
+      "sourceSha": "0b9f466476b71207a34d55ef9b01fa6d8bce5e92",
+      "target": "isolated GitHub branch",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/published-ci.json",
+      "proofSha256": "37f060667e8ef0ee3b59b679e7519119c3c4e52654e979b274abdc4382f6dae3",
+      "assertion": "Exact published source CI passed",
+      "limits": "Code checkpoint CI only; final documentation has its own SHA. No production readiness promotion"
+    },
+    {
+      "id": "publication-handoff",
+      "type": "LOCAL_SYNTHETIC",
+      "timestampUtc": "2026-10-26T16:44:47.208Z",
+      "sourceSha": "0b9f466476b71207a34d55ef9b01fa6d8bce5e92",
+      "target": "isolated GitHub branch",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/PUBLICATION_AND_HANDOFF.md",
+      "proofSha256": "7680bcadc284f7463ce78df79b49bfe07e49e4d3dcb155c9816a84f322f3e747",
+      "assertion": "Published tree equals local checkpoint; local history preserved",
+      "limits": "Code checkpoint CI only; final documentation has its own SHA. No production readiness promotion"
     }
   ],
   "metrics": {

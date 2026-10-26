@@ -1,0 +1,21 @@
+# Publicação e handoff final LAB03-PC15
+
+Código e evidências publicados na branch `codex/caravana77-desktop-finalizacao-20261026` pelo conector GitHub já autenticado como proprietário `CristianoRFB`. Não foi necessário login novo, token, troca de credencial Git, armazenamento de segredo ou uso de conta de terceiro. Nenhuma publicação do aplicativo/infraestrutura ocorreu.
+
+Base: `6453da4949dd98de7f933b4c7c4fa5f1b61438ec`. Commits locais originais: `71eec58e3c5837ab9e850f6c80ce6d2957781ac4` (ferramentas/testes), `e56b23a179f097ba360dafe26216beb9866a4145` (evidências/gates). O push Git local foi negado por identidade sem acesso; não se alterou credential helper nem se persistiu novo token.
+
+O conector criou o checkpoint remoto `0b9f466476b71207a34d55ef9b01fa6d8bce5e92`, com **árvore exatamente igual** ao checkpoint local e56b23a: `2d59e70e8ea5a04cfe6d91be859275fcb77d6b02`. Metadados e SHAs dos commits diferem porque a criação foi feita pela API na identidade do proprietário. Fetch e merge não destrutivo `fef454ede82b0741e8ab1193cfb97025d2183d6c` preservaram ambos os históricos; nenhum commit local foi descartado.
+
+CI proporcional desse SHA remoto: [Lab recovery guards / 40361808144](https://github.com/CristianoRFB/Caravana/actions/runs/40361808144), completed/success. Executou sete testes e dry-run offline, sem chaves reais, rede de dados, artifacts ou deploy. Não é repetição do CI integral nem nova prova SDK/Auth/ACL. Lint local passou. As únicas mudanças posteriores a esse CI são este fechamento documental e o ledger, sem alteração de código/ferramentas/workflow. O CI do checkpoint documental final deve ser referido pelo seu próprio SHA na entrega, sem atribuir este run a outro commit.
+
+O checkpoint documental final também é publicado por árvore equivalente, seguido de fetch/merge preservando os commits locais. `git rev-parse HEAD` e `git rev-parse origin/codex/caravana77-desktop-finalizacao-20261026` identificam respectivamente HEAD local e checkpoint remoto. O primeiro pode aparecer ahead por conter commits locais e merges preservados, mesmo com `git diff origin/codex/caravana77-desktop-finalizacao-20261026 HEAD --exit-code` vazio. Isso não significa arquivos faltando no GitHub. Não resetar/rebasear para esconder a diferença; futura publicação normal pelo proprietário pode transportar também esses objetos de histórico.
+
+Um bundle incremental sanitizado é criado após o último merge em `.firebase/lab-handoff-2026-10-26.bundle` e validado por `git bundle verify`; não contém binários age, ciphertexts, chaves, node_modules, arquivos ignorados ou payloads reais. Ele preserva os objetos locais adicionais sobre a base comercial; deve ser aplicado em clone que já contém a base6453da4, sem sobrescrever WIP. Não é backup do banco nem de identidade. SHA256 e HEAD final constam na entrega externa ao próprio commit para evitar autorreferência.
+
+## Resultado e sequência restante
+
+Concluídos neste PC: preflight, ferramentas locais sem instalação global, criptografia age/testes de integridade/restore por processo independente com fixture fixa, reentrada/idempotência, modelos compensatórios/rollback, monitor real sanitizado e pacote de cinco documentos/ledger/gates. Critério seguro de laboratório atendido; os bloqueios reais permanecem explícitos.
+
+Nenhum payload de produção, backup/restore real, sessão de usuário real, Drive, deploy, IAM, billing, API, termo, pagamento ou cutover foi executado. Staging não sofreu mutação. As únicas escritas externas foram fonte/documentação sanitizadas na branch GitHub isolada e seu CI público padrão. App Check segue desativado. Consulta atual de subscriptions permanece403; não se ampliaram acessos. Resolução automática heartbeat segue não comprovada apesar de4sucessos/0erros em1h.
+
+Seguir somente o [roteiro pessoal único](ITALO_BACKUP_RECOVERY_READINESS.md): custódia/segunda cópia → inventário e dois totais → Drive correto/exportador protegido/destino privado R$0 → ciphertext e download/hash → restore real/Auth/Storage/links/RPO/RTO → reconciliação e nova decisão. Consultar o [monitor](MONITOR_AND_F7_CLOSURE.md) para o critério de evidência restante, sem repetir perturbação. **17/20 técnico; F7 9/10; F8 6/14; GOAL7/17; comercialNO-GO; migraçãoNOT_READY; ITALO_NOT_MIGRATED.**
