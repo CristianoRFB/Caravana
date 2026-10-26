@@ -1,0 +1,15 @@
+{
+  "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234",
+  "equivalentLocalSource": "22f71866fb3ecb9447721a25137a3d7a22fb6b28",
+  "treeSha": "6d3b20273d439b1043c716f25e60e893a837b46a",
+  "runId": 40394504912,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40394504912",
+  "status": "completed",
+  "conclusion": "success",
+  "newNativeCases": 7,
+  "newSdkCases": 4,
+  "existingNativeRegressionCases": 17,
+  "existingBaselineCases": 2,
+  "scope": "Synthetic demo only: actual Auth login and Firestore SDK/Rules; no real data or production deployment",
+  "laterChanges": "Documentary closure and evidence-hash CI step only; runtime bootstrap unchanged"
+}

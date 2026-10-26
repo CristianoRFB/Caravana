@@ -1,5 +1,11 @@
 # Estado atual — Caravana 77
 
+## GOAL XI — rota A escolhida e ensaiada, objetivo integral ativo
+
+Branch `codex/caravana77-goal-xi-reconstrucao-italo-20261026`: [evolução in-place aditiva](operations/goal-xi-italo/CHOSEN_PATH.md), preservando o backend/UIDs/links e sem instalação vazia. Bootstrap completo de companions comerciais, apply/rollback estritamente demo e preview privado agora exercitados:7novos casos nativos +4SDK, além de19regressões existentes. Login fictício/UID, A×B privado, reservas, check-in, compensação, relatório/downgrade, falha/retry e retorno com hash PASS; build sintético/tipos/lint PASS. Nenhum deploy, dado real, Auth real ou ambiente hospedado alterado.
+
+[Oito requisitos materiais de produção](operations/goal-xi-italo/READINESS_MATRIX.md): faltam inventário/backup/restauração/reconciliação reais em operação privada autorizada. Heartbeat semEND não é barreira exclusiva se alternativa crítica gratuita for realmente provada; não houve falsa promoção. Técnico17/20,F7preparação9/10,F8 6/14,GOAL7/17 mantidos. **READY=NO; MIGRATED=NO; objetivo integral ainda ativo.** [Handoff](operations/goal-xi-italo/HANDOFF.md) e [ação humana mínima](operations/goal-xi-italo/OWNER_ACTIONS.md).
+
 ## GOAL X vigente —26/10/2026, laboratório
 
 Branch `codex/caravana77-goal-x-italo-ready-20261026`: exportador REST read-only/streaming age, inventário, manifesto autenticado, verificação Drive e recuperação independente offline agora implementados;17 testes novos de unidade/transporte+1 caso integrado em três emuladores PASS com dados inventados. Não são os7 testes anteriores recontados. [Código, operação pessoal e limites](operations/goal-x-italo/REAL_BACKUP_RESTORE.md).

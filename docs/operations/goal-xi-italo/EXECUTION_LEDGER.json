@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "checkedAtUtc": "2026-10-26T20:23:17.584Z",
+  "objective": "GOAL XI: client operational installation with preservation; not yet achieved",
+  "strategy": "A_IN_PLACE_ADDITIVE",
+  "branch": "codex/caravana77-goal-xi-reconstrucao-italo-20261026",
+  "baseRemote": "43185152b4c4e4210c4cf0dfcfda55a92e4ee94c",
+  "baseLocal": "53d8d14130611500ad27c22e6b69201308bb1cae",
+  "sourceCiSha": "76d61e906db66736cc5dbeef73b57145915d3234",
+  "proofEncoding": "UTF-8 LF",
+  "sourceFiles": [
+    {
+      "path": "scripts/recovery/in-place-bootstrap.mjs",
+      "sha256": "7e583b81fb35066c5cd25c5d69eb51920c1a81f48db47bda702fd480b534ef6a"
+    },
+    {
+      "path": "scripts/private-recovery.mjs",
+      "sha256": "74258ed373370ba2a6d4c45cfc937483060584ab1ee7ae7ea79785bf16348f70"
+    },
+    {
+      "path": "scripts/run-local-tests.mjs",
+      "sha256": "d9dcc0719a323fb73b185c4439ab873662700b0e22f0698f9f16a529d45bc9a9"
+    },
+    {
+      "path": "scripts/tests/in-place-bootstrap.test.mjs",
+      "sha256": "5734969becd264ca41009013109d4f4e001fd54d5e7260bf8a119da3e709f13c"
+    },
+    {
+      "path": "scripts/tests/in-place-fixture.mjs",
+      "sha256": "a5da6b694263a5ebcaa7c608e0f2dde2b50f8f7c44db9afadd71056d034796bd"
+    },
+    {
+      "path": "tests/in-place-bootstrap.auth.ts",
+      "sha256": "bd2c526a968199a5378b096efd8f3080e8fae72b0af2308431d7275fb1d1c96d"
+    },
+    {
+      "path": "src/lib/commercial-baseline.ts",
+      "sha256": "0c39960ef0f7903ab6f8127f252d4e7210301a05523fe86ca134ba701f534045"
+    },
+    {
+      "path": "vitest.in-place.config.ts",
+      "sha256": "f0adaffcd46e77c115a4d8e3b5a8ed360e6a20a9b77034a9cb16c3ac41dbbb4c"
+    },
+    {
+      "path": ".github/workflows/goal-xi-in-place.yml",
+      "sha256": "48629d76ca8c459a9c9200da85793ade25d9eed39f6a562aa8c144a583df01c6"
+    }
+  ],
+  "proofs": [
+    {
+      "path": "docs/operations/goal-xi-italo/CHOSEN_PATH.md",
+      "sha256": "9104ca59ea036eb4306a6cacd7eb57faf6ff5ce56d4e594c000bef6a5241f8c7",
+      "category": "DOCUMENTARY",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    },
+    {
+      "path": "docs/operations/goal-xi-italo/READINESS_MATRIX.md",
+      "sha256": "6b8740f20f66ffaf8d799515e043dcb4dc5557d9ad317f23d559be6df2f3efb2",
+      "category": "DOCUMENTARY",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    },
+    {
+      "path": "docs/operations/goal-xi-italo/OWNER_ACTIONS.md",
+      "sha256": "50c4d2972aa08bf0b7625a73dbd26f2ff8ae977da12dffefd040d8adfd2cd13a",
+      "category": "DOCUMENTARY",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    },
+    {
+      "path": "docs/operations/goal-xi-italo/HANDOFF.md",
+      "sha256": "0fa021e2f734dc92e4bba5fd96ecd3c6a2a02338f04f596e056b304c55fd9e67",
+      "category": "DOCUMENTARY",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    },
+    {
+      "path": "docs/operations/goal-xi-italo/native-tests.tap",
+      "sha256": "3b4c3789ed11b839394900a1fa391520a13569776a7753b8af5e0fbc28a6723f",
+      "category": "LOCAL_SYNTHETIC",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    },
+    {
+      "path": "docs/operations/goal-xi-italo/sdk-rehearsal.json",
+      "sha256": "90b3c3d9f4a91f5046981fed2b1778751bb26ad4444ec4d84e62405f07bd7014",
+      "category": "LOCAL_SYNTHETIC",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    },
+    {
+      "path": "docs/operations/goal-xi-italo/source-ci.json",
+      "sha256": "733c52d0f4c8a7881fdb629170c7737801c982b8ec9f381bf8c69d719d718514",
+      "category": "HOSTED_OPERATIONAL",
+      "sourceSha": "76d61e906db66736cc5dbeef73b57145915d3234"
+    }
+  ],
+  "observed": {
+    "nativeTests": 24,
+    "sdkAndBaselineTests": 6,
+    "newDistinctCases": 11,
+    "existingCasesRevalidated": 19,
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "syntheticBuild": "PASS",
+    "privateMode": "SHARED_DEVICE_REFUSED_BEFORE_CONFIG_READ",
+    "approvedPrivateRemoteRuntime": "NOT_PROVIDED_ACCESSIBLE",
+    "trustedDevice": false,
+    "realInventory": false,
+    "realFinancialReconciliation": false,
+    "ownerKeyOrRecipientVerified": false,
+    "realBackup": false,
+    "realRestore": false,
+    "stagingWrites": 0,
+    "productionWrites": 0,
+    "cutover": false,
+    "newBillingApiTermsOrPaidServices": false
+  },
+  "limitations": [
+    "Synthetic source is representative, not the historical real24doc snapshot",
+    "Auth password/UID preservation is demonstrated in demo only",
+    "Known-document transaction checks still require a controlled global write window",
+    "No production writer or deletion operation was run",
+    "Historical monitor subitem not promoted; critical alternative may qualify only with real evidence"
+  ],
+  "attempts": [
+    {
+      "result": "CORRECTED",
+      "reason": "Known bearer portal get is public by capability; isolate private proofs/queries instead"
+    },
+    {
+      "result": "CORRECTED",
+      "reason": "Normalize actual SDK Compat delegate before host guard"
+    },
+    {
+      "result": "CORRECTED",
+      "reason": "Rules test helper discards callback return; capture result explicitly"
+    },
+    {
+      "result": "ABORTED_BEFORE_TESTS",
+      "reason": "A JVM startup timed out; verified owned process was stopped; subsequent run passed"
+    }
+  ],
+  "verdict": {
+    "readyForItaloMigration": false,
+    "italoMigrated": false,
+    "commercialReadyNewTenants": false,
+    "fullGoalComplete": false
+  },
+  "historicalMetrics": {
+    "technical": "17/20",
+    "F7Preparation": "9/10",
+    "F8": "6/14",
+    "GOAL": "7/17"
+  },
+  "remoteActions": [
+    {
+      "provider": "GitHub",
+      "target": "CristianoRFB/Caravana branch codex/caravana77-goal-xi-reconstrucao-italo-20261026",
+      "identity": "repository owner via existing connector",
+      "actions": [
+        "fetch",
+        "sanitized tree/commit/branch publication",
+        "public source CI metadata"
+      ]
+    }
+  ],
+  "productionTargetsPreserved": [
+    "caravana-af306",
+    "caravana-77"
+  ],
+  "hostedStagingPreserved": [
+    "bdall-e3585",
+    "caravana77-staging"
+  ],
+  "sourceHashBasis": "Git commit blob bytes (LF); Windows CRLF checkout bytes are not the public artifact"
+}

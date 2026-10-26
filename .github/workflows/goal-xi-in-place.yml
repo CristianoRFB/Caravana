@@ -38,3 +38,14 @@ jobs:
         run: |
           npm run build:e2e
           npm run lint
+      - name: Verify committed evidence hashes
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const ledger = JSON.parse(readFileSync('docs/operations/goal-xi-italo/EXECUTION_LEDGER.json', 'utf8'));
+          const hash = path => createHash('sha256').update(readFileSync(path)).digest('hex');
+          for (const item of ledger.proofs) if (hash(item.path) !== item.sha256) throw Error('Evidence hash mismatch: ' + item.path);
+          for (const item of ledger.sourceFiles) if (hash(item.path) !== item.sha256) throw Error('Source hash mismatch: ' + item.path);
+          console.log('PASS: Goal XI evidence/source hashes');
+          NODE

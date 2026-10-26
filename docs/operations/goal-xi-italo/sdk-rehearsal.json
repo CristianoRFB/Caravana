@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-26T20:13:55.971Z",
+  "strategy": "A_IN_PLACE_ADDITIVE",
+  "target": "demo-caravana77-test",
+  "actualAuthEmulatorLogin": true,
+  "uidChanged": false,
+  "authRecreatedByBootstrap": false,
+  "atomicConcurrency": true,
+  "replayCreates": 0,
+  "legacyAliasPreserved": true,
+  "legacyMoneyPreserved": true,
+  "reservationReplay": true,
+  "checkinAndReversal": true,
+  "financialCompensation": true,
+  "proReportAndDowngradeHistory": true,
+  "revocationWithoutLegacyFallback": true,
+  "rollbackAfterWrites": "STOP_PRESERVE_FORWARD_DATA",
+  "realDataRead": false,
+  "stagingWrites": 0,
+  "productionWrites": 0,
+  "realBackup": false,
+  "realMigrationReady": false
+}
