@@ -30,7 +30,7 @@ export class GoogleSource {
     const u = new URL(`https://${host}/${version}/${service === 'storage' ? resource : encoded(resource).replace(/%3A(listCollectionIds|batchGet)$/, ':$1')}`);
     for (const [k, v] of Object.entries(query)) if (v !== undefined) u.searchParams.set(k, String(v));
     const r = await this.fetcher(u, { method: body === undefined ? 'GET' : 'POST', redirect: 'error',
-      signal: AbortSignal.timeout(30000), headers: { Authorization: `Bearer ${this.token}`, ...(service==='authConfig'?{'x-goog-user-project':SOURCE}:{}), ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      signal: AbortSignal.timeout(30000), headers: { Authorization: `Bearer ${this.token}`, ...(['auth','authConfig'].includes(service)?{'x-goog-user-project':SOURCE}:{}), ...(body ? { 'Content-Type': 'application/json' } : {}) },
       body: body ? JSON.stringify(body) : undefined });
     // Object media remains a bounded stream; never JSON-decode or log it.
     if (service === 'storage' && query.alt === 'media') { requireThat(r.status === 200, `OBJECT_HTTP_${r.status}`); return r; }
@@ -66,7 +66,7 @@ export class GoogleSource {
     const auth = (await this.request('authConfig', prefix + '/config')).data;
     // Tenant-specific Auth requires a separate supported recovery design.
     requireThat(auth.multiTenant?.allowTenants !== true, 'AUTH_MULTI_TENANT_UNSUPPORTED');
-    const indexes = await this.pages('firestore', prefix + '/databases/(default)/collectionGroups/-/indexes', 'indexes', { pageSize: 100 });
+    const indexes = await this.pages('firestore', prefix + '/databases/(default)/collectionGroups/-/indexes', 'indexes', { pageSize: 0 });
     const releases = [];
     // Storage releases are bucket-specific. Discover/paginate all releases;
     // never assume a generic firebase.storage release or infer absence from404.
