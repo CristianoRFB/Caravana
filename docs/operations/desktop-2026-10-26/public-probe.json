@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-26T16:32:16.788Z",
+  "target": "caravana77-staging",
+  "status": "PASS_PUBLIC_PROBE_ONLY",
+  "source": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+  "requests": ["GET /admin/login", "GET /release.json"],
+  "credentialsUsed": false,
+  "privateDataRead": false,
+  "authenticatedJourneysVerified": false,
+  "allAssetsVerified": false,
+  "productionAccess": false
+}

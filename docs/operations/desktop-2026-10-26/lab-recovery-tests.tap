@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: fixed demo target refuses real/staging, remote loopback tricks and credential selectors
+ok 1 - fixed demo target refuses real/staging, remote loopback tricks and credential selectors
+  ---
+  duration_ms: 2.346
+  type: 'test'
+  ...
+# Subtest: schema-compatible arbitrary content cannot be mistaken for the fixed fictitious corpus
+ok 2 - schema-compatible arbitrary content cannot be mistaken for the fixed fictitious corpus
+  ---
+  duration_ms: 2.1046
+  type: 'test'
+  ...
+# Subtest: manifest refuses byte tamper, truncation, trailing data and coverage downgrade
+ok 3 - manifest refuses byte tamper, truncation, trailing data and coverage downgrade
+  ---
+  duration_ms: 8.0876
+  type: 'test'
+  ...
+# Subtest: interrupted restore resumes without overwrites; replay and conflicting parallel writer fail safely
+ok 4 - interrupted restore resumes without overwrites; replay and conflicting parallel writer fail safely
+  ---
+  duration_ms: 2.8711
+  type: 'test'
+  ...
+# Subtest: compensation is append-only, preserves original, retries once and rejects conflicting reversal
+ok 5 - compensation is append-only, preserves original, retries once and rejects conflicting reversal
+  ---
+  duration_ms: 3.3268
+  type: 'test'
+  ...
+# Subtest: coordinated model returns all config components only before forward writes
+ok 6 - coordinated model returns all config components only before forward writes
+  ---
+  duration_ms: 1.025
+  type: 'test'
+  ...
+# Subtest: CLI defaults to dry-run and rejects arbitrary arguments before key/file operations
+ok 7 - CLI defaults to dry-run and rejects arbitrary arguments before key/file operations
+  ---
+  duration_ms: 373.2581
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 550.7644

@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-26T16:29:17.579Z",
+  "windowStart": "2026-10-26T15:15:00Z",
+  "windowEnd": "2026-10-26T16:15:00Z",
+  "data": [
+    {
+      "kind": "success",
+      "status": 200,
+      "success": true,
+      "result": {
+        "data": [
+          {
+            "value": 4
+          }
+        ],
+        "rows": 1,
+        "statistics": {
+          "elapsed_ms": 109,
+          "rows_read": 6603072,
+          "bytes_read": 90036490
+        }
+      }
+    },
+    {
+      "kind": "error",
+      "status": 200,
+      "success": true,
+      "result": {
+        "data": [
+          {
+            "value": 0
+          }
+        ],
+        "rows": 1,
+        "statistics": {
+          "elapsed_ms": 113,
+          "rows_read": 6546541,
+          "bytes_read": 52569553
+        }
+      }
+    }
+  ]
+}

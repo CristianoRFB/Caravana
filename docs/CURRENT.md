@@ -1,5 +1,13 @@
 # Estado atual — Caravana 77
 
+## Rodada vigente — LAB03-PC15, 26/10/2026
+
+[Execução e handoff](operations/desktop-2026-10-26/DESKTOP_EXECUTION_2026-10-26.md): branch isolada sobre6453da4, sem WIP inicial; laboratório UNTRUSTED. Novo ensaio offline com age oficial/manifesto SHA256, recuperação em processo separado, interrupção/replay, compensação e rollback em modelo PASS;7 testes dirigidos/lint PASS. Não é backup/restore/Auth/ACL real. [Gates e roteiro pessoal único](operations/desktop-2026-10-26/CUTOVER_GO_NO_GO.md).
+
+Monitor real reconferido: seletor JSON e cron15m corretos, janela de1h com4sucessos/0erros. Histórico completo retornado não contém END do sinal de vida; resolução automática permanece PENDING, sem novo teste de falha ou mutação. Billing via OAuth403; Free atual não reconfirmado. [Prova e limites](operations/desktop-2026-10-26/MONITOR_AND_F7_CLOSURE.md).
+
+Sem payload real, custódia pessoal, Drive, alteração de staging/produção, deploy, API, termo ou custo novo. Técnico17/20, F7 preparação9/10, F8 6/14, GOAL7/17 mantidos. **DEMO_READY; comercial NO-GO; migração NOT_READY; ITALO_NOT_MIGRATED.** Git local sem permissão de push; publicação pelo conector do proprietário, CI e SHAs são registrados separadamente no pacote operacional. Não atribuir o CI6453da4 às adições novas.
+
 ## Entrega de falha/recuperação confirmada; pré-condição App Check
 
 Os e-mails reais START/END da sonda foram conferidos na conta aprovada; ainda falta resolução automática do sinal de vida após correção do filtro JSON. Google Cloud staging reconferido sem billing vinculado. API reCAPTCHA ainda requer ativação com termos apresentados; confirmação específica do proprietário solicitada, sem clicar Ativar/aceitar contrato. [Prova](evidence/2026-10-23/desktop/staging-billing-and-provider-prerequisite.json). App Check segue desativado e backup/migração reais pendentes. Não promover os gates por essas pré-condições.

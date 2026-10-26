@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-26T16:41:48.398Z",
+  "baseSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+  "testedSourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+  "sourceFiles": [
+    {
+      "path": "scripts/lib/lab-recovery.mjs",
+      "sha256": "83874cb5763ce74ddf78788cf45478044fa798885a38d381a3057fec778d3246"
+    },
+    {
+      "path": "scripts/lab-recovery-child.mjs",
+      "sha256": "0594820020c953431cbf854b8b4c49e71d208d6712999c5d75f4c3b6200cae13"
+    },
+    {
+      "path": "scripts/rehearse-lab-recovery.mjs",
+      "sha256": "3be952fc6094e73521198987d166485f606cb60961a0e77286af93b4236feb27"
+    },
+    {
+      "path": "scripts/install-lab-age.ps1",
+      "sha256": "48e14f4c0fd7422251be01fd84d8430ca12ebc7740b06e06c7220e0d3010996c"
+    },
+    {
+      "path": "scripts/tests/lab-recovery.test.mjs",
+      "sha256": "9708e1743a66e4741a56d4e9d8bf52a6460e64894d63343c82f06d22deaf9741"
+    },
+    {
+      "path": ".github/workflows/lab-recovery.yml",
+      "sha256": "e9f73bb643cd034839ff707ca59a0fd0e766ddb59c12d89545210a82601070ec"
+    },
+    {
+      "path": "package.json",
+      "sha256": "b14cd3c1c913cc8f00c830ce6d490c86b53c226421b4878b8426fe771fd2607f"
+    }
+  ],
+  "entries": [
+    {
+      "id": "preflight",
+      "type": "LOCAL_SYNTHETIC",
+      "timestampUtc": "2026-10-26T16:41:48.377Z",
+      "sourceSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+      "target": "LAB03-PC15",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/preflight.json",
+      "proofSha256": "3191aaca111d4f1084efc31197492f8daaefeb93b636e10e531522824f6e2b12",
+      "assertion": "Clean isolated branch, tools and baseline CI checked",
+      "limits": "Tool capabilities do not establish administrative identity"
+    },
+    {
+      "id": "native-tests",
+      "type": "LOCAL_SYNTHETIC",
+      "timestampUtc": "2026-10-26T16:41:48.391Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "demo-caravana77-test/offline",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/lab-recovery-tests.tap",
+      "proofSha256": "b5beb87694d349f583cbb7eead6cc5c234e5a470d1a672dffec3b1af3ff41b2a",
+      "assertion": "7 directed guard/recovery/model tests passed",
+      "limits": "Model only, no Firebase emulator or real Auth/ACL enforcement"
+    },
+    {
+      "id": "age-recovery",
+      "type": "LOCAL_SYNTHETIC",
+      "timestampUtc": "2026-10-26T16:41:48.391Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "fixed invented corpus/offline",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/lab-recovery-result.json",
+      "proofSha256": "4f899ecb882df1cb7cdf6f4416c9afd30f4d456aee00b9a96ceb1549d1f10d60",
+      "assertion": "Official age encrypt/decrypt separate process, SHA and reentry passed",
+      "limits": "No owner custody, real backup, Drive download, real recovery or passwords"
+    },
+    {
+      "id": "monitor-config",
+      "type": "HOSTED_OPERATIONAL",
+      "timestampUtc": "2026-10-26T16:41:48.392Z",
+      "sourceSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+      "target": "caravana77-staging-monitor",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/monitor-config.json",
+      "proofSha256": "f21365ecfc95ca841538740ce4f726057b9c306733f1a3d353c009b4e08ce959",
+      "assertion": "JSON selector and 15m cron/policies enabled observed",
+      "limits": "Recipient count only; identity approval and Free plan not revalidated"
+    },
+    {
+      "id": "monitor-window",
+      "type": "HOSTED_OPERATIONAL",
+      "timestampUtc": "2026-10-26T16:41:48.392Z",
+      "sourceSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+      "target": "caravana77-staging-monitor",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/monitor-window.json",
+      "proofSha256": "9ca421bbc9bc3da4f53c2c4ed8befb52101c0b31aeb09cd409b849f1f3e21e56",
+      "assertion": "Four successes and zero errors in one complete hour",
+      "limits": "Does not prove alert evaluation or automatic resolution"
+    },
+    {
+      "id": "heartbeat-resolution",
+      "type": "HOSTED_OPERATIONAL",
+      "timestampUtc": "2026-10-26T16:41:48.392Z",
+      "sourceSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+      "target": "heartbeat policy",
+      "result": "UNKNOWN",
+      "proof": "docs/operations/desktop-2026-10-26/monitor-history.json",
+      "proofSha256": "f6d4e2ab1189274797dbad6b6c007f89786ffc61f8b6bc8477be343596e1c83d",
+      "assertion": "No heartbeat END in complete returned history",
+      "limits": "Not promoted; no new outage/alert exercise; last false START retained"
+    },
+    {
+      "id": "public-probe",
+      "type": "STAGING_REAL",
+      "timestampUtc": "2026-10-26T16:41:48.393Z",
+      "sourceSha": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+      "target": "caravana77-staging",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/public-probe.json",
+      "proofSha256": "f8bb29255487134811809bb38bb482e02db92996a12aaeadb9c67b7faa95949b",
+      "assertion": "Two public resources and headers passed",
+      "limits": "No private business data, SDK journeys or whole-asset parity checked"
+    },
+    {
+      "id": "inherited-staging",
+      "type": "STAGING_REAL",
+      "timestampUtc": "2026-10-26T16:41:48.393Z",
+      "sourceSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+      "target": "bdall-e3585/caravana77-staging",
+      "result": "PASS",
+      "proof": "docs/STAGING_RELEASE_2026-10-23.md",
+      "proofSha256": "ce3ab930b5e248b0dc4fdf1ac42028c09afd290526de5d07dad326632f5829b7",
+      "assertion": "Prior 17 SDK, 11 indexes and frontend/Rules rollback retained in their original scope",
+      "limits": "Historical evidence only; not re-executed on new tools"
+    },
+    {
+      "id": "owner-custody",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.394Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "personal trusted device required",
+      "result": "SKIPPED",
+      "proof": "docs/operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md",
+      "proofSha256": "1419ca4f0f3ca8dd1fbd0465c34ff00f40ae483dfeb2943724172a638490bfc2",
+      "assertion": "Owner age recipient/custody not validated",
+      "limits": "Shared-lab prohibition; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-inventory",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.395Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "personal trusted device required",
+      "result": "SKIPPED",
+      "proof": "docs/operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md",
+      "proofSha256": "1419ca4f0f3ca8dd1fbd0465c34ff00f40ae483dfeb2943724172a638490bfc2",
+      "assertion": "No production payload read; historical inventory remains partial",
+      "limits": "Shared-lab prohibition; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-backup",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.396Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "personal trusted device required",
+      "result": "SKIPPED",
+      "proof": "docs/operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md",
+      "proofSha256": "1419ca4f0f3ca8dd1fbd0465c34ff00f40ae483dfeb2943724172a638490bfc2",
+      "assertion": "Real export/encrypt/upload/download not run",
+      "limits": "Shared-lab prohibition; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-restore",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.396Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "personal trusted device required",
+      "result": "SKIPPED",
+      "proof": "docs/operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md",
+      "proofSha256": "1419ca4f0f3ca8dd1fbd0465c34ff00f40ae483dfeb2943724172a638490bfc2",
+      "assertion": "Independent real restore/Auth/Storage not run",
+      "limits": "Shared-lab prohibition; no synthetic-to-real promotion"
+    },
+    {
+      "id": "real-finance",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.396Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "personal trusted device required",
+      "result": "SKIPPED",
+      "proof": "docs/operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md",
+      "proofSha256": "1419ca4f0f3ca8dd1fbd0465c34ff00f40ae483dfeb2943724172a638490bfc2",
+      "assertion": "Two real totals remain unresolved",
+      "limits": "Shared-lab prohibition; no synthetic-to-real promotion"
+    },
+    {
+      "id": "authenticated-ux",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.397Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "personal trusted device required",
+      "result": "SKIPPED",
+      "proof": "docs/operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md",
+      "proofSha256": "1419ca4f0f3ca8dd1fbd0465c34ff00f40ae483dfeb2943724172a638490bfc2",
+      "assertion": "No new authenticated fixture UI session",
+      "limits": "Shared-lab prohibition; no synthetic-to-real promotion"
+    },
+    {
+      "id": "billing-current",
+      "type": "NOT_RUN",
+      "timestampUtc": "2026-10-26T16:41:48.397Z",
+      "sourceSha": "6453da4949dd98de7f933b4c7c4fa5f1b61438ec",
+      "target": "Cloudflare subscriptions",
+      "result": "UNKNOWN",
+      "proof": "docs/operations/desktop-2026-10-26/preflight.json",
+      "proofSha256": "3191aaca111d4f1084efc31197492f8daaefeb93b636e10e531522824f6e2b12",
+      "assertion": "Read rejected by OAuth scope (403)",
+      "limits": "No token/scope escalation or paid activation; historic Free evidence remains dated"
+    },
+    {
+      "id": "go-no-go",
+      "type": "LOCAL_SYNTHETIC",
+      "timestampUtc": "2026-10-26T16:41:48.398Z",
+      "sourceSha": "71eec58e3c5837ab9e850f6c80ce6d2957781ac4",
+      "target": "decision/documentation",
+      "result": "PASS",
+      "proof": "docs/operations/desktop-2026-10-26/CUTOVER_GO_NO_GO.md",
+      "proofSha256": "26d917630454836b27547d9fe420dc84e01f70acccefb759cbcedde0eb92c0e0",
+      "assertion": "17 GOAL and 14 F8 gates separately recorded",
+      "limits": "Documentation PASS is not commercial acceptance"
+    }
+  ],
+  "metrics": {
+    "technical": "17/20",
+    "F7": "9/10",
+    "F8": "6/14",
+    "GOAL": "7/17",
+    "commercial": "NO-GO",
+    "migration": "NOT_READY"
+  },
+  "productionPayloadAccess": false,
+  "productionMutation": false,
+  "stagingMutation": false,
+  "realBackup": false,
+  "realRestore": false
+}

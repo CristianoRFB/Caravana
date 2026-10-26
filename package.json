@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:lab-recovery": "node --test scripts/tests/lab-recovery.test.mjs",
+    "recovery:lab": "node scripts/rehearse-lab-recovery.mjs",
     "dev": "vite --mode e2e --host 127.0.0.1",
     "demo": "node scripts/start-demo.mjs",
     "build": "tsc -b && vite build",

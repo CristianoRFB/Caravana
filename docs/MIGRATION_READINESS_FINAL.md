@@ -1,5 +1,9 @@
 # Parecer final de preparação para migração
 
+## Checkpoint vigente — laboratório, 26/10/2026
+
+[17 gates atuais e decisão](operations/desktop-2026-10-26/CUTOVER_GO_NO_GO.md):7/17 mantidos, F8 6/14, F7 preparação9/10, técnico17/20. Ferramentas age/manifesto/recuperação independente em processo/compensação/rollback passaram exclusivamente com corpus inventado. Não houve inventário ou backup/restore real nesta máquina compartilhada. **NOT_READY; ITALO_NOT_MIGRATED; comercialNO-GO.** [Roteiro único no PC pessoal](operations/desktop-2026-10-26/ITALO_BACKUP_RECOVERY_READINESS.md); não executar cutover nem produção por este parecer. Blocos históricos abaixo conservam seus próprios SHAs e escopos.
+
 ### Reconciliação Desktop posterior —23/10/2026
 
 O diagnóstico Cloud foi preservado, sem assumir a causa de diferenças entre ambientes. Novo `npm run build:staging` neste checkout Windows, HEAD de build `d14311328e36eff9d37791c164f5edc39196d916`, gerou os15/15 arquivos com caminhos, tamanhos e SHA256 idênticos ao manifesto publicado `bc5dd40`. `git diff bc5dd40 HEAD -- src public index.html vite.config.ts package.json package-lock.json firestore.rules firestore.indexes.json` vazio. Portanto o frontend efetivamente homologado no Desktop tem procedência local conferida; nenhuma republicação ou repetição de17SDK foi necessária. A razão específica da divergência do build Cloud permanece NOT_DETERMINED, sem apagar a evidência. MIME atual já PASS na própria evidência Cloud. Isso encerra a pendência de paridade do artefato publicado para esta candidata no checkout Windows, sem declarar builds de hosts diferentes reproduzíveis.

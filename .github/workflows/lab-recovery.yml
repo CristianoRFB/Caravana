@@ -1,0 +1,24 @@
+name: Lab recovery guards
+
+on:
+  push:
+    branches: [codex/caravana77-desktop-finalizacao-20261026]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-guards:
+    if: github.event.repository.private == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Fixed corpus, target guards, manifest, reentry and compensation
+        run: npm run test:lab-recovery
+      - name: Default dry-run (no keys, files or network)
+        run: npm run recovery:lab -- --dry-run

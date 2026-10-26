@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-10-26T16:29:43.823Z",
+  "status": 200,
+  "pagination": {
+    "page": 1,
+    "per_page": 1000,
+    "count": 9,
+    "total_count": 9,
+    "total_pages": 1
+  },
+  "events": [
+    {
+      "policyId": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "sent": "2026-10-23T21:02:32.964066Z",
+      "state": "ALERT_STATE_EVENT_START",
+      "triggeredResult": "0",
+      "executionInterval": "1m",
+      "silenced": false
+    },
+    {
+      "policyId": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "sent": "2026-10-23T20:02:32.714833Z",
+      "state": "ALERT_STATE_EVENT_START",
+      "triggeredResult": "0",
+      "executionInterval": "1m",
+      "silenced": false
+    },
+    {
+      "policyId": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "sent": "2026-10-23T19:01:35.457169Z",
+      "state": "ALERT_STATE_EVENT_START",
+      "triggeredResult": "0",
+      "executionInterval": "1m",
+      "silenced": false
+    },
+    {
+      "policyId": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "sent": "2026-10-23T18:01:32.907345Z",
+      "state": "ALERT_STATE_EVENT_START",
+      "triggeredResult": "0",
+      "executionInterval": "1m",
+      "silenced": false
+    },
+    {
+      "policyId": "90f8a607522e48cbaa33588d0b532c5f",
+      "sent": "2026-10-23T17:25:49.571767Z",
+      "state": "ALERT_STATE_EVENT_END",
+      "triggeredResult": "0",
+      "executionInterval": "1m",
+      "silenced": false
+    },
+    {
+      "policyId": "90f8a607522e48cbaa33588d0b532c5f",
+      "sent": "2026-10-23T17:10:48.806728Z",
+      "state": "ALERT_STATE_EVENT_START",
+      "triggeredResult": "0.3",
+      "executionInterval": "1m",
+      "silenced": false
+    },
+    {
+      "policyId": "12ff55a597184d7e9b5bb08dcbcc238b",
+      "sent": "2026-10-23T17:01:32.50199Z",
+      "state": "ALERT_STATE_EVENT_START",
+      "triggeredResult": "0",
+      "executionInterval": "1m",
+      "silenced": false
+    }
+  ],
+  "automaticHeartbeatResolution": "NOT_OBSERVED",
+  "rawBodiesRetained": false,
+  "recipientAddressesRetained": false
+}
