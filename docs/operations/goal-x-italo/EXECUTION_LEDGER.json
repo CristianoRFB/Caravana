@@ -60,7 +60,7 @@
     },
     {
       "path": ".github/workflows/goal-x-recovery.yml",
-      "sha256": "0f9a14184cdc94e2514a6713ae5fd71a20895b746766865a6b639af8adebf9ca"
+      "sha256": "c730822a7feee37aa228d77be3faaf4ac09a56abe021c413a5f299cd1d9323c6"
     }
   ],
   "entries": [
@@ -103,7 +103,7 @@
         14
       ],
       "proof": "docs/operations/goal-x-italo/final-directed-tests.tap",
-      "proofSha256": "de4412a54ecc3f1243ceb2a53d32f427f0b718488fbee0d4d8aff4c2220d825e",
+      "proofSha256": "cb9e9fd3dade6e75cf7ca34f7e3a07e660bca0bfeb207cf461f1fe4e96f7e9c8",
       "claim": "18 distinct cases: 17 unit/transport and 1 age process case",
       "limits": "Real adapters tested with intercepted requests; all data invented. Not real backup/restore; previous7 not re-counted"
     },
@@ -112,7 +112,7 @@
       "type": "LOCAL_SYNTHETIC",
       "result": "PASS",
       "timestampUtc": "2026-10-26T17:45:36.740Z",
-      "sourceSha": "d02637318f804c210efd492d72c20e45c521cc36",
+      "sourceSha": "d9bef14a1b5f5e36e3a8cbe60f86b19601eadc8d",
       "tool": "Node24 / official CLI or connector as identified in proof",
       "environment": "SHARED_UNTRUSTED_SYNTHETIC_ONLY",
       "target": "demo-caravana77-recovery 127.0.0.1",
@@ -123,9 +123,9 @@
         11
       ],
       "proof": "docs/operations/goal-x-italo/emulator-tests.log",
-      "proofSha256": "c06c6e6c3276530d472167b1e7de2ef9d6d2ba8d3796f1b79c0e0841857f3122",
+      "proofSha256": "a071a77ca5c554c9b51f4e7637609c81c4858e938e17c639bdf0d7599bdea0be",
       "claim": "Independent signed age archive to Firestore/Auth/Storage and replay passed",
-      "limits": "Same integrated age case, not an extra case. No passwords/MFA/provider sessions or hosted tokens/ACL/IAM proven"
+      "limits": "Same integrated age case, not an extra case. No passwords/MFA/provider sessions or hosted tokens/ACL/IAM proven; later release-discovery adapter change tested in final-directed-tests; final hosted CI validates the full published candidate"
     },
     {
       "id": "port-blocked-run",
@@ -140,7 +140,7 @@
         17
       ],
       "proof": "docs/operations/goal-x-italo/emulator-reentry-port-blocked.log",
-      "proofSha256": "b7b2a71833e4a59af5bdf9d55f5f397497c21bea7a73e7fb88a1e4e64a068d52",
+      "proofSha256": "743760d8fa0a3760b4477075625e4f43110d8a0462fa0399c6d3e5b4f25e404e",
       "claim": "A repeat startup failed because our prior JVM retained the port",
       "limits": "Before tests, no production/staging involved; exact owned process verified and stopped"
     },
@@ -157,7 +157,7 @@
         17
       ],
       "proof": "docs/operations/goal-x-italo/emulator-jvm-cleanup-before-fix.log",
-      "proofSha256": "53f3882dab63e889ec117da664ee8082830ecb70be8f4aa7f30c80dd34283eb4",
+      "proofSha256": "61445ac8614a7b4f4559617c665e2b58b9a2a187121bf5fd44a0780c878e006c",
       "claim": "Functional case passed but parent-PID-only cleanup did not reach orphan JVM",
       "limits": "Fixed with workspace lock, initially free dedicated ports, creation time and exact jar/project/port checks; final listener check PASS in preflight"
     },
@@ -302,6 +302,36 @@
       "proofSha256": "4b5cf212802bbeac6438a180538a49e4431a6a9b9694bdd5311e8aa243b7cbe8",
       "claim": "Current provider subscriptions not reconfirmed; prior OAuth403 retained, no scope escalation",
       "limits": "Shared-device prohibition or unavailable private evidence; no synthetic-to-real promotion"
+    },
+    {
+      "id": "source-ci",
+      "type": "HOSTED_OPERATIONAL",
+      "result": "PASS",
+      "timestampUtc": "2026-10-26T17:51:26.956Z",
+      "sourceSha": "5f6193a7595cc10df4a0f8b90b7c131fb502c8a0",
+      "target": "isolated GitHub branch",
+      "gates": [
+        17
+      ],
+      "proof": "docs/operations/goal-x-italo/published-source-ci.json",
+      "proofSha256": "118ab175bf645486e623b4412c72674c54e86a7852817a3c68da3d285c2deacf",
+      "claim": "Exact published source CI passed",
+      "limits": "Later documentary/evidence CI step changes require their own final SHA/run; no real readiness promotion"
+    },
+    {
+      "id": "handoff",
+      "type": "LOCAL_SYNTHETIC",
+      "result": "PASS",
+      "timestampUtc": "2026-10-26T17:51:26.973Z",
+      "sourceSha": "5f6193a7595cc10df4a0f8b90b7c131fb502c8a0",
+      "target": "isolated GitHub branch",
+      "gates": [
+        17
+      ],
+      "proof": "docs/operations/goal-x-italo/HANDOFF.md",
+      "proofSha256": "41db0d9120ec1e9dc5826ec5de1d6c5b2c9fcc3a2b9a41dad38a04c3f6db2f3f",
+      "claim": "Code, limits and private handoff recorded",
+      "limits": "Later documentary/evidence CI step changes require their own final SHA/run; no real readiness promotion"
     }
   ],
   "remoteActions": [
@@ -335,5 +365,6 @@
   "stagingWrite": false,
   "driveAccess": false,
   "ownerPrivateKeyAccess": false,
-  "newBillingTermsApiOrPaidService": false
+  "newBillingTermsApiOrPaidService": false,
+  "proofEncoding": "UTF-8 with LF; enforced by scoped .gitattributes"
 }

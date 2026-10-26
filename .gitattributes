@@ -4,3 +4,10 @@ scripts/staging-readonly-audit.py text eol=lf
 scripts/reconcile-staging-rules.py text eol=lf
 scripts/production-readonly-preflight.py text eol=lf
 scripts/production-structural-inventory.py text eol=lf
+
+# Keep new Goal X evidence byte hashes stable between Windows and hosted CI.
+/docs/operations/goal-x-italo/** text eol=lf
+/scripts/recovery/*.mjs text eol=lf
+/scripts/private-recovery.mjs text eol=lf
+/scripts/tests/private-recovery*.mjs text eol=lf
+/scripts/tests/recovery-fixture.mjs text eol=lf

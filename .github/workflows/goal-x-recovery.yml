@@ -38,3 +38,14 @@ jobs:
         run: npm run test:private-recovery:emulators
       - name: Lint
         run: npm run lint
+      - name: Verify committed evidence and source hashes
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const ledger = JSON.parse(readFileSync('docs/operations/goal-x-italo/EXECUTION_LEDGER.json', 'utf8'));
+          const hash = path => createHash('sha256').update(readFileSync(path)).digest('hex');
+          for (const entry of ledger.entries) if (hash(entry.proof) !== entry.proofSha256) throw Error('Evidence hash mismatch: ' + entry.id);
+          for (const entry of ledger.sourceFiles) if (hash(entry.path) !== entry.sha256) throw Error('Source hash mismatch: ' + entry.path);
+          console.log('PASS: committed evidence and source hashes');
+          NODE

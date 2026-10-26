@@ -1,0 +1,14 @@
+{
+  "sourceSha": "5f6193a7595cc10df4a0f8b90b7c131fb502c8a0",
+  "equivalentLocalCheckpoint": "15d8ffea9e54f05e96efdabed537ba801a1b90e5",
+  "treeSha": "411bb5cacbf20560c0fe02d91b301feb963bf222",
+  "runId": 40372081834,
+  "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40372081834",
+  "status": "completed",
+  "conclusion": "success",
+  "stepsVerified": ["17 native tests", "default dry-run", "signed age to independent process and three demo emulators", "lint"],
+  "scope": "IMPLEMENTATION_LOCAL synthetic only; no real Google source or Drive request",
+  "laterChanges": "Evidence line endings/hash correction and CI evidence verification step; runtime recovery modules unchanged",
+  "productionMutation": false,
+  "stagingMutation": false
+}
