@@ -10,6 +10,18 @@ import { planTenantCopy, validateTenantCopyPlan, tenantCopyHash } from './tenant
 const mode = process.argv[2];
 const directory = process.argv[3];
 let phase = 'PRECHECK', commitAttempted = false;
+// Firestore normalizes RFC3339 fractional precision on output. Preserve nanos;
+// only this REST timestamp representation may differ during target readback.
+const normalizedRest = value => {
+  if (Array.isArray(value)) return value.map(normalizedRest);
+  if (!value || typeof value !== 'object') return value;
+  if (Object.keys(value).length === 1 && typeof value.timestampValue === 'string') {
+    const match = value.timestampValue.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})(?:\.([0-9]{1,9}))?(Z|[+-][0-9]{2}:[0-9]{2})$/);
+    requireThat(match && Number.isSafeInteger(Date.parse(match[1] + match[3])), 'COPY_INVALID_REST_TIMESTAMP');
+    return { timestampValue: { seconds: String(BigInt(Date.parse(match[1] + match[3]) / 1000)), nanos: (match[2] || '').padEnd(9, '0') } };
+  }
+  return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, normalizedRest(child)]));
+};
 try {
   requireThat(['--plan', '--apply-copy-to-italo', '--verify'].includes(mode) && process.argv.length === 4, 'COPY_EXPLICIT_MODE_REQUIRED');
   requireThat(process.platform === 'linux' && process.env.CLOUD_SHELL === 'true' && !/lab\d|alunos?|shared|public/i.test(os.hostname()+' '+os.userInfo().username), 'COPY_GOOGLE_CLOUD_SHELL_REQUIRED');
@@ -77,7 +89,7 @@ try {
       for (const [name, original] of sourceEntries) requireThat(tenantCopyHash(entries.get(name)) === tenantCopyHash(original), 'COPY_SOURCE_VERSION_CHANGED');
     };
     const copiedExactly = entries => {
-      for (const [name, target] of targets) requireThat(entries.get(name) && canonical(entries.get(name).fields) === canonical(target.fields), 'COPY_TARGET_READBACK_MISMATCH');
+      for (const [name, target] of targets) requireThat(entries.get(name) && canonical(normalizedRest(entries.get(name).fields)) === canonical(normalizedRest(target.fields)), 'COPY_TARGET_READBACK_MISMATCH');
     };
     if (mode === '--apply-copy-to-italo') {
       phase = 'SOURCE_RECHECK';
