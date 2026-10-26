@@ -1,6 +1,12 @@
 # Estado atual — Caravana 77
 
-## GOAL XI — rota A escolhida e ensaiada, objetivo integral ativo
+## 26/10/2026 — cópia real para o novo tenant italo concluída
+
+Por solicitação explícita mais recente, foi executada uma cópia aditiva em `caravana-af306`, de `caravana-77` para `italo`, pelo Cloud Shell autorizado: **22 documentos de negócio copiados +6 companions +1 auditoria =29 criações atômicas**. Uma caravana, dez inscrições e seus pagamentos/comprovante foram conferidos; os24 documentos originais mantêm os mesmos hashes/versões. Auth, admins legados, Rules e site permaneceram intactos. Os dois totais desconhecidos continuam desconhecidos. [Resultado real sanitizado](operations/goal-xi-italo/TENANT_COPY_RESULT.json).
+
+**Cópia concluída; acesso no aplicativo e cutover pendentes.** A caravana copiada está em rascunho/importPending e tem slug próprio; links existentes continuam na origem. As Rules publicadas ainda não suportam memberships/tenantSlugs. Não repetir `--apply-copy-to-italo`: a transação foi aceita e a leitura posterior confirmou os29 destinos. O snapshot e o plano estão cifrados apenas no home privado remoto; isso não comprova segunda cópia/custódia independente. Nenhuma suíte nova foi executada, conforme pedido. READY/MIGRATED continuamNO; as seções abaixo são checkpoints históricos, anteriores a esta cópia real.
+
+## Histórico GOAL XI — rota A escolhida e ensaiada
 
 Branch `codex/caravana77-goal-xi-reconstrucao-italo-20261026`: [evolução in-place aditiva](operations/goal-xi-italo/CHOSEN_PATH.md), preservando o backend/UIDs/links e sem instalação vazia. Bootstrap completo de companions comerciais, apply/rollback estritamente demo e preview privado agora exercitados:7novos casos nativos +4SDK, além de19regressões existentes. Login fictício/UID, A×B privado, reservas, check-in, compensação, relatório/downgrade, falha/retry e retorno com hash PASS; build sintético/tipos/lint PASS. Nenhum deploy, dado real, Auth real ou ambiente hospedado alterado.
 

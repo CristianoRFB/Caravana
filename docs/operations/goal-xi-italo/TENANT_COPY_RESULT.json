@@ -1,0 +1,42 @@
+{
+  "status": "ITALO_TENANT_COPY_VERIFIED",
+  "sourceProject": "caravana-af306",
+  "sourceOrganizationId": "caravana-77",
+  "targetOrganizationId": "italo",
+  "planHash": "5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10",
+  "sourceReadTime": "2026-10-26T22:15:02.000Z",
+  "copiedDocuments": 22,
+  "tenantCompanions": 6,
+  "auditDocuments": 1,
+  "totalCreatedDocuments": 29,
+  "caravans": 1,
+  "registrations": 10,
+  "existingAuthUsersRetained": 2,
+  "owners": 2,
+  "unknownFinancialTotalsRetained": 2,
+  "verifiedFinancialTotals": 8,
+  "originalDocumentsUnchanged": 24,
+  "originalWrites": 0,
+  "authWrites": 0,
+  "ruleWrites": 0,
+  "frontendDeploys": 0,
+  "accessActivated": false,
+  "publicCutover": false,
+  "verifiedAt": "2026-10-26T22:24:14.632Z",
+  "execution": {
+    "environment": "Google Cloud Shell, authenticated existing owner account",
+    "writeMode": "One acknowledged Firestore transaction; 29 exists:false creates; no commit retry",
+    "verification": "Read back all 29 targets and hash/version-check all 24 original documents",
+    "timestampComparison": "Only REST timestamp formatting normalized; seconds and all 9 fractional digits retained",
+    "testSuitesRun": 0,
+    "codeRevision": "b6387fb2bbe6042e0b81fb08f36d3080a48befe1"
+  },
+  "limits": [
+    "Point-in-time historical copy, not synchronized cutover. Original links still address the original records.",
+    "Copied caravan is draft/importPending with a unique slug, preventing duplicate public reservations.",
+    "Existing deployed Rules lack memberships and tenant slug support; access through the published application remains pending.",
+    "No commercial subscription or entitlements were invented or assigned.",
+    "Encrypted snapshot and key remain only in the private remote home; an independently custodied backup/restore is not proved.",
+    "READY_FOR_ITALO_MIGRATION and ITALO_MIGRATED remain NO; this result proves the requested data copy only."
+  ]
+}
