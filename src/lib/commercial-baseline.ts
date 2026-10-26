@@ -1,4 +1,4 @@
-import { validatePlanAssignment, type ManualPlanAssignment } from "./plan-catalog";
+import { validatePlanAssignment, type ManualPlanAssignment } from "./plan-catalog.ts";
 export interface CommercialUsage { organizationId: string; publishedCaravans: number; activeMembers: number; activeOwners: number; version: "commercial-v1" }
 interface CaravanInventory { id: string; organizationId: string; status: string; capacity: number; reservedSeats: number }
 interface MemberInventory { uid: string; organizationId: string; role: string; status: string }

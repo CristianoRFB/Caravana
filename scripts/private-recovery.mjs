@@ -10,6 +10,9 @@ import { inventorySummary,migrationPreview,validatePreview } from './recovery/in
 import { exportEncrypted,decryptVerified } from './recovery/archive.mjs';
 import { PrivateDrive } from './recovery/drive.mjs';
 import { EmulatorRestore,restoreVerifiedTree } from './recovery/restore.mjs';
+import { planInPlaceBootstrap,bootstrapHash } from './recovery/in-place-bootstrap.mjs';
+import { fields } from './recovery/inventory.mjs';
+import { NAMESPACE_SOURCES } from '../src/lib/namespace-protection.ts';
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 try {
   const args=process.argv.slice(2),mode=args[0]||'--dry-run';
@@ -17,9 +20,9 @@ try {
     requireThat(args.length<=1,'UNKNOWN_ARGUMENTS');
     console.log(JSON.stringify({mode:'DRY_RUN',sourceProject:SOURCE,sourceRequests:0,credentialsRead:false,configurationRead:false,
       payloadRead:false,filesCreated:0,productionApplySupported:false,
-      privateModes:['--private-inventory','--private-export','--private-drive','--private-restore-dry-run','--private-restore-apply']}));
+      privateModes:['--private-inventory','--private-in-place-preview','--private-export','--private-drive','--private-restore-dry-run','--private-restore-apply']}));
   }else{
-    requireThat(['--private-inventory','--private-export','--private-drive','--private-restore-dry-run','--private-restore-apply'].includes(mode)&&args.length===3&&args[1]==='--config','UNKNOWN_ARGUMENTS');
+    requireThat(['--private-inventory','--private-in-place-preview','--private-export','--private-drive','--private-restore-dry-run','--private-restore-apply'].includes(mode)&&args.length===3&&args[1]==='--config','UNKNOWN_ARGUMENTS');
     requireThat(!/lab\d|alunos?|shared|public/i.test(os.hostname()+' '+os.userInfo().username),'SHARED_DEVICE_REFUSED');
     for(const key of ['FIREBASE_TOKEN','GOOGLE_APPLICATION_CREDENTIALS','GOOGLE_OAUTH_ACCESS_TOKEN','CLOUDSDK_AUTH_ACCESS_TOKEN'])requireThat(!process.env[key],'ENV_CREDENTIAL_SELECTOR_REFUSED');
     const configPath=outsideRepo(args[2],repo),raw=await readFile(configPath,'utf8');requireThat(raw.length<=32768,'CONFIG_BOUND');
@@ -34,10 +37,19 @@ try {
       const r=spawnSync('ssh-keygen',['-Y','verify','-f',signerFile,'-I','caravana77-owner','-n','caravana77-backup','-s',signatureFile],{input:bytes,timeout:15000,maxBuffer:32768,windowsHide:true});
       return r.status===0;
     };
-    if(mode==='--private-inventory'||mode==='--private-export'){
+    if(mode==='--private-inventory'||mode==='--private-in-place-preview'||mode==='--private-export'){
       requireThat(config.ownerReviewedReadBudget===true&&config.crossServiceWriteWindowControlled===true,'READ_QUOTA_AND_CONSISTENCY_REVIEW_REQUIRED');
       const source=new GoogleSource(officialAccessToken(config.expectedPrincipal));
-      if(mode==='--private-inventory'){
+      if(mode==='--private-in-place-preview'){
+        requireThat(Array.isArray(config.inPlaceReviews)&&config.inPlaceReviews.length>0,'PRIVATE_TENANT_REVIEW_REQUIRED');
+        const tree=await source.collect(),latest=await source.verifyStable();
+        requireThat(bootstrapHash([...tree.documents].sort((a,b)=>a.name.localeCompare(b.name)))===bootstrapHash([...latest.documents].sort((a,b)=>a.name.localeCompare(b.name)))&&bootstrapHash([...tree.missing].sort())===bootstrapHash([...latest.missing].sort()),'PRIVATE_PREVIEW_SOURCE_DRIFT');
+        const snapshot={projectId:SOURCE,timestamp:tree.readTime,inventoryComplete:true,coveredSources:[...NAMESPACE_SOURCES],
+          authUids:tree.users.map(u=>u.localId),documents:tree.documents.map(d=>({path:d.name.split('/documents/')[1],data:fields(d)}))};
+        const preview=planInPlaceBootstrap(snapshot,config.inPlaceReviews);
+        console.log(JSON.stringify({status:'PRIVATE_IN_PLACE_PREVIEW_ONLY',plannedCreates:preview.creates.length,plannedAdditivePatches:preview.patches.length,
+          retainedDocuments:preview.retained.length,reviewedTenants:preview.manifests.length,productionApplySupported:false,realMigrationReady:false}));
+      }else if(mode==='--private-inventory'){
         const tree=await source.collect(),summary=inventorySummary(tree,config),preview=migrationPreview(tree);
         console.log(JSON.stringify({status:'PRIVATE_READ_ONLY_INVENTORY',summary,migrationCreates:preview.creates.length,migrationConflicts:preview.conflicts.length,
           authPasswordRecoveryVerified:false,realBackupCreated:false,realMigrationReady:false}));

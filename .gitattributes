@@ -11,3 +11,7 @@ scripts/production-structural-inventory.py text eol=lf
 /scripts/private-recovery.mjs text eol=lf
 /scripts/tests/private-recovery*.mjs text eol=lf
 /scripts/tests/recovery-fixture.mjs text eol=lf
+/docs/operations/goal-xi-italo/** text eol=lf
+/scripts/tests/in-place*.mjs text eol=lf
+/tests/in-place-bootstrap.auth.ts text eol=lf
+/vitest.in-place.config.ts text eol=lf

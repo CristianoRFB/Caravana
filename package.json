@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:in-place": "node --test scripts/tests/in-place-bootstrap.test.mjs",
+    "test:in-place:integration": "node scripts/run-local-tests.mjs legacy-in-place",
     "recovery:private": "node scripts/private-recovery.mjs",
     "test:private-recovery": "node --test scripts/tests/private-recovery.test.mjs",
     "test:private-recovery:age": "node --test scripts/tests/private-recovery-age.test.mjs",
