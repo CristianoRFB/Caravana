@@ -93,7 +93,9 @@ export async function packagePrivateRelease({ environment, legacyDirectory, priv
   if (legacyManifestBytes) prepared.set('release.json', legacyManifestBytes);
   const redirects = await checkedFile(legacyRoot, '_redirects');
   assert(redirects.toString().trim() === '/* /index.html 200', 'LEGACY_REDIRECTS_REVIEW_REQUIRED');
-  prepared.set('_redirects', Buffer.concat([Buffer.from('/tenant-italo/* /tenant-italo/index.html 200\n'), redirects]));
+  // Pages canonicalizes index.html. Rewrite to the directory entry so its
+  // canonicalization cannot fall through to the legacy root SPA fallback.
+  prepared.set('_redirects', Buffer.concat([Buffer.from('/tenant-italo/* /tenant-italo/ 200\n'), redirects]));
   const oldHeaders = prepared.get('_headers') || Buffer.alloc(0);
   prepared.set('_headers', privateViewerHeaders(oldHeaders, environment));
   for (const file of privateFiles) {
