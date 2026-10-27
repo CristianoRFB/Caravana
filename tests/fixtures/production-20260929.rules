@@ -1,0 +1,327 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function adminOrg() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.organizationId
+        : '';
+    }
+    function isAdmin(orgId) { return signedIn() && adminOrg() == orgId; }
+    function publicCaravan(caravanId) {
+      return exists(/databases/$(database)/documents/caravans/$(caravanId))
+        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published';
+    }
+
+    match /admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    match /organizations/{orgId} {
+      allow get: if isAdmin(orgId);
+      allow list, create, update, delete: if false;
+    }
+
+    match /caravans/{caravanId} {
+      allow get, list: if (resource.data.status == 'published') || isAdmin(resource.data.organizationId);
+      allow create: if isAdmin(request.resource.data.organizationId)
+        && request.resource.data.reservedSeats == 0
+        && request.resource.data.capacity is int
+        && request.resource.data.capacity > 0
+        && request.resource.data.capacity <= 1000;
+      allow update: if (isAdmin(resource.data.organizationId)
+          && request.resource.data.capacity is int
+          && request.resource.data.capacity > 0
+          && request.resource.data.capacity <= 1000
+          && request.resource.data.reservedSeats is int
+          && request.resource.data.reservedSeats >= 0
+          && request.resource.data.reservedSeats <= request.resource.data.capacity)
+        || (resource.data.status == 'published'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reservedSeats', 'lastReservationNonce', 'lastReservationId', 'updatedAt'])
+          && !('lastReservationId' in request.resource.data)
+          && request.resource.data.reservedSeats == resource.data.reservedSeats + 1
+          && request.resource.data.reservedSeats <= resource.data.capacity
+          && request.resource.data.lastReservationNonce is string
+          && request.resource.data.lastReservationNonce.matches('^[a-f0-9]{64}$')
+          && existsAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce))
+          && getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.caravanId == caravanId
+          && getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.organizationId == resource.data.organizationId
+          && existsAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId))
+          && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.reservationNonce == request.resource.data.lastReservationNonce
+          && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.caravanId == caravanId
+          && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.registrationStatus == 'awaiting_payment');
+      allow delete: if isAdmin(resource.data.organizationId);
+    }
+
+    // This unguessable, unreadable receipt links a public nonce to the private registration ID.
+    match /reservationReceipts/{nonce} {
+      allow get, list: if false;
+      allow create: if request.resource.data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId'])
+        && request.resource.data.registrationId is string
+        && request.resource.data.registrationId.matches('^[a-f0-9]{64}$')
+        && nonce.matches('^[a-f0-9]{64}$')
+        && nonce != request.resource.data.registrationId
+        && request.resource.data.organizationId is string
+        && request.resource.data.caravanId is string
+        && publicCaravan(request.resource.data.caravanId)
+        && get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.organizationId == request.resource.data.organizationId
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.lastReservationNonce == nonce
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats == get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats + 1
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats <= get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.capacity
+        && existsAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId))
+        && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.id == request.resource.data.registrationId
+        && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.reservationNonce == nonce
+        && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.organizationId == request.resource.data.organizationId
+        && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.caravanId == request.resource.data.caravanId;
+      allow update: if false;
+      allow delete: if isAdmin(resource.data.organizationId)
+        || (exists(/databases/$(database)/documents/caravans/$(resource.data.caravanId))
+          && get(/databases/$(database)/documents/caravans/$(resource.data.caravanId)).data.organizationId == resource.data.organizationId
+          && getAfter(/databases/$(database)/documents/caravans/$(resource.data.caravanId)).data.lastReservationNonce != nonce);
+    }
+
+    match /registrations/{registrationId} {
+      function validLegacyImport(id) {
+        let data = request.resource.data;
+        let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId));
+        let tripAfter = getAfter(/databases/$(database)/documents/caravans/$(data.caravanId));
+        return data.keys().hasAll(['id', 'importedFromLegacy', 'importBatchId', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'registrationStatus', 'paymentStatus', 'createdAt'])
+          && data.keys().hasOnly(['id', 'importedFromLegacy', 'importBatchId', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'documentRecords', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'paymentTotalCents', 'paymentReportedMethod', 'paymentReportedUnreconciled', 'registrationStatus', 'paymentStatus', 'createdAt'])
+          && id.matches('^[a-f0-9]{64}$')
+          && data.id == id
+          && data.importedFromLegacy == true
+          && data.importBatchId is string
+          && data.importBatchId.matches('^[a-f0-9]{32}$')
+          && data.organizationId is string
+          && isAdmin(data.organizationId)
+          && data.caravanId is string
+          && exists(/databases/$(database)/documents/caravans/$(data.caravanId))
+          && existsAfter(/databases/$(database)/documents/caravans/$(data.caravanId))
+          && trip.data.organizationId == data.organizationId
+          && tripAfter.data.reservedSeats is int
+          && tripAfter.data.reservedSeats > trip.data.reservedSeats
+          && tripAfter.data.capacity is int
+          && tripAfter.data.reservedSeats <= tripAfter.data.capacity
+          && data.caravanName is string
+          && data.passengerName is string
+          && data.passengerName.size() >= 2
+          && data.passengerName.size() <= 120
+          && data.phone is string
+          && data.phone.size() <= 30
+          && (data.phone.size() == 0 || data.phone.size() >= 8)
+          && data.email is string
+          && data.email.size() <= 254
+          && ((data.phone.size() > 0 || data.email.size() > 0)
+            || ('cpf' in data)
+            || ('documentRecords' in data && data.documentRecords is list && data.documentRecords.size() > 0))
+          && data.city is string
+          && data.city.size() <= 120
+          && data.boardingPointId is string
+          && data.boardingPointName is string
+          && data.boardingPointName.size() <= 120
+          && data.emergencyContact is string
+          && data.emergencyContact.size() <= 120
+          && data.notes is string
+          && data.notes.size() <= 1000
+          && (!('amountCents' in data) || (data.amountCents is int && data.amountCents > 0))
+          && (!('paymentTotalCents' in data) || (data.paymentTotalCents is int && data.paymentTotalCents >= 0))
+          && data.paymentStatus in ['pending', 'approved', 'reported']
+          && ((data.paymentStatus == 'pending' && data.registrationStatus == 'awaiting_payment')
+            || (data.paymentStatus == 'approved' && data.registrationStatus == 'confirmed')
+            || (data.paymentStatus == 'reported' && data.registrationStatus == 'confirmed'
+              && data.paymentReportedMethod == 'pix' && data.paymentReportedUnreconciled == true))
+          && (data.paymentStatus == 'reported'
+            || (!('paymentReportedMethod' in data) && !('paymentReportedUnreconciled' in data)))
+          && data.createdAt is string
+          && (!('cpf' in data) || (data.cpf is string && data.cpf.matches('^[0-9]{11}$')))
+          && (!('birthDate' in data) || (data.birthDate is string && data.birthDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')))
+          && (!('isMinor' in data) || data.isMinor is bool)
+          && (!('guardianName' in data) || (data.guardianName is string && data.guardianName.size() >= 2 && data.guardianName.size() <= 120))
+          && (!('guardianPhone' in data) || (data.guardianPhone is string && data.guardianPhone.size() >= 8 && data.guardianPhone.size() <= 30))
+          && (!('authorizationStatus' in data) || data.authorizationStatus in ['unknown', 'not_required', 'not_sent', 'pending', 'received', 'approved'])
+          && (!('isMinor' in data && data.isMinor) || ('birthDate' in data && 'guardianName' in data && 'guardianPhone' in data && data.authorizationStatus in ['not_sent', 'pending', 'received', 'approved']))
+          && (!('isMinor' in data && !data.isMinor && 'authorizationStatus' in data) || data.authorizationStatus == 'not_required')
+          && (!('documentRecords' in data) || (data.documentRecords is list && data.documentRecords.size() <= 3))
+          && (!('requiresMinorAuthorization' in trip.data) || trip.data.requiresMinorAuthorization != true || data.paymentStatus == 'reported' || ('birthDate' in data && 'isMinor' in data && 'authorizationStatus' in data));
+      }
+      // Admins may check whether a candidate import ID already exists. Public
+      // reads still require an existing record and its high-entropy link ID.
+      allow get: if (resource == null
+          && signedIn()
+          && exists(/databases/$(database)/documents/admins/$(request.auth.uid)))
+        || (resource != null
+          && (isAdmin(resource.data.organizationId) || registrationId.matches('^[a-f0-9]{64}$')));
+      allow list: if isAdmin(resource.data.organizationId);
+      allow create: if validLegacyImport(registrationId) || (request.resource.data.id == registrationId
+        && registrationId.matches('^[a-f0-9]{64}$')
+        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
+        && request.resource.data.reservationNonce is string
+        && request.resource.data.reservationNonce.matches('^[a-f0-9]{64}$')
+        && request.resource.data.reservationNonce != registrationId
+        && request.resource.data.registrationStatus == 'awaiting_payment'
+        && request.resource.data.paymentStatus == 'pending'
+        && request.resource.data.passengerName is string
+        && request.resource.data.passengerName.size() >= 2
+        && request.resource.data.passengerName.size() <= 120
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 8
+        && request.resource.data.phone.size() <= 30
+        && (!('cpf' in request.resource.data) || (request.resource.data.cpf is string && request.resource.data.cpf.matches('^[0-9]{11}$')))
+        && (!('birthDate' in request.resource.data) || (request.resource.data.birthDate is string && request.resource.data.birthDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')))
+        && (!('isMinor' in request.resource.data) || request.resource.data.isMinor is bool)
+        && (!('guardianName' in request.resource.data) || (request.resource.data.guardianName is string && request.resource.data.guardianName.size() >= 2 && request.resource.data.guardianName.size() <= 120))
+        && (!('guardianPhone' in request.resource.data) || (request.resource.data.guardianPhone is string && request.resource.data.guardianPhone.size() >= 8 && request.resource.data.guardianPhone.size() <= 30))
+        && (!('authorizationStatus' in request.resource.data) || request.resource.data.authorizationStatus in ['not_required', 'not_sent'])
+        && (!('isMinor' in request.resource.data && request.resource.data.isMinor) || ('birthDate' in request.resource.data && 'guardianName' in request.resource.data && 'guardianPhone' in request.resource.data && request.resource.data.authorizationStatus == 'not_sent'))
+        && (!('isMinor' in request.resource.data && !request.resource.data.isMinor && 'authorizationStatus' in request.resource.data) || request.resource.data.authorizationStatus == 'not_required')
+        && request.resource.data.organizationId is string
+        && request.resource.data.caravanId is string
+        && publicCaravan(request.resource.data.caravanId)
+        && get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.organizationId == request.resource.data.organizationId
+        && get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.priceCents == request.resource.data.amountCents
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.lastReservationNonce == request.resource.data.reservationNonce
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats == get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats + 1
+        && getAfter(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.reservedSeats <= get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.capacity
+        && existsAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.reservationNonce))
+        && getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.reservationNonce)).data.registrationId == registrationId
+        && getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.reservationNonce)).data.caravanId == request.resource.data.caravanId
+        && getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.reservationNonce)).data.organizationId == request.resource.data.organizationId
+          && (!('requiresMinorAuthorization' in get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data)
+          || get(/databases/$(database)/documents/caravans/$(request.resource.data.caravanId)).data.requiresMinorAuthorization != true
+          || ('birthDate' in request.resource.data && 'isMinor' in request.resource.data && 'authorizationStatus' in request.resource.data))
+        && request.resource.data.boardingPointId is string
+        && request.resource.data.boardingPointName is string
+        && request.resource.data.createdAt is string);
+      allow update: if isAdmin(resource.data.organizationId)
+        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proofId', 'paymentStatus', 'registrationStatus', 'proofUploadedAt'])
+          && resource.data.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
+          && request.resource.data.paymentStatus == 'awaiting_review'
+          && request.resource.data.registrationStatus == 'awaiting_review'
+          && request.resource.data.proofId == 'current'
+          && request.resource.data.proofUploadedAt is timestamp
+          && request.resource.data.proofUploadedAt <= request.time
+          && existsAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current)
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/proofs/current).data.registrationId == registrationId);
+      allow delete: if isAdmin(resource.data.organizationId);
+
+      match /payments/{paymentId} {
+        function parentRegistration() {
+          return get(/databases/$(database)/documents/registrations/$(registrationId)).data;
+        }
+        function validPaymentFields(data) {
+          return data.amountCents is int
+            && data.amountCents > 0
+            && data.method in ['pix', 'transfer', 'cash', 'card', 'other']
+            && data.notes is string
+            && data.notes.size() <= 500
+            && (!('paymentDate' in data) || (data.paymentDate is string && data.paymentDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')));
+        }
+        allow get, list: if isAdmin(parentRegistration().organizationId);
+        allow create: if request.resource.data.keys().hasAll(['id', 'registrationId', 'organizationId', 'caravanId', 'amountCents', 'method', 'notes', 'status', 'createdAt', 'createdBy'])
+          && request.resource.data.keys().hasOnly(['id', 'registrationId', 'organizationId', 'caravanId', 'amountCents', 'method', 'paymentDate', 'notes', 'status', 'createdAt', 'createdBy'])
+          && paymentId.matches('^[a-zA-Z0-9_-]{1,128}$')
+          && request.resource.data.id == paymentId
+          && request.resource.data.registrationId == registrationId
+          && request.resource.data.organizationId == parentRegistration().organizationId
+          && request.resource.data.caravanId == parentRegistration().caravanId
+          && isAdmin(request.resource.data.organizationId)
+          && parentRegistration().registrationStatus != 'cancelled'
+          && validPaymentFields(request.resource.data)
+          && request.resource.data.status == 'active'
+          && request.resource.data.createdAt is string
+          && request.resource.data.createdBy == request.auth.uid
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents
+            == (('paymentTotalCents' in parentRegistration()) ? parentRegistration().paymentTotalCents : 0) + request.resource.data.amountCents
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents is int
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents >= 0
+          && (!('amountCents' in parentRegistration())
+            || getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents <= parentRegistration().amountCents);
+        allow update: if resource.data.registrationId == registrationId
+          && isAdmin(resource.data.organizationId)
+          && resource.data.status == 'active'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'voidedAt', 'voidedBy'])
+          && request.resource.data.status == 'voided'
+          && request.resource.data.voidReason is string
+          && request.resource.data.voidReason.size() >= 3
+          && request.resource.data.voidReason.size() <= 300
+          && request.resource.data.voidedAt is timestamp
+          && request.resource.data.voidedBy == request.auth.uid
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents
+            == parentRegistration().paymentTotalCents - resource.data.amountCents
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents is int
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data.paymentTotalCents >= 0;
+        allow delete: if false;
+      }
+
+      match /proofs/{proofId} {
+        function registration() {
+          return get(/databases/$(database)/documents/registrations/$(registrationId)).data;
+        }
+        function validProof() {
+          let registrationData = registration();
+          let updatedRegistration = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
+          return proofId == 'current'
+            && request.resource.data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId', 'contentType', 'fileName', 'content', 'uploadedAt'])
+            && request.resource.data.registrationId == registrationId
+            && request.resource.data.organizationId == registrationData.organizationId
+            && request.resource.data.caravanId == registrationData.caravanId
+            && request.resource.data.contentType in ['image/jpeg', 'image/png', 'application/pdf']
+            && request.resource.data.fileName is string
+            && request.resource.data.fileName.size() > 0
+            && request.resource.data.fileName.size() <= 120
+            && request.resource.data.content is string
+            && request.resource.data.content.size() > 0
+            && request.resource.data.content.size() <= 820000
+            && ((request.resource.data.contentType == 'application/pdf' && request.resource.data.content.matches('^JVBERi0.*$'))
+              || (request.resource.data.contentType == 'image/png' && request.resource.data.content.matches('^iVBORw0KGgo.*$'))
+              || (request.resource.data.contentType == 'image/jpeg' && request.resource.data.content.matches('^/9j/.*$')))
+            && request.resource.data.uploadedAt is timestamp
+            && request.resource.data.uploadedAt <= request.time
+            && registrationData.registrationStatus in ['awaiting_payment', 'awaiting_review', 'rejected']
+            && updatedRegistration.proofId == proofId
+            && updatedRegistration.registrationStatus == 'awaiting_review';
+        }
+        allow get, list: if resource.data.registrationId == registrationId
+          && isAdmin(resource.data.organizationId);
+        allow create, update: if validProof();
+        allow delete: if resource.data.registrationId == registrationId
+          && isAdmin(resource.data.organizationId);
+      }
+    }
+
+    match /caravans/{caravanId}/expenses/{expenseId} {
+      function validExpense(data) {
+        return data.description is string
+          && data.description.size() >= 3
+          && data.description.size() <= 120
+          && data.category in ['transporte', 'alimentacao', 'pedagio', 'estacionamento', 'outros']
+          && data.amountCents is int
+          && data.amountCents > 0
+          && data.date is string
+          && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+          && data.notes is string
+          && data.notes.size() <= 500;
+      }
+      allow get, list: if isAdmin(
+        get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId,
+      );
+      allow create: if request.resource.data.keys().hasAll(['id', 'organizationId', 'caravanId', 'description', 'category', 'amountCents', 'date', 'notes', 'createdAt', 'createdBy'])
+        && request.resource.data.keys().hasOnly(['id', 'organizationId', 'caravanId', 'description', 'category', 'amountCents', 'date', 'notes', 'createdAt', 'createdBy'])
+        && request.resource.data.id == expenseId
+        && request.resource.data.caravanId == caravanId
+        && request.resource.data.organizationId == get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId
+        && isAdmin(request.resource.data.organizationId)
+        && validExpense(request.resource.data)
+        && request.resource.data.createdAt is string
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update: if resource.data.caravanId == caravanId
+        && isAdmin(resource.data.organizationId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'category', 'amountCents', 'date', 'notes', 'updatedAt', 'updatedBy'])
+        && validExpense(request.resource.data)
+        && request.resource.data.updatedAt is timestamp
+        && request.resource.data.updatedBy == request.auth.uid;
+      allow delete: if false;
+    }
+  }
+}

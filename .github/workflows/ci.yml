@@ -3,7 +3,7 @@ name: CI
 on:
   workflow_dispatch:
   push:
-    branches: [main, codex/caravana77-commercial-v1-20261016, codex/caravana77-goal-xiii-activate-italo-cloud-20261026]
+    branches: [main, codex/caravana77-commercial-v1-20261016, codex/caravana77-goal-xiii-activate-italo-cloud-20261026, codex/caravana77-goal-xiii-pc-20261027]
   pull_request:
     branches: [main]
 
@@ -77,14 +77,18 @@ jobs:
       - name: Desktop and mobile E2E (synthetic only)
         run: npm run test:e2e
 
+      - name: Private history subpath against the published legacy Rules contract (synthetic only)
+        run: npm run test:italo-private:e2e
+
       - name: Record synthetic browser summary without artifact storage
         if: always()
         run: |
           node --input-type=module <<'NODE'
           import { existsSync, readFileSync, appendFileSync } from 'node:fs';
-          const path = 'test-results/e2e-report.json';
-          const stats = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')).stats : { result: 'E2E report unavailable; inspect previous steps' };
-          appendFileSync(process.env.GITHUB_STEP_SUMMARY, '## Synthetic E2E\n```json\n' + JSON.stringify(stats, null, 2) + '\n```\n');
+          for (const [label, path] of [['Synthetic E2E', 'test-results/e2e-report.json'], ['Private history E2E', 'test-results-italo-private/e2e-report.json']]) {
+            const stats = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')).stats : { result: 'E2E report unavailable; inspect previous steps' };
+            appendFileSync(process.env.GITHUB_STEP_SUMMARY, '## ' + label + '\n```json\n' + JSON.stringify(stats, null, 2) + '\n```\n');
+          }
           NODE
 
       - name: Build

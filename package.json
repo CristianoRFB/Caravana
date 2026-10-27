@@ -71,7 +71,11 @@
     "build:public-preview": "tsc -b && node scripts/build-public-preview.mjs",
     "test:finance:all-e2e": "node scripts/run-local-tests.mjs finance-ledger-e2e",
     "test:tenant-activation": "node --test scripts/tests/tenant-activation.test.mjs",
-    "test:tenant-activation:integration": "node scripts/run-local-tests.mjs tenant-activation"
+    "test:tenant-activation:integration": "node scripts/run-local-tests.mjs tenant-activation",
+    "test:italo-private": "node scripts/run-local-tests.mjs italo-private-release",
+    "test:italo-private:e2e": "node scripts/run-local-tests.mjs italo-private-release-e2e",
+    "build:italo-private": "tsc -b && node scripts/build-italo-private.mjs",
+    "build:italo-private:staging": "tsc -b && node scripts/build-italo-private.mjs --staging"
   },
   "dependencies": {
     "firebase": "^11.10.0",

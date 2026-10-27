@@ -7,6 +7,7 @@ dist-e2e/
 !.env.staging.example
 dist-staging/
 test-results/
+test-results-italo-private/
 playwright-report/
 .wrangler/
 coverage/
@@ -19,6 +20,8 @@ storage-debug.log
 ui-debug.log
 
 dist-public-preview/
+dist-italo-private/
+dist-italo-private-e2e/
 
 # Firebase CLI may leave a raw temporary export when local export fails.
 /firebase-export-*/

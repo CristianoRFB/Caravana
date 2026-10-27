@@ -1,0 +1,60 @@
+import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { initializeTestEnvironment, type RulesTestEnvironment } from '@firebase/rules-unit-testing';
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { seedSyntheticEnvironment, testAccount } from './fixtures';
+import { activationFixture } from '../scripts/tests/tenant-activation-fixture.mjs';
+let env: RulesTestEnvironment, dispose: (() => Promise<void>) | undefined, owner: string;
+let failures: string[];
+const registrationId = 'f'.repeat(64), base = '/tenant-italo';
+test.beforeEach(async ({ context, page }) => {
+  failures = []; dispose = await seedSyntheticEnvironment();
+  env = await initializeTestEnvironment({ projectId: 'demo-caravana77-test', firestore: { rules: readFileSync('firestore.italo-private.rules', 'utf8') } });
+  await env.withSecurityRulesDisabled(async ctx => {
+    const db = ctx.firestore(); owner = (await getDocs(collection(db, 'admins'))).docs[0].id;
+    await setDoc(doc(db, 'organizations/italo'), { name: 'Ítalo fictício', importPending: true });
+    await setDoc(doc(db, `memberships/${owner}/organizations/italo`), { uid: owner, organizationId: 'italo', role: 'tenant_owner', status: 'active' });
+    await setDoc(doc(db, 'organizations/italo/tenantActivations/private-v1'), { mode: 'private_history_only', copyPlanHash: '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10' });
+    await setDoc(doc(db, 'publicTenantSettings/italo'), activationFixture().review.branding);
+    await setDoc(doc(db, 'tenantSlugs/italo'), { slug: 'italo', organizationId: 'italo' });
+    const original = (await getDoc(doc(db, 'caravans/ride-a'))).data()!;
+    await setDoc(doc(db, 'caravans/copied-ride'), { ...original, id: 'copied-ride', organizationId: 'italo', name: 'Viagem histórica fictícia', slug: 'private-copy', status: 'draft', importPending: true });
+    const passenger = (await getDoc(doc(db, `registrations/${'a'.repeat(64)}`))).data()!;
+    await setDoc(doc(db, `registrations/${registrationId}`), { ...passenger, id: registrationId, organizationId: 'italo', caravanId: 'copied-ride', passengerName: 'Passageiro fictício importado', paymentTotalCents: null });
+  });
+  page.on('pageerror', () => failures.push('runtime_error'));
+  await context.route('**/*', route => {
+    const hostname = new URL(route.request().url()).hostname;
+    if (['firestore.googleapis.com', 'identitytoolkit.googleapis.com', 'securetoken.googleapis.com'].includes(hostname)) failures.push('remote_firebase');
+    return ['localhost', '127.0.0.1'].includes(hostname) ? route.continue() : route.abort();
+  });
+});
+test.afterEach(async () => { await env?.cleanup(); await dispose?.(); expect(failures).toEqual([]); });
+test('private subpath uses existing Auth, preserves UNKNOWN, disables mutations, refreshes and revokes without source selection', async ({ page }) => {
+  await page.goto(`${base}/admin/login`);
+  await page.getByLabel(/E-mail/).fill(testAccount.email); await page.getByLabel(/Senha/).fill(testAccount.password);
+  await page.getByRole('button', { name: 'Entrar no painel' }).click(); await expect(page).toHaveURL(new RegExp(`${base}/admin$`));
+  await expect(page.getByLabel('Organização ativa')).toHaveCount(0);
+  await page.goto(`${base}/admin/financeiro`);
+  await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
+  const row = page.locator('.finance-passenger-row').filter({ has: page.getByText('Passageiro fictício importado', { exact: true }) });
+  await expect(row).toContainText('Não conciliado'); await expect(row.getByRole('button', { name: 'Histórico', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Registrar', exact: true })).toHaveCount(0);
+  await page.reload(); await expect(row).toContainText('Não conciliado');
+  await page.goto(`${base}/admin/caravanas`);
+  for (const name of ['Editar', 'Duplicar', 'Publicar', 'Arquivar']) await expect(page.getByRole('button', { name, exact: true })).toBeDisabled();
+  await page.getByRole('link', { name: /Passageiros/ }).click();
+  await expect(page.getByRole('button', { name: 'Editar', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Revogar link', exact: true })).toBeDisabled();
+  await page.goto(`${base}/admin/check-in/copied-ride`); await expect(page.getByRole('button', { name: 'Embarcar', exact: true })).toBeDisabled();
+  await page.goto(`${base}/caravana/private-copy/inscricao`); await expect(page).toHaveURL(new RegExp(`${base}/admin$`));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+  await env.withSecurityRulesDisabled(async ctx => {
+    const db = ctx.firestore();
+    expect((await getDoc(doc(db, `registrations/${registrationId}`))).data()?.paymentTotalCents).toBeNull();
+    expect((await getDoc(doc(db, 'caravans/ride-a'))).data()?.reservedSeats).toBe(1);
+    expect((await getDoc(doc(db, 'subscriptions/italo'))).exists()).toBe(false);
+    await updateDoc(doc(db, `memberships/${owner}/organizations/italo`), { status: 'revoked' });
+  });
+  await expect(page.getByRole('heading', { name: 'Conta ainda não autorizada' })).toBeVisible();
+});

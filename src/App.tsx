@@ -1,4 +1,5 @@
 import TenantImportNotice from "./TenantImportNotice";
+import { privateHistoryScope, privateHistoryRouteAllowed, scopePrivateHistoryAccess } from "./lib/private-history-release";
 import { usePublicAvailability } from "./lib/use-public-availability";
 import TenantBrandSettings from "./TenantBrandSettings";
 import TenantCommercial from "./TenantCommercial";
@@ -25,6 +26,7 @@ import {
   Route,
   Routes,
   useNavigate,
+  useLocation,
   useParams,
 } from "react-router-dom";
 import {
@@ -1526,10 +1528,11 @@ function AdminGuard({ children }: { children: ReactNode }) {
       stopAccess = watchTenantAccess(u.uid,
         (available) => {
           if (!active || currentRevision !== revision) return;
-          setAccess(available);
+          const scoped = scopePrivateHistoryAccess(available, privateHistoryScope);
+          setAccess(scoped);
           let preferred: string | null = null;
           try { preferred = window.sessionStorage.getItem(tenantPreferenceKey(u.uid)); } catch { /* optional preference */ }
-          setOrg((selected) => chooseTenant(available, selected, preferred));
+          setOrg((selected) => chooseTenant(scoped, selected, preferred));
           setAccessError("");
           setLoading(false);
         },
@@ -1668,11 +1671,11 @@ function AdminShell({
           <Link to="/admin/check-in">
             <span>✓</span> Check-in
           </Link>
-          <Link to="/admin/suporte"><span>?</span> Suporte</Link>
+          {!privateHistoryScope && <><Link to="/admin/suporte"><span>?</span> Suporte</Link>
           <Link to="/admin/identidade"><span>◈</span> Identidade pública</Link>
           <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
           <Link to="/admin/plano"><span>◇</span> Plano e limites</Link>
-          <Link to="/admin/equipe"><span>♧</span> Equipe e convites</Link>
+          <Link to="/admin/equipe"><span>♧</span> Equipe e convites</Link></>}
           <Link to="/admin/relatorios"><span aria-hidden="true">▥</span> Relatórios</Link>
           <Link to="/admin/roteiros"><span aria-hidden="true">☷</span> Roteiros da equipe</Link>
           <Link to="/admin/diagnostico"><span aria-hidden="true">?</span> Diagnóstico local</Link>
@@ -1682,7 +1685,7 @@ function AdminShell({
         </aside>
         <main className="admin-content" data-org={orgId}>
           <TenantImportNotice organizationId={orgId} onPending={setImportPending} />
-          <HistoricalImportContext.Provider value={importPending}>
+          <HistoricalImportContext.Provider value={Boolean(privateHistoryScope) || importPending}>
           {children}
           </HistoricalImportContext.Provider>
         </main>
@@ -1889,6 +1892,7 @@ function AdminDashboard() {
 }
 
 function AdminCaravans() {
+  const readOnly = useContext(HistoricalImportContext);
   const [list, setList] = useState<Caravan[]>([]);
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -2195,7 +2199,7 @@ function AdminCaravans() {
           <h1>Caravanas</h1>
           <p>Crie e gerencie as próximas experiências.</p>
         </div>
-        <button className="button button-primary" onClick={openNew}>
+        <button className="button button-primary" onClick={openNew} disabled={readOnly}>
           ＋ Nova caravana
         </button>
       </div>
@@ -2252,12 +2256,12 @@ function AdminCaravans() {
                   </Link>
                 </div>
                 <div className="caravan-tools">
-                  <button onClick={() => openEdit(c)}>Editar</button>
-                  <button onClick={() => duplicate(c)}>Duplicar</button>
-                  <button onClick={() => togglePublish(c)}>
+                  <button onClick={() => openEdit(c)} disabled={readOnly}>Editar</button>
+                  <button onClick={() => duplicate(c)} disabled={readOnly}>Duplicar</button>
+                  <button onClick={() => togglePublish(c)} disabled={readOnly}>
                     {c.status === "published" ? "Pausar" : "Publicar"}
                   </button>
-                  <button onClick={() => archive(c)}>Arquivar</button>
+                  <button onClick={() => archive(c)} disabled={readOnly}>Arquivar</button>
                 </div>
               </div>
             </article>
@@ -2268,7 +2272,7 @@ function AdminCaravans() {
           <Bus />
           <h2>Nenhuma caravana cadastrada</h2>
           <p>Cadastre a viagem para começar a receber inscrições.</p>
-          <button className="button button-primary" onClick={openNew}>
+          <button className="button button-primary" onClick={openNew} disabled={readOnly}>
             Criar primeira caravana
           </button>
         </div>
@@ -2541,7 +2545,8 @@ function downloadLegacyCsvTemplate() {
 }
 
 function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
-  const canImport = useContext(TenantRoleContext) === "tenant_owner";
+  const readOnly = useContext(HistoricalImportContext);
+  const canImport = useContext(TenantRoleContext) === "tenant_owner" && !readOnly;
   const operationPending = useSyncExternalStore(observePendingWrites, pendingWrites, pendingWrites);
   const { id: routeId } = useParams();
   const [regs, setRegs] = useState<Registration[]>([]);
@@ -3240,6 +3245,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                           <small>{r.guardianPhone}</small>
                           <select
                             aria-label={`Autorização de ${r.passengerName}`}
+                            disabled={readOnly}
                             value={r.authorizationStatus || "not_sent"}
                             onChange={(e) =>
                               changeAuthorization(
@@ -3265,6 +3271,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                         <button
                           className="button button-tiny button-outline"
                           onClick={() => editPassenger(r)}
+                          disabled={readOnly}
                         >
                           Editar
                         </button>
@@ -3281,6 +3288,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                           <button
                             className="button button-tiny button-outline"
                             onClick={() => void copyRegistrationLink(r)}
+                            disabled={readOnly}
                           >
                             <Copy size={13} /> Link privado
                           </button>
@@ -3288,6 +3296,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                         <button
                           className="button button-tiny button-outline"
                           onClick={() => void changePortalAccess(r)}
+                          disabled={readOnly}
                         >
                           {r.portalAccessRevoked ? "Reativar link" : "Revogar link"}
                         </button>
@@ -3296,12 +3305,14 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                             <button
                               className="button button-tiny button-green"
                               onClick={() => approve(r, true)}
+                              disabled={readOnly}
                             >
                               Aprovar
                             </button>
                             <button
                               className="button button-tiny button-red"
                               onClick={() => approve(r, false)}
+                              disabled={readOnly}
                             >
                               Recusar
                             </button>
@@ -3311,6 +3322,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                           <button
                             className={`button button-tiny ${r.checkedInAt ? "button-outline" : "button-green"}`}
                             onClick={() => boarding(r)}
+                            disabled={readOnly}
                           >
                             {r.checkedInAt ? "Desfazer" : "Embarcou"}
                           </button>
@@ -3319,6 +3331,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
                           <button
                             className="button button-tiny button-red"
                             onClick={() => cancel(r)}
+                            disabled={readOnly}
                           >
                             Cancelar
                           </button>
@@ -3494,6 +3507,7 @@ function Checkin() {
   return <PassengersCheckin caravanId={id} />;
 }
 function PassengersCheckin({ caravanId }: { caravanId: string }) {
+  const readOnly = useContext(HistoricalImportContext);
   const org = useContext(OrganizationContext);
   const [caravans, setCaravans] = useState<Caravan[]>([]);
   const [regs, setRegs] = useState<Registration[]>([]);
@@ -3643,7 +3657,7 @@ function PassengersCheckin({ caravanId }: { caravanId: string }) {
               </span>
             </div>
             <button
-              disabled={busy === r.id}
+              disabled={readOnly || busy === r.id}
               className={`button ${r.checkedInAt ? "button-uncheck" : "button-board"}`}
               onClick={() => flip(r)}
             >
@@ -3730,6 +3744,8 @@ function TenantSupport() {
 
 export default function App() {
   useEffect(() => installDiagnosticHandlers(window), []);
+  const location = useLocation();
+  if (privateHistoryScope && !privateHistoryRouteAllowed(location.pathname)) return <Navigate to="/admin" replace />;
   const routes = (
     <Routes>
       <Route path="/saas" element={<Suspense fallback={<Loading />}><CommercialLanding /></Suspense>} />

@@ -1,5 +1,11 @@
 # GOAL XIII — ativação privada sobre a cópia existente
 
+## Continuação PC27 — resultado real posterior
+
+Branch `codex/caravana77-goal-xiii-pc-20261027` sobre c2c4c7b. Cloud Shell oficial autorizado e fonte executada d7d4ded limpa; PREVIEW/APPLY/VERIFY reais PASS. Quatro companions precisos criados; 24 originais/29 copiados/2 owners reconferidos, zero recopy/Auth/contrato/negócio/Rules/frontend writes. Configuração atual preservada cifrada com readback, billing=false/Standard/freeTier, 2 índices READY, zero buckets. [Resultado](HOSTED_PRIVATE_RESULT_2026-10-27.json). Estes resultados substituem o bloqueio histórico de identidade desta sessão, mas não os gates de login/app/cutover.
+
+Preparado protótipo separado de Rules privadas sobre os bytes fe594614 publicados e aplicativo sob `/tenant-italo/`, preservando o escritor público legado e negando mutações na cópia. 14 dirigidos/4 E2E locais PASS; CI integral novo, pacote combinado, delta de índices e ensaio staging/rollback ainda pendentes. Sem release desta candidata. [Contrato, validação e sequência restante](PRIVATE_RELEASE.md). Não tratar a candidata como migração completa nem substituir Rules SaaS globais no escuro.
+
 Base3fc0bc3e17767cba4774c001c10fab0310517811; branch codex/caravana77-goal-xiii-activate-italo-cloud-20261026. Correção de imutabilidade do sdk-rehearsal.json preservada. Trabalho desta etapa não repete a cópia nem presume corte público.
 
 Código novo: planner+validador reproduzível e executor Cloud Shell privado, PREVIEW/APPLY/VERIFY, alvo/número/copyPlanHash exatos,4companions no máximo e exists:false. Revalida24originais/29copiados na operação real; não escreve em nenhum deles, memberships, Auth, planos ou finanças. Transação única, fonte/versionamento rechecados, sem retry de commit incerto; readback obrigatório. PREVIEW cifrado em memória e arquivo privado, sem dados pessoais no relatório. Modos fora do Cloud Shell privado falham antes de ler arquivos/credenciais.

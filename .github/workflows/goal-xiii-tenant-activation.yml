@@ -1,7 +1,7 @@
 name: Goal XIII private tenant activation
 on:
   push:
-    branches: [codex/caravana77-goal-xiii-activate-italo-cloud-20261026]
+    branches: [codex/caravana77-goal-xiii-activate-italo-cloud-20261026, codex/caravana77-goal-xiii-pc-20261027]
   workflow_dispatch:
 permissions:
   contents: read
