@@ -95,7 +95,9 @@ export async function packagePrivateRelease({ environment, legacyDirectory, priv
   assert(redirects.toString().trim() === '/* /index.html 200', 'LEGACY_REDIRECTS_REVIEW_REQUIRED');
   // Pages canonicalizes index.html. Rewrite to the directory entry so its
   // canonicalization cannot fall through to the legacy root SPA fallback.
-  prepared.set('_redirects', Buffer.concat([Buffer.from('/tenant-italo/* /tenant-italo/ 200\n'), redirects]));
+  // Explicit asset passes precede the private SPA catch-all: 200 rewrites also
+  // apply to existing files, so otherwise JS/CSS would receive HTML.
+  prepared.set('_redirects', Buffer.concat([Buffer.from('/tenant-italo/assets/* /tenant-italo/assets/:splat 200\n/tenant-italo/private-release.json /tenant-italo/private-release.json 200\n/tenant-italo/* /tenant-italo/ 200\n'), redirects]));
   const oldHeaders = prepared.get('_headers') || Buffer.alloc(0);
   prepared.set('_headers', privateViewerHeaders(oldHeaders, environment));
   for (const file of privateFiles) {
