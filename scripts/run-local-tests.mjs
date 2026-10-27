@@ -9,6 +9,7 @@ const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/fireba
 const suite = process.argv[2] || "unit";
 const commands = {
   "tenant-activation-regression": "vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts",
+  "tenant-booking-regression-e2e": 'playwright test e2e/baseline.spec.ts --grep "public booking, private proof"',
   "tenant-activation-e2e": "playwright test e2e/tenant-import-review.spec.ts",
   "tenant-activation": "vitest run --config vitest.tenant-activation.config.ts",
   "legacy-in-place": "vitest run --config vitest.in-place.config.ts",

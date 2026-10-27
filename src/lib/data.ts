@@ -255,6 +255,7 @@ export async function reserveSeat(
       caravanId: caravanRef.id,
       caravanName: current.name,
       amountCents: current.priceCents,
+      paymentTotalCents: 0,
       registrationStatus: "awaiting_payment",
       paymentStatus: "pending",
       createdAt: new Date().toISOString(),

@@ -85,10 +85,19 @@ describe("production data functions on synthetic emulator fixtures", () => {
     write.set(doc(runtime.db!, `reservationReceipts/${attempt.reservationNonce}`), { registrationId: attempt.registrationId, organizationId: "org-a", caravanId: "ride-a" });
     await assertFails(write.commit()); expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(0);
   });
+  it.each([-1, 1, null])("rejects a forged initial payment total %s in a new public booking", async (paymentTotalCents) => {
+    await seedTrip(); const attempt = createReservationAttempt(); const write = writeBatch(runtime.db!);
+    write.update(doc(runtime.db!, "caravans/ride-a"), { reservedSeats: 1, lastReservationNonce: attempt.reservationNonce, updatedAt: serverTimestamp() });
+    write.set(doc(runtime.db!, `registrations/${attempt.registrationId}`), { ...passenger, boardingPointSnapshot: { id: "point-a", name: "Embarque de teste", address: "", time: "06:00" }, id: attempt.registrationId, reservationNonce: attempt.reservationNonce, organizationId: "org-a", caravanId: "ride-a", caravanName: "Viagem sintética A", amountCents: 8500, paymentTotalCents, registrationStatus: "awaiting_payment", paymentStatus: "pending", createdAt: new Date().toISOString() });
+    write.set(doc(runtime.db!, `reservationReceipts/${attempt.reservationNonce}`), { registrationId: attempt.registrationId, organizationId: "org-a", caravanId: "ride-a" });
+    await assertFails(write.commit());
+    expect((await getDoc(doc(runtime.db!, "caravans/ride-a"))).data()?.reservedSeats).toBe(0);
+  });
   it("replays one concurrent booking operation without taking two seats, including after another reservation", async () => {
     const trip = await seedTrip({ capacity: 2 }); const attempt = createReservationAttempt();
     const ids = await Promise.all([reserveSeat(trip, passenger, attempt), reserveSeat(trip, passenger, attempt)]);
     expect(ids).toEqual([attempt.registrationId, attempt.registrationId]);
+    expect((await getDoc(doc(runtime.db!, `registrations/${attempt.registrationId}`))).data()?.paymentTotalCents).toBe(0);
     await reserveSeat(trip, { ...passenger, passengerName: "Another synthetic" });
     // The original private receipt has now been replaced; the registration remains authoritative.
     expect(await reserveSeat(trip, passenger, attempt)).toBe(attempt.registrationId);

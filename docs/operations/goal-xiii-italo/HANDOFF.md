@@ -23,3 +23,7 @@ Ainda falta leitura oficial mínima, comparação do cliente/regras publicados e
 ## Compatibilidade de importação/relatórios consolidada
 
 CI0516661 chegou à regressão do produto e expôs5falhas (301PASS): criação CSV sem baseline explícito de recebimentos e envelope dos relatórios Pro. Corrigido somente o novo registro CSV (zero explícito na criação, null recusado; nenhum preenchimento de registro histórico), preservado o envelope Pro anterior (diagnóstico desconhecido não é métrica persistida) e reduzidas avaliações redundantes da organização nas Rules sem retirar verificações.60regressões dirigidas PASS, incluindo payload máximo do owner legado;48Python PASS. Nova rodada integral deve ser avaliada pelo SHA próprio, sem tratar os runs falhos como aceites.
+
+## Correção do fluxo público novo
+
+CI2feb794 confirmou307backend/Rules,8Auth,6Storage,48Python e184E2E;4E2E falharam no mesmo fluxo público em quatro larguras. A causa era reserva NOVA sem baseline de recebimento, agora classificada corretamente como desconhecida pelo leitor financeiro. Corrigida exclusivamente a criação pública para paymentTotalCents=0, com Rules aceitando somente inteiro0 quando o campo é enviado; clientes anteriores que o omitem mantêm o contrato. Nenhum histórico null/ausente é preenchido.3negativas novas recusam -1,1,null atomicamente sem tomar vaga;63regressões dirigidas e48guards PASS. O resultado integral da revisão corrigida deve constar no ledger final; não promover o run anterior falho.

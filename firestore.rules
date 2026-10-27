@@ -1162,13 +1162,14 @@ service cloud.firestore {
       allow list: if isAdmin(resource.data.organizationId);
       allow create: if validLegacyImport(registrationId) || (request.resource.data.id == registrationId
         && registrationId.matches('^[a-f0-9]{64}$')
-        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'reservationRequestHash', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'boardingPointSnapshot', 'emergencyContact', 'notes', 'amountCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['id', 'reservationNonce', 'reservationRequestHash', 'organizationId', 'caravanId', 'caravanName', 'passengerName', 'cpf', 'birthDate', 'isMinor', 'guardianName', 'guardianPhone', 'authorizationStatus', 'phone', 'email', 'city', 'boardingPointId', 'boardingPointName', 'boardingPointSnapshot', 'emergencyContact', 'notes', 'amountCents', 'paymentTotalCents', 'registrationStatus', 'paymentStatus', 'createdAt'])
         && (!('reservationRequestHash' in request.resource.data) || (request.resource.data.reservationRequestHash is string && request.resource.data.reservationRequestHash.matches('^[a-f0-9]{64}$')))
         && request.resource.data.reservationNonce is string
         && request.resource.data.reservationNonce.matches('^[a-f0-9]{64}$')
         && request.resource.data.reservationNonce != registrationId
         && request.resource.data.registrationStatus == 'awaiting_payment'
         && request.resource.data.paymentStatus == 'pending'
+        && (!('paymentTotalCents' in request.resource.data) || (request.resource.data.paymentTotalCents is int && request.resource.data.paymentTotalCents == 0))
         && request.resource.data.passengerName is string
         && request.resource.data.passengerName.size() >= 2
         && request.resource.data.passengerName.size() <= 120
