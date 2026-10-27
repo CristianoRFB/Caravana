@@ -1,5 +1,20 @@
 # Estado atual — Caravana 77
 
+## 27/10/2026 — acesso privado publicado; corte público ainda pendente
+
+Fonte de produto **4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2**, branch PC. CI principal [40557950406](https://github.com/CristianoRFB/Caravana/actions/runs/40557950406) e dedicado [40557950411](https://github.com/CristianoRFB/Caravana/actions/runs/40557950411) SUCCESS no SHA exato. Aplicativo em [tenant-italo/admin/login](https://caravana-77.pages.dev/tenant-italo/admin/login); deployment **6e76a7cd-32f1-4d40-9a4c-f470cbe4445c**, sem Functions, dirty=false. Os seis assets da raiz legada permanecem byte a byte; 20 assets e três rotas privados/legados passaram em HTTP/hash/MIME/cabeçalhos.
+
+Rules privadas SHA256 **77307820aa8878c3d5349b7c15d3ef4b232e9199d56ff59f657bc29bb3fc7c8f**, ruleset392e61a3, publicadas com retorno real a585cb14f e avanço comprovados. Seis leituras privadas anônimas negadas, dois links legados com conteúdo original e três companions públicos verificados no provedor; A×B/revogação autenticados permanecem prova demo sobre os bytes exatos publicados. Adicionados somente três índices: **cinco READY, zero remoções**, Spark/billing=false. Nenhum recopy, write de negócio/original/Auth/membership ou atribuição comercial.
+
+O proprietário respondeu **“Entrei e conferi os dados e o comprovante”**. Registrar como acesso confirmado pelo proprietário, sem fingir observação da sessão: Auth mantém os mesmos dois UIDs ativos e não mostrou novo lastLoginAt após publicação/baseline, compatível também com sessão já existente. Não pedir senha nem transferir PII para o PC compartilhado.
+
+O retorno simples de Pages e a republicação pura legada deixaram HTML privado em cache. A contingência comprovada é o deployment **6d131a85-950a-482f-b74a-4de3b291932c**, com os mesmos seis assets e regra explícita /tenant-italo/* → / (200). Seu rollback por API passou nas quatro URLs, inclusive aquecidas; o avanço final à candidata passou novamente nos20assets/três rotas. Isso preserva dados posteriores, sem restore de Firestore. [Resultado, limitações e manifestos](operations/goal-xiii-italo/HOSTED_RELEASE_2026-10-27.json); [runbook atual](operations/goal-xiii-italo/PRIVATE_RELEASE.md).
+
+**DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; APP_ACTIVE=PUBLISHED_PRIVATE_HISTORY_OWNER_REPORTED_PASS; PUBLIC_CUTOVER=false; MIGRATED=false.** A cópia continua histórica/importPending/somente leitura; a origem permanece o único escritor público. A missão integral segue ativa: falta implementar e validar corte sincronizado e compatibilidade dos links, sem usar a etapa privada como substituto da transferência operacional.
+
+## Checkpoints anteriores — históricos, substituídos pelo estado acima
+
+
 ## 27/10/2026 — companions do Ítalo aplicados e verificados em produção; app ainda pendente
 
 **Direção posterior do proprietário:** seguir transferência/ativação diretamente em caravana-af306, sem testar em bdall. Diagnóstico somente leitura no staging retornou403 para a conta atual, inclusive firebaserules.releases.get; não houve mutação e não haverá novas tentativas hospedadas ali. Preservação, CI/sintéticos e retorno do alvo de produção continuam obrigatórios; não repetir a cópia.

@@ -1,5 +1,20 @@
 # GOAL XIII — ativação privada sobre a cópia existente
 
+## 27/10/2026 — acesso privado publicado; corte público ainda pendente
+
+Fonte de produto **4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2**, branch PC. CI principal [40557950406](https://github.com/CristianoRFB/Caravana/actions/runs/40557950406) e dedicado [40557950411](https://github.com/CristianoRFB/Caravana/actions/runs/40557950411) SUCCESS no SHA exato. Aplicativo em [tenant-italo/admin/login](https://caravana-77.pages.dev/tenant-italo/admin/login); deployment **6e76a7cd-32f1-4d40-9a4c-f470cbe4445c**, sem Functions, dirty=false. Os seis assets da raiz legada permanecem byte a byte; 20 assets e três rotas privados/legados passaram em HTTP/hash/MIME/cabeçalhos.
+
+Rules privadas SHA256 **77307820aa8878c3d5349b7c15d3ef4b232e9199d56ff59f657bc29bb3fc7c8f**, ruleset392e61a3, publicadas com retorno real a585cb14f e avanço comprovados. Seis leituras privadas anônimas negadas, dois links legados com conteúdo original e três companions públicos verificados no provedor; A×B/revogação autenticados permanecem prova demo sobre os bytes exatos publicados. Adicionados somente três índices: **cinco READY, zero remoções**, Spark/billing=false. Nenhum recopy, write de negócio/original/Auth/membership ou atribuição comercial.
+
+O proprietário respondeu **“Entrei e conferi os dados e o comprovante”**. Registrar como acesso confirmado pelo proprietário, sem fingir observação da sessão: Auth mantém os mesmos dois UIDs ativos e não mostrou novo lastLoginAt após publicação/baseline, compatível também com sessão já existente. Não pedir senha nem transferir PII para o PC compartilhado.
+
+O retorno simples de Pages e a republicação pura legada deixaram HTML privado em cache. A contingência comprovada é o deployment **6d131a85-950a-482f-b74a-4de3b291932c**, com os mesmos seis assets e regra explícita /tenant-italo/* → / (200). Seu rollback por API passou nas quatro URLs, inclusive aquecidas; o avanço final à candidata passou novamente nos20assets/três rotas. Isso preserva dados posteriores, sem restore de Firestore. [Resultado, limitações e manifestos](HOSTED_RELEASE_2026-10-27.json); [runbook atual](PRIVATE_RELEASE.md).
+
+**DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; APP_ACTIVE=PUBLISHED_PRIVATE_HISTORY_OWNER_REPORTED_PASS; PUBLIC_CUTOVER=false; MIGRATED=false.** A cópia continua histórica/importPending/somente leitura; a origem permanece o único escritor público. A missão integral segue ativa: falta implementar e validar corte sincronizado e compatibilidade dos links, sem usar a etapa privada como substituto da transferência operacional.
+
+## Checkpoints anteriores — históricos, substituídos pelo estado acima
+
+
 ## Continuação PC27 — resultado real posterior
 
 Branch `codex/caravana77-goal-xiii-pc-20261027` sobre c2c4c7b. Cloud Shell oficial autorizado e fonte executada d7d4ded limpa; PREVIEW/APPLY/VERIFY reais PASS. Quatro companions precisos criados; 24 originais/29 copiados/2 owners reconferidos, zero recopy/Auth/contrato/negócio/Rules/frontend writes. Configuração atual preservada cifrada com readback, billing=false/Standard/freeTier, 2 índices READY, zero buckets. [Resultado](HOSTED_PRIVATE_RESULT_2026-10-27.json). Estes resultados substituem o bloqueio histórico de identidade desta sessão, mas não os gates de login/app/cutover.

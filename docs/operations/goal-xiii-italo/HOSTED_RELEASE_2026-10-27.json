@@ -1,0 +1,161 @@
+{
+  "source": "4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2",
+  "branch": "codex/caravana77-goal-xiii-pc-20261027",
+  "projectId": "caravana-af306",
+  "projectNumber": "742921744156",
+  "accountId": "80a4c951d716d79fa10fffcf648d3288",
+  "pagesProject": "caravana-77",
+  "previousDeployment": "4d069e0a-344a-415a-ae41-aa314df10ace",
+  "oldRuleset": "projects/caravana-af306/rulesets/585cb14f-bdfe-4f58-a7fd-f760d222c4af",
+  "candidateRuleset": "projects/caravana-af306/rulesets/392e61a3-ec9c-4b08-9f47-7250c5e7e14f",
+  "candidateRulesSha256": "77307820aa8878c3d5349b7c15d3ef4b232e9199d56ff59f657bc29bb3fc7c8f",
+  "combinedManifestSha256": "2fcba7e1248a17d7368dcfe9af7d3b4e30cff8467c8a14f3e8d20cbc9265c447",
+  "privateManifestSha256": "170f5fa27196461890057b7b73af290323a40f18a0ccb53de92e80032015515f",
+  "packageDirectory": "dist-italo-release-production-4ecaa9e3bef5",
+  "ciMain": 40557950406,
+  "ciDedicated": 40557950411,
+  "localHttp": {
+    "status": "PASS",
+    "assets": 20,
+    "routes": 3,
+    "firebaseRequests": 0
+  },
+  "noRecopy": true,
+  "publicCutover": false,
+  "ownerLoginVerified": false,
+  "indexes": {
+    "before": 2,
+    "added": 3,
+    "ready": 5,
+    "deleted": 0
+  },
+  "rulesActivate": {
+    "at": "2026-10-27T18:25:42.086959Z",
+    "readback": "PASS",
+    "anonymousSmoke": {
+      "at": "2026-10-27T18:26:05.403Z",
+      "legacyVerified": 2,
+      "privateDenials": 6,
+      "publicCompanions": 3
+    }
+  },
+  "rulesRollback": {
+    "at": "2026-10-27T18:26:24.566863Z",
+    "readback": "PASS",
+    "anonymousSmoke": {
+      "at": "2026-10-27T18:26:36.548Z",
+      "markerStatus": 403,
+      "legacyVerified": 2
+    }
+  },
+  "rulesForward": {
+    "at": "2026-10-27T18:26:50.155679Z",
+    "readback": "PASS",
+    "anonymousSmoke": {
+      "at": "2026-10-27T18:27:07.004Z",
+      "legacyVerified": 2,
+      "privateDenials": 6,
+      "publicCompanions": 3
+    }
+  },
+  "ruleReleaseWrites": 3,
+  "immutableRulesetsCreated": 1,
+  "pages": {
+    "activeDeployment": "6e76a7cd-32f1-4d40-9a4c-f470cbe4445c",
+    "createdOn": "2026-10-27T18:27:30.244605Z",
+    "usesFunctions": false,
+    "initialCanonicalHttp": "PASS_20_ASSETS_3_ROUTES",
+    "barePointerRollback": {
+      "to": "4d069e0a-344a-415a-ae41-aa314df10ace",
+      "metadata": "PASS",
+      "legacySixAssets": "PASS",
+      "privateWarmUrl": "FAILED_STALE_NEW_HTML",
+      "cacheBustedPrivateUrl": "LEGACY_HTML_PASS"
+    },
+    "bareReupload": {
+      "id": "84720b82-798a-497d-a120-8b0c064e05f0",
+      "privateWarmUrl": "FAILED_STALE_NEW_HTML"
+    },
+    "provedReturn": {
+      "id": "6d131a85-950a-482f-b74a-4de3b291932c",
+      "kind": "LEGACY_ASSETS_WITH_PRIVATE_PREFIX_REWRITE_TO_ROOT",
+      "createdOn": "2026-10-27T18:30:45.479191Z",
+      "uploadHttp": "PASS_6_ASSETS_2_PRIVATE_ROUTES",
+      "apiRollbackHttp": "PASS_4_ROUTES",
+      "businessDataRestoredOrDeleted": false
+    },
+    "finalForward": {
+      "metadata": "PASS",
+      "http": "PASS_20_ASSETS_3_ROUTES"
+    },
+    "domains": [
+      "caravana-77.pages.dev"
+    ],
+    "sourceCommit": "4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2",
+    "sourceDirty": false
+  },
+  "ownerReport": {
+    "at": "2026-10-27",
+    "source": "Explicit user reply in this chat",
+    "result": "Entrei e conferi os dados e o comprovante",
+    "scope": [
+      "existing account access",
+      "tenant Italo data",
+      "registrations",
+      "finance",
+      "one proof"
+    ],
+    "independentlyObservedUI": false
+  },
+  "ownerMetadataReadback": {
+    "at": "2026-10-27T18:34:54.650Z",
+    "owners": 2,
+    "authUsers": 2,
+    "ownerUidsPreserved": true,
+    "newLoginAfterBaseline": 0,
+    "loginAfterPublication": 0,
+    "interpretation": "No new password login corroborated by provider metadata; existing session reuse remains possible. Owner report is recorded separately."
+  },
+  "labels": {
+    "ITALO_TENANT_DATA_COPIED": "REVERIFIED_HOSTED",
+    "ITALO_TENANT_AUTHENTICATED": "OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS",
+    "ITALO_TENANT_APP_ACTIVE": "PUBLISHED_PRIVATE_HISTORY_OWNER_REPORTED_PASS",
+    "ITALO_PUBLIC_CUTOVER_COMPLETE": false,
+    "ITALO_MIGRATED": false
+  },
+  "cost": {
+    "incrementalOperation": "R$0",
+    "firebaseBillingEnabled": false,
+    "databaseFreeTier": true,
+    "pagesStaticOnly": true,
+    "accountAggregateBilling": "UNKNOWN_CONNECTOR_BILLING_SCOPE_UNAVAILABLE",
+    "newPaidResources": 0
+  },
+  "securityEvidence": {
+    "hostedAnonymousNegativeChecks": 6,
+    "legacyAnonymousReadback": 2,
+    "publicCompanionsReadback": 3,
+    "crossTenantAndRevocation": "DEMO_SDK_ON_EXACT_PUBLISHED_RULES_BYTES; not a production authenticated B/revocation exercise"
+  },
+  "afterReleaseDataVerify": {
+    "exit": 0,
+    "originalDocuments": 24,
+    "copiedDocuments": 29,
+    "companions": 4,
+    "commitAttempted": false,
+    "copyRepeated": false,
+    "scope": "Pinned original/copy/companion paths; not a proof that no additional source event was created"
+  },
+  "cutoverEventClassification": {
+    "sourcePublished": true,
+    "targetDraft": true,
+    "targetImportPending": true,
+    "eventDateValid": true,
+    "eventBeforeToday": true,
+    "reservedSeatsMatch": true,
+    "distinctSlugs": true,
+    "classificationOnly": true,
+    "businessWrites": 0
+  },
+  "remainingBusinessClarification": "Past event: historical closure versus continuing operation; question sent, no closure performed"
+}

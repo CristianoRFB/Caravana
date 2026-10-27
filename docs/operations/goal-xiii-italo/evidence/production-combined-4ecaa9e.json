@@ -1,0 +1,127 @@
+{
+  "kind": "LEGACY_PLUS_ITALO_PRIVATE_HISTORY",
+  "source": "4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2",
+  "environment": "production",
+  "projectId": "caravana-af306",
+  "pagesProject": "caravana-77",
+  "legacyHost": "https://caravana-77.pages.dev/",
+  "legacyAssetsPreserved": 6,
+  "routingChanged": [
+    "_redirects",
+    "_headers"
+  ],
+  "readOnlyTenant": "italo",
+  "publicCutover": false,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 861,
+      "sha256": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f"
+    },
+    {
+      "path": "assets/index-BXYRgZFm.js",
+      "bytes": 384009,
+      "sha256": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/firebase-firestore-CZpT9MEq.js",
+      "bytes": 364045,
+      "sha256": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594"
+    },
+    {
+      "path": "assets/firebase-auth-Ctb8h5Tt.js",
+      "bytes": 123693,
+      "sha256": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58"
+    },
+    {
+      "path": "assets/index-C9drOnjs.css",
+      "bytes": 46175,
+      "sha256": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990"
+    },
+    {
+      "path": "_redirects",
+      "bytes": 184,
+      "sha256": "d3d3e676a79e0389e62da9352f6fd84cb05815b0d6e5cd941c0042102f0f5a8e"
+    },
+    {
+      "path": "_headers",
+      "bytes": 704,
+      "sha256": "8ffa391cea3d4dc0ff85599270f8b16bb89a437a5ae7195a8cc6fd71ae49ab92"
+    },
+    {
+      "path": "tenant-italo/assets/CommercialLanding-0uZpc247.css",
+      "bytes": 10506,
+      "sha256": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64"
+    },
+    {
+      "path": "tenant-italo/assets/CommercialLanding-BfABCw3E.js",
+      "bytes": 13600,
+      "sha256": "8e894ccd64ffcc9ec6f272f5a5fd107bcd737417ea97f3b9a84466655b6d300d"
+    },
+    {
+      "path": "tenant-italo/assets/firebase-auth-CrZdVSXx.js",
+      "bytes": 123693,
+      "sha256": "fce3001d1a62b03d95f6f5a81961a56e6e96ef121ab0d81942fea9693f8afc77"
+    },
+    {
+      "path": "tenant-italo/assets/firebase-firestore-KyaGVL9b.js",
+      "bytes": 365354,
+      "sha256": "6a584ee0e3847eac04a583e32c2bcf1be4b890367471c50b13c8dfc4ba526d3c"
+    },
+    {
+      "path": "tenant-italo/assets/index-B8yB-XKr.js",
+      "bytes": 532780,
+      "sha256": "ce68395c246ccf8fd73bfc636e61abc2c05abf62dcb09ecb7044cbbcdf058d69"
+    },
+    {
+      "path": "tenant-italo/assets/index-WxrywgLI.css",
+      "bytes": 49354,
+      "sha256": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf"
+    },
+    {
+      "path": "tenant-italo/assets/InvitationInbox-DyHVv53D.js",
+      "bytes": 3186,
+      "sha256": "1ef4f7e7d4efdc18752e934964f3d2dc2feb377af150f6b23e29152201fc5869"
+    },
+    {
+      "path": "tenant-italo/assets/OperationalTools-DizXD7cd.js",
+      "bytes": 18968,
+      "sha256": "f6ad517a6dc1726efbc3452dee5d20ae734ab2d01e971c2d3e6ca52b80401cbc"
+    },
+    {
+      "path": "tenant-italo/assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "tenant-italo/assets/team-BVPrK3vp.js",
+      "bytes": 8941,
+      "sha256": "e7500f6605189342c977788ed9b4110dff69e47be72434bad7aea3841d1ea05a"
+    },
+    {
+      "path": "tenant-italo/assets/team-DO-9gEyi.css",
+      "bytes": 1315,
+      "sha256": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8"
+    },
+    {
+      "path": "tenant-italo/assets/TeamManagement-BpdRP3E3.js",
+      "bytes": 8703,
+      "sha256": "11728fc3499170e13d0af38e29f7a8055ce14fd4047823800f497c9b4fb7e4ee"
+    },
+    {
+      "path": "tenant-italo/index.html",
+      "bytes": 978,
+      "sha256": "d722b1a65ea7f9c7a6c730a44fdd461a165f91e3a6efd51419f345e67c1ffe95"
+    },
+    {
+      "path": "tenant-italo/private-release.json",
+      "bytes": 2699,
+      "sha256": "170f5fa27196461890057b7b73af290323a40f18a0ccb53de92e80032015515f"
+    }
+  ]
+}

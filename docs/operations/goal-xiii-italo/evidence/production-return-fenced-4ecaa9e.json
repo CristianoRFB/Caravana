@@ -1,0 +1,42 @@
+{
+  "kind": "PRESERVED_LEGACY_WITH_EXPLICIT_PRIVATE_ROUTE_RETURN",
+  "deployment": "6d131a85-950a-482f-b74a-4de3b291932c",
+  "dataRollback": false,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 861,
+      "sha256": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f"
+    },
+    {
+      "path": "assets/index-BXYRgZFm.js",
+      "bytes": 384009,
+      "sha256": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/firebase-firestore-CZpT9MEq.js",
+      "bytes": 364045,
+      "sha256": "3710dfa0129541c869480844ce1419589e0f9880a7d4011f0402542fcdc5a594"
+    },
+    {
+      "path": "assets/firebase-auth-Ctb8h5Tt.js",
+      "bytes": 123693,
+      "sha256": "e72d221313e50a0a25ab6a60bcdc1fe7e7cfefd16d4426c93ee8c90974a30f58"
+    },
+    {
+      "path": "assets/index-C9drOnjs.css",
+      "bytes": 46175,
+      "sha256": "37573d73c0263a404f3d8ff15cbfecb77850571d80e6e0c811ab3170e7d84990"
+    },
+    {
+      "path": "_redirects",
+      "bytes": 41,
+      "sha256": "2bd020ed8d2ec7d6fe3c0fd9ca899f0a51336f672374cd72a4e8ab1556a25d4d"
+    }
+  ]
+}
