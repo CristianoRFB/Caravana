@@ -1,6 +1,6 @@
 {
   "goal": "XIII",
-  "checkedAt": "2026-10-27T13:25:44.415976+00:00",
+  "checkedAt": "2026-10-27T13:39:33.332498+00:00",
   "branch": "codex/caravana77-goal-xiii-activate-italo-cloud-20261026",
   "base": "3fc0bc3e17767cba4774c001c10fab0310517811",
   "codeSource": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
@@ -21,14 +21,36 @@
   "tests": {
     "mainCI": {
       "id": 40511470906,
-      "status": "IN_PROGRESS"
+      "status": "SUCCESS",
+      "source": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+      "backendAndRules": 312,
+      "auth": 8,
+      "storage": 6,
+      "pythonGuards": 48,
+      "boundedHealthTransport": 13,
+      "recovery": "PASS_SYNTHETIC_EMULATOR_RECOVERY",
+      "e2e": 188,
+      "e2eWidths": [
+        320,
+        375,
+        768,
+        1440
+      ],
+      "lint": "PASS",
+      "typecheck": "PASS",
+      "stagingRestoreHarnessTypecheck": "PASS",
+      "build": "PASS",
+      "runtimeAudit": "0 vulnerabilities",
+      "summary": "evidence/ci-main-summary.log"
     },
     "activationCI": {
       "id": 40511470991,
       "status": "SUCCESS",
       "native": 14,
       "sdkAndFinance": 17,
-      "legacySdkAndCommercial": 6
+      "legacySdkAndCommercial": 6,
+      "source": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+      "summary": "evidence/ci-activation-summary.log"
     },
     "localDirectedRegression": {
       "tests": 69,
@@ -88,7 +110,7 @@
     {
       "source": "fdbd76ccc38ccbd7c1c36bf7922c05afc5cb4b2b",
       "run": 40510591671,
-      "conclusion": "SUPERSEDED_SEE_GITHUB",
+      "conclusion": "CANCELLED_BY_NEWER_CANDIDATE",
       "scope": "Superseded by report-unknown compatibility fix"
     }
   ],
@@ -173,7 +195,7 @@
     "finalGoal": "7/17"
   },
   "readiness": {
-    "code": "READY_FOR_PROTECTED_PRIVATE_PREVIEW_AFTER_GREEN_CI",
+    "code": "READY_FOR_PROTECTED_PRIVATE_PREVIEW",
     "hostedActivation": "NOT_READY",
     "commercialNewTenants": "NO_GO",
     "legacyMigration": "NOT_READY"
@@ -183,5 +205,7 @@
     "Preserve/compare actual deployed Rules/frontend/attachments and cost; verify legacy public-writer compatibility and applicable rollback before hosted release.",
     "Coordinate candidate staging and production validation with synthetic staging fixtures; authenticate existing users privately and record readback.",
     "Independent backup custody/restore and synchronized single-writer public cutover remain unproved; no generic cutover command delivered."
-  ]
+  ],
+  "finalDocumentationOnlyChangesAfterCodeCI": true,
+  "hostedGatesClosedThisSession": 0
 }

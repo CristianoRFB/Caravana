@@ -1,0 +1,29 @@
+[
+  {
+    "id": 40511470906,
+    "name": "CI",
+    "source": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40511470906",
+    "updatedAt": "2026-10-27T13:36:59Z"
+  },
+  {
+    "id": 40511470991,
+    "name": "Goal XIII private tenant activation",
+    "source": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40511470991",
+    "updatedAt": "2026-10-27T13:23:30Z"
+  },
+  {
+    "id": 40510591671,
+    "name": "CI",
+    "source": "fdbd76ccc38ccbd7c1c36bf7922c05afc5cb4b2b",
+    "status": "completed",
+    "conclusion": "cancelled",
+    "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40510591671",
+    "updatedAt": "2026-10-27T13:23:07Z"
+  }
+]
