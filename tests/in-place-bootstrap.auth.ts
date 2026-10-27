@@ -1,5 +1,5 @@
 import { beforeAll,beforeEach,afterAll,afterEach,describe,it,expect,vi } from 'vitest';
-import { readFileSync,writeFileSync,mkdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { initializeTestEnvironment,assertFails,type RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import { initializeApp,deleteApp,type FirebaseApp } from 'firebase/app';
 import { getAuth,connectAuthEmulator,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,type Auth } from 'firebase/auth';
@@ -104,9 +104,5 @@ describe('in-place additive upgrade using actual SDK, Auth and unchanged candida
       await updateDoc(doc(ctx.firestore(),`memberships/${uidA}/organizations/${org}`),{status:'revoked'});
     });
     await assertFails(getDocFromServer(doc(dbA,`registrations/${regId}/proofs/current`)));
-    mkdirSync('docs/operations/goal-xi-italo',{recursive:true});writeFileSync('docs/operations/goal-xi-italo/sdk-rehearsal.json',JSON.stringify({checkedAt:new Date().toISOString(),strategy:'A_IN_PLACE_ADDITIVE',target:'demo-caravana77-test',
-      actualAuthEmulatorLogin:true,uidChanged:false,authRecreatedByBootstrap:false,atomicConcurrency:true,replayCreates:0,legacyAliasPreserved:true,legacyMoneyPreserved:true,
-      reservationReplay:true,checkinAndReversal:true,financialCompensation:true,proReportAndDowngradeHistory:true,revocationWithoutLegacyFallback:true,
-      rollbackAfterWrites:'STOP_PRESERVE_FORWARD_DATA',realDataRead:false,stagingWrites:0,productionWrites:0,realBackup:false,realMigrationReady:false},null,2)+'\n');
   });
 });
