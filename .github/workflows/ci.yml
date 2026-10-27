@@ -77,6 +77,9 @@ jobs:
       - name: Private proof viewer CSP with synthetic in-memory data only
         run: node --test scripts/tests/private-viewer-csp.test.mjs
 
+      - name: Compiled cutover bootstrap with synthetic metadata and blocked external network
+        run: node --test scripts/tests/italo-bootstrap-browser.test.mjs
+
       - name: Desktop and mobile E2E (synthetic only)
         run: npm run test:e2e
 

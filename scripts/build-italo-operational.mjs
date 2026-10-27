@@ -15,7 +15,7 @@ const base = '/tenant-italo/', directory = 'dist-italo-operational';
 await build({ mode: 'production', base, define: {
   'import.meta.env.VITE_ITALO_OPERATIONAL_TENANT': JSON.stringify('italo'),
   'import.meta.env.VITE_PRIVATE_HISTORY_TENANT': JSON.stringify(''),
-}, build: { outDir: directory } });
+}, build: { outDir: directory, rollupOptions: { input: { index: 'index.html', bootstrap: 'src/italo-bootstrap.ts' } } } });
 const files = [];
 async function inventory(prefix = '') {
   for (const item of await readdir(`${directory}/${prefix}`, { withFileTypes: true })) {
@@ -32,7 +32,9 @@ async function inventory(prefix = '') {
 await inventory();
 const source = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 const dirty = Boolean(execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], { encoding: 'utf8' }).trim());
-await writeFile(`${directory}/operational-release.json`, JSON.stringify({ kind: 'ITALO_EXISTING_EVENT_OPERATIONAL_CANDIDATE', source, dirty, base,
+const bootstrap = files.filter(file => /^\/tenant-italo\/assets\/bootstrap-[A-Za-z0-9_-]+\.js$/.test(file.path));
+if (bootstrap.length !== 1) throw Error('EXACT_BOOTSTRAP_ENTRY_REQUIRED');
+await writeFile(`${directory}/operational-release.json`, JSON.stringify({ kind: 'ITALO_EXISTING_EVENT_OPERATIONAL_CANDIDATE', source, dirty, base, bootstrap: bootstrap[0].path,
   projectId: 'caravana-af306', pagesProject: 'caravana-77', emulator: false, requiresOperatorLedger: true,
   publicCutover: false, readyForDeploy: false, files }, null, 2) + '\n');
 console.log(`Existing-event candidate built: ${files.length} public files. Not packaged, deployed or activated.`);

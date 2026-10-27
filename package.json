@@ -77,7 +77,8 @@
     "build:italo-private": "tsc -b && node scripts/build-italo-private.mjs",
     "build:italo-private:staging": "tsc -b && node scripts/build-italo-private.mjs --staging",
     "package:italo-private": "node scripts/package-italo-private.mjs",
-    "build:italo-operational": "tsc -b && node scripts/build-italo-operational.mjs"
+    "build:italo-operational": "tsc -b && node scripts/build-italo-operational.mjs",
+    "package:italo-operational": "node scripts/package-italo-operational.mjs"
   },
   "dependencies": {
     "firebase": "^11.10.0",
