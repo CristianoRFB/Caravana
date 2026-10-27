@@ -51,7 +51,7 @@ async function liveAsset(url, expected) {
   const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000) });
   assert(response.status === 200 && Number(response.headers.get('content-length') || 0) <= 2_000_000, 'LIVE_BASELINE_HTTP');
   const pathname = new URL(url).pathname, type = response.headers.get('content-type')?.split(';')[0];
-  const types = pathname.endsWith('.js') ? ['text/javascript', 'application/javascript'] : pathname.endsWith('.css') ? ['text/css'] : pathname.endsWith('.json') ? ['application/json'] : pathname.endsWith('.html') ? ['text/html'] : null;
+  const types = pathname.endsWith('.js') ? ['text/javascript', 'application/javascript'] : pathname.endsWith('.css') ? ['text/css'] : pathname.endsWith('.json') ? ['application/json'] : pathname.endsWith('.html') || pathname.endsWith('/') ? ['text/html'] : null;
   assert(!types || types.includes(type), 'LIVE_BASELINE_MIME');
   const chunks = []; let total = 0;
   for await (const part of response.body) { total += part.length; assert(total <= 2_000_000, 'LIVE_BASELINE_BOUND'); chunks.push(part); }
@@ -86,7 +86,9 @@ export async function packagePrivateRelease({ environment, legacyDirectory, priv
     prepared.set(name, await checkedFile(legacyRoot, name, file));
     // Pages routing/header configuration is not a public asset endpoint. Its
     // local bytes are bound to the exact staging manifest above.
-    if (!name.startsWith('_')) await liveAsset(new URL(name, host), file);
+    // Pages canonically serves index.html at /. Keep redirect:error for every
+    // network request rather than following an unreviewed redirect target.
+    if (!name.startsWith('_')) await liveAsset(new URL(name === 'index.html' ? '' : name, host), file);
   }
   if (legacyManifestBytes) prepared.set('release.json', legacyManifestBytes);
   const redirects = await checkedFile(legacyRoot, '_redirects');
