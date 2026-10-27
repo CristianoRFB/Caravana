@@ -11,7 +11,7 @@ import { importDigest } from "./lib/import-identity";
 import { money, type Caravan } from "./lib/types";
 import ToolAudit from "./ToolAudit";
 
-export default function OperationalTools({ organizationId, mode, canManageTemplates }: { organizationId: string; mode: "reports" | "worklists"; canManageTemplates: boolean }) {
+export default function OperationalTools({ organizationId, mode, canManageTemplates, readOnly = false }: { organizationId: string; mode: "reports" | "worklists"; canManageTemplates: boolean; readOnly?: boolean }) {
   const [policy, setPolicy] = useState<FunctionalEntitlements | null>(null), [suspended, setSuspended] = useState(true);
   const [trips, setTrips] = useState<Caravan[]>([]), [reports, setReports] = useState<SavedReport[]>([]), [worklists, setWorklists] = useState<SavedWorklist[]>([]);
   const [error, setError] = useState(""), [message, setMessage] = useState(""), [pending, setPending] = useState(false), [now, setNow] = useState(Date.now());
@@ -26,7 +26,7 @@ export default function OperationalTools({ organizationId, mode, canManageTempla
     const timer = setInterval(() => setNow(Date.now()), 10000);
     return () => { stops.forEach(stop => stop()); clearInterval(timer); };
   }, [organizationId, mode]);
-  const allowed = functionalFeatureAllowed(policy, mode === "reports" ? "report_library" : "worklists", now) && !suspended;
+  const allowed = functionalFeatureAllowed(policy, mode === "reports" ? "report_library" : "worklists", now) && !suspended && !readOnly;
   async function perform(key: string, payload: object, operation: (id: string) => Promise<unknown>) {
     if (pending) return;
     setPending(true); setError(""); setMessage("");
@@ -62,7 +62,7 @@ export default function OperationalTools({ organizationId, mode, canManageTempla
     <h1>{mode === "reports" ? "Central de relatórios" : "Roteiros da equipe"}</h1>
     <p>{mode === "reports" ? "Fechamentos por data da viagem, salvos para a equipe e exportáveis sem lista de passageiros." : "Modelos reutilizáveis e tarefas compartilhadas por caravana. Não substituem check-in, documentos ou controles obrigatórios."}</p>
     <p>O Financeiro Geral, a importação CSV e os recursos essenciais continuam disponíveis em todos os planos.</p>
-    {!allowed && <div className="notice" role="status">{mode === "reports" ? "Novos relatórios requerem Pro ou Premium habilitado." : "Novos roteiros e alterações requerem Premium habilitado."} O histórico permanece disponível aos acessos autorizados. <Link to="/admin/plano">Conferir plano e limites</Link></div>}
+    {!allowed && !readOnly && <div className="notice" role="status">{mode === "reports" ? "Novos relatórios requerem Pro ou Premium habilitado." : "Novos roteiros e alterações requerem Premium habilitado."} O histórico permanece disponível aos acessos autorizados. <Link to="/admin/plano">Conferir plano e limites</Link></div>}
     {error && <p role="alert" className="error-message">{error}</p>}{message && <p role="status">{message}</p>}
     {pending && <p role="status">Confirmando alteração com o servidor…</p>}
     <form onSubmit={submit} className="tool-form">
@@ -79,7 +79,8 @@ export default function OperationalTools({ organizationId, mode, canManageTempla
     <h2>Histórico da organização</h2><p>Até 30 documentos mais recentes; alterações dos roteiros têm eventos imutáveis. Nenhum documento é apagado por mudança de plano.</p>
     {mode === "reports" ? <div className="tool-cards">{reports.map(report=><article key={report.id} className="empty-box">
       <h3>{report.title}</h3><p>Viagens de {report.from || "qualquer data"} até {report.to || "qualquer data"} · Captura {report.updatedAt?.toDate().toLocaleString("pt-BR")}</p>
-      <dl><dt>Caravanas</dt><dd>{report.summary.trips}</dd><dt>Passageiros ativos</dt><dd>{report.summary.finance.passengerCount}</dd><dt>Embarcados</dt><dd>{report.summary.boarded}</dd><dt>Autorizações pendentes</dt><dd>{report.summary.pendingAuthorizations}</dd><dt>Recebido registrado</dt><dd>{money(report.summary.finance.receivedCents)}</dd><dt>Despesas registradas</dt><dd>{money(report.summary.finance.expenseCents)}</dd></dl>
+      <dl><dt>Caravanas</dt><dd>{report.summary.trips}</dd><dt>Passageiros ativos</dt><dd>{report.summary.finance.passengerCount}</dd><dt>Embarcados</dt><dd>{report.summary.boarded}</dd><dt>Autorizações pendentes</dt><dd>{report.summary.pendingAuthorizations}</dd><dt>Recebido registrado</dt><dd>{report.summary.finance.receivedCents === null ? "Não conciliado" : money(report.summary.finance.receivedCents)}</dd><dt>Despesas registradas</dt><dd>{money(report.summary.finance.expenseCents)}</dd></dl>
+      {!!report.summary.finance.unknownPaymentCount && <p>Relatório incompleto: {report.summary.finance.unknownPaymentCount} total(is) de recebimento não conciliado(s).</p>}
       <button type="button" className="button button-outline" onClick={()=>download(report)}>Exportar relatório CSV</button>
     </article>)}{!reports.length && <p>Nenhum relatório salvo nesta organização.</p>}</div>
       : <><label className="tool-checkbox"><input type="checkbox" checked={showArchived} onChange={e=>setShowArchived(e.target.checked)} />Mostrar roteiros arquivados</label><div className="tool-cards">{worklists.filter(list=>showArchived || !list.archived).map(list=>{

@@ -28,6 +28,14 @@ describe("cumulative commercial tools with the entire existing core preserved", 
     const csv = operationalReportCsv({...filter,title:"=formula"},report); expect(csv).toContain("'=formula"); expect(csv).not.toContain("passengerName");
     expect(() => operationalSummary("b",filter,trips,registrations,costs)).toThrow("outra organização");
   });
+  it("exports incomplete historical reports as UNKNOWN without changing known cohorts", () => {
+    const trips = [{ id: "trip", organizationId: "a", date: "2026-10-20", capacity: 2 }] as Caravan[];
+    const rows = [{ organizationId: "a", caravanId: "trip", registrationStatus: "confirmed", amountCents: 8500, paymentTotalCents: null }] as Registration[];
+    const report = operationalSummary("a", filter, trips, rows, []);
+    expect(report.finance).toMatchObject({ unknownPaymentCount: 1, receivedCents: null, receivableCents: null, recordedBalanceCents: null, expectedCents: 8500 });
+    expect(operationalReportCsv(filter, report).match(/UNKNOWN/g)).toHaveLength(3);
+    expect(() => operationalSummary("a", filter, trips, [...rows, { ...rows[0], paymentTotalCents: -1 }], [])).toThrow("inconsistentes");
+  });
   it("rejects invalid dates, ranges, overflows, invalid worklists and duplicate tasks", () => {
     expect(() => reportFilter({...filter,from:"2026-02-30"})).toThrow(); expect(() => reportFilter({...filter,from:"2027-01-01"})).toThrow();
     expect(() => operationalSummary("a",filter,[{id:"trip",organizationId:"a",date:"2026-10-20",capacity:NaN}] as Caravan[],[],[])).toThrow("inconsistentes");

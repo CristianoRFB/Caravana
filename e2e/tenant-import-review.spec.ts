@@ -1,6 +1,6 @@
 import { test,expect } from '@playwright/test';
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
-import { doc,updateDoc } from 'firebase/firestore';
+import { doc,updateDoc,setDoc,Timestamp } from 'firebase/firestore';
 import { seedSyntheticEnvironment,patchSyntheticMembership,testAccount } from './fixtures';
 let dispose:(()=>Promise<void>)|undefined;
 let failures:string[];
@@ -8,7 +8,7 @@ test.beforeEach(async({context,page})=>{
  failures=[];dispose=await seedSyntheticEnvironment();
  await patchSyntheticMembership('org-a','tenant_owner');await patchSyntheticMembership('org-b','tenant_owner');
  const env=await initializeTestEnvironment({projectId:'demo-caravana77-test'});
- try{await env.withSecurityRulesDisabled(async ctx=>{await updateDoc(doc(ctx.firestore(),'organizations/org-a'),{importPending:true});await updateDoc(doc(ctx.firestore(),'registrations/'+'a'.repeat(64)),{paymentTotalCents:null});});}finally{await env.cleanup();}
+ try{await env.withSecurityRulesDisabled(async ctx=>{await updateDoc(doc(ctx.firestore(),'organizations/org-a'),{importPending:true});await updateDoc(doc(ctx.firestore(),'registrations/'+'a'.repeat(64)),{paymentTotalCents:null});await setDoc(doc(ctx.firestore(),'organizations/org-a/reports/'+'d'.repeat(32)),{organizationId:'org-a',title:'Histórico sintético incompleto',from:'',to:'',updatedAt:Timestamp.now(),summary:{trips:1,capacity:25,boarded:0,pendingAuthorizations:0,finance:{passengerCount:1,unknownPaymentCount:1,receivedCents:null,expenseCents:0}}});});}finally{await env.cleanup();}
  page.on('pageerror',()=>failures.push('runtime_error'));
  await context.route('**/*',route=>{const hostname=new URL(route.request().url()).hostname;if(['firestore.googleapis.com','identitytoolkit.googleapis.com','securetoken.googleapis.com'].includes(hostname))failures.push('remote_firebase');return ['localhost','127.0.0.1'].includes(hostname)?route.continue():route.abort();});
 });
@@ -21,6 +21,7 @@ test('imported history remains readable, unknown money explicit, and selection/r
  await expect(page.getByRole('button',{name:'Registrar',exact:true})).toHaveCount(0);
  const metric=page.locator('.finance-summary-card').filter({has:page.getByText('Recebido registrado',{exact:true})});await expect(metric).toContainText('Não conciliado');
  await page.reload();await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
+ await page.goto('/admin/relatorios');const report=page.locator('article').filter({has:page.getByRole('heading',{name:'Histórico sintético incompleto'})});await expect(report).toContainText('Não conciliado');await expect(report).toContainText('Relatório incompleto');await expect(page.getByRole('button',{name:'Salvar relatório',exact:true})).toBeDisabled();
  await page.getByLabel('Organização ativa').selectOption('org-b');await expect(page).toHaveURL(/\/admin$/);await page.goto('/admin/financeiro');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
 });

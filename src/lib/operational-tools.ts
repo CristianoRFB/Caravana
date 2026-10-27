@@ -1,7 +1,10 @@
 import { calculateFinanceSummary, type FinanceSummary } from "./finance";
 import type { Caravan, CaravanExpense, Registration } from "./types";
 export interface ReportFilter { title: string; from: string; to: string; caravanId: string }
-export interface OperationalSummary { trips: number; capacity: number; boarded: number; pendingAuthorizations: number; finance: Omit<FinanceSummary, "unknownPaymentCount"> }
+export type ReportFinance = Omit<FinanceSummary, "unknownPaymentCount" | "receivedCents" | "receivableCents" | "recordedBalanceCents"> & {
+  unknownPaymentCount?: number; receivedCents: number | null; receivableCents: number | null; recordedBalanceCents: number | null;
+};
+export interface OperationalSummary { trips: number; capacity: number; boarded: number; pendingAuthorizations: number; finance: ReportFinance }
 export interface WorkItem { label: string; done: boolean }
 export interface WorklistInput { title: string; kind: "template" | "trip"; caravanId: string | null; items: WorkItem[]; archived: boolean }
 export function validReportDate(value: string) { return /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(`${value}T12:00:00Z`)) && new Date(`${value}T12:00:00Z`).toISOString().slice(0, 10) === value; }
@@ -17,13 +20,21 @@ export function operationalSummary(organizationId: string, filter: ReportFilter,
   const ids = new Set(selected.map((trip) => trip.id));
   const passengers = registrations.filter((item) => ids.has(item.caravanId));
   const calculatedFinance = calculateFinanceSummary(passengers, expenses.filter((item) => ids.has(item.caravanId)));
-  if (calculatedFinance.unknownPaymentCount > 0) throw new Error("Existem totais de recebimento não conciliados. Confira o histórico antes de salvar um relatório consolidado.");
-  // Keep the persisted Pro report envelope compatible; this UI diagnostic is not a new saved metric.
-  const { unknownPaymentCount: _unknown, ...reportFinance } = calculatedFinance; void _unknown;
+  // Known cohorts retain the previous schema; incomplete totals are explicitly null, never zero.
+  const { unknownPaymentCount, ...knownFinance } = calculatedFinance;
+  let knownReceived = 0;
+  for (const row of passengers) if (row.paymentTotalCents != null) {
+    if (!Number.isSafeInteger(row.paymentTotalCents) || row.paymentTotalCents < 0) throw new Error("Valores inconsistentes no histórico de recebimentos.");
+    knownReceived += row.paymentTotalCents;
+    if (!Number.isSafeInteger(knownReceived) || knownReceived > 9000000000000) throw new Error("Valores inconsistentes ou acima do limite seguro de cálculo.");
+  }
+  const reportFinance: ReportFinance = unknownPaymentCount
+    ? { ...knownFinance, unknownPaymentCount, receivedCents: null, receivableCents: null, recordedBalanceCents: null }
+    : knownFinance;
   const summary = { trips: selected.length, capacity: selected.reduce((sum, trip) => sum + trip.capacity, 0), boarded: passengers.filter((item) => item.registrationStatus !== "cancelled" && item.checkedInAt).length,
     pendingAuthorizations: passengers.filter((item) => item.registrationStatus !== "cancelled" && item.isMinor && selected.some((trip) => trip.id === item.caravanId && trip.requiresMinorAuthorization) && item.authorizationStatus !== "approved").length,
     finance: reportFinance };
-  if ([summary.trips, summary.capacity, summary.boarded, summary.pendingAuthorizations, ...Object.values(summary.finance)].some((value) => !Number.isSafeInteger(value) || Math.abs(value) > 9000000000000)) throw new Error("Valores inconsistentes ou acima do limite seguro de cálculo. Confira os lançamentos antes de salvar.");
+  if ([summary.trips, summary.capacity, summary.boarded, summary.pendingAuthorizations, ...Object.values(summary.finance).filter((value) => value !== null)].some((value) => !Number.isSafeInteger(value) || Math.abs(value) > 9000000000000)) throw new Error("Valores inconsistentes ou acima do limite seguro de cálculo. Confira os lançamentos antes de salvar.");
   return summary;
 }
 export function validateWorklist(input: WorklistInput): WorklistInput {
@@ -37,6 +48,6 @@ export function validateWorklist(input: WorklistInput): WorklistInput {
 export function safeCsvCell(value: unknown) { if (typeof value === "number" && Number.isSafeInteger(value)) return String(value); const text = String(value ?? ""); return `"${(/^[\s]*[=+@-]/.test(text) ? `'${text}` : text).replaceAll('"', '""')}"`; }
 const reportLabels: Record<keyof FinanceSummary,string> = { passengerCount:"Passageiros ativos",paidPassengerCount:"Passageiros pagos",partialPassengerCount:"Passageiros parciais",pendingPassengerCount:"Passageiros pendentes",reportedPassengerCount:"Pix informado sem conciliação",unknownPaymentCount:"Totais de recebimento não conciliados",unknownFareCount:"Tarifas desconhecidas",expectedCents:"Previsto conhecido (centavos)",receivedCents:"Recebido registrado (centavos)",receivableCents:"A receber calculável (centavos)",uncertainReceivableCount:"Recebimentos não conciliados",expenseCents:"Despesas registradas (centavos)",recordedBalanceCents:"Saldo registrado (centavos)",projectedResultCents:"Resultado previsto (centavos)" };
 export function operationalReportCsv(filter: ReportFilter, summary: OperationalSummary): string {
-  const rows = [["Relatório", filter.title], ["Critério", "Data da viagem; valores históricos conhecidos das viagens selecionadas. Valores monetários em centavos. Sem conciliação bancária."], ["De", filter.from], ["Até", filter.to], ["Caravanas", summary.trips], ["Lugares físicos", summary.capacity], ["Embarcados", summary.boarded], ["Autorizações pendentes", summary.pendingAuthorizations], ...Object.entries(summary.finance).map(([key, value]) => [reportLabels[key as keyof FinanceSummary], value])];
+  const rows = [["Relatório", filter.title], ["Critério", "Data da viagem; valores históricos conhecidos das viagens selecionadas. Valores monetários em centavos. Sem conciliação bancária."], ["De", filter.from], ["Até", filter.to], ["Caravanas", summary.trips], ["Lugares físicos", summary.capacity], ["Embarcados", summary.boarded], ["Autorizações pendentes", summary.pendingAuthorizations], ...Object.entries(summary.finance).map(([key, value]) => [reportLabels[key as keyof FinanceSummary], value === null ? "UNKNOWN" : value])];
   return "\uFEFF" + rows.map((row) => row.map(safeCsvCell).join(";")).join("\r\n");
 }

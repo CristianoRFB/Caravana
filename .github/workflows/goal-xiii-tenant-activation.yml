@@ -24,5 +24,7 @@ jobs:
         run: node --test scripts/tests/tenant-activation.test.mjs scripts/tests/in-place-bootstrap.test.mjs
       - name: Existing Auth login, private activation, revocation and unknown finance with demo SDKs
         run: npm run test:tenant-activation:integration
+      - name: Legacy SDK journeys remain compatible without rewriting historical evidence
+        run: npm run test:in-place:integration
       - name: Preserve previously verified Goal XI evidence
         run: git diff --exit-code -- tests/in-place-bootstrap.auth.ts docs/operations/goal-xi-italo/sdk-rehearsal.json

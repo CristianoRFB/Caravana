@@ -241,7 +241,8 @@ service cloud.firestore {
         && event.kind == kind && event.entityId == entityId;
     }
     function validReportFinance(value) {
-      return value is map && value.keys().hasOnly(['passengerCount', 'paidPassengerCount', 'partialPassengerCount', 'pendingPassengerCount', 'reportedPassengerCount', 'unknownFareCount', 'expectedCents', 'receivedCents', 'receivableCents', 'uncertainReceivableCount', 'expenseCents', 'recordedBalanceCents', 'projectedResultCents'])
+      let unknown = value.get('unknownPaymentCount', 0);
+      return value is map && value.keys().hasOnly(['passengerCount', 'paidPassengerCount', 'partialPassengerCount', 'pendingPassengerCount', 'reportedPassengerCount', 'unknownPaymentCount', 'unknownFareCount', 'expectedCents', 'receivedCents', 'receivableCents', 'uncertainReceivableCount', 'expenseCents', 'recordedBalanceCents', 'projectedResultCents'])
  && value.passengerCount is int && value.passengerCount >= 0 && value.passengerCount <= 9000000000000
  && value.paidPassengerCount is int && value.paidPassengerCount >= 0 && value.paidPassengerCount <= 9000000000000
  && value.partialPassengerCount is int && value.partialPassengerCount >= 0 && value.partialPassengerCount <= 9000000000000
@@ -249,13 +250,16 @@ service cloud.firestore {
  && value.reportedPassengerCount is int && value.reportedPassengerCount >= 0 && value.reportedPassengerCount <= 9000000000000
  && value.unknownFareCount is int && value.unknownFareCount >= 0 && value.unknownFareCount <= 9000000000000
  && value.expectedCents is int && value.expectedCents >= 0 && value.expectedCents <= 9000000000000
- && value.receivedCents is int && value.receivedCents >= 0 && value.receivedCents <= 9000000000000
- && value.receivableCents is int && value.receivableCents >= 0 && value.receivableCents <= 9000000000000
  && value.uncertainReceivableCount is int && value.uncertainReceivableCount >= 0 && value.uncertainReceivableCount <= 9000000000000
  && value.expenseCents is int && value.expenseCents >= 0 && value.expenseCents <= 9000000000000
- && value.recordedBalanceCents is int && value.recordedBalanceCents >= -9000000000000 && value.recordedBalanceCents <= 9000000000000
  && value.projectedResultCents is int && value.projectedResultCents >= -9000000000000 && value.projectedResultCents <= 9000000000000
-        && value.recordedBalanceCents == value.receivedCents - value.expenseCents
+        && unknown is int && unknown >= 0 && unknown <= 9000000000000
+        && ((unknown == 0
+          && value.receivedCents is int && value.receivedCents >= 0 && value.receivedCents <= 9000000000000
+          && value.receivableCents is int && value.receivableCents >= 0 && value.receivableCents <= 9000000000000
+          && value.recordedBalanceCents is int && value.recordedBalanceCents >= -9000000000000 && value.recordedBalanceCents <= 9000000000000
+          && value.recordedBalanceCents == value.receivedCents - value.expenseCents)
+          || (unknown > 0 && value.receivedCents == null && value.receivableCents == null && value.recordedBalanceCents == null))
         && value.projectedResultCents == value.expectedCents - value.expenseCents;
     }
     match /organizations/{orgId}/reports/{reportId} {

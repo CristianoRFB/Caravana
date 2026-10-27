@@ -50,6 +50,16 @@ describe("functional plan enforcement using actual SDK and candidate Rules", () 
     await expect(saveOperationalReport("a",{...filter,title:"Outro título"},id)).rejects.toThrow("outros dados");
     await assertFails(updateDoc(doc(runtime.db!,`organizations/a/reports/${id}`),{title:"Reescrita"}));await assertFails(deleteDoc(doc(runtime.db!,`organizations/a/toolEvents/${id}`)));
   });
+  it("persists explicit unknown report totals with audit and rejects falsely complete null totals", async () => {
+    await seed("pro");
+    await env.withSecurityRulesDisabled(async ctx => updateDoc(doc(ctx.firestore(), "registrations/PRIVATE_SYNTHETIC_ID"), { paymentTotalCents: null }));
+    const id = await saveOperationalReport("a", filter);
+    const report = await read(`organizations/a/reports/${id}`);
+    expect(report.summary.finance).toMatchObject({ unknownPaymentCount: 1, receivedCents: null, receivableCents: null, recordedBalanceCents: null });
+    for (const patch of [{ unknownPaymentCount: 0 }, { unknownPaymentCount: -1 }, { receivedCents: 0 }]) {
+      await assertFails(forgeReport(runtime.db!, { summary: { ...report.summary, finance: { ...report.summary.finance, ...patch } } }));
+    }
+  });
   it("blocks Essential service and a forged complete SDK report/audit, without hiding existing finance",async()=>{
     await seed("essencial");await expect(saveOperationalReport("a",filter)).rejects.toThrow("requer um plano");await assertFails(forgeReport(runtime.db!));
     expect((await read("registrations/PRIVATE_SYNTHETIC_ID")).paymentTotalCents).toBe(2500);await assign("pro");await saveOperationalReport("a",filter);

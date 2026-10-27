@@ -3714,7 +3714,8 @@ function TenantPlan() {
 function TenantOperationalTools({ mode }: { mode: "reports" | "worklists" }) {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
-  return <Suspense fallback={<Loading />}><OperationalTools organizationId={organizationId} mode={mode} canManageTemplates={role === "tenant_owner"} /></Suspense>;
+  const readOnly = useContext(HistoricalImportContext);
+  return <Suspense fallback={<Loading />}><OperationalTools organizationId={organizationId} mode={mode} readOnly={readOnly} canManageTemplates={role === "tenant_owner"} /></Suspense>;
 }
 function TenantTeam() {
   const organizationId = useContext(OrganizationContext);

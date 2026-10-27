@@ -23,7 +23,7 @@ import urllib.request
 PROJECT = "bdall-e3585"
 PROJECT_NUMBER = "146882624278"
 PRINCIPAL = "crisf.bueno10@gmail.com"
-RULES_SHA256 = "c605fcf1b1d3a4dee7b1ade56369ac4c4174e3752c16888b28e9c5fc72382d81"
+RULES_SHA256 = "b2891b274393172c4a1ec69d9feeb627a485948617c4123abad23b0244dfeab0"
 INDEXES_SHA256 = "63d6eb0d3ccae2def9399f9a4fbe91b1e051ce4bc7373b39e3940f7efc835238"
 IDENTITY_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 ROUTES = {
