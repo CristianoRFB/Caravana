@@ -79,11 +79,11 @@ async function executeImport(caravanId: string, organizationId: string, rows: Le
               if (!keys.some(Boolean)) throw new Error(`Linha ${row.line}: falta identificação do passageiro.`);
               if (preflightSkipped.has(row.line) || keys.some((key) => key && claims[key]) || existing[index].exists()) return { line: row.line, status: "skipped", reason: "Passageiro já cadastrado, inclusive em lote anterior ou inscrição cancelada." };
               const { line, ...input } = row; void line;
-              if ((input.paymentTotalCents || 0) !== 0) throw new Error("Importação não registra recebimentos. Use o financeiro auditado.");
+              if (input.paymentTotalCents !== undefined && input.paymentTotalCents !== 0) throw new Error("Importação não registra recebimentos. Use o financeiro auditado.");
               const point = trip.boardingPoints?.find((item) => item.id === input.boardingPointId);
               if (input.boardingPointId && !point) throw new Error(`Linha ${row.line}: ponto de embarque não está disponível.`);
               documents[refs[index].id] = { ...input, ...(point ? { boardingPointName: point.name, boardingPointSnapshot: point } : {}), id: refs[index].id, importedFromLegacy: true, importBatchId: batchId, importOperationId: operationId, importIdentityKeys: keys,
-                organizationId, caravanId, caravanName: trip.name, createdAt: new Date().toISOString() };
+                organizationId, caravanId, caravanName: trip.name, paymentTotalCents: 0, createdAt: new Date().toISOString() };
               keys.filter(Boolean).forEach((key) => { additions[key] = true; claims[key] = true; });
               return { line: row.line, status: "imported", reason: "Importação confirmada." };
             });

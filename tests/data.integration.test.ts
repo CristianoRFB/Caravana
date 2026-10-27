@@ -8,6 +8,7 @@ import { createReservationAttempt } from "../src/lib/reservation-attempt";
 import { updatePassengerWithAuthorizationReset } from "../src/lib/documents";
 import { assertFails } from "@firebase/rules-unit-testing";
 import { PROOF_POLICY } from "../src/lib/proof-policy";
+import { importLegacyRegistrationsDetailed } from "../src/lib/import-operations";
 import { legacyImportDocumentId } from "../src/lib/legacy-import";
 import type { Caravan, Registration } from "../src/lib/types";
 import { pendingWrites } from "../src/lib/pending-writes";
@@ -122,6 +123,19 @@ describe("production data functions on synthetic emulator fixtures", () => {
     await assertFails(getDoc(doc(runtime.db!, "registrations/guessable-id")));
     await assertFails(getDocs(collection(runtime.db!, "registrations")));
   });
+  it("initializes only newly imported nonfinancial rows with an explicit zero and rejects explicit unknown totals", async () => {
+    await seedTrip();
+    runtime.db = env.authenticatedContext("admin-a").firestore();
+    const rows = [{ ...passenger, line: 2, amountCents: 8500, registrationStatus: "awaiting_payment" as const, paymentStatus: "pending" as const }];
+    const imported = await importLegacyRegistrationsDetailed("ride-a", "org-a", rows, "8".repeat(32));
+    expect(imported.imported).toBe(1);
+    const id = await legacyImportDocumentId("8".repeat(32), 2);
+    expect((await getDoc(doc(runtime.db!, "registrations", id))).data()?.paymentTotalCents).toBe(0);
+    const bad = [{ ...passenger, passengerName: "Outra pessoa fictícia", phone: "11999999999", line: 3, amountCents: 8500, registrationStatus: "awaiting_payment" as const, paymentStatus: "pending" as const, paymentTotalCents: null }];
+    const result = await importLegacyRegistrationsDetailed("ride-a", "org-a", bad, "9".repeat(32));
+    expect(result.rejected).toBe(1);
+  });
+
   it("supports imports and manual ledger writes for a membership-only owner without a legacy admin record", async () => {
     await seedTrip();
     await env.withSecurityRulesDisabled(async (context) => {

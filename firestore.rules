@@ -209,7 +209,8 @@ service cloud.firestore {
     function functionalGrowth(orgId, feature) {
       let subscription = get(/databases/$(database)/documents/subscriptions/$(orgId)).data;
       let projection = get(/databases/$(database)/documents/organizations/$(orgId)/commercialFeatures/current).data;
-      return exists(/databases/$(database)/documents/organizations/$(orgId)) && tenantWritesEnabled(orgId) && isAdmin(orgId) && acceptsReservations(orgId)
+      let organization = get(/databases/$(database)/documents/organizations/$(orgId)).data;
+      return isAdmin(orgId) && organization.get('importPending', false) == false && organization.get('status', 'active') != 'suspended'
         && subscription.status in ['active', 'trial', 'demo']
         && (subscription.trialEndsAt == null || request.time < subscription.trialEndsAt)
         && feature in functionalFeatures(subscription.planId)
