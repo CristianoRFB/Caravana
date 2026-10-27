@@ -31,7 +31,7 @@
     },
     {
       "path": "tests/in-place-bootstrap.auth.ts",
-      "sha256": "bd2c526a968199a5378b096efd8f3080e8fae72b0af2308431d7275fb1d1c96d"
+      "sha256": "9b900a6b2171278ae30c85b315734eddbae88eadb44ee33ce6c95a986b51207e"
     },
     {
       "path": "src/lib/commercial-baseline.ts",
