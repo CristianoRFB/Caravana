@@ -14,6 +14,7 @@ export interface FinanceSummary {
   pendingPassengerCount: number;
   reportedPassengerCount: number;
   unknownFareCount: number;
+  unknownPaymentCount: number;
   expectedCents: number;
   receivedCents: number;
   receivableCents: number;
@@ -34,10 +35,10 @@ export function passengerFinancialStatus(
     "amountCents" | "paymentTotalCents" | "paymentReportedUnreconciled"
   >,
 ): PassengerFinancialStatus {
-  const paid = Number.isSafeInteger(registration.paymentTotalCents)
-    ? Math.max(0, registration.paymentTotalCents || 0)
-    : 0;
-  if (registration.paymentReportedUnreconciled && paid === 0) return "reported";
+  const known = Number.isSafeInteger(registration.paymentTotalCents) && (registration.paymentTotalCents as number) >= 0;
+  if (registration.paymentReportedUnreconciled && (!known || registration.paymentTotalCents === 0)) return "reported";
+  if (!known) return "unknown";
+  const paid = registration.paymentTotalCents as number;
 
   const due = registration.amountCents;
   if (!Number.isSafeInteger(due) || (due || 0) <= 0) return "unknown";
@@ -60,8 +61,9 @@ export function calculateFinanceSummary(
       item.paymentReportedUnreconciled &&
       (item.paymentTotalCents || 0) === 0,
   );
+  const unknownPaymentCount = registrations.filter(item => item.paymentTotalCents == null).length;
   const expectedCents = sumSafeCents(expectedRows.map((item) => item.amountCents!));
-  const receivableCents = sumSafeCents(active.map((item) => {
+  const receivableCents = active.some(item => item.paymentTotalCents == null) ? NaN : sumSafeCents(active.map((item) => {
     if (
       !Number.isSafeInteger(item.amountCents) ||
       (item.amountCents || 0) <= 0 ||
@@ -69,10 +71,11 @@ export function calculateFinanceSummary(
     ) {
       return 0;
     }
-    const paid = item.paymentTotalCents ?? 0;
+    const paid = item.paymentTotalCents;
+    if (paid == null) return NaN;
     return Number.isSafeInteger(paid) && paid >= 0 ? Math.max(0, item.amountCents! - paid) : NaN;
   }));
-  const receivedCents = sumSafeCents(registrations.map((item) => item.paymentTotalCents ?? 0));
+  const receivedCents = unknownPaymentCount ? NaN : sumSafeCents(registrations.map((item) => item.paymentTotalCents!));
   const expenseCents = sumSafeCents(expenses.filter((item) => item.status !== "voided").map((item) => item.amountCents ?? 0));
 
   return {
@@ -84,6 +87,7 @@ export function calculateFinanceSummary(
     unknownFareCount: active.filter(
       (item) => !Number.isSafeInteger(item.amountCents) || (item.amountCents || 0) <= 0,
     ).length,
+    unknownPaymentCount,
     expectedCents,
     receivedCents,
     receivableCents,

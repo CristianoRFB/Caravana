@@ -378,10 +378,10 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
         <Summary label="Pendentes" value={String(summary.pendingPassengerCount)} tone="blue" />
         <Summary label="Pix informado · sem conciliação" value={String(summary.reportedPassengerCount)} tone="violet" />
         <Summary label="Valor previsto conhecido" value={money(summary.expectedCents)} hint={summary.unknownFareCount ? `${summary.unknownFareCount} sem valor definido` : "Valores registrados"} />
-        <Summary label="Recebido registrado" value={money(summary.receivedCents)} hint="Somente lançamentos com valor" tone="green" />
-        <Summary label="A receber calculável" value={money(summary.receivableCents)} hint={summary.uncertainReceivableCount ? `${summary.uncertainReceivableCount} sem conciliação` : "Saldo conhecido"} tone="amber" />
+        <Summary label="Recebido registrado" value={summary.unknownPaymentCount ? "Não conciliado" : money(summary.receivedCents)} hint={summary.unknownPaymentCount ? `${summary.unknownPaymentCount} total(is) não conciliado(s); confira o histórico` : "Somente lançamentos com valor"} tone="green" />
+        <Summary label="A receber calculável" value={Number.isNaN(summary.receivableCents) && summary.unknownPaymentCount ? "Não calculável" : money(summary.receivableCents)} hint={summary.uncertainReceivableCount ? `${summary.uncertainReceivableCount} sem conciliação` : "Saldo conhecido"} tone="amber" />
         <Summary label="Despesas" value={money(summary.expenseCents)} tone="red" />
-        <Summary label="Saldo de caixa registrado" value={money(summary.recordedBalanceCents)} hint="Recebimentos lançados menos despesas" />
+        <Summary label="Saldo de caixa registrado" value={summary.unknownPaymentCount ? "Não calculável" : money(summary.recordedBalanceCents)} hint="Recebimentos lançados menos despesas" />
         <Summary label="Resultado previsto conhecido" value={money(summary.projectedResultCents)} hint="Previsão conhecida menos despesas" />
       </section>
       {summary.unknownFareCount > 0 && (
@@ -405,9 +405,9 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
               .sort((a, b) => a.passengerName.localeCompare(b.passengerName, "pt-BR"))
               .map((registration) => {
                 const status = passengerFinancialStatus(registration);
-                const paid = Math.max(0, registration.paymentTotalCents || 0);
+                const paid = Number.isSafeInteger(registration.paymentTotalCents) && registration.paymentTotalCents! >= 0 ? registration.paymentTotalCents! : null;
                 const due = registration.amountCents;
-                const balance = due && !registration.paymentReportedUnreconciled
+                const balance = due && paid !== null && !registration.paymentReportedUnreconciled
                   ? Math.max(0, due - paid)
                   : null;
                 return (
@@ -416,17 +416,17 @@ export default function FinancePage({ organizationId, canEdit = false }: { organ
                       <strong>{registration.passengerName}</strong>
                       {isAllCaravans && <small>Caravana: {registration.caravanName}</small>}
                       <span className={`finance-status finance-status-${status}`}>
-                        {status === "paid" ? "Pago" : status === "partial" ? "Parcial" : status === "reported" ? "Pix informado · valor não conciliado" : status === "unknown" ? "Valor da viagem não informado" : "Pendente"}
+                        {status === "paid" ? "Pago" : status === "partial" ? "Parcial" : status === "reported" ? "Pix informado · valor não conciliado" : status === "unknown" ? "Valores não conciliados · confira o histórico" : "Pendente"}
                       </span>
-                      <small>Viagem: {amountText(due)} · Recebido com valor: {money(paid)}</small>
+                      <small>Viagem: {amountText(due)} · Recebido com valor: {paid === null ? "Não conciliado" : money(paid)}</small>
                       <small>Saldo: {balance === null ? "Não calculável" : money(balance)}</small>
                     </div>
                     <div className="finance-row-actions">
                       <button type="button" className="button button-outline" onClick={() => setHistoryFor(registration)}>
                         <Clock3 size={15} /> Histórico
                       </button>
-                      {canEdit && <button type="button" className="button button-outline" onClick={() => void correctFare(registration)}>Corrigir valor previsto</button>}
-                      {canEdit && <button type="button" className="button button-primary" onClick={() => openPayment(registration)}>
+                      {canEdit && paid !== null && <button type="button" className="button button-outline" onClick={() => void correctFare(registration)}>Corrigir valor previsto</button>}
+                      {canEdit && paid !== null && <button type="button" className="button button-primary" onClick={() => openPayment(registration)}>
                         <Plus size={15} /> Registrar
                       </button>}
                     </div>

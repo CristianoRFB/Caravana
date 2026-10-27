@@ -1,0 +1,13 @@
+# GOAL XIII — ativação privada sobre a cópia existente
+
+Base3fc0bc3e17767cba4774c001c10fab0310517811; branch codex/caravana77-goal-xiii-activate-italo-cloud-20261026. Correção de imutabilidade do sdk-rehearsal.json preservada. Trabalho desta etapa não repete a cópia nem presume corte público.
+
+Código novo: planner+validador reproduzível e executor Cloud Shell privado, PREVIEW/APPLY/VERIFY, alvo/número/copyPlanHash exatos,4companions no máximo e exists:false. Revalida24originais/29copiados na operação real; não escreve em nenhum deles, memberships, Auth, planos ou finanças. Transação única, fonte/versionamento rechecados, sem retry de commit incerto; readback obrigatório. PREVIEW cifrado em memória e arquivo privado, sem dados pessoais no relatório. Modos fora do Cloud Shell privado falham antes de ler arquivos/credenciais.
+
+Companions candidatos:publicTenantSettings/italo,tenantSlugs/italo,organizationAvailability/italo e organizations/italo/tenantActivations/private-v1. Branding exige revisão explícita privada; sem contato, logo ou contrato inventado. Companions existentes diferentes bloqueiam, revogação não reativa, snapshots desatualizados bloqueiam sem recopy. Sem subscription/entitlements, acesso histórico permanece, crescimento continua bloqueado pelos contratos existentes.
+
+App:aviso de histórico importado, seleção multitenant já existente exercitada. Financeiro passa a distinguir total null/ausente de zero; status/caixa/saldo/CSV explicitam incerteza, revisão do histórico permanece disponível; lançamento/correção não inicializa recebimento desconhecido. Rules candidatas vedam publicar/retirar importPending pelo cliente e mantêm o ledger de ativação imutável. Estas Rules ainda não foram publicadas nesta sessão.
+
+Validação inicial:7casos nativos novos,8SDK novos +8finance existentes (um novo) PASS (16casos no harness); lint/typecheck PASS. SDKs reais dos emuladores demo, transação REST, login/UID, alias/resolver, A×B, revogação, unknowns, concorrência e ack perdido. Nenhum payload hospedado, write real, Auth/Rules/índices/deploy real. Regressão principal e responsividade seguirão nesta branch; não chamar CI antigo de aprovação nova.
+
+Snapshot real:DATA_COPIED reportado/verificado pelo operador em26/10,29destinos/24originais/2Auth retidos conforme TENANT_COPY_RESULT.json. Esta sessão não revalidou hosted:runtime77 sem identidade GCP/segredos/variáveis gerenciadas. ACCESS_ACTIVE/PUBLIC_ACTIVE/MIGRATED não comprovados. Falta executar preview/readback em sessão privada oficial e validar/publicar Rules/frontend compatíveis com retorno preservado antes de afirmar acesso do Ítalo. Segunda custódia/restore reais seguem não provados; produção não alterada pelo Cloud.

@@ -3,7 +3,7 @@ name: CI
 on:
   workflow_dispatch:
   push:
-    branches: [main, codex/caravana77-commercial-v1-20261016]
+    branches: [main, codex/caravana77-commercial-v1-20261016, codex/caravana77-goal-xiii-activate-italo-cloud-20261026]
   pull_request:
     branches: [main]
 

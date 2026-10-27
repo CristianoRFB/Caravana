@@ -143,7 +143,7 @@ export interface Registration {
   emergencyContact: string;
   notes: string;
   amountCents?: number;
-  paymentTotalCents?: number;
+  paymentTotalCents?: number | null;
   paymentReportedMethod?: "pix";
   paymentReportedUnreconciled?: boolean;
   registrationStatus: RegistrationStatus;

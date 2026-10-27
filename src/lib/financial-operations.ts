@@ -41,7 +41,7 @@ async function perform(action: Action, registrationId: string, caravanId: string
       const orgId = parent.organizationId; const tripId = registrationAction ? parent.caravanId : caravanId;
       if ((organizationId && organizationId !== orgId) || (caravanId && caravanId !== tripId)) throw new Error("O cadastro pertence a outro contexto.");
       if (action === "fare_adjusted") {
-        const beforeCents = parent.amountCents ?? 0; const afterCents = input!.amountCents; const paid = parent.paymentTotalCents ?? 0;
+        const beforeCents = parent.amountCents ?? 0; const afterCents = input!.amountCents; const paid = parent.paymentTotalCents;
         cents(beforeCents); cents(afterCents); cents(paid);
         if (afterCents > 0 && afterCents < paid) throw new Error("O valor previsto não pode ser menor que o recebimento registrado.");
         if (beforeCents === afterCents) return;
@@ -64,7 +64,8 @@ async function perform(action: Action, registrationId: string, caravanId: string
         throw new Error("Despesa já anulada; confira a substituição no histórico.");
       }
       if (old) positive(old.amountCents);
-      const beforeCents = payment ? parent.paymentTotalCents ?? 0 : old?.amountCents ?? 0;
+      if (payment && parent.paymentTotalCents == null) throw new Error("Total não conciliado. Confira o histórico antes de registrar ou anular pagamentos.");
+      const beforeCents = payment ? parent.paymentTotalCents : old?.amountCents ?? 0;
       cents(beforeCents);
       const amount = input?.amountCents ?? old?.amountCents;
       positive(amount);

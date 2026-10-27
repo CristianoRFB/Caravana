@@ -8,6 +8,7 @@ const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
 const suite = process.argv[2] || "unit";
 const commands = {
+  "tenant-activation": "vitest run --config vitest.tenant-activation.config.ts",
   "legacy-in-place": "vitest run --config vitest.in-place.config.ts",
   unit: "vitest run",
   "staging-restore": "vitest run --config vitest.restore.config.ts",
@@ -68,7 +69,7 @@ const commands = {
   migration: "node scripts/simulate-membership-migration.mjs --apply-synthetic",
 };
 if (!Object.hasOwn(commands, suite) || process.argv.length > 3) throw new Error("Choose a documented local suite.");
-const withAuth = commands[suite].startsWith("playwright test") || ["demo-auth", "demo", "legacy-in-place"].includes(suite);
+const withAuth = commands[suite].startsWith("playwright test") || ["demo-auth", "demo", "legacy-in-place", "tenant-activation"].includes(suite);
 const args = ["emulators:exec", "--config", "firebase.test.json", "--project", "demo-caravana77-test", "--only", suite === "storage" ? "firestore,auth,storage" : withAuth ? "firestore,auth" : "firestore", commands[suite]];
 let exitCode = 1;
 try {

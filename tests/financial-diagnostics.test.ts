@@ -14,7 +14,8 @@ describe("read-only finance diagnostics and redacted export", () => {
     expect(diagnoseFinancialLedger([{ ...reg, paymentTotalCents: 1000 }], [entry])[0].kind).toBe("ledger_exceeds_total");
     expect(diagnoseFinancialLedger([{ ...reg, paymentTotalCents: -1 }], [entry])[0].kind).toBe("invalid_amount");
     expect(diagnoseFinancialLedger([reg], [{ ...entry, organizationId: "b" }])[0].kind).toBe("foreign_entry");
-    expect(diagnoseFinancialLedger([{ ...reg, paymentTotalCents: undefined }], [])).toEqual([]);
+    expect(diagnoseFinancialLedger([{ ...reg, paymentTotalCents: undefined }], [])).toEqual([{ registrationId: reg.id, kind: "unknown_total", differenceCents: null }]);
+    expect(redactedFinanceCsv([{ ...reg, paymentTotalCents: null }], [])).toContain("receivedCents,UNKNOWN");
   });
   it("exports only fixed metrics, excludes voided expenses, preserves cancelled receipts and zero data", () => {
     const expenses = [{ amountCents: 500 }, { amountCents: 1000, status: "voided" }] as CaravanExpense[];

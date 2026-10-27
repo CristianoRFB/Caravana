@@ -1,3 +1,4 @@
+import TenantImportNotice from "./TenantImportNotice";
 import { usePublicAvailability } from "./lib/use-public-availability";
 import TenantBrandSettings from "./TenantBrandSettings";
 import TenantCommercial from "./TenantCommercial";
@@ -1678,6 +1679,7 @@ function AdminShell({
           </div>
         </aside>
         <main className="admin-content" data-org={orgId}>
+          <TenantImportNotice organizationId={orgId} />
           {children}
         </main>
       </div>

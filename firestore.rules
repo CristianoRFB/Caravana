@@ -47,6 +47,7 @@ service cloud.firestore {
     function publicCaravan(caravanId) {
       return exists(/databases/$(database)/documents/caravans/$(caravanId))
         && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published'
+        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.get('importPending', false) == false
         && acceptsReservations(get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId);
     }
     function acceptsReservations(orgId) {
@@ -117,6 +118,12 @@ service cloud.firestore {
 
     match /profiles/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    // Operator-created activation ledger is immutable to every client.
+    match /organizations/{orgId}/tenantActivations/{operationId} {
+      allow get: if isTenantOwner(orgId);
       allow list, create, update, delete: if false;
     }
 
@@ -917,7 +924,9 @@ service cloud.firestore {
       }
       function ownerConfiguration() {
         let changed = request.resource.data.diff(resource.data).affectedKeys();
-        return request.resource.data.status in ['draft', 'published', 'archived']
+        return !changed.hasAny(['importPending'])
+          && (resource.data.get('importPending', false) == false || request.resource.data.status != 'published')
+          && request.resource.data.status in ['draft', 'published', 'archived']
           && request.resource.data.get('creationRequestHash', '') == resource.data.get('creationRequestHash', '')
           && (!changed.hasAny(['priceCents']) || (request.resource.data.priceCents is int && request.resource.data.priceCents >= 0 && request.resource.data.priceCents <= 9007199254740991))
           && ((request.resource.data.capacity <= resource.data.capacity && !(resource.data.status != 'published' && request.resource.data.status == 'published')) || growthConfiguration())
@@ -1242,7 +1251,7 @@ service cloud.firestore {
       function validFinancialUpdate() {
         let data = request.resource.data;
         let event = getAfter(/databases/$(database)/documents/financialOperations/$(data.lastFinancialOperationId)).data;
-        let before = resource.data.get('paymentTotalCents', 0);
+        let before = resource.data.get('paymentTotalCents', null);
         let original = event.action == 'payment_voided' ? get(/databases/$(database)/documents/registrations/$(registrationId)/payments/$(event.entityId)).data : {};
         let entry = getAfter(/databases/$(database)/documents/registrations/$(registrationId)/payments/$(event.entityId)).data;
         return data.diff(resource.data).affectedKeys().hasOnly(['paymentTotalCents', 'updatedAt', 'lastFinancialOperationId'])

@@ -66,6 +66,20 @@ describe("finance calculations", () => {
     ).toBe("reported");
   });
 
+  it("preserves unknown copied totals in status, aggregates and diagnostics rather than inventing zero", () => {
+    const unknown = registration("copied-unknown", 7500, 0, { paymentTotalCents: null });
+    const absent = registration("absent", 7500); delete absent.paymentTotalCents;
+    for (const row of [unknown, absent]) {
+      expect(passengerFinancialStatus(row)).toBe("unknown");
+      const summary = calculateFinanceSummary([registration("known", 7500, 7500), row], []);
+      expect(summary.unknownPaymentCount).toBe(1);
+      expect(Number.isNaN(summary.receivedCents)).toBe(true);
+      expect(Number.isNaN(summary.receivableCents)).toBe(true);
+      expect(Number.isNaN(summary.recordedBalanceCents)).toBe(true);
+      expect(row.paymentTotalCents).not.toBe(0);
+    }
+  });
+
   it("calculates the documented trip totals without floating point currency", () => {
     const passengers = [
       ...Array.from({ length: 8 }, (_, index) => registration(`paid-${index}`, 8500, 8500)),
