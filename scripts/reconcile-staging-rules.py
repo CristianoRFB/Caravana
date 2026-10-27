@@ -15,6 +15,9 @@ import urllib.request
 SPEC = importlib.util.spec_from_file_location("staging_audit", Path(__file__).with_name("staging-readonly-audit.py"))
 audit = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(audit)
+# Historical CRLF-only operation: NEVER retarget to a functional Rules release.
+# This private module instance audits only the original reviewed artifact.
+audit.RULES_SHA256 = "8acafe757210277ea96c3700813c064537622d44f0cfd7f6a141de059ed58c0f"
 OLD_HASH = "41388c5fced786f8adb6ae2eb60160d4244809beb00415f6a2959999442c6f81"
 CREATE_URL = f"https://firebaserules.googleapis.com/v1/projects/{audit.PROJECT}/rulesets"
 RELEASE_NAME = f"projects/{audit.PROJECT}/releases/cloud.firestore"

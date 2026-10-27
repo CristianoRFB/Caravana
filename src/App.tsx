@@ -212,6 +212,7 @@ const validCpf = (value: string) => {
 };
 const OrganizationContext = createContext("");
 const TenantRoleContext = createContext<TenantRole>("staff");
+const HistoricalImportContext = createContext(false);
 
 function Brand({ light = false }: { light?: boolean }) {
   const tenant = useTenantBrand();
@@ -1606,6 +1607,7 @@ function AdminShell({
   const [open, setOpen] = useState(false);
   const pendingCount = useSyncExternalStore(observePendingWrites, pendingWrites, () => 0);
   useEffect(() => { setDiagnosticScope(`${user.uid}:${orgId}`); return () => setDiagnosticScope("public"); }, [user.uid, orgId]);
+  const [importPending, setImportPending] = useState(false);
   const nav = useNavigate();
   async function exit() {
     await logout();
@@ -1679,8 +1681,10 @@ function AdminShell({
           </div>
         </aside>
         <main className="admin-content" data-org={orgId}>
-          <TenantImportNotice organizationId={orgId} />
+          <TenantImportNotice organizationId={orgId} onPending={setImportPending} />
+          <HistoricalImportContext.Provider value={importPending}>
           {children}
+          </HistoricalImportContext.Provider>
         </main>
       </div>
       </TenantBrandScope>
@@ -3689,7 +3693,8 @@ function NotFound() {
 function CaravanFinance() {
   const organizationId = useContext(OrganizationContext);
   const role = useContext(TenantRoleContext);
-  return <FinancePage organizationId={organizationId} canEdit={role === "tenant_owner"} />;
+  const imported = useContext(HistoricalImportContext);
+  return <FinancePage organizationId={organizationId} canEdit={role === "tenant_owner" && !imported} />;
 }
 function TenantIdentity() {
   const organizationId = useContext(OrganizationContext);

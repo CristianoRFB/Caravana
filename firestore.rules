@@ -50,6 +50,11 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/caravans/$(caravanId)).data.get('importPending', false) == false
         && acceptsReservations(get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId);
     }
+    // A copied historical tenant remains read-only until a separately reviewed cutover.
+    function tenantWritesEnabled(orgId) {
+      return !exists(/databases/$(database)/documents/organizations/$(orgId))
+        || get(/databases/$(database)/documents/organizations/$(orgId)).data.get('importPending', false) == false;
+    }
     function acceptsReservations(orgId) {
       return !exists(/databases/$(database)/documents/organizations/$(orgId))
         || get(/databases/$(database)/documents/organizations/$(orgId)).data.get('status', 'active') != 'suspended';
@@ -193,7 +198,7 @@ service cloud.firestore {
     }
     function quotaGrowth(orgId) {
       let policy = get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data;
-      return acceptsReservations(orgId) && policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
+      return tenantWritesEnabled(orgId) && acceptsReservations(orgId) && policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
     }
     function functionalFeatures(planId) {
       return planId == 'premium' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library', 'worklists']
@@ -204,7 +209,7 @@ service cloud.firestore {
     function functionalGrowth(orgId, feature) {
       let subscription = get(/databases/$(database)/documents/subscriptions/$(orgId)).data;
       let projection = get(/databases/$(database)/documents/organizations/$(orgId)/commercialFeatures/current).data;
-      return exists(/databases/$(database)/documents/organizations/$(orgId)) && isAdmin(orgId) && acceptsReservations(orgId)
+      return exists(/databases/$(database)/documents/organizations/$(orgId)) && tenantWritesEnabled(orgId) && isAdmin(orgId) && acceptsReservations(orgId)
         && subscription.status in ['active', 'trial', 'demo']
         && (subscription.trialEndsAt == null || request.time < subscription.trialEndsAt)
         && feature in functionalFeatures(subscription.planId)
@@ -909,7 +914,7 @@ service cloud.firestore {
       allow get: if (resource == null && signedIn()) || (resource != null && isAdmin(resource.data.organizationId));
       allow list: if isAdmin(resource.data.organizationId);
       allow update, delete: if false;
-      allow create: if operationId.matches('^[a-f0-9]{32}$')
+      allow create: if tenantWritesEnabled(request.resource.data.organizationId) && operationId.matches('^[a-f0-9]{32}$')
         && isAdmin(request.resource.data.organizationId)
         && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time
         && get(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.organizationId == request.resource.data.organizationId
@@ -944,7 +949,7 @@ service cloud.firestore {
         && request.resource.data.capacity is int
         && request.resource.data.capacity > 0
         && request.resource.data.capacity <= 1000;
-      allow update: if (isTenantOwner(resource.data.organizationId)
+      allow update: if tenantWritesEnabled(resource.data.organizationId) && ((isTenantOwner(resource.data.organizationId)
           && ownerConfiguration()
           && (request.resource.data.reservedSeats <= resource.data.reservedSeats || quotaSeats(resource.data.organizationId, request.resource.data.reservedSeats))
           && request.resource.data.organizationId == resource.data.organizationId
@@ -976,7 +981,7 @@ service cloud.firestore {
           && existsAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId))
           && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.reservationNonce == request.resource.data.lastReservationNonce
           && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.caravanId == caravanId
-          && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.registrationStatus == 'awaiting_payment');
+          && getAfter(/databases/$(database)/documents/registrations/$(getAfter(/databases/$(database)/documents/reservationReceipts/$(request.resource.data.lastReservationNonce)).data.registrationId)).data.registrationStatus == 'awaiting_payment'));
       allow delete: if false;
     }
 
@@ -1151,7 +1156,7 @@ service cloud.firestore {
       allow get: if (resource == null
           && (signedIn() || registrationId.matches('^[a-f0-9]{64}$')))
         || (resource != null
-          && (isAdmin(resource.data.organizationId) || (registrationId.matches('^[a-f0-9]{64}$')
+          && (isAdmin(resource.data.organizationId) || (tenantWritesEnabled(resource.data.organizationId) && registrationId.matches('^[a-f0-9]{64}$')
             && (!('portalAccessRevoked' in resource.data) || resource.data.portalAccessRevoked == false))));
       allow list: if isAdmin(resource.data.organizationId);
       allow create: if validLegacyImport(registrationId) || (request.resource.data.id == registrationId
@@ -1196,7 +1201,7 @@ service cloud.firestore {
         && request.resource.data.boardingPointName is string
         && validBoardingPoint(request.resource.data)
         && request.resource.data.createdAt is string);
-      allow update: if (isAdmin(resource.data.organizationId)
+      allow update: if tenantWritesEnabled(resource.data.organizationId) && ((isAdmin(resource.data.organizationId)
           && request.resource.data.organizationId == resource.data.organizationId
           && request.resource.data.caravanId == resource.data.caravanId
           && request.resource.data.get('id', registrationId) == resource.data.get('id', registrationId)
@@ -1234,7 +1239,7 @@ service cloud.firestore {
           && request.resource.data.authorizationId == 'current' && request.resource.data.authorizationStatus == 'pending'
           && request.resource.data.authorizationUploadedAt == request.time
           && request.resource.data.authorizationRetentionDays == getAfter(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.retentionDays
-          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.registrationId == registrationId);
+          && getAfter(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data.registrationId == registrationId));
       // Preserve operation identity and history; cancellation is the controlled reversal.
       allow delete: if false;
 
@@ -1305,7 +1310,7 @@ service cloud.firestore {
         function validProof() {
           let registrationData = registration();
           let updatedRegistration = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
-          return proofId == 'current'
+          return tenantWritesEnabled(registrationData.organizationId) && proofId == 'current'
             && (!('portalAccessRevoked' in registrationData) || registrationData.portalAccessRevoked == false)
             && request.resource.data.keys().hasOnly(['registrationId', 'organizationId', 'caravanId', 'contentType', 'fileName', 'content', 'uploadedAt', 'retentionDays'])
             && request.resource.data.registrationId == registrationId
@@ -1374,7 +1379,7 @@ service cloud.firestore {
       }
       allow get: if (resource == null && signedIn()) || (resource != null && isAdmin(resource.data.organizationId));
       allow list: if isAdmin(resource.data.organizationId);
-      allow create: if operationId.matches('^[a-f0-9]{32}$')
+      allow create: if tenantWritesEnabled(request.resource.data.organizationId) && operationId.matches('^[a-f0-9]{32}$')
         && request.resource.data.keys().hasOnly(['action', 'organizationId', 'caravanId', 'registrationId', 'entityId', 'sourceId', 'actorUid', 'at', 'payloadHash', 'reason', 'beforeCents', 'afterCents'])
         && isTenantOwner(request.resource.data.organizationId)
         && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time

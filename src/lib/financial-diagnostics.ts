@@ -26,5 +26,5 @@ export function diagnoseFinancialLedger(registrations: Registration[], payments:
 export function redactedFinanceCsv(registrations: Registration[], expenses: CaravanExpense[]): string {
   const summary = calculateFinanceSummary(registrations, expenses);
   // Fixed keys and numeric cells only: no passenger, document, contact, bearer URL, tenant or caravan identifier.
-  return "metric,value\r\n" + (Object.entries(summary) as [keyof FinanceSummary, number][]).map(([key, value]) => `${key},${Number.isSafeInteger(value) ? value : summary.unknownPaymentCount ? "UNKNOWN" : "INVALID"}`).join("\r\n") + "\r\n";
+  return "metric,value\r\n" + (Object.entries(summary) as [keyof FinanceSummary, number][]).map(([key, value]) => `${key},${Number.isSafeInteger(value) ? value : summary.unknownPaymentCount && ["receivedCents", "receivableCents", "recordedBalanceCents"].includes(key) ? "UNKNOWN" : "INVALID"}`).join("\r\n") + "\r\n";
 }

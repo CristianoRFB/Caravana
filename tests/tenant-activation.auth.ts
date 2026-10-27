@@ -13,7 +13,7 @@ const runtime=vi.hoisted(()=>({db:null as Firestore|null,auth:{currentUser:{uid:
 vi.mock('../src/lib/firebase',()=>runtime);
 import { watchTenantAccess } from '../src/lib/tenant-access';
 import { resolveTenantSlug } from '../src/lib/tenant-branding-data';
-import { recordPassengerPayment } from '../src/lib/financial-operations';
+import { recordPassengerPayment,adjustRegistrationFare } from '../src/lib/financial-operations';
 import type { Registration } from '../src/lib/types';
 let env:RulesTestEnvironment,app:FirebaseApp,auth:Auth,database:Firestore,uid:string,secondUid:string;
 let f:ReturnType<typeof activationFixture>,plan:ReturnType<typeof planTenantActivation>,paths:string[];
@@ -92,6 +92,17 @@ describe('existing copied tenant: real demo Auth, transaction, Rules and applica
   await expect(recordPassengerPayment({...data,id:mapped.split('/')[1]} as Registration,{amountCents:100,method:'cash',notes:'synthetic'},'3'.repeat(32))).rejects.toThrow('não conciliado');
   await assertFails(updateDoc(doc(database,mapped),{paymentTotalCents:0}));
   expect((await getDocFromServer(doc(database,mapped))).data()?.paymentTotalCents).toBeNull();
+ });
+ it('private historical copy denies business writes and new bearer access while legacy operations remain writable',async()=>{
+  await apply();const mapped=f.copyPlan.pathMap.find(p=>p.sourcePath==='registrations/'+'a'.repeat(64))!.targetPath;
+  const data=(await getDocFromServer(doc(database,mapped))).data()!;
+  await expect(adjustRegistrationFare({...data,id:mapped.split('/')[1]} as Registration,8000,'Ajuste estritamente fictício','4'.repeat(32))).rejects.toMatchObject({code:'permission-denied'});
+  await assertFails(getDocFromServer(doc(env.unauthenticatedContext().firestore(),mapped)));
+  const source='registrations/'+'a'.repeat(64),legacy=(await getDocFromServer(doc(database,source))).data()!;
+  await adjustRegistrationFare({...legacy,id:'a'.repeat(64)} as Registration,8000,'Ajuste estritamente fictício','5'.repeat(32));
+  expect((await getDocFromServer(doc(database,source))).data()?.amountCents).toBe(8000);
+  expect((await getDocFromServer(doc(database,mapped))).data()?.amountCents).toBe(7500);
+  await expect(apply()).rejects.toThrow('DRIFT');
  });
  it('concurrent private activation commits once and the losing caller can verify/replay safely',async()=>{
   const results=await Promise.allSettled([apply(),apply()]);

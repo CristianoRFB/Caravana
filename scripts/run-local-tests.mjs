@@ -8,6 +8,7 @@ const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
 const suite = process.argv[2] || "unit";
 const commands = {
+  "tenant-activation-e2e": "playwright test e2e/tenant-import-review.spec.ts",
   "tenant-activation": "vitest run --config vitest.tenant-activation.config.ts",
   "legacy-in-place": "vitest run --config vitest.in-place.config.ts",
   unit: "vitest run",

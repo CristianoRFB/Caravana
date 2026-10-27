@@ -11,7 +11,7 @@ SPEC.loader.exec_module(reconcile)
 
 class ReconcileTests(unittest.TestCase):
     def test_exact_reviewed_crlf_source_converts_to_exact_git_bytes(self):
-        content = (ROOT / "firestore.rules").read_bytes().decode("utf-8")
+        content = (ROOT / "scripts/tests/fixtures/staging-rules-20261022.rules").read_bytes().decode("utf-8")
         original = content.replace("\n", "\r\n")
         self.assertEqual(reconcile.sha(original), reconcile.OLD_HASH)
         source = {"files": [{"name": "firestore.rules", "content": original}]}
@@ -20,8 +20,14 @@ class ReconcileTests(unittest.TestCase):
         self.assertEqual(reconcile.sha(content), reconcile.audit.RULES_SHA256)
         self.assertEqual(source["files"][0]["content"], original)
 
+    def test_historical_reconciler_cannot_publish_current_functional_rules(self):
+        current = (ROOT / "firestore.rules").read_text(encoding="utf-8")
+        self.assertNotEqual(reconcile.sha(current), reconcile.audit.RULES_SHA256)
+        with self.assertRaisesRegex(reconcile.audit.Blocked, "unexpected_rules_bytes"):
+            reconcile.candidate({"files": [{"name": "firestore.rules", "content": current}]})
+
     def test_modified_or_additional_rules_cannot_be_deployed(self):
-        content = (ROOT / "firestore.rules").read_bytes().decode("utf-8")
+        content = (ROOT / "scripts/tests/fixtures/staging-rules-20261022.rules").read_bytes().decode("utf-8")
         for files in [[], [{"name": "storage.rules", "content": content}],
                       [{"name": "firestore.rules", "content": content + "\n"}],
                       [{"name": "firestore.rules", "content": content}] * 2]:

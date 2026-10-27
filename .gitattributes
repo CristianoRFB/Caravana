@@ -15,3 +15,5 @@ scripts/production-structural-inventory.py text eol=lf
 /scripts/tests/in-place*.mjs text eol=lf
 /tests/in-place-bootstrap.auth.ts text eol=lf
 /vitest.in-place.config.ts text eol=lf
+
+scripts/tests/fixtures/staging-rules-20261022.rules text eol=lf
