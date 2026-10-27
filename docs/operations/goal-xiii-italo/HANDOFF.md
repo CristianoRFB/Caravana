@@ -1,5 +1,14 @@
 # GOAL XIII — ativação privada sobre a cópia existente
 
+## Inventário seguinte —18:51UTC, somente leitura
+
+Nova fonte operacional ce9693759e322a4284d7c40915b1de8924fda709 acrescenta uma pré-checagem, sem alterar app/Rules publicados4ecaa9e. Seis casos novos nativos PASS (20com regressões), lint PASS; workflow dedicado40563424616 SUCCESS. CI principal40563424653 SUCCESS no mesmo SHA, incluindo regressão integral; [evidência oficial](evidence/ci-cutover-preflight-ce96937.json).
+
+[Inventário completo privado](CUTOVER_INVENTORY_RESULT_2026-10-27.json):24originais/29copiados reconciliados,1caravana e10inscrições de origem,0docs novos inesperados em origem/destino,0referências ambíguas,2totais financeiros desconhecidos preservados. Data do único evento anterior a hoje; segue published na origem e draft/importPending no destino. Nenhuma write, recopy, PII ou ciphertext exportado. A primeira tentativa não iniciou porque a conexão Cloud Shell se perdeu; reconectada a mesma sessão, foram confirmados0processos/0recibos antes de executar uma única leitura.
+
+Pendente a resposta do proprietário: evento apenas histórico (encerrar reservas/edições) ou ainda em operação. A classificação temporal não autoriza encerrar o evento nem reabrir a cópia. O PREVIEW somente de inventário não contém writes e nunca é readyForApply. Nenhum novo corte ou deploy da pré-checagem foi executado.
+
+
 ## 27/10/2026 — acesso privado publicado; corte público ainda pendente
 
 Fonte de produto **4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2**, branch PC. CI principal [40557950406](https://github.com/CristianoRFB/Caravana/actions/runs/40557950406) e dedicado [40557950411](https://github.com/CristianoRFB/Caravana/actions/runs/40557950411) SUCCESS no SHA exato. Aplicativo em [tenant-italo/admin/login](https://caravana-77.pages.dev/tenant-italo/admin/login); deployment **6e76a7cd-32f1-4d40-9a4c-f470cbe4445c**, sem Functions, dirty=false. Os seis assets da raiz legada permanecem byte a byte; 20 assets e três rotas privados/legados passaram em HTTP/hash/MIME/cabeçalhos.

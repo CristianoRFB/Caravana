@@ -1,0 +1,221 @@
+{
+  "source": "ce9693759e322a4284d7c40915b1de8924fda709",
+  "main": {
+    "run": 40563424653,
+    "url": "https://github.com/CristianoRFB/Caravana/actions/runs/40563424653",
+    "sha": "ce9693759e322a4284d7c40915b1de8924fda709",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 122398226763,
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Java for Firebase emulators",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Audit runtime dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Lint",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Typecheck",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Read-only staging audit guards (no credentials or remote audit)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit, integration and Firestore Rules",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Bounded public health transport (synthetic streams only)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Auth emulator integration",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Storage Rules with Auth",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Coordinated Auth Firestore Storage recovery (synthetic emulator only)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install Chromium",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Private proof viewer CSP with synthetic in-memory data only",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Desktop and mobile E2E (synthetic only)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Private history subpath against the published legacy Rules contract (synthetic only)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record synthetic browser summary without artifact storage",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Java for Firebase emulators",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "dedicated": {
+    "run": 40563424616,
+    "jobs": [
+      {
+        "id": 122398226951,
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Pure activation planner and preservation guards",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Existing Auth login, private activation, revocation and unknown finance with demo SDKs",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Legacy SDK journeys remain compatible without rewriting historical evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Preserve previously verified Goal XI evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+}

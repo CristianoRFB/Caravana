@@ -1,5 +1,14 @@
 # Release privado atual e contingência —27/10/2026
 
+## Inventário seguinte —18:51UTC, somente leitura
+
+Nova fonte operacional ce9693759e322a4284d7c40915b1de8924fda709 acrescenta uma pré-checagem, sem alterar app/Rules publicados4ecaa9e. Seis casos novos nativos PASS (20com regressões), lint PASS; workflow dedicado40563424616 SUCCESS. CI principal40563424653 SUCCESS no mesmo SHA, incluindo regressão integral; [evidência oficial](evidence/ci-cutover-preflight-ce96937.json).
+
+[Inventário completo privado](CUTOVER_INVENTORY_RESULT_2026-10-27.json):24originais/29copiados reconciliados,1caravana e10inscrições de origem,0docs novos inesperados em origem/destino,0referências ambíguas,2totais financeiros desconhecidos preservados. Data do único evento anterior a hoje; segue published na origem e draft/importPending no destino. Nenhuma write, recopy, PII ou ciphertext exportado. A primeira tentativa não iniciou porque a conexão Cloud Shell se perdeu; reconectada a mesma sessão, foram confirmados0processos/0recibos antes de executar uma única leitura.
+
+Pendente a resposta do proprietário: evento apenas histórico (encerrar reservas/edições) ou ainda em operação. A classificação temporal não autoriza encerrar o evento nem reabrir a cópia. O PREVIEW somente de inventário não contém writes e nunca é readyForApply. Nenhum novo corte ou deploy da pré-checagem foi executado.
+
+
 A produção foi operada diretamente, conforme instrução do proprietário de não testar em bdall. Não repetir COPY, APPLY de companions ou conceder plano. A fonte publicada é4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2; os commits seguintes de evidência não são nova fonte de produto nem novo CI de runtime.
 
 ## Estado efetivo

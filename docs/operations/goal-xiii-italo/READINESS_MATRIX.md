@@ -21,3 +21,11 @@ Produção direta por instrução do proprietário; nenhum novo teste hospedado 
 **READY_FOR_ITALO_MIGRATION=NO; ITALO_MIGRATED=NO; COMMERCIAL_READY_NEW_TENANTS=NO.** Indicadores históricos17/20, F7 9/10, F8 6/14, GOAL7/17 não são reavaliados como conclusão. Monitoramento crítico desta janela foi exercitado por detecção HTTP, resposta e retorno/avanço reais; nenhum heartbeat END foi inventado.
 
 Próxima fase técnica: inventário de divergência temporal, contrato de único escritor, compatibilidade de links existentes e PREVIEW/corte transacional protegido, incluindo preservação de writes posteriores no retorno. Não falta permissão genérica nem conta de staging; não pedir tokens/senhas/OTP. O objetivo permanece ativo.
+
+## Inventário seguinte —18:51UTC, somente leitura
+
+Nova fonte operacional ce9693759e322a4284d7c40915b1de8924fda709 acrescenta uma pré-checagem, sem alterar app/Rules publicados4ecaa9e. Seis casos novos nativos PASS (20com regressões), lint PASS; workflow dedicado40563424616 SUCCESS. CI principal40563424653 SUCCESS no mesmo SHA, incluindo regressão integral; [evidência oficial](evidence/ci-cutover-preflight-ce96937.json).
+
+[Inventário completo privado](CUTOVER_INVENTORY_RESULT_2026-10-27.json):24originais/29copiados reconciliados,1caravana e10inscrições de origem,0docs novos inesperados em origem/destino,0referências ambíguas,2totais financeiros desconhecidos preservados. Data do único evento anterior a hoje; segue published na origem e draft/importPending no destino. Nenhuma write, recopy, PII ou ciphertext exportado. A primeira tentativa não iniciou porque a conexão Cloud Shell se perdeu; reconectada a mesma sessão, foram confirmados0processos/0recibos antes de executar uma única leitura.
+
+Pendente a resposta do proprietário: evento apenas histórico (encerrar reservas/edições) ou ainda em operação. A classificação temporal não autoriza encerrar o evento nem reabrir a cópia. O PREVIEW somente de inventário não contém writes e nunca é readyForApply. Nenhum novo corte ou deploy da pré-checagem foi executado.

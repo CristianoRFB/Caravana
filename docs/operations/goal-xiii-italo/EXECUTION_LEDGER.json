@@ -35,7 +35,20 @@
     "hostedReleaseEvidence": "HOSTED_RELEASE_2026-10-27.json",
     "ownerLoginEvidence": "OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; no new lastLoginAt corroborated",
     "publicCutover": false,
-    "migrated": false
+    "migrated": false,
+    "cutoverInventory": {
+      "source": "ce9693759e322a4284d7c40915b1de8924fda709",
+      "evidence": "CUTOVER_INVENTORY_RESULT_2026-10-27.json",
+      "nativeNewCases": 6,
+      "nativeIncludingRegression": 20,
+      "status": "RECONCILED_NO_WRITES",
+      "dedicatedCi": 40563424616,
+      "dedicatedStatus": "SUCCESS",
+      "mainCi": 40563424653,
+      "mainStatus": "SUCCESS",
+      "businessIntentQuestion": "PENDING",
+      "ciEvidence": "evidence/ci-cutover-preflight-ce96937.json"
+    }
   },
   "goal": "XIII",
   "checkedAt": "2026-10-27T13:39:33.332498+00:00",

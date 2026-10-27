@@ -157,5 +157,15 @@
     "classificationOnly": true,
     "businessWrites": 0
   },
-  "remainingBusinessClarification": "Past event: historical closure versus continuing operation; question sent, no closure performed"
+  "remainingBusinessClarification": "Past event: historical closure versus continuing operation; question sent, no closure performed",
+  "ownerSessionMetadataReadback": {
+    "at": "2026-10-27T19:01:46.042Z",
+    "owners": 2,
+    "lastLoginMetadataAvailable": 2,
+    "lastRefreshMetadataAvailable": 2,
+    "visibleLoginsAfterPublication": 0,
+    "visibleTokensMintedAfterPublication": 0,
+    "operatorAuthWrites": 0,
+    "interpretation": "Owner-confirmed access remains reported evidence. Reusing an already valid existing session is possible; no fresh sign-in or token mint after publication independently corroborated."
+  }
 }

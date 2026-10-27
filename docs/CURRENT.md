@@ -12,6 +12,8 @@ O retorno simples de Pages e a republicação pura legada deixaram HTML privado 
 
 **DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; APP_ACTIVE=PUBLISHED_PRIVATE_HISTORY_OWNER_REPORTED_PASS; PUBLIC_CUTOVER=false; MIGRATED=false.** A cópia continua histórica/importPending/somente leitura; a origem permanece o único escritor público. A missão integral segue ativa: falta implementar e validar corte sincronizado e compatibilidade dos links, sem usar a etapa privada como substituto da transferência operacional.
 
+Pré-checagem adicional de corte em ce9693759e322a4284d7c40915b1de8924fda709: inventário completo privado reconciliou24originais/29copiados,1caravana/10inscrições,0docs novos inesperados e2totais UNKNOWN. O único evento tem data passada e continua publicado na origem; aguarda decisão do proprietário entre histórico encerrado e continuidade operacional. Seis testes novos/20nativos com regressões e CI dedicado40563424616 PASS; CI principal40563424653 SUCCESS no mesmo SHA; código de produto publicado permanece4ecaa9e. Nenhum corte ou novo deploy. [Resultado sanitizado](operations/goal-xiii-italo/CUTOVER_INVENTORY_RESULT_2026-10-27.json).
+
 ## Checkpoints anteriores — históricos, substituídos pelo estado acima
 
 
