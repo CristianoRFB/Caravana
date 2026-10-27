@@ -2,6 +2,8 @@
 
 ## 27/10/2026 — companions do Ítalo aplicados e verificados em produção; app ainda pendente
 
+**Direção posterior do proprietário:** seguir transferência/ativação diretamente em caravana-af306, sem testar em bdall. Diagnóstico somente leitura no staging retornou403 para a conta atual, inclusive firebaserules.releases.get; não houve mutação e não haverá novas tentativas hospedadas ali. Preservação, CI/sintéticos e retorno do alvo de produção continuam obrigatórios; não repetir a cópia.
+
 Cloud Shell oficial autorizado nesta conversa revalidou **24 originais, 29 documentos copiados e os 2 owners Auth existentes**. PREVIEW, uma transação APPLY com quatro `exists:false` e VERIFY independente PASS, plano `95597e20a9fb779598abc7076b74ca2dbb49a53f491b868b312c0baeec18ebf1`. Criados somente branding público mínimo, slug, disponibilidade e ledger de ativação privada. **Zero recopy, writes de negócio/originais/Auth/memberships/contrato/Rules ou deploy frontend.** [Resultado sanitizado](operations/goal-xiii-italo/HOSTED_PRIVATE_RESULT_2026-10-27.json).
 
 Projeto `caravana-af306`/742921744156 confirmado ACTIVE, billing=false, Standard/freeTier; Rules legadas `fe594614…`/ruleset585cb14f, 2 índices READY e zero buckets/objetos. Configurações afetadas preservadas e lidas de volta cifradas no home privado; isso não prova segunda custódia ou restore independente. Pages atual confirmado por API: staging4ed92f3b e produção4d069e0a, sem alteração. DATA_COPIED agora **REVERIFIED_HOSTED**; autenticação do cliente, APP_ACTIVE, PUBLIC_ACTIVE e MIGRATED continuam sem comprovação.

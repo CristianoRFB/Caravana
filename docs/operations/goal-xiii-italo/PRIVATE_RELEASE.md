@@ -1,5 +1,15 @@
 # Etapa privada — continuidade do GOAL XIII no PC
 
+## Direção do proprietário — produção direta
+
+Em27/10, após o diagnóstico 403 de staging, o proprietário instruiu: **“não teste por bdall, faça a transferencia direta”**. Não haverá novas chamadas nem testes hospedados em bdall-e3585. Seguir diretamente no Firebase existente caravana-af306/caravana-77, sem recopy, com CI/sintéticos, preservação atual, diff, smoke e retorno coordenado. Os passos abaixo que previam staging são históricos e estão substituídos por essa instrução; não pedir novamente a conta de staging. O 403 não foi contornado com outra credencial e nenhuma mutação de staging ocorreu.
+
+Continuação técnica: `package-italo-private.mjs` valida build limpo/target/SHA, cada arquivo do manifesto e os assets legados por HTTP/hash/MIME antes de criar diretório novo. Não lê credenciais/dados; não sobrescreve saída existente; preserva todos os assets legados, acrescentando o aplicativo no subpath e regras de roteamento/cabeçalho. O CSP privado mantém scripts self e aceita frames blob locais para comprovantes; herança/detach foram conferidos no runtime local Pages4.151.3, sem mudar o CSP da raiz. Teste real de navegador com conteúdo fictício em memória PASS. Referência de semântica: [Cloudflare Pages headers](https://developers.cloudflare.com/pages/configuration/headers/).
+
+A extensão de validação local tem17casos dirigidos (12SDK/Rules,3seleção/rotas,2limites do pacote),4E2E com comprovante blob nas quatro larguras e1teste CSP independente. O CI aeffda8 principal40550558727 e dedicado40550559000 passaram antes dessas extensões finais; não aprova automaticamente o novo SHA.
+
+Índices de produção reconferidos: caravans(slug ASC,status ASC) e registrations(organizationId ASC,caravanId ASC), ambos READY. `firestore.italo-private.indexes.json` preserva esses dois e acrescenta somente registrationOperations(org,caravan,at DESC) e financialOperations(org,at DESC)/(org,caravan,at DESC), necessários às consultas de histórico permitidas nesta fase: **delta planejado3, zero remoções**, ainda não aplicado. Importação/configuração comercial ficam indisponíveis nesta fase e não justificam os outros índices SaaS. O ledger de ativação real tem createTime2026-10-27T16:10:02.108883Z.
+
 ## Estado real
 
 `HOSTED_PRIVATE_RESULT_2026-10-27.json` registra PREVIEW/APPLY/VERIFY oficiais, sem dados pessoais. Os quatro companions já existem; não repetir COPY nem criar novos owners. Código operacional executado: d7d4ded. A cópia e os originais foram revalidados, mas isso não é login do cliente nem aplicação publicada.

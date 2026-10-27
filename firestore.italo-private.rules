@@ -9,7 +9,13 @@ service cloud.firestore {
         ? get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.organizationId
         : '';
     }
-    function isAdmin(orgId) { return orgId != 'italo' && signedIn() && adminOrg() == orgId; }
+    function legacyMembershipAllows(orgId) {
+      let member = /databases/$(database)/documents/memberships/$(request.auth.uid)/organizations/$(orgId);
+      return !exists(member) || (get(member).data.uid == request.auth.uid
+        && get(member).data.organizationId == orgId && get(member).data.status == 'active'
+        && get(member).data.role == 'tenant_owner');
+    }
+    function isAdmin(orgId) { return orgId != 'italo' && signedIn() && adminOrg() == orgId && legacyMembershipAllows(orgId); }
     function publicCaravan(caravanId) {
       return exists(/databases/$(database)/documents/caravans/$(caravanId))
         && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published';

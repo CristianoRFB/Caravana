@@ -75,7 +75,8 @@
     "test:italo-private": "node scripts/run-local-tests.mjs italo-private-release",
     "test:italo-private:e2e": "node scripts/run-local-tests.mjs italo-private-release-e2e",
     "build:italo-private": "tsc -b && node scripts/build-italo-private.mjs",
-    "build:italo-private:staging": "tsc -b && node scripts/build-italo-private.mjs --staging"
+    "build:italo-private:staging": "tsc -b && node scripts/build-italo-private.mjs --staging",
+    "package:italo-private": "node scripts/package-italo-private.mjs"
   },
   "dependencies": {
     "firebase": "^11.10.0",

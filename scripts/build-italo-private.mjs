@@ -25,6 +25,9 @@ const files = [];
 async function inventory(prefix = '') {
   for (const entry of await readdir(`${directory}/${prefix}`, { withFileTypes: true })) {
     const name = prefix + entry.name;
+    // Outer Pages configuration belongs to the combined package, never to the
+    // tenant asset manifest. Vite copies public/_redirects automatically.
+    if (!prefix && ['_headers', '_redirects'].includes(entry.name)) continue;
     if (entry.isDirectory()) await inventory(name + '/');
     else { const bytes = await readFile(`${directory}/${name}`); files.push({ path: base + name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') }); }
   }

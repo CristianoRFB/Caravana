@@ -8,7 +8,7 @@ const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
 const suite = process.argv[2] || "unit";
 const commands = {
-  "italo-private-release": "vitest run tests/italo-private-release.test.ts tests/private-history-release.test.ts",
+  "italo-private-release": "vitest run tests/italo-private-release.test.ts tests/private-history-release.test.ts tests/private-history-package.test.ts",
   "italo-private-release-e2e": "playwright test --config playwright.italo-private.config.ts",
   "tenant-activation-regression": "vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/operational-tools.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts",
   "tenant-booking-regression-e2e": 'playwright test e2e/baseline.spec.ts --grep "public booking, private proof"',

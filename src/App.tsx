@@ -1564,10 +1564,11 @@ function AdminGuard({ children }: { children: ReactNode }) {
             <LockKeyhole />
             <h1>{accessError ? "Atualização necessária" : "Conta ainda não autorizada"}</h1>
             <p>
-              {accessError ||
-                "Peça um convite à pessoa responsável pela sua organização e aceite-o na área da sua conta."}
+              {accessError || (privateHistoryScope
+                ? "Entre com a conta responsável já autorizada para consultar o histórico do Ítalo. Não é necessário criar outra conta."
+                : "Peça um convite à pessoa responsável pela sua organização e aceite-o na área da sua conta.")}
             </p>
-            <p><Link className="button button-outline" to="/conta/convites">Meus convites</Link></p>
+            {!privateHistoryScope && <p><Link className="button button-outline" to="/conta/convites">Meus convites</Link></p>}
             {accessError ? (
               <button
                 className="button button-outline"

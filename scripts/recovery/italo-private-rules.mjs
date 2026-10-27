@@ -27,7 +27,13 @@ export function buildItaloPrivateRules(bytes) {
   });
   rules = replaceOnce(rules,
     "function isAdmin(orgId) { return signedIn() && adminOrg() == orgId; }",
-    "function isAdmin(orgId) { return orgId != 'italo' && signedIn() && adminOrg() == orgId; }");
+    `function legacyMembershipAllows(orgId) {
+      let member = /databases/$(database)/documents/memberships/$(request.auth.uid)/organizations/$(orgId);
+      return !exists(member) || (get(member).data.uid == request.auth.uid
+        && get(member).data.organizationId == orgId && get(member).data.status == 'active'
+        && get(member).data.role == 'tenant_owner');
+    }
+    function isAdmin(orgId) { return orgId != 'italo' && signedIn() && adminOrg() == orgId && legacyMembershipAllows(orgId); }`);
   rules = replaceOnce(rules,
     "isAdmin(resource.data.organizationId) || registrationId.matches('^[a-f0-9]{64}$')",
     "isAdmin(resource.data.organizationId) || (resource.data.organizationId != 'italo' && registrationId.matches('^[a-f0-9]{64}$'))");

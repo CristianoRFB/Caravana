@@ -20,7 +20,8 @@ test.beforeEach(async ({ context, page }) => {
     const original = (await getDoc(doc(db, 'caravans/ride-a'))).data()!;
     await setDoc(doc(db, 'caravans/copied-ride'), { ...original, id: 'copied-ride', organizationId: 'italo', name: 'Viagem histórica fictícia', slug: 'private-copy', status: 'draft', importPending: true });
     const passenger = (await getDoc(doc(db, `registrations/${'a'.repeat(64)}`))).data()!;
-    await setDoc(doc(db, `registrations/${registrationId}`), { ...passenger, id: registrationId, organizationId: 'italo', caravanId: 'copied-ride', passengerName: 'Passageiro fictício importado', paymentTotalCents: null });
+    await setDoc(doc(db, `registrations/${registrationId}`), { ...passenger, id: registrationId, organizationId: 'italo', caravanId: 'copied-ride', passengerName: 'Passageiro fictício importado', paymentTotalCents: null, proofId: 'current' });
+    await setDoc(doc(db, `registrations/${registrationId}/proofs/current`), { registrationId, organizationId: 'italo', caravanId: 'copied-ride', contentType: 'application/pdf', fileName: 'synthetic-private.pdf', content: Buffer.from('%PDF-1.4\nSYNTHETIC PRIVATE PROOF').toString('base64') });
   });
   page.on('pageerror', () => failures.push('runtime_error'));
   await context.route('**/*', route => {
@@ -46,6 +47,9 @@ test('private subpath uses existing Auth, preserves UNKNOWN, disables mutations,
   await page.getByRole('link', { name: /Passageiros/ }).click();
   await expect(page.getByRole('button', { name: 'Editar', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Revogar link', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Comprovante', exact: true }).click();
+  await expect(page.locator('iframe[title="Comprovante privado"]')).toHaveAttribute('src', /^blob:/);
+  await page.getByRole('button', { name: 'Fechar', exact: true }).click();
   await page.goto(`${base}/admin/check-in/copied-ride`); await expect(page.getByRole('button', { name: 'Embarcar', exact: true })).toBeDisabled();
   await page.goto(`${base}/caravana/private-copy/inscricao`); await expect(page).toHaveURL(new RegExp(`${base}/admin$`));
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);

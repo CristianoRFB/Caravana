@@ -2,6 +2,8 @@
 
 ## Atualização PC — posterior aos checkpoints abaixo
 
+Direção posterior do proprietário: **produção direta, sem testes hospedados em bdall**. Não há dependência pendente de fornecer conta de staging. A execução continuará em caravana-af306, condicionada ao CI da candidata, preservação/diff e retorno. 403 de staging foi somente leitura; nenhuma API, permissão ou billing foi alterado para contorná-lo.
+
 DATA_COPIED=REVERIFIED_HOSTED: 24 originais/29 copiados/2 owners Auth conferidos no PREVIEW/APPLY/VERIFY oficial. Quatro companions adicionais criados atomicamente; os documentos copiados não foram recriados. Billing=false/Standard/freeTier e Rules/Auth/2 índices/metadados Storage preservados cifrados com readback em custódia única. Fonte: `HOSTED_PRIVATE_RESULT_2026-10-27.json`. ACCESS_ACTIVE/APP_ACTIVE/PUBLIC_ACTIVE/MIGRATED seguem não comprovados. Autenticação GCP oficial agora disponível; não repetir a afirmação histórica de ausência de identidade nesta execução. Candidata privada nova: 14 dirigidos/4 E2E PASS, ainda sem CI/deploy próprios; próximos gates em `PRIVATE_RELEASE.md`.
 
 | Estado | Resultado nesta sessão | Prova/limite |

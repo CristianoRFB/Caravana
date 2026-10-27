@@ -1,6 +1,7 @@
 {
   "status": "PRIVATE_ACTIVATION_COMPANIONS_VERIFIED",
   "date": "2026-10-27",
+  "activationCreatedAt": "2026-10-27T16:10:02.108883Z",
   "environment": "Official Google Cloud Shell; existing owner identity authorized in chat",
   "codeSource": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
   "projectId": "caravana-af306",
@@ -15,6 +16,7 @@
   "independentVerify": { "exit": 0, "originalDocuments": 24, "copiedDocuments": 29, "companions": 4, "commitAttempted": false },
   "createdPaths": ["publicTenantSettings/italo", "tenantSlugs/italo", "organizationAvailability/italo", "organizations/italo/tenantActivations/private-v1"],
   "authOwnersRechecked": 2,
+  "subsequentReadOnlyPreflight": { "owners": 2, "ownersDisabled": 0, "ownersBlockedByDemoEmailGuard": 0, "inlineProofsVerified": 1, "proofContentMatchesOriginal": true, "proofBytesExported": 0 },
   "businessWrites": 0,
   "originalWrites": 0,
   "authWrites": 0,

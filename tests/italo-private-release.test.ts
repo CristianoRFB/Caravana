@@ -109,4 +109,11 @@ describe('private Italo release against the exact published legacy writer', () =
     await env.withSecurityRulesDisabled(async context => { await updateDoc(doc(context.firestore(), 'organizations/italo'), { importPending: true }); await deleteDoc(doc(context.firestore(), 'organizations/italo/tenantActivations/private-v1')); });
     await assertFails(getDoc(doc(authenticated(), `registrations/${copyId}`)));
   });
+  it('does not let a revoked source membership fall back to the legacy admin document', async () => {
+    await assertSucceeds(getDoc(doc(authenticated(), 'organizations/caravana-77')));
+    await env.withSecurityRulesDisabled(context => setDoc(doc(context.firestore(), `memberships/${owner}/organizations/caravana-77`), { uid: owner, organizationId: 'caravana-77', role: 'tenant_owner', status: 'revoked' }));
+    await assertFails(getDoc(doc(authenticated(), 'organizations/caravana-77')));
+    await assertFails(updateDoc(doc(authenticated(), `registrations/${sourceId}`), { paymentTotalCents: 0 }));
+    await assertSucceeds(getDoc(doc(authenticated(), `registrations/${copyId}`)));
+  });
 });

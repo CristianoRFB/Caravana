@@ -74,6 +74,9 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Private proof viewer CSP with synthetic in-memory data only
+        run: node --test scripts/tests/private-viewer-csp.test.mjs
+
       - name: Desktop and mobile E2E (synthetic only)
         run: npm run test:e2e
 
