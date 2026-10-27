@@ -1,0 +1,38 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/tenant-import-review.spec.ts
+[WebServer] (node:9715) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:9746) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:9764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop-1440] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (10.8s)
+(node:9885) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [tablet-768] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (5.4s)
+(node:10028) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [mobile-375] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (4.0s)
+(node:10160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [mobile-320] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (4.1s)
+
+  4 passed (39.4s)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

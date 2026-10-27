@@ -1,0 +1,48 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts
+
+ RUN  v5.0.3 /workspace/Caravana
+
+ ❯ tests/data.integration.test.ts (27 tests | 1 failed) 11771ms
+   ❯ production data functions on synthetic emulator fixtures (27)
+     × initializes only newly imported nonfinancial rows with an explicit zero and rejects explicit unknown totals 43ms
+ ❯ tests/operational-tools.integration.test.ts (12 tests | 1 failed) 4560ms
+   ❯ functional plan enforcement using actual SDK and candidate Rules (12)
+     × supports the original legacy admin at maximum payload without weakening atomic audit 174ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/data.integration.test.ts > production data functions on synthetic emulator fixtures > initializes only newly imported nonfinancial rows with an explicit zero and rejects explicit unknown totals
+ReferenceError: importCsvRows is not defined
+ ❯ tests/data.integration.test.ts:128:22
+    126|     await seedTrip();
+    127|     const rows = [{ ...passenger, line: 2, amountCents: 8500, registra…
+    128|     const imported = await importCsvRows("trip-a", rows, "8".repeat(32…
+       |                      ^
+    129|     const id = imported[0].registrationId!;
+    130|     expect((await getDoc(doc(runtime.db!, "registrations", id))).data(…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/operational-tools.integration.test.ts > functional plan enforcement using actual SDK and candidate Rules > supports the original legacy admin at maximum payload without weakening atomic audit
+FirebaseError: 7 PERMISSION_DENIED:
+evaluation error at L278:24 for 'create' @ L278, evaluation error at L323:24 for 'create' @ L323, false for 'create' @ L323, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'create' @ L278
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  2 failed | 58 passed (60)
+   Start at  12:47:27
+   Duration  20.69s (tests 94%, transform 3%, import 2%)
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts" exited with code 1

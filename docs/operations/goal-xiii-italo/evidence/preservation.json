@@ -1,0 +1,25 @@
+{
+  "base": "3fc0bc3e17767cba4774c001c10fab0310517811",
+  "candidate": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+  "protectedGoalXiEvidenceUnchanged": true,
+  "indexesChanged": false,
+  "realDataRead": false,
+  "firebaseWrites": 0,
+  "authWrites": 0,
+  "ruleDeploys": 0,
+  "frontendDeploys": 0,
+  "copyRepeated": false,
+  "dataCopiedReported": {
+    "documents": 29,
+    "originals": 24,
+    "authRetained": 2,
+    "sourceEvidence": "docs/operations/goal-xi-italo/TENANT_COPY_RESULT.json",
+    "currentSessionHostedVerified": false
+  },
+  "prototypeRulesReviewPerformed": true,
+  "candidateRulesSha256": "b2891b274393172c4a1ec69d9feeb627a485948617c4123abad23b0244dfeab0",
+  "publicMetadataOnlyRequests": [
+    "production HTML + entry JS",
+    "staging release.json"
+  ]
+}

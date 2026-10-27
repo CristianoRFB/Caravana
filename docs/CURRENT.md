@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## GOAL XIII —27/10, ativação privada preparada sem recopy
+
+Branch `codex/caravana77-goal-xiii-activate-italo-cloud-20261026`, base3fc0bc3. [Handoff](operations/goal-xiii-italo/HANDOFF.md), [estados por prova](operations/goal-xiii-italo/READINESS_MATRIX.md) e [operação privada](operations/goal-xiii-italo/OPERATE_PRIVATE.md). Ativador PREVIEW/APPLY/VERIFY cria até4companions ausentes, não copia de novo os29docs nem altera24originais/Auth/memberships/contrato. Rules/UI preservam leitura histórica, UNKNOWN e bloqueiam escrita na cópia importPending; CSV novo tem baseline explícito, Pro mantém envelope. Candidata de código d7d4ded; fonte/CI próprios registrados no ledger. Relatórios incompletos preservam3null+contagem e CSV UNKNOWN; reservas novas têm baseline explícito0, sem preencher históricos. Nenhuma mutação/deploy hospedados pelo Cloud. DATA_COPIED permanece prova reportada26/10; ACCESS_ACTIVE/APP_ACTIVE/PUBLIC_ACTIVE/MIGRATED ainda não comprovados em hosted.
+
 ## 26/10/2026 — cópia real para o novo tenant italo concluída
 
 Por solicitação explícita mais recente, foi executada uma cópia aditiva em `caravana-af306`, de `caravana-77` para `italo`, pelo Cloud Shell autorizado: **22 documentos de negócio copiados +6 companions +1 auditoria =29 criações atômicas**. Uma caravana, dez inscrições e seus pagamentos/comprovante foram conferidos; os24 documentos originais mantêm os mesmos hashes/versões. Auth, admins legados, Rules e site permaneceram intactos. Os dois totais desconhecidos continuam desconhecidos. [Resultado real sanitizado](operations/goal-xi-italo/TENANT_COPY_RESULT.json).

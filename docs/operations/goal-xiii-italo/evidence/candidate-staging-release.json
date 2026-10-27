@@ -1,0 +1,86 @@
+{
+  "kind": "FUNCTIONAL_STAGING_CANDIDATE",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "emulator": false,
+  "environment": "staging",
+  "source": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+  "builtAt": "2026-10-27T13:23:19.784Z",
+  "files": [
+    {
+      "path": "_headers",
+      "bytes": 716,
+      "sha256": "0b545bccabd7cdc62e3156d0a69b5fcd2599d48b94db0e17f097c3c00dbb2a77"
+    },
+    {
+      "path": "_redirects",
+      "bytes": 19,
+      "sha256": "6036983e5fc00f0169c9e939b1816ed771eee00e27f2fcc517b819041460b9ef"
+    },
+    {
+      "path": "assets/CommercialLanding-0uZpc247.css",
+      "bytes": 10506,
+      "sha256": "ccdaf9883e85603d2cd9111c6cf90c2fa8ba0e4db8b17b25bd9b5534d5556d64"
+    },
+    {
+      "path": "assets/CommercialLanding-C-uKZAED.js",
+      "bytes": 13600,
+      "sha256": "0ee98e4ea7660732d3b54b10cf150be807f5d19b3f4941b9f9463a83ee588191"
+    },
+    {
+      "path": "assets/InvitationInbox-DkYPMMIQ.js",
+      "bytes": 3186,
+      "sha256": "fb6e172cfaf6becb04de3cc67b15f57fd514489a807223b7eadf42f664a55c76"
+    },
+    {
+      "path": "assets/OperationalTools-D0dff8T8.js",
+      "bytes": 18968,
+      "sha256": "7cbfe873f5b3f7b9ffd070663583af0917140e0a486fb10c9b948cb887b4fb32"
+    },
+    {
+      "path": "assets/TeamManagement-iR4gxLCb.js",
+      "bytes": 8703,
+      "sha256": "1804e1da5eac9e4d6d2922bc2509bfa439d1ebf34c7153026b00a6cf59660b82"
+    },
+    {
+      "path": "assets/firebase-auth-CrZdVSXx.js",
+      "bytes": 123693,
+      "sha256": "fce3001d1a62b03d95f6f5a81961a56e6e96ef121ab0d81942fea9693f8afc77"
+    },
+    {
+      "path": "assets/firebase-firestore-KyaGVL9b.js",
+      "bytes": 365354,
+      "sha256": "6a584ee0e3847eac04a583e32c2bcf1be4b890367471c50b13c8dfc4ba526d3c"
+    },
+    {
+      "path": "assets/index-D_EYXssP.js",
+      "bytes": 531895,
+      "sha256": "5f1d965ffe30425965068ce538b5496f2ff99e76680c09d21c0828e3b4d54a5c"
+    },
+    {
+      "path": "assets/index-WxrywgLI.css",
+      "bytes": 49354,
+      "sha256": "a1c02aa8405b8553d8be8a6dd762cc62998ac282fbb231d1c8f77735a024d7cf"
+    },
+    {
+      "path": "assets/react-vendor-Cy33O35p.js",
+      "bytes": 9058,
+      "sha256": "1e6722a92f8f23c75b58a12ba6894dc79d26bb642f135d061c2b05b65a2600d5"
+    },
+    {
+      "path": "assets/team-DO-9gEyi.css",
+      "bytes": 1315,
+      "sha256": "e1c0266817f19964d3d2ff361bdbd90946f5612e40a790672f35f60b66ea1fc8"
+    },
+    {
+      "path": "assets/team-NA_OBj3B.js",
+      "bytes": 8941,
+      "sha256": "12f07ef5700f1e2e1485ea6eeafe2ee01c23ef06bfebc3b2c429a494e1ccab49"
+    },
+    {
+      "path": "index.html",
+      "bytes": 895,
+      "sha256": "c083d7b91fac5baf1167aa24b311f132ee107133772306df900ae4c79f577b01"
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: playwright test e2e/tenant-import-review.spec.ts
+[WebServer] (node:4830) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer]
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:4862) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:4880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop-1440] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (19.2s)
+(node:4987) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [tablet-768] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (14.6s)
+(node:5090) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [mobile-375] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (13.7s)
+(node:5203) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [mobile-320] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation (12.7s)
+
+
+  1) [desktop-1440] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.finance-passenger-row')
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.finance-passenger-row') with timeout 10000ms
+      - waiting for locator('.finance-passenger-row')
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      22 |  const metric=page.locator('.finance-summary-card').filter({has:page.getByText('Recebido registrado',{exact:true})});await expect(metric).toContainText('Não conciliado');
+      23 |  await page.reload();await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
+    > 24 |  await page.getByLabel('Organização ativa').selectOption('org-b');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
+         |                                                                                                                                                                                                                   ^
+      25 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+      26 | });
+      27 |
+        at /workspace/Caravana/e2e/tenant-import-review.spec.ts:24:211
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-desktop-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-desktop-1440/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-desktop-1440/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-desktop-1440/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [tablet-768] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.finance-passenger-row')
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.finance-passenger-row') with timeout 10000ms
+      - waiting for locator('.finance-passenger-row')
+        23 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      22 |  const metric=page.locator('.finance-summary-card').filter({has:page.getByText('Recebido registrado',{exact:true})});await expect(metric).toContainText('Não conciliado');
+      23 |  await page.reload();await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
+    > 24 |  await page.getByLabel('Organização ativa').selectOption('org-b');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
+         |                                                                                                                                                                                                                   ^
+      25 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+      26 | });
+      27 |
+        at /workspace/Caravana/e2e/tenant-import-review.spec.ts:24:211
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-tablet-768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-tablet-768/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-tablet-768/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-tablet-768/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile-375] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.finance-passenger-row')
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.finance-passenger-row') with timeout 10000ms
+      - waiting for locator('.finance-passenger-row')
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      22 |  const metric=page.locator('.finance-summary-card').filter({has:page.getByText('Recebido registrado',{exact:true})});await expect(metric).toContainText('Não conciliado');
+      23 |  await page.reload();await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
+    > 24 |  await page.getByLabel('Organização ativa').selectOption('org-b');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
+         |                                                                                                                                                                                                                   ^
+      25 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+      26 | });
+      27 |
+        at /workspace/Caravana/e2e/tenant-import-review.spec.ts:24:211
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-375/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-375/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-375/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-375/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-320] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.finance-passenger-row')
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.finance-passenger-row') with timeout 10000ms
+      - waiting for locator('.finance-passenger-row')
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      22 |  const metric=page.locator('.finance-summary-card').filter({has:page.getByText('Recebido registrado',{exact:true})});await expect(metric).toContainText('Não conciliado');
+      23 |  await page.reload();await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
+    > 24 |  await page.getByLabel('Organização ativa').selectOption('org-b');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
+         |                                                                                                                                                                                                                   ^
+      25 |  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+      26 | });
+      27 |
+        at /workspace/Caravana/e2e/tenant-import-review.spec.ts:24:211
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-320/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-320/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-320/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-import-review-impor-e7c88-h-preserve-tenant-isolation-mobile-320/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [desktop-1440] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+    [tablet-768] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+    [mobile-375] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+    [mobile-320] › e2e/tenant-import-review.spec.ts:16:1 › imported history remains readable, unknown money explicit, and selection/refresh preserve tenant isolation
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "playwright test e2e/tenant-import-review.spec.ts" exited with code 1

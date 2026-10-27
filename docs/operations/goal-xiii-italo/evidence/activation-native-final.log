@@ -1,0 +1,15 @@
+✔ private activation adds exactly four missing companions, no plan, business, Auth, owner grant or copy (28.269759ms)
+✔ replay and lost acknowledgement require no new creates; partial state is not silently repaired (9.498615ms)
+✔ original drift, copied business drift and revoked target owner stop without a re-copy (9.59061ms)
+✔ wrong plan hash, public mode, alias hijack or existing branded conflict is denied (6.885349ms)
+✔ a rehashed malicious write-set is not a reproducible activation plan (5.125363ms)
+✔ return always preserves business documents; later traffic forces forward reconciliation (3.120359ms)
+✔ CLI refuses an ordinary Cloud host and every copy flag before credentials or private reads (243.144332ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 485.666569

@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-27T12:43:23.056Z",
+  "scope": "PUBLIC_PRODUCTION_FRONTEND_CODE_METADATA_ONLY",
+  "origin": "https://caravana-77.pages.dev",
+  "htmlSha256": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f",
+  "entryPath": "/assets/index-BXYRgZFm.js",
+  "entryBytes": 384009,
+  "entrySha256": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16",
+  "stringSignals": {
+    "memberships": false,
+    "tenantSlugs": false,
+    "reservationReceipts": true,
+    "reservationNonce": false,
+    "importPending": false
+  },
+  "firebaseRequests": 0,
+  "privateDataRead": false,
+  "productionWrites": 0,
+  "deploymentPerformed": false,
+  "sourceCommitProven": false
+}

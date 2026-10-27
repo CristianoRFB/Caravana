@@ -1,0 +1,49 @@
+
+> caravana-77@0.1.0 test:in-place:integration
+> node scripts/run-local-tests.mjs legacy-in-place
+
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run --config vitest.in-place.config.ts
+
+ RUN  v5.0.3 /workspace/Caravana
+
+ ❯ tests/in-place-bootstrap.auth.ts (4 tests | 1 failed) 10385ms
+   ❯ in-place additive upgrade using actual SDK, Auth and unchanged candidate Rules (4)
+     × runs old links, reservations/replay, check-in, compensations, reports/downgrade and revocation without deleting legacy history 857ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/in-place-bootstrap.auth.ts > in-place additive upgrade using actual SDK, Auth and unchanged candidate Rules > runs old links, reservations/replay, check-in, compensations, reports/downgrade and revocation without deleting legacy history
+Error: Existem totais de recebimento não conciliados. Confira o histórico antes de salvar um relatório consolidado.
+ ❯ operationalSummary src/lib/operational-tools.ts:20:56
+     18|   const passengers = registrations.filter((item) => ids.has(item.carav…
+     19|   const calculatedFinance = calculateFinanceSummary(passengers, expens…
+     20|   if (calculatedFinance.unknownPaymentCount > 0) throw new Error("Exis…
+       |                                                        ^
+     21|   // Keep the persisted Pro report envelope compatible; this UI diagno…
+     22|   const { unknownPaymentCount: _unknown, ...reportFinance } = calculat…
+ ❯ src/lib/operational-tools-data.ts:73:34
+ ❯ src/lib/operational-tools-data.ts:38:19
+ ❯ trackWrite src/lib/pending-writes.ts:13:16
+ ❯ tests/in-place-bootstrap.auth.ts:93:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 5 passed (6)
+   Start at  13:17:53
+   Duration  11.28s (tests 94%, transform 4%, import 2%)
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run --config vitest.in-place.config.ts" exited with code 1

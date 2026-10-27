@@ -1,0 +1,33 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts
+
+ RUN  v5.0.3 /workspace/Caravana
+
+ ❯ tests/data.integration.test.ts (27 tests | 1 failed) 14548ms
+   ❯ production data functions on synthetic emulator fixtures (27)
+     × initializes only newly imported nonfinancial rows with an explicit zero and rejects explicit unknown totals 119ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/data.integration.test.ts > production data functions on synthetic emulator fixtures > initializes only newly imported nonfinancial rows with an explicit zero and rejects explicit unknown totals
+FirebaseError:
+false for 'get' @ L878
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 59 passed (60)
+   Start at  12:49:51
+   Duration  23.55s (tests 96%, import 2%, transform 2%)
+
+⚠  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts" exited with code 1

@@ -1,0 +1,22 @@
+✔ full legacy bootstrap adds companions without replacing identity, legacy access, money or links (13.726752ms)
+✔ existing plan/companions are retained on a new preview; original plan permits exact replay (4.046887ms)
+✔ no guessed owner, reactivation, unreviewed commercial rights or visibility (2.207086ms)
+✔ cannot silently shrink legacy limits, reset counters or claim a foreign public slug (2.545319ms)
+✔ revoked history survives without recreating deleted Auth or granting an active member (0.74935ms)
+✔ source/target drift and tampered write-set stop; post-traffic rollback always preserves forward data (1.822753ms)
+✔ demo executor checks actual SDK host as well as project/env before any callback (1.013869ms)
+✔ private activation adds exactly four missing companions, no plan, business, Auth, owner grant or copy (22.626382ms)
+✔ replay and lost acknowledgement require no new creates; partial state is not silently repaired (10.761339ms)
+✔ original drift, copied business drift and revoked target owner stop without a re-copy (8.464465ms)
+✔ wrong plan hash, public mode, alias hijack or existing branded conflict is denied (6.299189ms)
+✔ a rehashed malicious write-set is not a reproducible activation plan (4.683099ms)
+✔ return always preserves business documents; later traffic forces forward reconciliation (2.670867ms)
+✔ CLI refuses an ordinary Cloud host and every copy flag before credentials or private reads (172.822723ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 562.773198

@@ -1,0 +1,20 @@
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-caravana77-test", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 19150.
+i  Running script: vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts
+
+ RUN  v5.0.3 /workspace/Caravana
+
+
+ Test Files  5 passed (5)
+      Tests  60 passed (60)
+   Start at  12:51:07
+   Duration  18.59s (tests 95%, import 2%, transform 2%)
+
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

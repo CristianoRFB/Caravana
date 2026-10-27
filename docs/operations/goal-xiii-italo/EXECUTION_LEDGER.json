@@ -1,0 +1,187 @@
+{
+  "goal": "XIII",
+  "checkedAt": "2026-10-27T13:25:44.415976+00:00",
+  "branch": "codex/caravana77-goal-xiii-activate-italo-cloud-20261026",
+  "base": "3fc0bc3e17767cba4774c001c10fab0310517811",
+  "codeSource": "d7d4ded7bbbe07500a87481ef19add7bdb0edb12",
+  "proofLevel": "DEMO_TESTED_NOT_HOSTED_ACTIVATED",
+  "remoteIdentityAvailable": false,
+  "runtimeRevision": 77,
+  "implementation": {
+    "activation": "PREVIEW_APPLY_VERIFY",
+    "maxCompanionCreates": 4,
+    "businessWrites": 0,
+    "authWrites": 0,
+    "commercialAssignments": 0,
+    "copyCommandAvailable": false,
+    "copyPendingReadOnly": true,
+    "unknownTotalsPreserved": true,
+    "incompleteReportTotals": "NULL_WITH_COUNT_AND_UNKNOWN_CSV"
+  },
+  "tests": {
+    "mainCI": {
+      "id": 40511470906,
+      "status": "IN_PROGRESS"
+    },
+    "activationCI": {
+      "id": 40511470991,
+      "status": "SUCCESS",
+      "native": 14,
+      "sdkAndFinance": 17,
+      "legacySdkAndCommercial": 6
+    },
+    "localDirectedRegression": {
+      "tests": 69,
+      "status": "PASS",
+      "log": "evidence/reports-regression.log"
+    },
+    "localLegacyRegression": {
+      "tests": 6,
+      "status": "PASS",
+      "log": "evidence/legacy-in-place-reports-final.log"
+    },
+    "localCopyReadOnlyE2E": {
+      "tests": 4,
+      "widths": [
+        320,
+        375,
+        768,
+        1440
+      ],
+      "status": "PASS",
+      "log": "evidence/reports-readonly-e2e.log"
+    },
+    "publicBookingCorrectionE2E": {
+      "source": "fdbd76ccc38ccbd7c1c36bf7922c05afc5cb4b2b",
+      "tests": 4,
+      "status": "PASS",
+      "log": "evidence/booking-e2e.log"
+    },
+    "python": {
+      "tests": 48,
+      "status": "PASS",
+      "log": "evidence/python-reports-final.log"
+    },
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "buildStaging": "PASS"
+  },
+  "earlierRuns": [
+    {
+      "source": "e11fb911b13871af54fa76289f8bb32bc2ea862c",
+      "run": 40503764015,
+      "conclusion": "FAIL",
+      "scope": "Rules pin guard; corrected independently from historical reconciler"
+    },
+    {
+      "source": "051666194bede4102e65cbbca1b363e46482e08a",
+      "run": 40505875428,
+      "conclusion": "FAIL",
+      "scope": "301 PASS /5 FAIL CSV baseline and Pro envelope; corrected"
+    },
+    {
+      "source": "2feb7942b714916bb608f8487f4067c514f68d3d",
+      "run": 40507383302,
+      "conclusion": "FAIL",
+      "scope": "307 backend,8Auth,6Storage,48Python PASS;184E2E PASS/4FAIL new public booking baseline; corrected"
+    },
+    {
+      "source": "fdbd76ccc38ccbd7c1c36bf7922c05afc5cb4b2b",
+      "run": 40510591671,
+      "conclusion": "SUPERSEDED_SEE_GITHUB",
+      "scope": "Superseded by report-unknown compatibility fix"
+    }
+  ],
+  "protectedFiles": {
+    "tests/in-place-bootstrap.auth.ts": "9b900a6b2171278ae30c85b315734eddbae88eadb44ee33ce6c95a986b51207e",
+    "docs/operations/goal-xi-italo/sdk-rehearsal.json": "90b3c3d9f4a91f5046981fed2b1778751bb26ad4444ec4d84e62405f07bd7014",
+    "docs/operations/goal-xi-italo/TENANT_COPY_RESULT.json": "4860f5fd22c12d4ad2615d45a59d257288021ccb440b491b42b0ea32f7e724f7"
+  },
+  "candidateRulesSha256": "b2891b274393172c4a1ec69d9feeb627a485948617c4123abad23b0244dfeab0",
+  "indexesChanged": false,
+  "reportedCopy": {
+    "proofDate": "2026-10-26",
+    "documents": 29,
+    "originals": 24,
+    "authRetained": 2,
+    "knownTotals": 8,
+    "unknownTotals": 2,
+    "verifiedHostedThisSession": false,
+    "sourceEvidence": "docs/operations/goal-xi-italo/TENANT_COPY_RESULT.json"
+  },
+  "italoStates": {
+    "DATA_COPIED": "REPORTED_VERIFIED_2026_10_26",
+    "AUTHENTICATED": "NOT_VERIFIED_HOSTED",
+    "APP_ACTIVE": false,
+    "PUBLIC_CUTOVER_COMPLETE": false,
+    "MIGRATED": false
+  },
+  "publicStaging": {
+    "checkedAt": "2026-10-27T13:22:59.113Z",
+    "url": "https://caravana77-staging.pages.dev/release.json",
+    "httpStatus": 200,
+    "sha256": "7a39184e9122bff7f55533ba23f349d008f29c5f15db14a09e3bddf85b4b6457",
+    "source": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+    "projectId": "bdall-e3585",
+    "pagesProject": "caravana77-staging",
+    "kind": "FUNCTIONAL_STAGING_CANDIDATE",
+    "builtAt": "2026-10-23T16:57:45.485Z",
+    "fileCount": 15,
+    "firebaseRequests": 0,
+    "writes": 0
+  },
+  "publicProductionFrontend": {
+    "checkedAt": "2026-10-27T12:43:23.056Z",
+    "scope": "PUBLIC_PRODUCTION_FRONTEND_CODE_METADATA_ONLY",
+    "origin": "https://caravana-77.pages.dev",
+    "htmlSha256": "525591aaaef546b3bce6a77b248f469e10b275dedad91c041778746b12ef066f",
+    "entryPath": "/assets/index-BXYRgZFm.js",
+    "entryBytes": 384009,
+    "entrySha256": "90677dd6e290cb4ba3ef54d6abfcdfc72aaf3b56ae85a0472012b195fee19f16",
+    "stringSignals": {
+      "memberships": false,
+      "tenantSlugs": false,
+      "reservationReceipts": true,
+      "reservationNonce": false,
+      "importPending": false
+    },
+    "firebaseRequests": 0,
+    "privateDataRead": false,
+    "productionWrites": 0,
+    "deploymentPerformed": false,
+    "sourceCommitProven": false
+  },
+  "remoteChangesThisSession": {
+    "firebaseReads": 0,
+    "firebaseWrites": 0,
+    "authWrites": 0,
+    "rulesDeploys": 0,
+    "indexDeploys": 0,
+    "frontendDeploys": 0,
+    "copyRepeated": false
+  },
+  "cost": {
+    "newServicesOrBillingActivated": false,
+    "executedNewResourceCostBRL": 0,
+    "currentHostedBillingVerified": "UNKNOWN"
+  },
+  "historicalMetricsNotPromoted": {
+    "technicalGroups": "17/20",
+    "F0_F6": "LOCAL_ACCEPTED_PRIOR_SCOPES",
+    "F7": "9/10",
+    "F8": "6/14",
+    "finalGoal": "7/17"
+  },
+  "readiness": {
+    "code": "READY_FOR_PROTECTED_PRIVATE_PREVIEW_AFTER_GREEN_CI",
+    "hostedActivation": "NOT_READY",
+    "commercialNewTenants": "NO_GO",
+    "legacyMigration": "NOT_READY"
+  },
+  "externalDependencies": [
+    "Official private Cloud Shell with original encrypted copy files and existing authorized identity; revalidate 24 originals/29 copied docs/Auth2 and approved branding.",
+    "Preserve/compare actual deployed Rules/frontend/attachments and cost; verify legacy public-writer compatibility and applicable rollback before hosted release.",
+    "Coordinate candidate staging and production validation with synthetic staging fixtures; authenticate existing users privately and record readback.",
+    "Independent backup custody/restore and synchronized single-writer public cutover remain unproved; no generic cutover command delivered."
+  ]
+}

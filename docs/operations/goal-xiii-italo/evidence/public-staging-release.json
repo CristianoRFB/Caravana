@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-27T13:22:59.113Z",
+  "url": "https://caravana77-staging.pages.dev/release.json",
+  "httpStatus": 200,
+  "sha256": "7a39184e9122bff7f55533ba23f349d008f29c5f15db14a09e3bddf85b4b6457",
+  "source": "67ce0328d7bf1b7395e71627cdc85c88667c77ec",
+  "projectId": "bdall-e3585",
+  "pagesProject": "caravana77-staging",
+  "kind": "FUNCTIONAL_STAGING_CANDIDATE",
+  "builtAt": "2026-10-23T16:57:45.485Z",
+  "fileCount": 15,
+  "firebaseRequests": 0,
+  "writes": 0
+}
