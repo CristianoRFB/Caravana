@@ -21,4 +21,6 @@ scripts/tests/fixtures/staging-rules-20261022.rules text eol=lf
 # Exact published production bytes, including its historical CRLF encoding.
 /tests/fixtures/production-20260929.rules -text whitespace=cr-at-eol
 /firestore.italo-private.rules text eol=lf
+/firestore.italo-cutover-fence.rules text eol=lf
+/firestore.italo-operational.rules text eol=lf
 /docs/operations/goal-xiii-italo/** text eol=lf

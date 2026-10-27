@@ -46,8 +46,32 @@
       "dedicatedStatus": "SUCCESS",
       "mainCi": 40563424653,
       "mainStatus": "SUCCESS",
-      "businessIntentQuestion": "PENDING",
+      "businessIntentQuestion": "ANSWERED_CONTINUES_OPERATION",
       "ciEvidence": "evidence/ci-cutover-preflight-ce96937.json"
+    },
+    "ownerOperationalDecision": {
+      "date": "2026-10-27",
+      "reply": "Ainda continua em operação",
+      "closeReservationsOrOperationalEdits": false,
+      "automaticDateBasedClosure": false,
+      "publicCutoverExecuted": false
+    },
+    "operationalCandidate": {
+      "status": "LOCAL_PROTOTYPE_NOT_DEPLOYED",
+      "base": "a52a4f9954c2298293870fb1c76d24120c4a41df",
+      "operationalSDKCases": 15,
+      "fenceAndPrivateCases": 25,
+      "writerModelCases": 5,
+      "lint": "PASS",
+      "typecheck": "PASS",
+      "candidateBuild": "PASS",
+      "hostedOperationalWrites": 0,
+      "publicCutover": false,
+      "copyRepeated": false,
+      "evidence": "OPERATIONAL_CANDIDATE.md",
+      "operationalWithRegressionCases": 24,
+      "commercialQuotaRegressionCases": 32,
+      "bookingDataRegressionCases": 68
     }
   },
   "goal": "XIII",

@@ -6,6 +6,7 @@ import { trackWrite } from "./pending-writes";
 import { importDigest } from "./import-identity";
 import type { Caravan } from "./types";
 import type { PublicEntitlements } from "./commercial-data";
+import { existingEventGrant } from './existing-event-grant';
 export const quotaOperationId = () => crypto.randomUUID().replaceAll("-", "");
 interface Counters { publishedCaravans: number; activeMembers: number; activeOwners: number }
 export function quotaGrowthAllowed(policy: PublicEntitlements | null, now = Date.now()) { return Boolean(policy?.growthEnabled && (!policy.growthUntil || policy.growthUntil.toMillis() > now)); }
@@ -38,15 +39,21 @@ async function changeCaravan(organizationId: string, caravanId: string, payload:
         if (!usage.exists()) throw new Error("A organização precisa de inventário comercial validado. Nenhum contador foi criado automaticamente.");
         const before = counters(usage.data()); const after = { ...before };
         const policy = policySnapshot.exists() ? policySnapshot.data() as PublicEntitlements : null;
+        const existingGrant = !creating && !policy && orgId === 'italo'
+          ? existingEventGrant((await tx.get(doc(database, 'publicTenantCutovers', 'italo'))).data()) : null;
+        const existingEvent = existingGrant?.everActivated === true && existingGrant.phase === 'target_active'
+          && existingGrant.targetCaravanId === entityId && original?.importPending === false;
         const data = { ...(original || {}), ...payload, organizationId: orgId, reservedSeats: original?.reservedSeats ?? 0 };
         validTrip(data);
         if ((creating || "priceCents" in payload) && (!Number.isSafeInteger(data.priceCents) || (data.priceCents ?? -1) < 0)) throw new Error("Informe um preço válido em centavos.");
         const beforePublished = original?.status === "published"; const afterPublished = data.status === "published";
         const growth = creating || (!beforePublished && afterPublished) || (original && data.capacity > original.capacity);
-        if (growth && (!quotaGrowthAllowed(policy) || data.capacity > policy!.limits.passengersPerCaravan)) throw new Error("O plano atual não permite esta criação, capacidade ou reativação. Confira os limites da organização.");
+        if (existingEvent && data.capacity > existingGrant.capacityCeiling) throw new Error('A capacidade não pode exceder o evento existente.');
+        if (growth && !(existingEvent && data.capacity <= existingGrant.capacityCeiling) && (!quotaGrowthAllowed(policy) || data.capacity > policy!.limits.passengersPerCaravan)) throw new Error("O plano atual não permite esta criação, capacidade ou reativação. Confira os limites da organização.");
         if (growth && organization.data()?.status === "suspended") throw new Error("A organização está suspensa para novas operações de crescimento. O histórico foi preservado.");
         after.publishedCaravans += Number(afterPublished) - Number(beforePublished);
-        if (after.publishedCaravans < 0 || (after.publishedCaravans > before.publishedCaravans && after.publishedCaravans > policy!.limits.activeCaravans)) throw new Error("O limite de caravanas publicadas foi atingido ou o inventário está inconsistente.");
+        const activeLimit = existingEvent ? 1 : policy?.limits.activeCaravans;
+        if (after.publishedCaravans < 0 || (after.publishedCaravans > before.publishedCaravans && (activeLimit === undefined || after.publishedCaravans > activeLimit))) throw new Error("O limite de caravanas publicadas foi atingido ou o inventário está inconsistente.");
         tx.set(target, { ...data, ...(creating ? { createdAt: serverTimestamp(), creationRequestHash: requestHash } : {}), updatedAt: serverTimestamp(), lastQuotaOperationId: operationId });
         if (after.publishedCaravans !== before.publishedCaravans) tx.update(usageRef, { ...after, updatedAt: serverTimestamp(), lastQuotaOperationId: operationId });
         tx.set(audit, { organizationId: orgId, entityId, kind: "caravan", action, actorUid, at: serverTimestamp(), requestHash, reason: "Configuração de caravana", before, after, beforeStatus: original?.status || "absent", afterStatus: data.status, beforeRole: "", afterRole: "" });

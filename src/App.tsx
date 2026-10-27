@@ -1,5 +1,7 @@
 import TenantImportNotice from "./TenantImportNotice";
 import { privateHistoryScope, privateHistoryRouteAllowed, scopePrivateHistoryAccess } from "./lib/private-history-release";
+import { operationalScope, operationalRouteAllowed } from './lib/italo-operational-scope';
+import { useItaloOperational } from './lib/italo-operational-context';
 import { usePublicAvailability } from "./lib/use-public-availability";
 import TenantBrandSettings from "./TenantBrandSettings";
 import TenantCommercial from "./TenantCommercial";
@@ -67,6 +69,7 @@ import {
   login,
   logout,
   reserveSeat,
+  prepareReservationAttempt,
   reviewPayment,
   setPortalAccessRevoked,
   toggleCheckin,
@@ -787,7 +790,12 @@ function RegistrationPage() {
     setBusy(true);
     try {
       const storage = window.sessionStorage;
-      const attempt = getReservationAttempt(caravan.id, storage);
+      const handoff = await prepareReservationAttempt(caravan, storage);
+      if (handoff?.existingRegistrationId) {
+        nav(`${tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : ""}/minha-inscricao/${handoff.existingRegistrationId}`);
+        return;
+      }
+      const attempt = handoff?.attempt ?? getReservationAttempt(caravan.id, storage);
       setRetryAvailable(true);
       const id = await reserveSeat(caravan, form, attempt);
       completeReservationAttempt(caravan.id, attempt, storage);
@@ -1071,6 +1079,8 @@ function Field({
 function MyRegistration() {
   const { id = "" } = useParams();
   const tenant = useTenantBrand();
+  const operational = useItaloOperational();
+  const [loadedFor, setLoadedFor] = useState('');
   const [reg, setReg] = useState<Registration | null>(null);
   const [caravan, setCaravan] = useState<Caravan | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1094,6 +1104,7 @@ function MyRegistration() {
           const currentRevision = ++revision;
           const trip = r ? await getCaravanById(r.caravanId).catch(() => null) : null;
           if (!active || currentRevision !== revision) return;
+          setLoadedFor(id);
           if (r && tenant.organizationId && r.organizationId !== tenant.organizationId) { setReg(null); setCaravan(null); setLoading(false); return; }
           setReg(r);
           setCaravan(trip);
@@ -1104,13 +1115,15 @@ function MyRegistration() {
           if (!active) return;
           setReg(null);
           setCaravan(null);
+          setLoadedFor(id);
           setLoading(false);
         },
       );
     return () => { active = false; revision++; unsubscribe(); };
-  }, [id, tenant.organizationId]);
+  }, [id, tenant.organizationId, operational.grant?.generation]);
   async function sendFile(file?: File) {
     if (!file || !reg) return;
+    if (operational.readOnly) { setError('Os envios estão temporariamente em conferência. Seus dados foram preservados.'); return; }
     setBusy(true);
     setError("");
     try {
@@ -1147,7 +1160,7 @@ function MyRegistration() {
       setLinkError("Não foi possível copiar. Salve esta página no navegador.");
     }
   }
-  if (loading || (reg !== null && reg.id !== id))
+  if (loading || loadedFor !== id)
     return (
       <>
         <Topbar />
@@ -1269,7 +1282,8 @@ function MyRegistration() {
               </Notice>
             )}
           </section>
-          {reg.isMinor && reg.registrationStatus !== "cancelled" && <MinorAuthorization key={reg.id} registration={reg} />}
+          {operational.readOnly && <Notice>Esta inscrição está disponível para consulta. Novos envios aguardam a confirmação da organização.</Notice>}
+          {!operational.readOnly && reg.isMinor && reg.registrationStatus !== "cancelled" && <MinorAuthorization key={reg.id} registration={reg} />}
           <section className="portal-card payment-card">
             <div className="eyebrow eyebrow-dark">
               COMPROVANTE · {caravan?.paymentMethod || "FORMA A DEFINIR"} · CONFERÊNCIA MANUAL
@@ -1330,7 +1344,7 @@ function MyRegistration() {
                   <input
                     type="file"
                     accept={PROOF_POLICY.accept}
-                    disabled={busy}
+                    disabled={busy || operational.readOnly}
                     onChange={(e) => sendFile(e.target.files?.[0])}
                   />
                 </label>
@@ -1528,7 +1542,7 @@ function AdminGuard({ children }: { children: ReactNode }) {
       stopAccess = watchTenantAccess(u.uid,
         (available) => {
           if (!active || currentRevision !== revision) return;
-          const scoped = scopePrivateHistoryAccess(available, privateHistoryScope);
+          const scoped = scopePrivateHistoryAccess(available, privateHistoryScope || operationalScope);
           setAccess(scoped);
           let preferred: string | null = null;
           try { preferred = window.sessionStorage.getItem(tenantPreferenceKey(u.uid)); } catch { /* optional preference */ }
@@ -1564,11 +1578,11 @@ function AdminGuard({ children }: { children: ReactNode }) {
             <LockKeyhole />
             <h1>{accessError ? "Atualização necessária" : "Conta ainda não autorizada"}</h1>
             <p>
-              {accessError || (privateHistoryScope
+              {accessError || (privateHistoryScope || operationalScope
                 ? "Entre com a conta responsável já autorizada para consultar o histórico do Ítalo. Não é necessário criar outra conta."
                 : "Peça um convite à pessoa responsável pela sua organização e aceite-o na área da sua conta.")}
             </p>
-            {!privateHistoryScope && <p><Link className="button button-outline" to="/conta/convites">Meus convites</Link></p>}
+            {!privateHistoryScope && !operationalScope && <p><Link className="button button-outline" to="/conta/convites">Meus convites</Link></p>}
             {accessError ? (
               <button
                 className="button button-outline"
@@ -1612,6 +1626,7 @@ function AdminShell({
   const pendingCount = useSyncExternalStore(observePendingWrites, pendingWrites, () => 0);
   useEffect(() => { setDiagnosticScope(`${user.uid}:${orgId}`); return () => setDiagnosticScope("public"); }, [user.uid, orgId]);
   const [importPending, setImportPending] = useState(false);
+  const operational = useItaloOperational();
   const nav = useNavigate();
   async function exit() {
     await logout();
@@ -1672,7 +1687,7 @@ function AdminShell({
           <Link to="/admin/check-in">
             <span>✓</span> Check-in
           </Link>
-          {!privateHistoryScope && <><Link to="/admin/suporte"><span>?</span> Suporte</Link>
+          {!privateHistoryScope && !operationalScope && <><Link to="/admin/suporte"><span>?</span> Suporte</Link>
           <Link to="/admin/identidade"><span>◈</span> Identidade pública</Link>
           <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
           <Link to="/admin/plano"><span>◇</span> Plano e limites</Link>
@@ -1686,7 +1701,8 @@ function AdminShell({
         </aside>
         <main className="admin-content" data-org={orgId}>
           <TenantImportNotice organizationId={orgId} onPending={setImportPending} />
-          <HistoricalImportContext.Provider value={Boolean(privateHistoryScope) || importPending}>
+          {operationalScope && operational.readOnly && <p className="error-message" role="status">A operação está em atualização. Os dados continuam disponíveis para consulta; aguarde a confirmação para gravar.</p>}
+          <HistoricalImportContext.Provider value={Boolean(privateHistoryScope) || importPending || Boolean(operationalScope && operational.readOnly)}>
           {children}
           </HistoricalImportContext.Provider>
         </main>
@@ -1893,6 +1909,7 @@ function AdminDashboard() {
 }
 
 function AdminCaravans() {
+  const operational = useItaloOperational();
   const readOnly = useContext(HistoricalImportContext);
   const [list, setList] = useState<Caravan[]>([]);
   const [show, setShow] = useState(false);
@@ -2200,7 +2217,7 @@ function AdminCaravans() {
           <h1>Caravanas</h1>
           <p>Crie e gerencie as próximas experiências.</p>
         </div>
-        <button className="button button-primary" onClick={openNew} disabled={readOnly}>
+        <button className="button button-primary" onClick={openNew} disabled={readOnly || Boolean(operationalScope)}>
           ＋ Nova caravana
         </button>
       </div>
@@ -2258,7 +2275,7 @@ function AdminCaravans() {
                 </div>
                 <div className="caravan-tools">
                   <button onClick={() => openEdit(c)} disabled={readOnly}>Editar</button>
-                  <button onClick={() => duplicate(c)} disabled={readOnly}>Duplicar</button>
+                  <button onClick={() => duplicate(c)} disabled={readOnly || Boolean(operationalScope)}>Duplicar</button>
                   <button onClick={() => togglePublish(c)} disabled={readOnly}>
                     {c.status === "published" ? "Pausar" : "Publicar"}
                   </button>
@@ -2273,7 +2290,7 @@ function AdminCaravans() {
           <Bus />
           <h2>Nenhuma caravana cadastrada</h2>
           <p>Cadastre a viagem para começar a receber inscrições.</p>
-          <button className="button button-primary" onClick={openNew} disabled={readOnly}>
+          <button className="button button-primary" onClick={openNew} disabled={readOnly || Boolean(operationalScope)}>
             Criar primeira caravana
           </button>
         </div>
@@ -2322,6 +2339,7 @@ function AdminCaravans() {
                 <Field label="Slug (link)">
                   <input
                     value={slug}
+                    disabled={Boolean(operationalScope)}
                     onChange={(e) => setSlug(e.target.value)}
                     placeholder="anime-friends-2026"
                   />
@@ -2393,7 +2411,7 @@ function AdminCaravans() {
                   <input
                     type="number"
                     min="1"
-                    max="1000"
+                    max={operationalScope ? operational.grant?.capacityCeiling ?? 1 : 1000}
                     required
                     value={capacity}
                     onChange={(e) => setCapacity(e.target.value)}
@@ -2547,7 +2565,7 @@ function downloadLegacyCsvTemplate() {
 
 function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
   const readOnly = useContext(HistoricalImportContext);
-  const canImport = useContext(TenantRoleContext) === "tenant_owner" && !readOnly;
+  const canImport = useContext(TenantRoleContext) === "tenant_owner" && !readOnly && !operationalScope;
   const operationPending = useSyncExternalStore(observePendingWrites, pendingWrites, pendingWrites);
   const { id: routeId } = useParams();
   const [regs, setRegs] = useState<Registration[]>([]);
@@ -3747,6 +3765,7 @@ export default function App() {
   useEffect(() => installDiagnosticHandlers(window), []);
   const location = useLocation();
   if (privateHistoryScope && !privateHistoryRouteAllowed(location.pathname)) return <Navigate to="/admin" replace />;
+  if (operationalScope && !operationalRouteAllowed(location.pathname)) return <Navigate to="/admin" replace />;
   const routes = (
     <Routes>
       <Route path="/saas" element={<Suspense fallback={<Loading />}><CommercialLanding /></Suspense>} />
@@ -3848,5 +3867,6 @@ export default function App() {
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
-  return <AppErrorBoundary>{import.meta.env.VITE_APP_ENV === "staging" ? <div className="staging-shell"><aside className="staging-notice" role="note">STAGING · Somente dados fictícios · Sem pagamentos</aside>{routes}</div> : routes}</AppErrorBoundary>;
+  const scopedRoutes = operationalScope ? <TenantBrandScope organizationId="italo">{routes}</TenantBrandScope> : routes;
+  return <AppErrorBoundary>{import.meta.env.VITE_APP_ENV === "staging" ? <div className="staging-shell"><aside className="staging-notice" role="note">STAGING · Somente dados fictícios · Sem pagamentos</aside>{scopedRoutes}</div> : scopedRoutes}</AppErrorBoundary>;
 }

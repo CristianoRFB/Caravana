@@ -157,7 +157,7 @@
     "classificationOnly": true,
     "businessWrites": 0
   },
-  "remainingBusinessClarification": "Past event: historical closure versus continuing operation; question sent, no closure performed",
+  "remainingBusinessClarification": "RESOLVED: owner confirmed that the existing event continues operating; no automatic archival closure",
   "ownerSessionMetadataReadback": {
     "at": "2026-10-27T19:01:46.042Z",
     "owners": 2,
@@ -167,5 +167,12 @@
     "visibleTokensMintedAfterPublication": 0,
     "operatorAuthWrites": 0,
     "interpretation": "Owner-confirmed access remains reported evidence. Reusing an already valid existing session is possible; no fresh sign-in or token mint after publication independently corroborated."
+  },
+  "ownerOperationalDecision": {
+    "date": "2026-10-27",
+    "reply": "Ainda continua em operação",
+    "closeReservationsOrOperationalEdits": false,
+    "automaticDateBasedClosure": false,
+    "publicCutoverExecuted": false
   }
 }

@@ -1,5 +1,12 @@
 # Estado atual — Caravana 77
 
+## Decisão posterior do proprietário — operação continua
+
+Em 27/10, o proprietário confirmou: **“Ainda continua em operação”**. A data passada não autoriza encerrar reservas ou edições nem arquivar o evento. A origem permanece operacional até validar o corte com um único escritor e os links antigos. A publicação privada 4ecaa9e permanece vigente; nenhum congelamento ou corte operacional foi aplicado.
+
+Candidata operacional implementada e testada em emulador: limite físico do evento existente, sem assinatura inventada; reserva idempotente e retomada da tentativa anterior; aliases nos dois sentidos; financeiro UNKNOWN, comprovante, check-in e edição auditada; consultas preservadas durante suspensão de gravações e revogação sem fallback legado. **15 testes operacionais, 25 testes do fence/contrato privado e 5 do modelo de transição PASS; lint/typecheck/build PASS.** Esses testes não comprovam corte hospedado. Faltam empacotamento/roteamento público, executor transacional protegido, ensaio de retorno com dados posteriores e validação do novo app. [Escopo e limites](operations/goal-xiii-italo/OPERATIONAL_CANDIDATE.md).
+
+
 ## 27/10/2026 — acesso privado publicado; corte público ainda pendente
 
 Fonte de produto **4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2**, branch PC. CI principal [40557950406](https://github.com/CristianoRFB/Caravana/actions/runs/40557950406) e dedicado [40557950411](https://github.com/CristianoRFB/Caravana/actions/runs/40557950411) SUCCESS no SHA exato. Aplicativo em [tenant-italo/admin/login](https://caravana-77.pages.dev/tenant-italo/admin/login); deployment **6e76a7cd-32f1-4d40-9a4c-f470cbe4445c**, sem Functions, dirty=false. Os seis assets da raiz legada permanecem byte a byte; 20 assets e três rotas privados/legados passaram em HTTP/hash/MIME/cabeçalhos.
@@ -12,7 +19,7 @@ O retorno simples de Pages e a republicação pura legada deixaram HTML privado 
 
 **DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; APP_ACTIVE=PUBLISHED_PRIVATE_HISTORY_OWNER_REPORTED_PASS; PUBLIC_CUTOVER=false; MIGRATED=false.** A cópia continua histórica/importPending/somente leitura; a origem permanece o único escritor público. A missão integral segue ativa: falta implementar e validar corte sincronizado e compatibilidade dos links, sem usar a etapa privada como substituto da transferência operacional.
 
-Pré-checagem adicional de corte em ce9693759e322a4284d7c40915b1de8924fda709: inventário completo privado reconciliou24originais/29copiados,1caravana/10inscrições,0docs novos inesperados e2totais UNKNOWN. O único evento tem data passada e continua publicado na origem; aguarda decisão do proprietário entre histórico encerrado e continuidade operacional. Seis testes novos/20nativos com regressões e CI dedicado40563424616 PASS; CI principal40563424653 SUCCESS no mesmo SHA; código de produto publicado permanece4ecaa9e. Nenhum corte ou novo deploy. [Resultado sanitizado](operations/goal-xiii-italo/CUTOVER_INVENTORY_RESULT_2026-10-27.json).
+Pré-checagem adicional de corte em ce9693759e322a4284d7c40915b1de8924fda709: inventário completo privado reconciliou24originais/29copiados,1caravana/10inscrições,0docs novos inesperados e2totais UNKNOWN. O único evento tem data passada e continua publicado na origem; continuidade operacional confirmada posteriormente pelo proprietário. Seis testes novos/20nativos com regressões e CI dedicado40563424616 PASS; CI principal40563424653 SUCCESS no mesmo SHA; código de produto publicado permanece4ecaa9e. Nenhum corte ou novo deploy. [Resultado sanitizado](operations/goal-xiii-italo/CUTOVER_INVENTORY_RESULT_2026-10-27.json).
 
 ## Checkpoints anteriores — históricos, substituídos pelo estado acima
 

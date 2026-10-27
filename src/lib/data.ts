@@ -38,12 +38,23 @@ import type { PublicEntitlements } from "./commercial-data";
 import { importDigest } from "./import-identity";
 import { completeQuotaAttempt, getQuotaAttempt } from "./quota-attempt";
 import { trackWrite } from "./pending-writes";
+import { existingEventCapacity } from './existing-event-grant';
+import { operationalScope } from './italo-operational-scope';
+import { canonicalEvent, readOperationalDirectory, resolveOperationalRegistration, resolveOperationalReservationAttempt } from './italo-cutover-client';
 
 const legacyReservationIdsCleared = new Set<string>();
 
 export async function findCaravan(slug: string, organizationId?: string): Promise<Caravan | null> {
   if (!db || !firebaseConfigured)
     throw new Error("A agenda de viagens ainda não está disponível.");
+  if (operationalScope) {
+    const grant = await readOperationalDirectory(db);
+    if (organizationId && organizationId !== 'italo' || ![grant.sourceSlug, grant.targetSlug].includes(slug)) return null;
+    const canonical = canonicalEvent(grant);
+    const trip = await getCaravanById(canonical.caravanId);
+    if (!trip || trip.organizationId !== canonical.organizationId || trip.slug !== canonical.slug || trip.status !== 'published') return null;
+    return trip;
+  }
   if (!organizationId) {
     const alias = await getDocFromServer(doc(db, "legacyTripAliases", slug));
     if (alias.exists()) {
@@ -67,6 +78,11 @@ export async function findCaravan(slug: string, organizationId?: string): Promis
 }
 export async function listPublishedCaravans(organizationId?: string): Promise<Caravan[]> {
   if (!db || !firebaseConfigured) return [];
+  if (operationalScope) {
+    const grant = await readOperationalDirectory(db);
+    const trip = await findCaravan(canonicalEvent(grant).slug, organizationId);
+    return trip ? [trip] : [];
+  }
   const snap = await getDocs(
     query(collection(db, "caravans"), where("status", "==", "published"), ...(organizationId ? [where("organizationId", "==", organizationId)] : [])),
   );
@@ -185,10 +201,15 @@ export async function reserveSeat(
       if (availability.data()?.status === "suspended") throw new Error("Novas reservas estão temporariamente suspensas pela organização.");
       const commercial = await tx.get(doc(database, "tenantEntitlements", current.organizationId));
       const policy = commercial.exists() ? commercial.data() as PublicEntitlements : null;
-      if (!quotaGrowthAllowed(policy)) throw new Error("Novas reservas estão indisponíveis no momento. Fale com a organização.");
+      let capacityLimit: number | null = quotaGrowthAllowed(policy) ? Math.min(current.capacity, policy!.limits.passengersPerCaravan) : null;
+      if (!policy && current.organizationId === 'italo') {
+        const directory = await tx.get(doc(database, 'publicTenantCutovers', 'italo'));
+        capacityLimit = existingEventCapacity(directory.data(), { ...current, id: caravan.id });
+      }
+      if (capacityLimit === null) throw new Error("Novas reservas estão indisponíveis no momento. Fale com a organização.");
       if (
         current.status !== "published" ||
-        current.reservedSeats >= Math.min(current.capacity, policy!.limits.passengersPerCaravan)
+        current.reservedSeats >= capacityLimit
       )
         throw new Error("As vagas desta caravana foram preenchidas.");
       const boardingPoint = (Array.isArray(current.boardingPoints) ? current.boardingPoints : []).find(
@@ -281,7 +302,10 @@ export async function getRegistration(
   id: string,
 ): Promise<Registration | null> {
   if (!db) return null;
-  const snap = await getDoc(doc(db, "registrations", id));
+  const grant = operationalScope ? await readOperationalDirectory(db) : null;
+  const actualId = grant ? await resolveOperationalRegistration(db, id, grant) : id;
+  const snap = await getDoc(doc(db, "registrations", actualId));
+  if (snap.exists() && grant && (snap.data().organizationId !== canonicalEvent(grant).organizationId || snap.data().caravanId !== canonicalEvent(grant).caravanId)) throw new Error('A inscrição não pertence a esta caravana.');
   return snap.exists()
     ? ({ ...snap.data(), id: snap.id } as Registration)
     : null;
@@ -292,6 +316,24 @@ export function watchRegistration(
   fail: (error: Error) => void,
 ): Unsubscribe {
   if (!db) throw new Error("Firebase não está configurado.");
+  if (operationalScope) {
+    const database = db;
+    let active = true; let unsubscribe: Unsubscribe = () => {};
+    void (async () => {
+      const grant = await readOperationalDirectory(database);
+      const actualId = await resolveOperationalRegistration(database, id, grant);
+      if (!active) return;
+      const canonical = canonicalEvent(grant);
+      unsubscribe = onSnapshot(doc(database, 'registrations', actualId), snapshot => {
+        if (!active) return;
+        if (!snapshot.exists()) { callback(null); return; }
+        const data = snapshot.data();
+        if (data.organizationId !== canonical.organizationId || data.caravanId !== canonical.caravanId) { fail(new Error('A inscrição não pertence a esta caravana.')); return; }
+        callback({ ...data, id: snapshot.id } as Registration);
+      }, fail);
+    })().catch(cause => { if (active) fail(cause instanceof Error ? cause : new Error('Não foi possível conferir o vínculo da inscrição.')); });
+    return () => { active = false; unsubscribe(); };
+  }
   return onSnapshot(
     doc(db, "registrations", id),
     (snap) =>
@@ -302,6 +344,11 @@ export function watchRegistration(
       ),
     fail,
   );
+}
+export async function prepareReservationAttempt(caravan: Caravan, storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>) {
+  if (!db) throw new Error('Firebase não está configurado.');
+  if (!operationalScope) return null;
+  return resolveOperationalReservationAttempt(db, await readOperationalDirectory(db), caravan.id, storage);
 }
 export async function setPortalAccessRevoked(registrationId: string, revoked: boolean): Promise<void> {
   if (!db || !auth?.currentUser) throw new Error("Sessão administrativa não encontrada.");

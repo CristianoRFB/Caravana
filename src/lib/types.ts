@@ -80,6 +80,7 @@ export interface BoardingPoint {
   time: string;
 }
 export interface Caravan {
+  importPending?: boolean;
   id: string;
   organizationId: string;
   organizerName?: string;

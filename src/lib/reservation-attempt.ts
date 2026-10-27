@@ -23,9 +23,15 @@ export function getReservationAttempt(caravanId: string, storage: AttemptStorage
   const saved = readReservationAttempt(caravanId, storage);
   if (saved) return saved;
   const attempt = createReservationAttempt();
+  saveReservationAttempt(caravanId, attempt, storage);
+  return attempt;
+}
+export function saveReservationAttempt(caravanId: string, attempt: ReservationAttempt, storage: AttemptStorage): void {
+  if (!validReservationAttempt(attempt)) throw new Error('Tentativa de reserva inválida.');
+  const prior = readReservationAttempt(caravanId, storage);
+  if (prior && (prior.registrationId !== attempt.registrationId || prior.reservationNonce !== attempt.reservationNonce)) throw new Error('Já existe uma tentativa pendente para esta caravana.');
   try { storage.setItem(key(caravanId), JSON.stringify(attempt)); }
   catch { throw new Error("Permita o armazenamento desta aba para reservar com segurança e tentar novamente sem duplicar sua inscrição."); }
-  return attempt;
 }
 export function completeReservationAttempt(caravanId: string, attempt: ReservationAttempt, storage: AttemptStorage): void {
   // Failure to clear is safe: a future retry returns the committed registration.

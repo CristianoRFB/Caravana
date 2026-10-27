@@ -9,6 +9,8 @@ const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/fireba
 const suite = process.argv[2] || "unit";
 const commands = {
   "italo-private-release": "vitest run tests/italo-private-release.test.ts tests/private-history-release.test.ts tests/private-history-package.test.ts",
+  "italo-cutover-fence": "vitest run tests/italo-cutover-fence.test.ts tests/italo-private-release.test.ts",
+  "italo-operational": "vitest run tests/italo-operational.test.ts tests/existing-event-grant.test.ts tests/reservation-attempt.test.ts tests/public-availability.test.ts",
   "italo-private-release-e2e": "playwright test --config playwright.italo-private.config.ts",
   "tenant-activation-regression": "vitest run tests/data.integration.test.ts tests/operational-tools.integration.test.ts tests/operational-tools.test.ts tests/financial-operations.integration.test.ts tests/financial-diagnostics.test.ts tests/finance.test.ts",
   "tenant-booking-regression-e2e": 'playwright test e2e/baseline.spec.ts --grep "public booking, private proof"',

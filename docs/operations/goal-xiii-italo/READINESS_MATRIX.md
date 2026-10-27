@@ -1,5 +1,12 @@
 # GOAL XIII — estados atuais por evidência (27/10/2026)
 
+## Decisão posterior do proprietário — operação continua
+
+Em 27/10, o proprietário confirmou: **“Ainda continua em operação”**. A data passada não autoriza encerrar reservas ou edições nem arquivar o evento. A origem permanece operacional até validar o corte com um único escritor e os links antigos. A publicação privada 4ecaa9e permanece vigente; nenhum congelamento ou corte operacional foi aplicado.
+
+Candidata operacional implementada e testada em emulador: limite físico do evento existente, sem assinatura inventada; reserva idempotente e retomada da tentativa anterior; aliases nos dois sentidos; financeiro UNKNOWN, comprovante, check-in e edição auditada; consultas preservadas durante suspensão de gravações e revogação sem fallback legado. **15 testes operacionais, 25 testes do fence/contrato privado e 5 do modelo de transição PASS; lint/typecheck/build PASS.** Esses testes não comprovam corte hospedado. Faltam empacotamento/roteamento público, executor transacional protegido, ensaio de retorno com dados posteriores e validação do novo app. [Escopo e limites](OPERATIONAL_CANDIDATE.md).
+
+
 Produção direta por instrução do proprietário; nenhum novo teste hospedado em bdall. Este quadro substitui os checkpoints anteriores. Evidência principal: [release real](HOSTED_RELEASE_2026-10-27.json), [companions](HOSTED_PRIVATE_RESULT_2026-10-27.json), [CI exato](evidence/ci-pc27-4ecaa9e.json).
 
 | Requisito | Estado atual | Evidência e limite |
@@ -28,4 +35,4 @@ Nova fonte operacional ce9693759e322a4284d7c40915b1de8924fda709 acrescenta uma p
 
 [Inventário completo privado](CUTOVER_INVENTORY_RESULT_2026-10-27.json):24originais/29copiados reconciliados,1caravana e10inscrições de origem,0docs novos inesperados em origem/destino,0referências ambíguas,2totais financeiros desconhecidos preservados. Data do único evento anterior a hoje; segue published na origem e draft/importPending no destino. Nenhuma write, recopy, PII ou ciphertext exportado. A primeira tentativa não iniciou porque a conexão Cloud Shell se perdeu; reconectada a mesma sessão, foram confirmados0processos/0recibos antes de executar uma única leitura.
 
-Pendente a resposta do proprietário: evento apenas histórico (encerrar reservas/edições) ou ainda em operação. A classificação temporal não autoriza encerrar o evento nem reabrir a cópia. O PREVIEW somente de inventário não contém writes e nunca é readyForApply. Nenhum novo corte ou deploy da pré-checagem foi executado.
+Resposta posterior do proprietário: o evento continua em operação. A classificação temporal não autoriza encerrar o evento nem reabrir a cópia. O PREVIEW somente de inventário não contém writes e nunca é readyForApply. Nenhum novo corte ou deploy da pré-checagem foi executado.
