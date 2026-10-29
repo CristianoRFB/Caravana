@@ -18,7 +18,7 @@ async function check(route, file) {
   assert.equal(digest(Buffer.from(await response.arrayBuffer())), file.sha256, route + ' SHA256');
   const type = response.headers.get('content-type') || '';
   assert(type.includes(file.path.endsWith('.js') ? 'javascript' : file.path.endsWith('.css') ? 'text/css' : file.path.endsWith('.json') ? 'application/json' : 'text/html'), route + ' MIME');
-  if (route.startsWith('tenant-italo/')) {
+  if (route.startsWith('tenant-italo/') || route.startsWith('platform')) {
     const csp = response.headers.get('content-security-policy') || '';
     assert(csp.includes("script-src 'self';") && csp.includes("frame-src 'self' blob:"), route + ' CSP');
     assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
@@ -29,11 +29,13 @@ for (const file of manifest.files) {
   assert(typeof file.path === 'string' && /^[A-Za-z0-9_./-]+$/.test(file.path) && !file.path.split('/').some(part => part.startsWith('.')), 'REVIEWED_PUBLIC_FILE_REQUIRED');
   if (file.path.startsWith('_')) { assert(['_headers', '_redirects'].includes(file.path)); continue; }
   assert(file.path === 'index.html' || /^(?:tenant-italo\/)?(?:assets\/[A-Za-z0-9_-]+\.(js|css)|entry-[a-f0-9]{12}\/index\.html)$/.test(file.path)
-    || /^tenant-italo\/(?:index\.html|runtime-[a-f0-9]{12}\.json|private-release(?:-baseline-[a-f0-9]{12})?\.json|operational-(?:release|artifact-[a-f0-9]{12})\.json)$/.test(file.path), 'UNREVIEWED_PUBLIC_PATH');
+    || /^tenant-italo\/(?:index\.html|runtime-[a-f0-9]{12}\.json|private-release(?:-baseline-[a-f0-9]{12})?\.json|operational-(?:release|artifact-[a-f0-9]{12})\.json)$/.test(file.path)
+    || /^platform-app\/(?:index\.html|platform-release\.json|entry-[a-f0-9]{12}\/index\.html|assets\/[A-Za-z0-9_-]+\.(js|css))$/.test(file.path), 'UNREVIEWED_PUBLIC_PATH');
   await check(file.path.endsWith('index.html') ? file.path.slice(0, -10) : file.path, file);
 }
 await check('combined-release.json', { path: 'combined-release.json', sha256: digest(manifestBytes) });
 const html = manifest.files.find(f => f.path === 'index.html');
 for (const route of ['admin/login', 'caravana/synthetic-route-check/inscricao', 'minha-inscricao/' + 'a'.repeat(64), 'tenant-italo/admin/login', 'tenant-italo/o/italo/minha-inscricao/' + 'a'.repeat(64)]) await check(route, html);
+if (manifest.platformEntry) for (const route of ['platform', 'platform/login']) await check(route, manifest.files.find(f => f.path === manifest.platformEntry));
 console.log(JSON.stringify({ status: 'OPERATIONAL_HTTP_PACKAGE_HASH_MIME_CACHE_CSP_PASS', source: manifest.source, host: host.origin,
   publicFiles: manifest.files.length - 2 + 1, routes: 5, firebaseRequests: 0, applicationExecuted: false, publicCutover: false }));
