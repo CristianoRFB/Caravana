@@ -29,3 +29,6 @@ dist-italo-release-*/
 
 # Firebase CLI may leave a raw temporary export when local export fails.
 /firebase-export-*/
+# Local public platform build artifacts.
+/dist-platform/
+/dist-platform-release-*/

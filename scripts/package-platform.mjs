@@ -8,7 +8,7 @@ const check=(x,c)=>{if(!x)throw Error(c);};
 check(process.argv.length===5&&baseline&&platform&&output,'THREE_PACKAGE_DIRECTORIES_REQUIRED');
 check(!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim(),'CLEAN_SOURCE_REQUIRED');
 const source=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),short=source.slice(0,12);
-check(path.dirname(path.resolve(output))===process.cwd()&&/^dist-platform-release-[a-f0-9]{12}$/.test(path.basename(output)),'ISOLATED_PLATFORM_OUTPUT_REQUIRED');
+check(path.dirname(path.resolve(output))===process.cwd()&&path.basename(output)==='dist-platform-release-'+short,'ISOLATED_PLATFORM_OUTPUT_REQUIRED');
 const base=JSON.parse(await readFile(path.join(baseline,'combined-release.json'))),app=JSON.parse(await readFile(path.join(platform,'platform-release.json')));
 check(base.source==='e3a465f15a1bd98946f01c037734432848cd9094'&&base.requiredRulesSha256==='8ceb58325c16b02e2aedc5c1a11e13f7da92ebcf738e70bc5acfb5bff96c2454'&&app.source===source&&!app.dirty,'PINNED_OPERATIONAL_AND_CLEAN_PLATFORM_ARTIFACT_REQUIRED');
 const prepared=new Map();
