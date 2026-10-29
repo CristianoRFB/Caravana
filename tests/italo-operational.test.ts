@@ -107,6 +107,7 @@ describe('scoped operational target alongside the frozen legacy source', () => {
     const resumed = await resolveOperationalReservationAttempt(publicDb, directory, trip.id, storage);
     expect(resumed.existingRegistrationId).toBe(knownId);
     expect(readReservationAttempt(trip.id, storage)).toBeNull();
+    expect(readReservationAttempt('original-event', storage)).toBeNull();
     values.clear();
     const uncommitted = { registrationId: 'd'.repeat(64), reservationNonce: 'c'.repeat(64) };
     saveReservationAttempt('original-event', uncommitted, storage);

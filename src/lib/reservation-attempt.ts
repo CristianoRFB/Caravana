@@ -35,7 +35,10 @@ export function saveReservationAttempt(caravanId: string, attempt: ReservationAt
 }
 export function completeReservationAttempt(caravanId: string, attempt: ReservationAttempt, storage: AttemptStorage): void {
   // Failure to clear is safe: a future retry returns the committed registration.
-  try { if (readReservationAttempt(caravanId, storage)?.registrationId === attempt.registrationId) storage.removeItem(key(caravanId)); } catch { /* retain the committed operation */ }
+  try {
+    const saved = readReservationAttempt(caravanId, storage);
+    if (saved?.registrationId === attempt.registrationId && saved.reservationNonce === attempt.reservationNonce) storage.removeItem(key(caravanId));
+  } catch { /* retain the committed operation */ }
 }
 export async function reservationRequestHash(caravanId: string, form: object): Promise<string> {
   const data = form as Record<string, unknown>;

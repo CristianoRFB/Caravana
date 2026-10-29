@@ -348,7 +348,8 @@ export function watchRegistration(
 export async function prepareReservationAttempt(caravan: Caravan, storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>) {
   if (!db) throw new Error('Firebase não está configurado.');
   if (!operationalScope) return null;
-  return resolveOperationalReservationAttempt(db, await readOperationalDirectory(db), caravan.id, storage);
+  const grant = await readOperationalDirectory(db);
+  return { ...await resolveOperationalReservationAttempt(db, grant, caravan.id, storage), sourceCaravanId: grant.sourceCaravanId };
 }
 export async function setPortalAccessRevoked(registrationId: string, revoked: boolean): Promise<void> {
   if (!db || !auth?.currentUser) throw new Error("Sessão administrativa não encontrada.");

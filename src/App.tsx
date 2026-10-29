@@ -237,12 +237,12 @@ function BrandLogo({ src, name }: { src: string; name: string }) {
 function Topbar({ admin = false }: { admin?: boolean }) {
   const tenant = useTenantBrand();
   const [open, setOpen] = useState(false);
-  const path = window.location.pathname;
+  const path = useLocation().pathname;
   const homePath = tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : "/";
   const home = path === homePath;
   const trip = path.includes("/caravana/") && !path.includes("/inscricao");
   const target = (anchor: string) =>
-    home ? "#eventos" : trip ? `#${anchor}` : `${homePath}#eventos`;
+    home ? "#eventos" : trip ? `#${anchor}` : `${operationalScope ? '/tenant-italo' : ''}${homePath}#eventos`;
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -799,6 +799,7 @@ function RegistrationPage() {
       setRetryAvailable(true);
       const id = await reserveSeat(caravan, form, attempt);
       completeReservationAttempt(caravan.id, attempt, storage);
+      if (handoff) completeReservationAttempt(handoff.sourceCaravanId, attempt, storage);
       nav(`${tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : ""}/minha-inscricao/${id}`);
     } catch (err) {
       setSubmissionError(errorMessage(err));

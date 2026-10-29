@@ -30,3 +30,15 @@ Pacote estático calcula hashes, valida os seis arquivos públicos legados e o m
 Validação seguinte: 31 testes SDK/política/pacote/regressão PASS (incluem os 15 operacionais/grant anteriores); cinco verificações do navegador compilado PASS, sendo quatro subcenários de viewport. Todos os endpoints externos foram simulados ou bloqueados; entries dos três aplicativos eram marcadores sintéticos. Isso prova o bootstrap, não a jornada Auth/financeiro completa do aplicativo operacional. Lint e typecheck PASS.
 
 **NOT_READY para corte público.** A pendência de finalidade do evento está resolvida. Os bloqueios restantes são implementação e validação técnica, não uma nova permissão genérica. R$ 0 de novos serviços; nenhum recurso hospedado foi criado nesta etapa. Protótipo de Rules sujeito à revisão e validação antes de publicação ampla.
+
+## Continuação de 29/10 — executor e aplicativo
+
+Novo inventário oficial às 17:54:34 UTC: 24 originais/29 copiados, 10 inscrições e dois UNKNOWN reconciliados; zero divergência, write ou recopy. Produção segue Pages 6e76a7cd/Rules 392e61a3 até publicar a candidata validada. O proprietário reiterou “continue até passsar os dados”.
+
+Executor privado implementado em `scripts/recovery/cloudshell-operational-cutover.mjs`, com PREVIEW/APPLY/VERIFY, projeto/número/identidade exatos, R$0, Rules/manifesto/CI exatos, plano cifrado reproduzível, inventário completo fresco, preconditions e uma tentativa de commit. Fases: prepare (origem aberta), freeze (reinventário obrigatório), activate (26 writes previstos para dez aliases nos dois sentidos, três ajustes de metadados e controles/auditoria) e return-source. Não escreve em inscrições, pagamentos, comprovantes, contas, contratos ou nos 24 originais.
+
+Retorno: antes da ativação, retoma somente o escritor de origem. Depois da ativação, exige o watermark privado completo de todos os 29 copiados e quatro companions; qualquer pagamento, despesa, cadastro ou revogação posterior exige preservar o destino e reparar adiante. Arquivos sem organizationId também integram esse watermark. Commit incerto nunca é repetido; VERIFY é obrigatório.
+
+Resultados: oito testes nativos do executor PASS; três casos REST de transação/máscara/readback/ACK perdido PASS; suíte SDK/política/pacote/regressão com 34 casos PASS. Duas jornadas completas do app em quatro larguras (oito execuções) PASS, com Auth demo existente, financeiro, UNKNOWN, edição, comprovante, check-in, revogação, alias antigo, reserva e congelamento. A primeira tentativa de browser falhou por seletor incorreto e por ID fictício já ocupado; o produto bloqueou a reserva conflitante. O ensaio final corrigiu essas fixtures e passou integralmente.
+
+Pacote eca5710: 41 arquivos, smoke local do Wrangler 4.151.3 com 40 recursos públicos e cinco rotas PASS em SHA/MIME/cache/CSP. Sem execução de Firebase real no PC. Código 4b5db70 e bootstrap eca5710 têm ambos CI principal/dedicado SUCCESS; a versão seguinte do executor/app precisa de seu próprio CI antes da publicação. Nada nesta seção afirma que o corte hospedado já ocorreu.

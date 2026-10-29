@@ -86,6 +86,9 @@ jobs:
       - name: Private history subpath against the published legacy Rules contract (synthetic only)
         run: npm run test:italo-private:e2e
 
+      - name: Existing-event operational app, retry handoff, freeze and revocation (demo only)
+        run: node scripts/run-local-tests.mjs italo-operational-e2e
+
       - name: Record synthetic browser summary without artifact storage
         if: always()
         run: |

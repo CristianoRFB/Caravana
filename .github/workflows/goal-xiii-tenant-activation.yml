@@ -21,7 +21,7 @@ jobs:
           java-version: 21
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Pure activation planner and preservation guards
-        run: node --test scripts/tests/tenant-activation.test.mjs scripts/tests/tenant-cutover-preflight.test.mjs scripts/tests/operational-writer-state.test.mjs scripts/tests/in-place-bootstrap.test.mjs
+        run: node --test scripts/tests/tenant-activation.test.mjs scripts/tests/tenant-cutover-preflight.test.mjs scripts/tests/operational-writer-state.test.mjs scripts/tests/tenant-operational-cutover.test.mjs scripts/tests/in-place-bootstrap.test.mjs
       - name: Dormant single-writer fence, source operations and unrelated-tenant isolation (demo only)
         run: node scripts/run-local-tests.mjs italo-cutover-fence
       - name: Existing-event operational target, old links, retry handoff and forward freeze (demo only)

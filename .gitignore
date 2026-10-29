@@ -23,6 +23,8 @@ dist-public-preview/
 dist-italo-private/
 dist-italo-private-e2e/
 dist-italo-operational/
+dist-italo-operational-e2e/
+test-results-italo-operational/
 dist-italo-release-*/
 
 # Firebase CLI may leave a raw temporary export when local export fails.

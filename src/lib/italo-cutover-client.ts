@@ -1,6 +1,6 @@
 import { doc, getDocFromServer, type Firestore } from 'firebase/firestore';
 import { existingEventGrant, type ExistingEventGrant } from './existing-event-grant';
-import { getReservationAttempt, readReservationAttempt, saveReservationAttempt, type ReservationAttempt } from './reservation-attempt';
+import { completeReservationAttempt, getReservationAttempt, readReservationAttempt, saveReservationAttempt, type ReservationAttempt } from './reservation-attempt';
 
 const opaqueId = /^[A-Za-z0-9_-]{1,128}$/;
 import { registrationAlias } from './italo-cutover-policy';
@@ -29,13 +29,21 @@ export async function resolveOperationalReservationAttempt(
   const previous = readReservationAttempt(grant.sourceCaravanId, storage);
   if (!previous) return { attempt: getReservationAttempt(caravanId, storage), existingRegistrationId: null };
   const canonicalId = await resolveOperationalRegistration(database, previous.registrationId, grant);
-  if (canonicalId !== previous.registrationId) return { attempt: previous, existingRegistrationId: canonicalId };
+  if (canonicalId !== previous.registrationId) {
+    const committed = await getDocFromServer(doc(database, 'registrations', canonicalId));
+    if (!committed.exists() || committed.data().organizationId !== 'italo' || committed.data().caravanId !== caravanId) throw Error('A reserva anterior precisa ser conferida pela organização. Nenhuma nova inscrição foi criada.');
+    completeReservationAttempt(grant.sourceCaravanId, previous, storage);
+    return { attempt: previous, existingRegistrationId: canonicalId };
+  }
   // A cutover with no historical alias must never silently create a second
   // registration. The known-ID server read distinguishes an uncommitted retry.
   const known = await getDocFromServer(doc(database, 'registrations', previous.registrationId));
   if (known.exists()) {
     const data = known.data();
-    if (data.organizationId === 'italo' && data.caravanId === caravanId) return { attempt: previous, existingRegistrationId: previous.registrationId };
+    if (data.organizationId === 'italo' && data.caravanId === caravanId) {
+      completeReservationAttempt(grant.sourceCaravanId, previous, storage);
+      return { attempt: previous, existingRegistrationId: previous.registrationId };
+    }
     throw Error('A reserva anterior precisa ser conciliada pela organização. Nenhuma nova inscrição foi criada.');
   }
   // Preserve both copies until confirmed; a storage error prevents the write.
