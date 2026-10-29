@@ -1561,12 +1561,12 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && platformOperation(orgId, op, 'tenant_created');
     }
     match /namespaceBootstrap/{id} {
-      allow get: if isPlatformOwner() && (isPlatformOwner());
-      allow list, create, update, delete: if isPlatformOwner() && (false);
+      allow get: if isPlatformOwner();
+
     }
     match /tenantNamespaces/{id} {
-      allow get: if isPlatformOwner() && (isPlatformOwner());
-      allow list, update, delete: if isPlatformOwner() && (false);
+      allow get: if isPlatformOwner();
+
       allow create: if isPlatformOwner() && (newTenantNamespace(id, request.resource.data.lastPlatformOperationId)
         && request.resource.data.keys().hasOnly(['namespace', 'organizationId', 'state', 'version', 'createdAt', 'actorUid', 'lastPlatformOperationId'])
         && request.resource.data.namespace == id && request.resource.data.organizationId == id
@@ -1612,8 +1612,8 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         || (logo.size() <= 1000 && brandWebsite(logo) && logo.matches('.*[.]([pP][nN][gG]|[jJ][pP][eE]?[gG]|[wW][eE][bB][pP])([?][^#]*)?$')));
     }
     match /tenantSlugs/{slug} {
-      allow get: if isPlatformOwner() && (true);
-      allow list, update, delete: if isPlatformOwner() && (false);
+      allow get: if isPlatformOwner();
+
       allow create: if isPlatformOwner() && (publicTenantSlug(slug) && request.resource.data.keys().hasOnly(['slug', 'organizationId'])
         && (!exists(/databases/$(database)/documents/organizations/$(slug)) || slug == request.resource.data.organizationId)
         && (!exists(/databases/$(database)/documents/tenantNamespaces/$(slug)) || get(/databases/$(database)/documents/tenantNamespaces/$(slug)).data.organizationId == request.resource.data.organizationId)
@@ -1641,8 +1641,8 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
               && getAfter(/databases/$(database)/documents/platformAudit/$(data.lastBrandOperationId)).data.details.branding == data))
           && getAfter(/databases/$(database)/documents/tenantSlugs/$(data.slug)).data.organizationId == orgId;
       }
-      allow get: if isPlatformOwner() && (true);
-      allow list, delete: if isPlatformOwner() && (false);
+      allow get: if isPlatformOwner();
+
       allow create: if isPlatformOwner() && ((isTenantOwner(orgId) || newTenantNamespace(orgId, request.resource.data.lastBrandOperationId)) && valid(request.resource.data));
       allow update: if isPlatformOwner() && (isTenantOwner(orgId) && request.resource.data.slug == resource.data.slug && valid(request.resource.data));
     }
@@ -1654,7 +1654,7 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time && request.resource.data.action == 'branding_saved'
         && request.resource.data.settings.lastBrandOperationId == operationId && request.resource.data.slug == request.resource.data.settings.slug
         && getAfter(/databases/$(database)/documents/publicTenantSettings/$(request.resource.data.organizationId)).data == request.resource.data.settings);
-      allow update, delete: if isPlatformOwner() && (false);
+
     }
     // Historical aliases are provisioned only by an explicitly approved administrative migration.
 
@@ -1672,8 +1672,8 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
     // New commercial tools never gate the existing core, security or historical reads.
 
     match /organizations/{orgId}/commercialFeatures/{id} {
-      allow get: if isPlatformOwner() && (isAdmin(orgId) || isPlatformOwner());
-      allow list, delete: if isPlatformOwner() && (false);
+      allow get: if isPlatformOwner();
+
       allow create, update: if isPlatformOwner() && (id == 'current' && isPlatformOwner()
         && existsAfter(/databases/$(database)/documents/organizations/$(orgId))
         && request.resource.data == {
@@ -1694,17 +1694,10 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
 
 
     // Invitations are authoritative here; the private inbox is only an exact projection.
-    function invitationPath(orgId, uid) {
-      return /databases/$(database)/documents/tenantInvitations/$(orgId)/users/$(uid);
-    }
 
 
-    function pendingInvitee(orgId) {
-      let path = invitationPath(orgId, request.auth.uid);
-      return signedIn() && exists(path) && get(path).data.status == 'pending'
-        && get(path).data.uid == request.auth.uid && get(path).data.organizationId == orgId
-        && get(path).data.expiresAt > request.time;
-    }
+
+
 
 
 
@@ -1719,25 +1712,25 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
 
     match /tenantTeam/{orgId}/members/{uid} {
       allow get, list: if isPlatformOwner() && (isTenantOwner(orgId));
-      allow create, update: if false;
-      allow delete: if isPlatformOwner() && (false);
+
+
       allow create: if isPlatformOwner() && (newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
         && request.resource.data == { 'uid': uid, 'organizationId': orgId, 'role': 'tenant_owner', 'status': 'active', 'updatedAt': request.time, 'lastPlatformOperationId': request.resource.data.lastPlatformOperationId }
         && getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.ownerUid == uid
         && getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.lastPlatformOperationId == request.resource.data.lastPlatformOperationId);
     }
     match /tenantUsage/{orgId} {
-      allow get: if isPlatformOwner() && (isTenantOwner(orgId) || isPlatformOwner() || pendingInvitee(orgId));
+      allow get: if isPlatformOwner();
       // Legacy baseline is never invented/reset by the client. New onboarding/quota operations follow later.
-      allow list, delete: if isPlatformOwner() && (false);
+
       allow create: if isPlatformOwner() && (newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
         && request.resource.data.keys().hasOnly(['organizationId', 'version', 'publishedCaravans', 'activeMembers', 'activeOwners', 'updatedAt', 'lastPlatformOperationId'])
         && request.resource.data.organizationId == orgId && request.resource.data.version == 'commercial-v1'
         && request.resource.data.publishedCaravans == 0 && request.resource.data.activeMembers == 1 && request.resource.data.activeOwners == 1
         && request.resource.data.updatedAt == request.time);
-      allow update: if false;
+
       // The immutable new receipt validates all counter/member/invitation effects once.
-      allow update: if false;
+
     }
     match /subscriptions/{orgId} {
       function initial(data) {
@@ -1773,11 +1766,11 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
           && getAfter(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data.lastCommercialOperationId == data.lastCommercialOperationId
           && get(/databases/$(database)/documents/tenantUsage/$(orgId)).data.version == 'commercial-v1';
       }
-      allow get: if isPlatformOwner() && (isTenantOwner(orgId) || isPlatformOwner());
-      allow list: if isPlatformOwner() && (isPlatformOwner());
-      allow create, update: if isPlatformOwner() && (isPlatformOwner() && exists(/databases/$(database)/documents/organizations/$(orgId)) && valid(request.resource.data));
-      allow create: if isPlatformOwner() && (isPlatformOwner() && !exists(/databases/$(database)/documents/organizations/$(orgId)) && initial(request.resource.data));
-      allow delete: if isPlatformOwner() && (false);
+      allow get: if isPlatformOwner();
+      allow list: if isPlatformOwner();
+      allow create, update: if isPlatformOwner() && (exists(/databases/$(database)/documents/organizations/$(orgId)) && valid(request.resource.data));
+      allow create: if isPlatformOwner() && (!exists(/databases/$(database)/documents/organizations/$(orgId)) && initial(request.resource.data));
+
     }
     match /tenantEntitlements/{orgId} {
       function valid(data) {
@@ -1789,23 +1782,23 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
           && ((exists(/databases/$(database)/documents/organizations/$(orgId)) && !exists(/databases/$(database)/documents/commercialOperations/$(data.lastCommercialOperationId)))
             || (!exists(/databases/$(database)/documents/organizations/$(orgId)) && newTenantNamespace(orgId, data.lastCommercialOperationId)));
       }
-      allow get: if isPlatformOwner() && (true);
-      allow list, delete: if isPlatformOwner() && (false);
-      allow create, update: if isPlatformOwner() && (isPlatformOwner() && valid(request.resource.data));
+      allow get: if isPlatformOwner();
+
+      allow create, update: if isPlatformOwner() && (valid(request.resource.data));
     }
     match /commercialOperations/{operationId} {
       allow get: if isPlatformOwner() && ((resource == null && signedIn()) || (resource != null && (isTenantOwner(resource.data.organizationId) || isPlatformOwner())));
-      allow list: if isPlatformOwner() && (isPlatformOwner() || isTenantOwner(resource.data.organizationId));
-      allow create: if isPlatformOwner() && (isPlatformOwner() && operationId.matches('^[a-f0-9]{32}$')
+      allow list: if isPlatformOwner();
+      allow create: if isPlatformOwner() && (operationId.matches('^[a-f0-9]{32}$')
         && request.resource.data.keys().hasOnly(['organizationId', 'actorUid', 'at', 'action', 'payloadHash', 'previous', 'subscription'])
         && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time && request.resource.data.action == 'plan_assigned'
         && request.resource.data.payloadHash.matches('^[a-f0-9]{64}$') && request.resource.data.subscription.lastCommercialOperationId == operationId
         && getAfter(/databases/$(database)/documents/subscriptions/$(request.resource.data.organizationId)).data == request.resource.data.subscription);
-      allow update, delete: if isPlatformOwner() && (false);
+
     }
     match /organizations/{orgId} {
-      allow get: if isPlatformOwner() && (isAdmin(orgId) || isPlatformOwner());
-      allow list: if isPlatformOwner() && (isPlatformOwner());
+      allow get: if isPlatformOwner();
+      allow list: if isPlatformOwner();
       allow create: if isPlatformOwner() && (request.resource.data.keys().hasOnly(['name', 'slug', 'ownerUid', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'lastPlatformOperationId'])
         && request.resource.data.name is string && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 120
         && request.resource.data.slug == orgId && orgId.matches('^[a-z0-9][a-z0-9-]{2,59}$')
@@ -1825,13 +1818,12 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && request.resource.data.status != resource.data.get('status', 'active')
         && request.resource.data.updatedAt == request.time && request.resource.data.updatedBy == request.auth.uid
         && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_status_changed'));
-      allow delete: if isPlatformOwner() && (false);
+
     }
     match /organizationAvailability/{orgId} {
-      allow get: if isPlatformOwner() && (true);
-      allow list, delete: if isPlatformOwner() && (false);
-      allow create, update: if isPlatformOwner() && (isPlatformOwner()
-        && request.resource.data.keys().hasOnly(['organizationId', 'status', 'updatedAt', 'lastPlatformOperationId'])
+      allow get: if isPlatformOwner();
+
+      allow create, update: if isPlatformOwner() && (request.resource.data.keys().hasOnly(['organizationId', 'status', 'updatedAt', 'lastPlatformOperationId'])
         && request.resource.data.organizationId == orgId && request.resource.data.updatedAt == request.time
         && request.resource.data.status == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.status
         && request.resource.data.lastPlatformOperationId == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId
@@ -1842,9 +1834,8 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
     match /memberships/{uid}/organizations/{orgId} {
       allow get: if isPlatformOwner() && ((signedIn() && request.auth.uid == uid) || isTenantOwner(orgId));
       allow list: if isPlatformOwner() && (signedIn() && request.auth.uid == uid);
-      allow create: if false;
-      allow create: if isPlatformOwner() && (isPlatformOwner()
-        && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt', 'lastPlatformOperationId'])
+
+      allow create: if isPlatformOwner() && (request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt', 'lastPlatformOperationId'])
         && request.resource.data.uid == uid && request.resource.data.organizationId == orgId
         && request.resource.data.role == 'tenant_owner' && request.resource.data.status == 'active'
         && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
@@ -1853,16 +1844,15 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && request.resource.data.lastPlatformOperationId == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId
         && getAfter(/databases/$(database)/documents/tenantTeam/$(orgId)/members/$(uid)).data == { 'uid': uid, 'organizationId': orgId, 'role': 'tenant_owner', 'status': 'active', 'updatedAt': request.time, 'lastPlatformOperationId': request.resource.data.lastPlatformOperationId }
         && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_created'));
-      allow update: if false;
-      allow update: if false;
-      allow delete: if isPlatformOwner() && (false);
+
+
+
     }
 
     match /platformAudit/{operationId} {
-      allow get, list: if isPlatformOwner() && (isPlatformOwner() || (resource != null && isTenantOwner(resource.data.organizationId)));
-      allow update, delete: if isPlatformOwner() && (false);
-      allow create: if isPlatformOwner() && (isPlatformOwner()
-        && request.resource.data.keys().hasOnly(['action', 'organizationId', 'actorUid', 'at', 'previousStatus', 'status', 'details'])
+      allow get, list: if isPlatformOwner();
+
+      allow create: if isPlatformOwner() && (request.resource.data.keys().hasOnly(['action', 'organizationId', 'actorUid', 'at', 'previousStatus', 'status', 'details'])
         && request.resource.data.actorUid == request.auth.uid && request.resource.data.at == request.time
         && request.resource.data.details is map
         && getAfter(/databases/$(database)/documents/organizations/$(request.resource.data.organizationId)).data.lastPlatformOperationId == operationId
@@ -1907,7 +1897,7 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'lastEventId'])
           && resource.data.status == 'active' && request.resource.data.status == 'revoked'
           && supportEvent(orgId, request.resource.data.lastEventId, operatorUid, 'support_revoked'))));
-      allow delete: if isPlatformOwner() && (false);
+
     }
     match /supportSessions/{operatorUid} {
       function validSession(data) {
@@ -1921,10 +1911,10 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
           && data.expiresAt <= supportGrant(data.organizationId, operatorUid).expiresAt
           && supportEvent(data.organizationId, data.lastEventId, operatorUid, 'support_opened');
       }
-      allow get: if isPlatformOwner() && (isPlatformOwner() && request.auth.uid == operatorUid);
-      allow list, delete: if isPlatformOwner() && (false);
-      allow create: if isPlatformOwner() && (isPlatformOwner() && request.auth.uid == operatorUid && validSession(request.resource.data));
-      allow update: if isPlatformOwner() && (isPlatformOwner() && request.auth.uid == operatorUid && (validSession(request.resource.data)
+      allow get: if isPlatformOwner() && (request.auth.uid == operatorUid);
+
+      allow create: if isPlatformOwner() && (request.auth.uid == operatorUid && validSession(request.resource.data));
+      allow update: if isPlatformOwner() && (request.auth.uid == operatorUid && (validSession(request.resource.data)
         || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'lastEventId'])
           && resource.data.status == 'active' && request.resource.data.status == 'closed'
           && supportEvent(resource.data.organizationId, request.resource.data.lastEventId, operatorUid, 'support_closed'))));
@@ -1952,7 +1942,7 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
       }
       allow get: if isPlatformOwner() && (isTenantOwner(orgId) || (isPlatformOwner() && (resource == null || resource.data.operatorUid == request.auth.uid)));
       allow list: if isPlatformOwner() && (isTenantOwner(orgId) || (isPlatformOwner() && resource.data.operatorUid == request.auth.uid));
-      allow update, delete: if isPlatformOwner() && (false);
+
       allow create: if isPlatformOwner() && (eventId.matches('^[a-f0-9]{32}$')
         && request.resource.data.keys().hasOnly(['organizationId', 'operatorUid', 'actorUid', 'action', 'at', 'consentId', 'scope', 'expiresAt', 'purpose'])
         && request.resource.data.organizationId == orgId && request.resource.data.actorUid == request.auth.uid

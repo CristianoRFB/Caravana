@@ -38,7 +38,20 @@ export function buildPlatformOperationalRules(operationalBytes, modernBytes) {
   management = management.replace(/\ballow\s+([^:]+):\s*if\s+([^;]+);/g,(_m,methods,condition)=>{
     // Tenant quota/invitation mutations stay exclusively in tenant contracts.
     // Platform onboarding uses lastPlatformOperationId, never these receipts.
-    if (/\b(?:create|update)\b/.test(methods)&&condition.includes('lastQuotaOperationId')) return `allow ${methods}: if false;`;
+    if (/\b(?:create|update)\b/.test(methods)&&condition.includes('lastQuotaOperationId')) return '';
+    // Boolean identities within this owner-only sibling avoid compiling the
+    // tenant/invite branches already dominated by the same mandatory owner gate.
+    const compact=condition.replace(/\s+/g,'');
+    // An absent allow is the same default denial as an unconditional false.
+    if(compact==='false')return '';
+    if(new Set(['true','isPlatformOwner()',
+      'isAdmin(orgId)||isPlatformOwner()',
+      'isTenantOwner(orgId)||isPlatformOwner()',
+      'isTenantOwner(orgId)||isPlatformOwner()||pendingInvitee(orgId)',
+      'isPlatformOwner()||isTenantOwner(resource.data.organizationId)',
+      'isPlatformOwner()||(resource!=null&&isTenantOwner(resource.data.organizationId))'
+    ]).has(compact))return `allow ${methods}: if isPlatformOwner();`;
+    condition=condition.replace(/^\s*isPlatformOwner\(\)\s*&&\s*/,'');
     return `allow ${methods}: if isPlatformOwner() && (${condition});`;
   });
   const close=management.lastIndexOf('}');

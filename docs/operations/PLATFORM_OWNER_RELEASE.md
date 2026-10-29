@@ -10,6 +10,12 @@ O papel global é um documento `platformOwners/{uid}` provisionado por identidad
 
 Uma única operação com precondições `exists:false` cria o papel e a auditoria privada do bootstrap. Tentativas são registradas antes do envio. Erros incertos exigem leitura e reconciliação, sem repetir criação. A aplicação não recebe credenciais administrativas de servidor.
 
+O runtime privado usa `firebase-admin@14.5.0` (Node >=22), instalado fora do checkout, sem alterar o lockfile do aplicativo. O provisionador recebe `NODE_PATH` apontando para esse runtime e `GOOGLE_CLOUD_QUOTA_PROJECT=caravana-af306`; o SDK oficial usa este último para o cabeçalho `x-goog-user-project`. Nenhuma dessas variáveis contém credenciais. Uma consulta inicialmente recusada, sem tentativa de criar Auth ou papel, foi reconciliada contra o snapshot de Auth inalterado; seu backup cifrado foi retido antes da primeira tentativa de cadastro.
+
+O cadastro foi confirmado no Cloud Shell privado: três contas Auth, duas contas anteriores preservadas, papel global ativo e auditoria criados atomicamente, nenhuma escrita nos dados operacionais. A senha foi recebida somente pela TTY sem eco e administrada pelo Firebase Auth.
+
+O provedor recusou duas composições por tamanho compilado (319830 e 257509 bytes, limite 256000), mantendo as Rules operacionais anteriores ativas em todos os readbacks. A composição final elimina funções sem chamadas e identidades booleanas redundantes exclusivamente no novo escopo de gestão. Os dois escopos operacionais mantêm suas expressões de autorização. Não se altera evidência histórica para encobrir uma recusa.
+
 O executor operacional passou a reconhecer o manifesto estendido e as Rules compostas, para manter PREVIEW/freeze/retomada protegidos após a publicação global. A marca privada de 33 documentos e o ledger do Ítalo permanecem os mesmos; não há novo COPY ou alteração financeira.
 
 Validações locais: 19 testes SDK/Rules, incluindo gestão global e os contratos operacionais do Ítalo; oito testes do executor transacional; lint/typecheck; recusa do provisionador no PC compartilhado antes de ler credenciais. A publicação requer CI do SHA exato, manifesto/bytes do pacote, readback do papel e login real no navegador privado do Cloud Shell. O resultado hospedado será registrado após a operação; esta preparação não é recibo de cadastro ou deploy.
