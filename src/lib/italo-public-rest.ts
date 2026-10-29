@@ -1,6 +1,7 @@
 // Only unauthenticated public metadata and an already-known portal capability.
 // No credentials, backend keys, SDK sessions or diagnostics are sent here.
 export const publicDocuments = 'https://firestore.googleapis.com/v1/projects/caravana-af306/databases/(default)/documents';
+export class PublicMetadataDenied extends Error {}
 export async function boundedPublicJson(response: Response): Promise<unknown> {
   if (!response.ok) throw Error('Não foi possível confirmar a disponibilidade. Tente novamente.');
   if (!response.body) throw Error('Resposta indisponível.');
@@ -46,5 +47,6 @@ export async function publicDocument(path: string): Promise<Record<string, unkno
   if (!/^(publicTenantCutovers\/italo|legacyRegistrationAliases\/[a-f0-9]{64}|registrations\/[a-f0-9]{64})$/.test(path)) throw Error('Endereço público inválido.');
   const response = await fetch(publicDocuments + '/' + path, { credentials: 'omit', redirect: 'error', cache: 'no-store', signal: AbortSignal.timeout(10000) });
   if (response.status === 404) return null;
+  if (response.status === 403) throw new PublicMetadataDenied('Este endereço requer a conta da organização.');
   return decodePublicFields(await boundedPublicJson(response));
 }

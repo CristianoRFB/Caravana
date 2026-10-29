@@ -1,6 +1,6 @@
 import { existingEventGrant } from './lib/existing-event-grant';
 import { italoBootstrapDecision } from './lib/italo-bootstrap-policy';
-import { boundedPublicJson, publicDocument } from './lib/italo-public-rest';
+import { boundedPublicJson, publicDocument, PublicMetadataDenied } from './lib/italo-public-rest';
 interface Asset { path: string; sha256: string }
 interface RuntimeApp { entry: Asset; styles: Asset[] }
 interface Runtime { version: 'italo-bootstrap-v1'; source: string; projectId: 'caravana-af306'; legacy: RuntimeApp; privateHistory: RuntimeApp; operational: RuntimeApp }
@@ -47,7 +47,16 @@ async function start() {
   if (decision.kind === 'lookup') {
     const id = decision.id;
     const opaque = /^[a-f0-9]{64}$/.test(id);
-    const alias = opaque ? await publicDocument('legacyRegistrationAliases/' + id) : await (await import('./lib/italo-bootstrap-owner-alias')).readExistingOwnerAlias(id);
+    let alias: Record<string, unknown> | null;
+    if (!opaque) alias = await (await import('./lib/italo-bootstrap-owner-alias')).readExistingOwnerAlias(id);
+    else {
+      try { alias = await publicDocument('legacyRegistrationAliases/' + id); }
+      catch (cause) {
+        if (!(cause instanceof PublicMetadataDenied)) throw cause;
+        alias = await (await import('./lib/italo-bootstrap-owner-alias')).readExistingOwnerAlias(id);
+        if (!alias) throw cause;
+      }
+    }
     const registration = alias === null && opaque ? await publicDocument('registrations/' + id) : null;
     decision = italoBootstrapDecision(grant, location.pathname, { alias, registration });
   }

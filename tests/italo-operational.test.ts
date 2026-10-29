@@ -143,6 +143,21 @@ describe('scoped operational target alongside the frozen legacy source', () => {
     await assertFails(getDoc(doc(privileged(), 'legacyRegistrationAliases', privateId)));
     await assertFails(getDoc(doc(privileged(), 'registrations', originalId)));
   });
+  it('a deterministic 64-character target ID never makes a private historical ID into a public portal capability', async () => {
+    const sourceId = 'private-historical-id';
+    await env.withSecurityRulesDisabled(async c => {
+      for (const lookupId of [sourceId, knownId]) await setDoc(doc(c.firestore(), 'legacyRegistrationAliases', lookupId), { lookupId, sourceId, targetId: knownId, organizationId: 'italo', targetCaravanId: 'copied-event', copyPlanHash });
+    });
+    const publicDb = env.unauthenticatedContext().firestore(), other = env.authenticatedContext('tenant-b').firestore();
+    await assertFails(getDoc(doc(publicDb, 'legacyRegistrationAliases', knownId)));
+    await assertFails(getDoc(doc(publicDb, 'registrations', knownId)));
+    await assertFails(getDoc(doc(other, 'registrations', knownId)));
+    await assertSucceeds(getDoc(doc(privileged(), 'registrations', knownId)));
+    expect(await resolveOperationalRegistration(privileged(), knownId, await readOperationalDirectory(privileged()))).toBe(knownId);
+    await env.withSecurityRulesDisabled(c => updateDoc(doc(c.firestore(), CUTOVER_LEDGER_PATH), { phase: 'frozen', writerOrganizationId: '', generation: 4 }));
+    await assertFails(getDoc(doc(publicDb, 'registrations', knownId)));
+    await assertSucceeds(getDoc(doc(privileged(), 'registrations', knownId)));
+  });
   it('uses the real reservation SDK without a subscription, rejects replay duplication and stops at the existing capacity', async () => {
     runtime.db = env.unauthenticatedContext().firestore();
     const attempt = { registrationId: 'd'.repeat(64), reservationNonce: 'c'.repeat(64) };

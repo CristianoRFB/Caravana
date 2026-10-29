@@ -43,13 +43,14 @@ test('compiled public bootstrap routes safely at four viewport widths with no ex
   try {
     for (const width of [320, 375, 768, 1440]) await t.test(`routing and negative transport at width ${width}`, async () => {
       const context = await browser.newContext({ viewport: { width, height: 900 } }); const page = await context.newPage();
-      let directory = grant, missing = false, status = 200; const unexpected = [];
+      let directory = grant, missing = false, deniedAlias = false, status = 200; const unexpected = [];
       await context.route('**/*', async route => {
         const url = new URL(route.request().url()); if (url.origin === origin) { await route.continue(); return; }
         if (url.hostname !== 'firestore.googleapis.com') { unexpected.push(url.origin); await route.abort(); return; }
         const base = '/v1/projects/caravana-af306/databases/(default)/documents';
         if (url.pathname === base + '/publicTenantCutovers/italo') { await route.fulfill({ status: missing ? 404 : status, json: raw(directory) }); return; }
         if (url.pathname === base + '/legacyRegistrationAliases/' + sourceId || url.pathname === base + '/legacyRegistrationAliases/' + targetId) {
+          if (deniedAlias) { await route.fulfill({ status: 403, json: {} }); return; }
           const lookupId = url.pathname.split('/').at(-1); await route.fulfill({ json: raw({ lookupId, sourceId, targetId, organizationId: 'italo', targetCaravanId: 'copied-event', copyPlanHash: grant.copyPlanHash }) }); return;
         }
         if (url.pathname === base + '/legacyRegistrationAliases/' + freshId) { await route.fulfill({ status: 404, json: {} }); return; }
@@ -79,6 +80,9 @@ test('compiled public bootstrap routes safely at four viewport widths with no ex
       directory = { ...grant, phase: 'source_active', writerOrganizationId: 'caravana-77', generation: 5 };
       await page.goto(origin + '/minha-inscricao/' + targetId); await page.waitForFunction(() => document.body.textContent.includes('LEGACY_APPLICATION'));
       assert.equal(new URL(page.url()).pathname, '/minha-inscricao/' + sourceId);
+      directory = grant; deniedAlias = true;
+      await page.goto(origin + '/minha-inscricao/' + targetId); await page.waitForFunction(() => document.body.textContent.includes('Estamos conferindo a disponibilidade'));
+      assert.equal(await page.evaluate(() => Boolean(window.__app)), false); deniedAlias = false;
       status = 503;
       await page.goto(origin + '/caravana/original-trip'); await page.waitForFunction(() => document.body.textContent.includes('Estamos conferindo a disponibilidade'));
       assert.equal(await page.evaluate(() => Boolean(window.__app)), false);

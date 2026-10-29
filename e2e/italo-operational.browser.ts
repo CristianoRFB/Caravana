@@ -54,6 +54,10 @@ async function freeze() {
 test('owner operates the existing event, preserves UNKNOWN and proof, then freezes and revokes the same session', async ({ page }) => {
   await page.goto(`${base}/admin/login`); await page.getByLabel(/E-mail/).fill(testAccount.email); await page.getByLabel(/Senha/).fill(testAccount.password);
   await page.getByRole('button', { name: 'Entrar no painel' }).click(); await expect(page).toHaveURL(new RegExp(`${base}/admin$`));
+  await env.withSecurityRulesDisabled(async ctx => {
+    for (const lookupId of ['owner-only-history', knownId]) await setDoc(doc(ctx.firestore(), 'legacyRegistrationAliases', lookupId), { lookupId, sourceId: 'owner-only-history', targetId: knownId, organizationId: 'italo', targetCaravanId: 'copied-ride', copyPlanHash: grant.copyPlanHash });
+  });
+  await page.goto(`${base}/o/italo/minha-inscricao/owner-only-history`); await expect(page.getByRole('heading', { name: 'Oi, Passageiro!', exact: true })).toBeVisible();
   await page.goto(`${base}/admin/financeiro`);
   const unknown = page.locator('.finance-passenger-row').filter({ hasText: 'Passageiro desconhecido fictício' }); await expect(unknown).toContainText('Não conciliado');
   const known = page.locator('.finance-passenger-row').filter({ hasText: 'Passageiro conhecido fictício' });

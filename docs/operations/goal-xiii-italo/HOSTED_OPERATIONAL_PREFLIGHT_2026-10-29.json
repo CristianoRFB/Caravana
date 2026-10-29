@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-29",
+  "status": "PRESERVED_AND_COMPILED_NO_OPERATIONAL_ACTIVATION",
+  "currentPages": {
+    "id": "6e76a7cd-32f1-4d40-9a4c-f470cbe4445c",
+    "source": "4ecaa9e3bef58c9b6f154a2b19d08c167ebed5a2",
+    "domain": "caravana-77.pages.dev"
+  },
+  "activeRules": {
+    "name": "projects/caravana-af306/rulesets/392e61a3-ec9c-4b08-9f47-7250c5e7e14f",
+    "sha256": "77307820aa8878c3d5349b7c15d3ef4b232e9199d56ff59f657bc29bb3fc7c8f"
+  },
+  "preservedPrivateComponents": {
+    "filename": "operational-before-20261029.enc",
+    "sha256": "0f14ea97c35ee52da92c3e51b8de9b6f754bfc6d2b02bc402a22a69680e9e6c5",
+    "encryptedReadback": "PASS",
+    "custody": "OFFICIAL_PRIVATE_CLOUD_SHELL_ONLY",
+    "independentFullRestore": false
+  },
+  "indexesReady": 5,
+  "billingEnabled": false,
+  "sourceRegistrationAccess": {
+    "publicCapabilityLinks": 10,
+    "ownerOnlyLinks": 0,
+    "identifiersExported": 0
+  },
+  "code55c1864": {
+    "mainCi": 40927208102,
+    "dedicatedCi": 40927208158,
+    "conclusion": "SUCCESS"
+  },
+  "candidateLocalRulesSha256": "8ceb58325c16b02e2aedc5c1a11e13f7da92ebcf738e70bc5acfb5bff96c2454",
+  "localCases": {
+    "sdkAndTransportWithRegression": 35,
+    "nativePhasePlanner": 8,
+    "fullAppBrowserExecutions": 8,
+    "fullAppDistinctJourneys": 2,
+    "viewports": [
+      320,
+      375,
+      768,
+      1440
+    ],
+    "bootstrapBrowserChecks": 5
+  },
+  "businessWrites": 0,
+  "authWrites": 0,
+  "publicCutover": false,
+  "copyRepeated": false
+}

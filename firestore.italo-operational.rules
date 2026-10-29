@@ -418,6 +418,14 @@ allow list: if isAdmin(
       allow list, create, update, delete: if false;
     }
 
+    function operationalPortalCapability(id) {
+      let p = /databases/$(database)/documents/legacyRegistrationAliases/$(id);
+      return id.matches('^[a-f0-9]{64}$') && (!exists(p) || (
+        get(p).data.copyPlanHash == '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10'
+        && get(p).data.targetId == id && get(p).data.sourceId is string
+        && get(p).data.sourceId.matches('^[a-f0-9]{64}$')));
+    }
+
     function operationalEverActivated() {
       let p = /databases/$(database)/documents/organizations/italo/tenantCutovers/operational-v1;
       return exists(p) && get(p).data.get('everActivated', false) == true;
@@ -446,6 +454,7 @@ allow list: if isAdmin(
         && (resource == null || (resource.data.copyPlanHash == '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10'
           && resource.data.organizationId == 'italo' && resource.data.lookupId == id
           && resource.data.sourceId is string && resource.data.sourceId.matches('^[A-Za-z0-9_-]{1,128}$')
+          && (resource.data.sourceId.matches('^[a-f0-9]{64}$') || privateHistoryOwner('italo'))
           && resource.data.targetId is string && resource.data.targetId.matches('^[a-f0-9]{64}$')
           && (id == resource.data.sourceId || id == resource.data.targetId)
           && resource.data.targetCaravanId == get(/databases/$(database)/documents/organizations/italo/tenantCutovers/operational-v1).data.targetCaravanId));
@@ -454,7 +463,7 @@ allow list: if isAdmin(
     // A known portal capability remains queryable during a forward-repair freeze.
     // Enumeration and private proof subcollections remain owner-only.
     match /registrations/{id} {
-      allow get: if id.matches('^[a-f0-9]{64}$') && operationalDataReadable()
+      allow get: if operationalPortalCapability(id) && operationalDataReadable()
         && get(/databases/$(database)/documents/organizations/italo/tenantCutovers/operational-v1).data.phase in ['target_active', 'frozen']
         && (resource == null || (resource.data.organizationId == 'italo'
           && resource.data.caravanId == get(/databases/$(database)/documents/organizations/italo/tenantCutovers/operational-v1).data.targetCaravanId
@@ -476,6 +485,13 @@ allow list: if isAdmin(
     }
     function operationalCaravanId() { return get(/databases/$(database)/documents/organizations/italo/tenantCutovers/operational-v1).data.targetCaravanId; }
     function operationalCapacity() { return get(/databases/$(database)/documents/organizations/italo/tenantCutovers/operational-v1).data.capacityCeiling; }
+    function operationalPortalCapability(id) {
+      let p = /databases/$(database)/documents/legacyRegistrationAliases/$(id);
+      return id.matches('^[a-f0-9]{64}$') && (!exists(p) || (
+        get(p).data.copyPlanHash == '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10'
+        && get(p).data.targetId == id && get(p).data.sourceId is string
+        && get(p).data.sourceId.matches('^[a-f0-9]{64}$')));
+    }
 
     function signedIn() {
       return request.auth != null && (
@@ -1292,7 +1308,7 @@ allow list: if false;
       }
       // Import candidates and opaque reservation retries may test absence (no document data).
       // Existing records still require organization authority or an active bearer link.
-      allow get: if operationalGrant() && ((resource == null || (resource.data.organizationId == 'italo' && resource.data.caravanId == operationalCaravanId()))) && ((resource == null
+      allow get: if operationalGrant() && ((resource == null || (resource.data.organizationId == 'italo' && resource.data.caravanId == operationalCaravanId())) && (isAdmin('italo') || operationalPortalCapability(registrationId))) && ((resource == null
           && (signedIn() || registrationId.matches('^[a-f0-9]{64}$')))
         || (resource != null
           && (isAdmin(resource.data.organizationId) || (tenantWritesEnabled(resource.data.organizationId) && registrationId.matches('^[a-f0-9]{64}$')

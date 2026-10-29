@@ -21,7 +21,16 @@ export function buildItaloOperationalRules(privateBytes, modernBytes) {
   if (legacy.split(bearer).length !== 2) throw Error('OPERATIONAL_LEGACY_BEARER_SURFACE_CHANGED');
   legacy = legacy.replace(bearer, () => bearer + " && !resource.data.get('portalAccessRevoked', false) && (resource.data.organizationId != 'caravana-77' || !operationalEverActivated() || operationalSourceWriterOpen('caravana-77'))");
   const legacyClosing = legacy.lastIndexOf('  }\n}');
+  const portalCapability = `    function operationalPortalCapability(id) {
+      let p = /databases/$(database)/documents/legacyRegistrationAliases/$(id);
+      return id.matches('^[a-f0-9]{64}$') && (!exists(p) || (
+        get(p).data.copyPlanHash == '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10'
+        && get(p).data.targetId == id && get(p).data.sourceId is string
+        && get(p).data.sourceId.matches('^[a-f0-9]{64}$')));
+    }
+`;
   const identity = `
+${portalCapability}
     function operationalEverActivated() {
       let p = /databases/$(database)/documents/${CUTOVER_LEDGER_PATH};
       return exists(p) && get(p).data.get('everActivated', false) == true;
@@ -50,6 +59,7 @@ export function buildItaloOperationalRules(privateBytes, modernBytes) {
         && (resource == null || (resource.data.copyPlanHash == '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10'
           && resource.data.organizationId == 'italo' && resource.data.lookupId == id
           && resource.data.sourceId is string && resource.data.sourceId.matches('^[A-Za-z0-9_-]{1,128}$')
+          && (resource.data.sourceId.matches('^[a-f0-9]{64}$') || privateHistoryOwner('italo'))
           && resource.data.targetId is string && resource.data.targetId.matches('^[a-f0-9]{64}$')
           && (id == resource.data.sourceId || id == resource.data.targetId)
           && resource.data.targetCaravanId == get(/databases/$(database)/documents/${CUTOVER_LEDGER_PATH}).data.targetCaravanId));
@@ -58,7 +68,7 @@ export function buildItaloOperationalRules(privateBytes, modernBytes) {
     // A known portal capability remains queryable during a forward-repair freeze.
     // Enumeration and private proof subcollections remain owner-only.
     match /registrations/{id} {
-      allow get: if id.matches('^[a-f0-9]{64}$') && operationalDataReadable()
+      allow get: if operationalPortalCapability(id) && operationalDataReadable()
         && get(/databases/$(database)/documents/${CUTOVER_LEDGER_PATH}).data.phase in ['target_active', 'frozen']
         && (resource == null || (resource.data.organizationId == 'italo'
           && resource.data.caravanId == get(/databases/$(database)/documents/${CUTOVER_LEDGER_PATH}).data.targetCaravanId
@@ -91,7 +101,7 @@ export function buildItaloOperationalRules(privateBytes, modernBytes) {
     function operationalCaravanId() { return get(/databases/$(database)/documents/${CUTOVER_LEDGER_PATH}).data.targetCaravanId; }
     function operationalCapacity() { return get(/databases/$(database)/documents/${CUTOVER_LEDGER_PATH}).data.capacityCeiling; }
 `;
-  modern = modern.replace(root, () => root + '\n' + grant);
+  modern = modern.replace(root, () => root + '\n' + grant + portalCapability);
   // Every allow is gated once below. Rechecking the full operator ledger in
   // each nested ACL/quota helper exceeds Firestore's expression budget.
   modern = replaceRootFunction(modern, 'isAdmin', `    function isAdmin(orgId) { return orgId == 'italo' && signedIn() && activeMembership(orgId) && membership(orgId).role == 'tenant_owner'; }`);
@@ -168,6 +178,7 @@ export function buildItaloOperationalRules(privateBytes, modernBytes) {
       if (['/registrations/{registrationId}', '/financialOperations/{operationId}', '/registrationOperations/{operationId}'].includes(preceding)) {
         scope = `(${data}.organizationId == 'italo' && ${data}.caravanId == operationalCaravanId())`;
         if (operation === 'get') scope = `(resource == null || ${scope})`;
+        if (operation === 'get' && preceding === '/registrations/{registrationId}') scope += " && (isAdmin('italo') || operationalPortalCapability(registrationId))";
       } else if (preceding === '/caravans/{caravanId}' && ['update'].includes(operation)) scope = "resource.data.organizationId == 'italo' && caravanId == operationalCaravanId() && request.resource.data.capacity <= operationalCapacity()";
       else if (['/payments/{paymentId}', '/proofs/{proofId}', '/authorizations/{fileId}'].includes(preceding)) {
         scope = "get(/databases/$(database)/documents/registrations/$(registrationId)).data.organizationId == 'italo' && get(/databases/$(database)/documents/registrations/$(registrationId)).data.caravanId == operationalCaravanId()";
