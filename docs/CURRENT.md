@@ -1,5 +1,19 @@
 # Estado atual — Caravana 77
 
+## 29/10/2026 — transferência operacional do Ítalo concluída
+
+O tenant **italo** é o único escritor: **target_active, geração 5**, com a caravana existente em operação. Os 24 originais preservam hashes/versões; os 29 documentos já copiados foram revalidados, sem recopy. Dez inscrições, oito totais pagos conciliados, dois UNKNOWN preservados e um comprovante com bytes/MIME idênticos e acesso anônimo negado. Duas contas Auth/claims e memberships existentes preservadas.
+
+Produto **e3a465f15a1bd98946f01c037734432848cd9094**, CI [40929890152](https://github.com/CristianoRFB/Caravana/actions/runs/40929890152) e [40929890169](https://github.com/CristianoRFB/Caravana/actions/runs/40929890169) SUCCESS. Pages **ebce9d69**, Rules **336fbe8b / 8ceb5832**, cinco índices READY e nenhum delta de índices neste corte. Quarenta arquivos/cinco rotas HTTP e smoke real privado dos links antigos/novos, catálogo único e login PASS, sem writes de teste.
+
+**DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; APP_ACTIVE=PROD_OPERATIONAL_SINGLE_WRITER; PUBLIC_CUTOVER=true; MIGRATED=true para o evento existente do Ítalo.** A confirmação de acesso do proprietário é anterior; não foi observada nova autenticação com senha. O catálogo e os aliases foram verificados após ativação. O grant existente não concede plano nem expansão comercial.
+
+Acesso: [painel Ítalo](https://caravana-77.pages.dev/tenant-italo/admin/login). [Resultado sanitizado](operations/goal-xiii-italo/HOSTED_OPERATIONAL_RESULT_2026-10-29.json), [handoff](operations/goal-xiii-italo/HANDOFF.md), [runbook de resposta](operations/goal-xiii-italo/OPERATIONAL_RELEASE.md). Retorno de componentes e congelamento/retorno à origem comprovados antes de ativar o destino; após operações novas, preservar dados e reparar para a frente. Custo incremental R$0; fatura agregada Cloudflare UNKNOWN por Billing403. Preservação cifrada em uma custódia privada, sem alegar restore independente.
+
+## Histórico — checkpoints anteriores ao corte de29/10
+
+As seções seguintes registram estados anteriores, substituídos pelo estado vigente acima.
+
 ## Decisão posterior do proprietário — operação continua
 
 Em 27/10, o proprietário confirmou: **“Ainda continua em operação”**. A data passada não autoriza encerrar reservas ou edições nem arquivar o evento. A origem permanece operacional até validar o corte com um único escritor e os links antigos. A publicação privada 4ecaa9e permanece vigente; nenhum congelamento ou corte operacional foi aplicado.

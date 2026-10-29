@@ -1,4 +1,32 @@
-# GOAL XIII — estados atuais por evidência (27/10/2026)
+# GOAL XIII — estados por evidência (29/10/2026)
+
+## Estado vigente —29/10/2026, corte real concluído
+
+Evidência: [resultado de produção](HOSTED_OPERATIONAL_RESULT_2026-10-29.json) e [runbook](OPERATIONAL_RELEASE.md). Escopo: evento existente do Ítalo, conforme decisão do proprietário de continuar em operação.
+
+| Requisito | Estado | Evidência e limite |
+|---|---|---|
+| ITALO_TENANT_DATA_COPIED | REVERIFIED_HOSTED |29copiados existentes;24originais com hashes/versões intactos;0recopy |
+| ITALO_TENANT_AUTHENTICATED | OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS |Confirmação anterior de entrada/dados/comprovante;2Auth/claims/memberships preservadas;nenhuma nova senha/sessão observada |
+| ACCESS_ACTIVE | EXISTING_OWNER_SCOPE_PRESERVED |Grant mínimo de owner existente;sem Platform Owner ou assinatura atribuída |
+| ITALO_TENANT_APP_ACTIVE | PROD_OPERATIONAL_SINGLE_WRITER |target_active/geração5;origem bloqueada,destino único escritor |
+| ITALO_PUBLIC_CUTOVER_COMPLETE | YES_PROD_BROWSER_PASS |Links antigos/novos e alias no app convergem;catálogo único;app operacional real e login visíveis |
+| ITALO_MIGRATED | YES_EXISTING_EVENT_SCOPE |Ativação26writes/readback e inventário completo84docs PASS |
+| Fonte/CI | EXACT_SHA_BOTH_SUCCESS |e3a465f;40929890152/40929890169 SUCCESS |
+| Rules/índices | PROD_PUBLISHED |8ceb5832/ruleset336fbe8b;5READY,0criados/removidos neste corte |
+| Frontend/HTTP | PROD_PASS |ebce9d69,dirty=false,sem Functions;40arquivos/5rotas/hash/MIME/cache/CSP |
+| Totais/comprovante | PRESERVED |8totais pagos conciliados,2UNKNOWN;1proof idêntico,anônimo403 |
+| A×B/revogação/login dirigido | DEMO_ON_PUBLISHED_BYTES |Prova autenticada dirigida em emuladores;sem sessão B ou pagamento real fabricados |
+| Retorno | PROD_BEFORE_TARGET_TRAFFIC_PASS |Pages ca4166eb e Rules392→336;controle1→2→3 antes do corte4→5 |
+| Dados posteriores | FORWARD_REPAIR_PROTECTED |Marca cifrada33docs;retorno à origem recusado após mudança,testado em demo;sem restore de negócio |
+| Custo | R$0_INCREMENTAL |Firebase billing=false/freeTier;Pages estático;fatura agregada CF UNKNOWN/Billing403 |
+| Preservação | COMPONENT_RETURN_SINGLE_CUSTODY |Ciphertext/readback e versões imutáveis preservadas;sem alegar segunda custódia/restore completo independente |
+
+**READY_FOR_ITALO_OPERATION=YES; ITALO_MIGRATED=YES no evento existente.** Novo crescimento comercial e rollout global não são aprovados por este resultado. Dois totais históricos seguem para revisão legítima do proprietário; nenhum valor foi inventado. Não resta bloqueio humano para este corte.
+
+## Histórico — checkpoints anteriores ao corte de29/10
+
+As seções seguintes registram estados anteriores, substituídos pelo estado vigente acima.
 
 ## Decisão posterior do proprietário — operação continua
 

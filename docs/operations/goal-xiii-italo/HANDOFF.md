@@ -1,4 +1,22 @@
-# GOAL XIII — ativação privada sobre a cópia existente
+# GOAL XIII — Ítalo operacional em produção
+
+## 29/10/2026 — Ítalo operacional em produção
+
+**Transferência concluída para o evento existente.** O destino é o único escritor em target_active/geração5. Fonte **e3a465f15a1bd98946f01c037734432848cd9094**, CI principal40929890152 e dedicado40929890169 SUCCESS; Pages **ebce9d69-198f-46e5-9892-afdcb8d3af0b**, Rules **336fbe8b / 8ceb58325c16b02e2aedc5c1a11e13f7da92ebcf738e70bc5acfb5bff96c2454**.
+
+Inventário privado de **19:21:56UTC**:84docs totais,24originais com hashes/versões intactos,29copiados existentes+4companions privados, marca cifrada33/33 coincidente,10inscrições,8totais pagos conciliados/2UNKNOWN,1comprovante idêntico e negado a anônimos,20aliases públicos conferidos. Duas contas Auth e claims/memberships preservadas. Zero recopy/original/Auth/membership/finance/contrato writes. Os38writes foram controles, aliases, auditorias e3ajustes de metadados.
+
+PREVIEW/APPLY/readback: prepare1 → freeze2 → return-source3 → freeze4 → activate5. Retorno/avanço Pages e Rules comprovados antes do uso do destino. A ativação final teve26writes. Smoke real em Chromium privado PASS: URLs antigas e novas, alias dentro do app, catálogo único e login, com0tentativas de write/0screenshots/0traces. HTTP40arquivos/5rotas/hash/MIME/cache/CSP PASS.
+
+**DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; ACCESS_ACTIVE=EXISTING_OWNER_SCOPE_PRESERVED; APP_ACTIVE=PROD_OPERATIONAL_SINGLE_WRITER; PUBLIC_CUTOVER=true; MIGRATED=true neste escopo.** O proprietário já confirmou entrada/dados/comprovante; nova senha/sessão autenticada não foi observada pelo agente. A×B/revogação autenticados continuam prova demo sobre os bytes publicados.
+
+[Resultado e hashes](HOSTED_OPERATIONAL_RESULT_2026-10-29.json), [matriz](READINESS_MATRIX.md), [runbook atual](OPERATIONAL_RELEASE.md). Executar comandos de controle somente no checkout operacional limpo **e3a465f** do Cloud Shell oficial; o commit posterior de documentação não muda a versão do produto. A contingência privada anterior só é válida antes de novas operações no destino. Depois delas, congelar e reparar para a frente; não reabrir a origem nem restaurar baseline de negócio. Commit incerto exige VERIFY, sem repetir APPLY.
+
+R$0 incremental, billing=false/Standard/freeTier e Pages sem Functions; cinco índices READY/zero mudanças neste corte. Cloudflare agregado UNKNOWN/Billing403. Custódia cifrada única e componentes preservados não constituem backup completo com restore independente. Sem novo bloqueio humano para o corte, sem staging adicional bdall, sem plano/trial inventado ou encerramento por data passada.
+
+## Histórico — checkpoints anteriores ao corte de29/10
+
+As seções seguintes registram estados anteriores, substituídos pelo estado vigente acima.
 
 ## Decisão posterior do proprietário — operação continua
 
