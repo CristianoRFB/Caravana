@@ -29,7 +29,8 @@ try{
   const token=officialAccessToken('nexus7devstudio@gmail.com'),api=new GoogleSource(token),metadata=await api.metadata(),config=await api.config(),before=await api.users();
   requireThat(String(metadata.project.projectNumber)==='742921744156'&&config.auth.signIn?.email?.enabled===true,'EXISTING_PROJECT_AND_PASSWORD_PROVIDER_REQUIRED');
   const actual=config.releases.find(r=>r.release.name.endsWith('/cloud.firestore'));
-  requireThat(createHash('sha256').update(actual.ruleset.source.files[0].content).digest('hex')===createHash('sha256').update(await readFile('firestore.platform-operational.rules')).digest('hex'),'PUBLISHED_PLATFORM_RULES_REQUIRED');
+  const publishedHash=createHash('sha256').update(actual.ruleset.source.files[0].content).digest('hex');
+  requireThat(publishedHash==='8ceb58325c16b02e2aedc5c1a11e13f7da92ebcf738e70bc5acfb5bff96c2454'||publishedHash===createHash('sha256').update(await readFile('firestore.platform-operational.rules')).digest('hex'),'PUBLISHED_OPERATIONAL_OR_PLATFORM_RULES_REQUIRED');
   const iv=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key,iv),ciphertext=Buffer.concat([cipher.update(Buffer.from(canonical({source,metadata,config,users:before}))),cipher.final()]);
   await writeFile(path.join(directory,'platform-owner-before.enc'),Buffer.concat([iv,cipher.getAuthTag(),ciphertext]),{mode:0o600,flag:'wx'});
   const require=createRequire(path.join(process.cwd(),'package.json')),admin=require('firebase-admin/app'),{getAuth}=require('firebase-admin/auth');

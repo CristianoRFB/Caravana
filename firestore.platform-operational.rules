@@ -499,11 +499,7 @@ allow list: if isAdmin(
           || request.auth.token.get('email', '').lower().matches('.*[.]test$'))
         || request.auth.token.get('aud', '') == 'demo-caravana77-test');
     }
-    function adminOrg() {
-      return exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-        ? get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.organizationId
-        : '';
-    }
+
     function hasMembership(orgId) {
       return exists(/databases/$(database)/documents/memberships/$(request.auth.uid)/organizations/$(orgId));
     }
@@ -518,14 +514,7 @@ allow list: if isAdmin(
         && member.status == 'active'
         && member.role in ['tenant_owner', 'staff'];
     }
-    function legacyAccess(orgId) {
-      let organization = /databases/$(database)/documents/organizations/$(orgId);
-      let settings = get(organization).data;
-      return adminOrg() == orgId && !hasMembership(orgId)
-        && (!exists(organization) || (
-          settings.get('legacyAdminAccessEnabled', true) == true
-          && request.time < settings.get('legacyAdminAccessUntil', request.time + duration.value(1, 's'))));
-    }
+
     // Legacy compatibility is explicit and can be cut off per organization only after migration.
     // An existing revoked/invalid membership NEVER falls back to admins/{uid}.
     function isAdmin(orgId) { return orgId == 'italo' && signedIn() && activeMembership(orgId) && membership(orgId).role == 'tenant_owner'; }
@@ -540,35 +529,15 @@ allow list: if isAdmin(
     // A copied historical tenant remains read-only until a separately reviewed cutover.
     function tenantWritesEnabled(orgId) { return orgId == 'italo' && get(/databases/$(database)/documents/organizations/italo).data.get('importPending', true) == false; }
     function acceptsReservations(orgId) { return tenantWritesEnabled(orgId) && get(/databases/$(database)/documents/organizations/italo).data.get('status', 'active') != 'suspended'; }
-    function platformOperation(orgId, operationId, action) {
-      let path = /databases/$(database)/documents/platformAudit/$(operationId);
-      let event = getAfter(path).data;
-      return isPlatformOwner() && operationId.matches('^[a-f0-9]{32}$') && !exists(path)
-        && event.organizationId == orgId && event.actorUid == request.auth.uid
-        && event.action == action && event.at == request.time;
-    }
-    function namespaceBootstrapReady() {
-      let marker = get(/databases/$(database)/documents/namespaceBootstrap/state).data;
-      return marker.version == 'namespace-v1' && marker.coverageVersion == 'tenant-references-v2'
-        && marker.inventoryComplete == true && marker.manifestHash.matches('^[a-f0-9]{64}$');
-    }
-    function newTenantNamespace(orgId, op) {
-      return namespaceBootstrapReady() && !exists(/databases/$(database)/documents/organizations/$(orgId))
-        && !exists(/databases/$(database)/documents/tenantNamespaces/$(orgId))
-        && platformOperation(orgId, op, 'tenant_created');
-    }
+
+
+
 
 
     function supportGrant(orgId, operatorUid) {
       return get(/databases/$(database)/documents/supportGrants/$(orgId)/operators/$(operatorUid)).data;
     }
-    function supportEvent(orgId, eventId, operatorUid, action) {
-      let path = /databases/$(database)/documents/supportGrants/$(orgId)/audit/$(eventId);
-      let event = getAfter(path).data;
-      return eventId.matches('^[a-f0-9]{32}$') && !exists(path)
-        && event.organizationId == orgId && event.operatorUid == operatorUid
-        && event.actorUid == request.auth.uid && event.action == action && event.at == request.time;
-    }
+
     function usableSupportGrant(orgId, operatorUid) {
       let grant = supportGrant(orgId, operatorUid);
       return grant.organizationId == orgId && grant.operatorUid == operatorUid
@@ -592,90 +561,24 @@ allow list: if isAdmin(
     // Operator-created activation ledger is immutable to every client.
 
 
-    function publicTenantSlug(slug) {
-      return slug is string && slug.matches('^[a-z0-9][a-z0-9-]{2,59}$') && !(slug in ['admin', 'platform', 'api', 'www', 'conta', 'demo']);
-    }
-    function brandWebsite(url) {
-      return url is string && (url == '' || (url.matches('^https://[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)+(/[^\\s#]*)?$')
-        && !url.matches('^https://[0-9.]+(/.*)?$') && !url.matches('^https://.*[.](local|internal|test)(/.*)?$')));
-    }
-    function brandImage(logo) {
-      return logo is string && (logo == ''
-        || (logo.size() <= 87384 && logo.matches('^(data:image/png;base64,iVBORw0KGgo|data:image/jpeg;base64,/9j/)[a-zA-Z0-9+/]*={0,2}$'))
-        || (logo.size() <= 1000 && brandWebsite(logo) && logo.matches('.*[.]([pP][nN][gG]|[jJ][pP][eE]?[gG]|[wW][eE][bB][pP])([?][^#]*)?$')));
-    }
+
+
+
 
 
 
     // Historical aliases are provisioned only by an explicitly approved administrative migration.
 
-    function commercialPlan(planId) {
-      return planId == 'essencial' ? { 'monthlyCents': 8900, 'limits': { 'activeCaravans': 2, 'passengersPerCaravan': 60, 'internalUsers': 2 } }
-        : planId == 'pro' ? { 'monthlyCents': 14900, 'limits': { 'activeCaravans': 5, 'passengersPerCaravan': 200, 'internalUsers': 5 } }
-        : { 'monthlyCents': 21900, 'limits': { 'activeCaravans': 15, 'passengersPerCaravan': 500, 'internalUsers': 15 } };
-    }
+
     function quotaGrowth(orgId) { return orgId == 'italo' && acceptsReservations(orgId); }
-    function functionalFeatures(planId) {
-      return planId == 'premium' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library', 'worklists']
-        : planId == 'pro' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library']
-        : ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding'];
-    }
+
     // New commercial tools never gate the existing core, security or historical reads.
-    function functionalGrowth(orgId, feature) {
-      let subscription = get(/databases/$(database)/documents/subscriptions/$(orgId)).data;
-      let projection = get(/databases/$(database)/documents/organizations/$(orgId)/commercialFeatures/current).data;
-      let organization = get(/databases/$(database)/documents/organizations/$(orgId)).data;
-      return isAdmin(orgId) && organization.get('importPending', false) == false && organization.get('status', 'active') != 'suspended'
-        && subscription.status in ['active', 'trial', 'demo']
-        && (subscription.trialEndsAt == null || request.time < subscription.trialEndsAt)
-        && feature in functionalFeatures(subscription.planId)
-        && projection.lastCommercialOperationId == subscription.lastCommercialOperationId
-        && projection.planId == subscription.planId && projection.status == subscription.status;
-    }
 
-    function toolEnvelope(orgId, kind, entityId, data) {
-      let event = getAfter(/databases/$(database)/documents/organizations/$(orgId)/toolEvents/$(data.lastToolOperationId)).data;
-      return data.organizationId == orgId && data.updatedAt == request.time && data.updatedBy == request.auth.uid
-        && data.lastToolOperationId.matches('^[a-f0-9]{32}$')
-        && !exists(/databases/$(database)/documents/organizations/$(orgId)/toolEvents/$(data.lastToolOperationId))
-        && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
-        && event.kind == kind && event.entityId == entityId;
-    }
-    function validReportFinance(value) {
-      let unknown = value.get('unknownPaymentCount', 0);
-      return value is map && value.keys().hasOnly(['passengerCount', 'paidPassengerCount', 'partialPassengerCount', 'pendingPassengerCount', 'reportedPassengerCount', 'unknownPaymentCount', 'unknownFareCount', 'expectedCents', 'receivedCents', 'receivableCents', 'uncertainReceivableCount', 'expenseCents', 'recordedBalanceCents', 'projectedResultCents'])
- && value.passengerCount is int && value.passengerCount >= 0 && value.passengerCount <= 9000000000000
- && value.paidPassengerCount is int && value.paidPassengerCount >= 0 && value.paidPassengerCount <= 9000000000000
- && value.partialPassengerCount is int && value.partialPassengerCount >= 0 && value.partialPassengerCount <= 9000000000000
- && value.pendingPassengerCount is int && value.pendingPassengerCount >= 0 && value.pendingPassengerCount <= 9000000000000
- && value.reportedPassengerCount is int && value.reportedPassengerCount >= 0 && value.reportedPassengerCount <= 9000000000000
- && value.unknownFareCount is int && value.unknownFareCount >= 0 && value.unknownFareCount <= 9000000000000
- && value.expectedCents is int && value.expectedCents >= 0 && value.expectedCents <= 9000000000000
- && value.uncertainReceivableCount is int && value.uncertainReceivableCount >= 0 && value.uncertainReceivableCount <= 9000000000000
- && value.expenseCents is int && value.expenseCents >= 0 && value.expenseCents <= 9000000000000
- && value.projectedResultCents is int && value.projectedResultCents >= -9000000000000 && value.projectedResultCents <= 9000000000000
-        && unknown is int && unknown >= 0 && unknown <= 9000000000000
-        && ((unknown == 0
-          && value.receivedCents is int && value.receivedCents >= 0 && value.receivedCents <= 9000000000000
-          && value.receivableCents is int && value.receivableCents >= 0 && value.receivableCents <= 9000000000000
-          && value.recordedBalanceCents is int && value.recordedBalanceCents >= -9000000000000 && value.recordedBalanceCents <= 9000000000000
-          && value.recordedBalanceCents == value.receivedCents - value.expenseCents)
-          || (unknown > 0 && value.receivedCents == null && value.receivableCents == null && value.recordedBalanceCents == null))
-        && value.projectedResultCents == value.expectedCents - value.expenseCents;
-    }
 
-    function validWorklist(orgId, data) {
-      return data.keys().hasOnly(['organizationId', 'revision', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'lastToolOperationId', 'title', 'kind', 'caravanId', 'tasksText', 'doneMask', 'archived'])
-        && data.title is string && data.title.size() >= 3 && data.title.size() <= 100 && data.archived is bool
-        && data.tasksText is string && data.tasksText.size() <= 2419
-        && data.tasksText.matches('^[^\\r\\n]{1,120}(\\n[^\\r\\n]{1,120}){0,19}$')
-        && data.doneMask is string && data.doneMask.matches('^[01]{1,20}$')
-        && data.doneMask.size() == data.tasksText.split('\\n').size()
-        && data.revision is int && data.revision >= 1 && data.revision <= 1000000
-        && ((data.kind == 'template' && data.caravanId == null && isTenantOwner(orgId))
-          || (data.kind == 'trip' && data.caravanId is string && data.caravanId.size() >= 1 && data.caravanId.size() <= 128
-            && !data.caravanId.matches('.*[/].*') && get(/databases/$(database)/documents/caravans/$(data.caravanId)).data.organizationId == orgId));
-    }
+
+
+
+
 
 
     function quotaSeats(orgId, seats) { return quotaGrowth(orgId) && seats is int && seats >= 0 && seats <= operationalCapacity(); }
@@ -705,34 +608,7 @@ allow list: if isAdmin(
         && get(path).data.uid == request.auth.uid && get(path).data.organizationId == orgId
         && get(path).data.expiresAt > request.time;
     }
-    function invitationEvent(event, orgId, op) {
-      let path = invitationPath(orgId, event.uid);
-      let existed = exists(path);
-      let before = existed ? get(path).data : {};
-      let after = getAfter(path).data;
-      return !exists(/databases/$(database)/documents/tenantInvitations/$(orgId)/events/$(op))
-        && op.matches('^[a-f0-9]{32}$') && event.keys().hasOnly(['organizationId', 'uid', 'actorUid', 'action', 'at', 'requestHash', 'reason', 'before', 'after'])
-        && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
-        && event.requestHash.matches('^[a-f0-9]{64}$') && event.reason is string && event.reason.size() >= 3 && event.reason.size() <= 300
-        && ((existed && event.before == before) || (!existed && event.before == null)) && event.after == after && after.lastOperationId == op && after.updatedAt == request.time
-        && after.organizationId == orgId && after.uid == event.uid
-        && getAfter(/databases/$(database)/documents/invitationInboxes/$(event.uid)/organizations/$(orgId)).data == after
-        && ((event.action == 'invitation_issued' && isTenantOwner(orgId) && event.uid != request.auth.uid
-          && after.keys().hasOnly(['organizationId', 'uid', 'role', 'generation', 'status', 'issuedBy', 'issuedAt', 'expiresAt', 'acceptedAt', 'updatedAt', 'lastOperationId'])
-          && event.uid is string && event.uid.size() > 0 && event.uid.size() <= 128 && event.uid.matches('^[^/]+$') && !(event.uid in ['.', '..'])
-          && after.role in ['tenant_owner', 'staff'] && after.status == 'pending' && after.acceptedAt == null
-          && after.generation is int && ((!existed && after.generation == 1) || (existed && after.generation == before.generation + 1))
-          && after.issuedBy == request.auth.uid && after.issuedAt == request.time
-          && after.expiresAt is timestamp && after.expiresAt > request.time && after.expiresAt <= request.time + duration.value(7, 'd')
-          && exists(/databases/$(database)/documents/organizations/$(orgId)) && quotaGrowth(orgId)
-          && get(/databases/$(database)/documents/tenantUsage/$(orgId)).data.version == 'commercial-v1'
-          && (!exists(/databases/$(database)/documents/memberships/$(event.uid)/organizations/$(orgId))
-            || get(/databases/$(database)/documents/memberships/$(event.uid)/organizations/$(orgId)).data.status == 'revoked'))
-          || (existed && before.status == 'pending' && after.diff(before).affectedKeys().hasOnly(['status', 'updatedAt', 'lastOperationId'])
-            && ((event.action == 'invitation_revoked' && after.status == 'revoked' && isTenantOwner(orgId))
-              || (event.action == 'invitation_expired' && after.status == 'expired' && before.expiresAt <= request.time
-                && (request.auth.uid == event.uid || isTenantOwner(orgId))))));
-    }
+
 
 
 
@@ -1663,21 +1539,10 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
       return signedIn() && exists(/databases/$(database)/documents/platformOwners/$(request.auth.uid))
         && get(/databases/$(database)/documents/platformOwners/$(request.auth.uid)).data.status == 'active';
     }
-    function publicCaravan(caravanId) {
-      return exists(/databases/$(database)/documents/caravans/$(caravanId))
-        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.status == 'published'
-        && get(/databases/$(database)/documents/caravans/$(caravanId)).data.get('importPending', false) == false
-        && acceptsReservations(get(/databases/$(database)/documents/caravans/$(caravanId)).data.organizationId);
-    }
+
     // A copied historical tenant remains read-only until a separately reviewed cutover.
-    function tenantWritesEnabled(orgId) {
-      return !exists(/databases/$(database)/documents/organizations/$(orgId))
-        || get(/databases/$(database)/documents/organizations/$(orgId)).data.get('importPending', false) == false;
-    }
-    function acceptsReservations(orgId) {
-      return !exists(/databases/$(database)/documents/organizations/$(orgId))
-        || get(/databases/$(database)/documents/organizations/$(orgId)).data.get('status', 'active') != 'suspended';
-    }
+
+
     function platformOperation(orgId, operationId, action) {
       let path = /databases/$(database)/documents/platformAudit/$(operationId);
       let event = getAfter(path).data;
@@ -1725,15 +1590,7 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && grant.status == 'active' && grant.scope == 'caravan_configuration_read'
         && grant.expiresAt > request.time;
     }
-    function canSupportConfiguration(orgId) {
-      let session = get(/databases/$(database)/documents/supportSessions/$(request.auth.uid)).data;
-      return isPlatformOwner() && session.operatorUid == request.auth.uid
-        && session.organizationId == orgId && session.status == 'active'
-        && session.scope == 'caravan_configuration_read' && session.expiresAt > request.time
-        && usableSupportGrant(orgId, request.auth.uid)
-        && session.consentId == supportGrant(orgId, request.auth.uid).consentId
-        && session.expiresAt <= supportGrant(orgId, request.auth.uid).expiresAt;
-    }
+
 
 
 
@@ -1806,27 +1663,14 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         : planId == 'pro' ? { 'monthlyCents': 14900, 'limits': { 'activeCaravans': 5, 'passengersPerCaravan': 200, 'internalUsers': 5 } }
         : { 'monthlyCents': 21900, 'limits': { 'activeCaravans': 15, 'passengersPerCaravan': 500, 'internalUsers': 15 } };
     }
-    function quotaGrowth(orgId) {
-      let policy = get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data;
-      return tenantWritesEnabled(orgId) && acceptsReservations(orgId) && policy.growthEnabled == true && (policy.growthUntil == null || request.time < policy.growthUntil);
-    }
+
     function functionalFeatures(planId) {
       return planId == 'premium' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library', 'worklists']
         : planId == 'pro' ? ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding', 'report_library']
         : ['caravans', 'registrations', 'proofs', 'checkin', 'csv_import', 'finance', 'branding'];
     }
     // New commercial tools never gate the existing core, security or historical reads.
-    function functionalGrowth(orgId, feature) {
-      let subscription = get(/databases/$(database)/documents/subscriptions/$(orgId)).data;
-      let projection = get(/databases/$(database)/documents/organizations/$(orgId)/commercialFeatures/current).data;
-      let organization = get(/databases/$(database)/documents/organizations/$(orgId)).data;
-      return isAdmin(orgId) && organization.get('importPending', false) == false && organization.get('status', 'active') != 'suspended'
-        && subscription.status in ['active', 'trial', 'demo']
-        && (subscription.trialEndsAt == null || request.time < subscription.trialEndsAt)
-        && feature in functionalFeatures(subscription.planId)
-        && projection.lastCommercialOperationId == subscription.lastCommercialOperationId
-        && projection.planId == subscription.planId && projection.status == subscription.status;
-    }
+
     match /organizations/{orgId}/commercialFeatures/{id} {
       allow get: if isPlatformOwner() && (isAdmin(orgId) || isPlatformOwner());
       allow list, delete: if isPlatformOwner() && (false);
@@ -1842,190 +1686,40 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
           'lastCommercialOperationId': getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.lastCommercialOperationId
         } && getAfter(/databases/$(database)/documents/subscriptions/$(orgId)).data.updatedAt == request.time);
     }
-    function toolEnvelope(orgId, kind, entityId, data) {
-      let event = getAfter(/databases/$(database)/documents/organizations/$(orgId)/toolEvents/$(data.lastToolOperationId)).data;
-      return data.organizationId == orgId && data.updatedAt == request.time && data.updatedBy == request.auth.uid
-        && data.lastToolOperationId.matches('^[a-f0-9]{32}$')
-        && !exists(/databases/$(database)/documents/organizations/$(orgId)/toolEvents/$(data.lastToolOperationId))
-        && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
-        && event.kind == kind && event.entityId == entityId;
-    }
-    function validReportFinance(value) {
-      let unknown = value.get('unknownPaymentCount', 0);
-      return value is map && value.keys().hasOnly(['passengerCount', 'paidPassengerCount', 'partialPassengerCount', 'pendingPassengerCount', 'reportedPassengerCount', 'unknownPaymentCount', 'unknownFareCount', 'expectedCents', 'receivedCents', 'receivableCents', 'uncertainReceivableCount', 'expenseCents', 'recordedBalanceCents', 'projectedResultCents'])
- && value.passengerCount is int && value.passengerCount >= 0 && value.passengerCount <= 9000000000000
- && value.paidPassengerCount is int && value.paidPassengerCount >= 0 && value.paidPassengerCount <= 9000000000000
- && value.partialPassengerCount is int && value.partialPassengerCount >= 0 && value.partialPassengerCount <= 9000000000000
- && value.pendingPassengerCount is int && value.pendingPassengerCount >= 0 && value.pendingPassengerCount <= 9000000000000
- && value.reportedPassengerCount is int && value.reportedPassengerCount >= 0 && value.reportedPassengerCount <= 9000000000000
- && value.unknownFareCount is int && value.unknownFareCount >= 0 && value.unknownFareCount <= 9000000000000
- && value.expectedCents is int && value.expectedCents >= 0 && value.expectedCents <= 9000000000000
- && value.uncertainReceivableCount is int && value.uncertainReceivableCount >= 0 && value.uncertainReceivableCount <= 9000000000000
- && value.expenseCents is int && value.expenseCents >= 0 && value.expenseCents <= 9000000000000
- && value.projectedResultCents is int && value.projectedResultCents >= -9000000000000 && value.projectedResultCents <= 9000000000000
-        && unknown is int && unknown >= 0 && unknown <= 9000000000000
-        && ((unknown == 0
-          && value.receivedCents is int && value.receivedCents >= 0 && value.receivedCents <= 9000000000000
-          && value.receivableCents is int && value.receivableCents >= 0 && value.receivableCents <= 9000000000000
-          && value.recordedBalanceCents is int && value.recordedBalanceCents >= -9000000000000 && value.recordedBalanceCents <= 9000000000000
-          && value.recordedBalanceCents == value.receivedCents - value.expenseCents)
-          || (unknown > 0 && value.receivedCents == null && value.receivableCents == null && value.recordedBalanceCents == null))
-        && value.projectedResultCents == value.expectedCents - value.expenseCents;
-    }
-
-    function validWorklist(orgId, data) {
-      return data.keys().hasOnly(['organizationId', 'revision', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'lastToolOperationId', 'title', 'kind', 'caravanId', 'tasksText', 'doneMask', 'archived'])
-        && data.title is string && data.title.size() >= 3 && data.title.size() <= 100 && data.archived is bool
-        && data.tasksText is string && data.tasksText.size() <= 2419
-        && data.tasksText.matches('^[^\\r\\n]{1,120}(\\n[^\\r\\n]{1,120}){0,19}$')
-        && data.doneMask is string && data.doneMask.matches('^[01]{1,20}$')
-        && data.doneMask.size() == data.tasksText.split('\\n').size()
-        && data.revision is int && data.revision >= 1 && data.revision <= 1000000
-        && ((data.kind == 'template' && data.caravanId == null && isTenantOwner(orgId))
-          || (data.kind == 'trip' && data.caravanId is string && data.caravanId.size() >= 1 && data.caravanId.size() <= 128
-            && !data.caravanId.matches('.*[/].*') && get(/databases/$(database)/documents/caravans/$(data.caravanId)).data.organizationId == orgId));
-    }
 
 
-    function quotaSeats(orgId, seats) {
-      return quotaGrowth(orgId) && seats is int && seats >= 0
-        && seats <= get(/databases/$(database)/documents/tenantEntitlements/$(orgId)).data.limits.passengersPerCaravan;
-    }
+
+
+
+
+
     // Invitations are authoritative here; the private inbox is only an exact projection.
     function invitationPath(orgId, uid) {
       return /databases/$(database)/documents/tenantInvitations/$(orgId)/users/$(uid);
     }
-    function invitationAcceptance(orgId, uid, op) {
-      let path = invitationPath(orgId, uid);
-      let before = get(path).data;
-      let after = getAfter(path).data;
-      return signedIn() && request.auth.uid == uid && exists(path)
-        && before.organizationId == orgId && before.uid == uid && before.role in ['tenant_owner', 'staff']
-        && before.status == 'pending' && before.expiresAt > request.time
-        && after.diff(before).affectedKeys().hasOnly(['status', 'acceptedAt', 'updatedAt', 'lastOperationId'])
-        && after.status == 'accepted' && after.acceptedAt == request.time && after.updatedAt == request.time && after.lastOperationId == op;
-    }
-    function invitationQuota(orgId, uid, op) {
-      let path = /databases/$(database)/documents/tenantQuotaOperations/$(op);
-      let event = getAfter(path).data;
-      return !exists(path) && event.organizationId == orgId && event.entityId == uid
-        && event.kind == 'member' && event.action == 'member_accepted' && event.actorUid == uid;
-    }
+
+
     function pendingInvitee(orgId) {
       let path = invitationPath(orgId, request.auth.uid);
       return signedIn() && exists(path) && get(path).data.status == 'pending'
         && get(path).data.uid == request.auth.uid && get(path).data.organizationId == orgId
         && get(path).data.expiresAt > request.time;
     }
-    function invitationEvent(event, orgId, op) {
-      let path = invitationPath(orgId, event.uid);
-      let existed = exists(path);
-      let before = existed ? get(path).data : {};
-      let after = getAfter(path).data;
-      return !exists(/databases/$(database)/documents/tenantInvitations/$(orgId)/events/$(op))
-        && op.matches('^[a-f0-9]{32}$') && event.keys().hasOnly(['organizationId', 'uid', 'actorUid', 'action', 'at', 'requestHash', 'reason', 'before', 'after'])
-        && event.organizationId == orgId && event.actorUid == request.auth.uid && event.at == request.time
-        && event.requestHash.matches('^[a-f0-9]{64}$') && event.reason is string && event.reason.size() >= 3 && event.reason.size() <= 300
-        && ((existed && event.before == before) || (!existed && event.before == null)) && event.after == after && after.lastOperationId == op && after.updatedAt == request.time
-        && after.organizationId == orgId && after.uid == event.uid
-        && getAfter(/databases/$(database)/documents/invitationInboxes/$(event.uid)/organizations/$(orgId)).data == after
-        && ((event.action == 'invitation_issued' && isTenantOwner(orgId) && event.uid != request.auth.uid
-          && after.keys().hasOnly(['organizationId', 'uid', 'role', 'generation', 'status', 'issuedBy', 'issuedAt', 'expiresAt', 'acceptedAt', 'updatedAt', 'lastOperationId'])
-          && event.uid is string && event.uid.size() > 0 && event.uid.size() <= 128 && event.uid.matches('^[^/]+$') && !(event.uid in ['.', '..'])
-          && after.role in ['tenant_owner', 'staff'] && after.status == 'pending' && after.acceptedAt == null
-          && after.generation is int && ((!existed && after.generation == 1) || (existed && after.generation == before.generation + 1))
-          && after.issuedBy == request.auth.uid && after.issuedAt == request.time
-          && after.expiresAt is timestamp && after.expiresAt > request.time && after.expiresAt <= request.time + duration.value(7, 'd')
-          && exists(/databases/$(database)/documents/organizations/$(orgId)) && quotaGrowth(orgId)
-          && get(/databases/$(database)/documents/tenantUsage/$(orgId)).data.version == 'commercial-v1'
-          && (!exists(/databases/$(database)/documents/memberships/$(event.uid)/organizations/$(orgId))
-            || get(/databases/$(database)/documents/memberships/$(event.uid)/organizations/$(orgId)).data.status == 'revoked'))
-          || (existed && before.status == 'pending' && after.diff(before).affectedKeys().hasOnly(['status', 'updatedAt', 'lastOperationId'])
-            && ((event.action == 'invitation_revoked' && after.status == 'revoked' && isTenantOwner(orgId))
-              || (event.action == 'invitation_expired' && after.status == 'expired' && before.expiresAt <= request.time
-                && (request.auth.uid == event.uid || isTenantOwner(orgId))))));
-    }
 
 
 
-    function quotaCounts(data) {
-      return { 'publishedCaravans': data.publishedCaravans, 'activeMembers': data.activeMembers, 'activeOwners': data.activeOwners };
-    }
-    function quotaBase(event, op) {
-      let before = get(/databases/$(database)/documents/tenantUsage/$(event.organizationId)).data;
-      let after = getAfter(/databases/$(database)/documents/tenantUsage/$(event.organizationId)).data;
-      return event.keys().hasOnly(['organizationId', 'entityId', 'kind', 'action', 'actorUid', 'at', 'requestHash', 'reason', 'before', 'after', 'beforeStatus', 'afterStatus', 'beforeRole', 'afterRole', 'invitationGeneration'])
-        && (event.action == 'member_accepted' || !event.keys().hasAny(['invitationGeneration']))
-        && op.matches('^[a-f0-9]{32}$') && event.actorUid == request.auth.uid && event.at == request.time
-        && event.requestHash.matches('^[a-f0-9]{64}$') && event.reason is string && event.reason.size() >= 3 && event.reason.size() <= 300
-        && before.organizationId == event.organizationId && after.organizationId == event.organizationId
-        && before.version == 'commercial-v1' && after.version == before.version
-        && event.before == quotaCounts(before) && event.after == quotaCounts(after)
-        && after.publishedCaravans is int && after.publishedCaravans >= 0
-        && after.activeMembers is int && after.activeOwners is int && after.activeOwners >= 1 && after.activeMembers >= after.activeOwners
-        && ((event.before == event.after && after == before) || (event.before != event.after && after.lastQuotaOperationId == op && after.updatedAt == request.time));
-    }
-    function quotaCaravan(event, op) {
-      let path = /databases/$(database)/documents/caravans/$(event.entityId);
-      let oldStatus = exists(path) ? get(path).data.status : 'absent';
-      let after = getAfter(path).data;
-      return event.kind == 'caravan' && event.beforeStatus == oldStatus && event.afterStatus == after.status
-        && event.beforeRole == '' && event.afterRole == ''
-        && after.organizationId == event.organizationId && after.lastQuotaOperationId == op && after.updatedAt == request.time
-        && (event.action == 'caravan_created' ? (!exists(path) && event.entityId == op && after.creationRequestHash == event.requestHash) : (event.action == 'caravan_updated' && exists(path) && get(path).data.organizationId == event.organizationId))
-        && event.after.activeMembers == event.before.activeMembers && event.after.activeOwners == event.before.activeOwners
-        && event.after.publishedCaravans == event.before.publishedCaravans + (after.status == 'published' ? 1 : 0) - (oldStatus == 'published' ? 1 : 0)
-        && (event.after.publishedCaravans <= event.before.publishedCaravans || (quotaGrowth(event.organizationId)
-          && event.after.publishedCaravans <= get(/databases/$(database)/documents/tenantEntitlements/$(event.organizationId)).data.limits.activeCaravans));
-    }
-    function quotaDelta(before, after, wasIncluded, isIncluded) {
-      return (wasIncluded == isIncluded && after == before)
-        || (!wasIncluded && isIncluded && after == before + 1)
-        || (wasIncluded && !isIncluded && after == before - 1);
-    }
-    function quotaMember(event, op) {
-      let path = /databases/$(database)/documents/memberships/$(event.entityId)/organizations/$(event.organizationId);
-      let oldStatus = exists(path) ? get(path).data.status : 'absent';
-      let oldRole = exists(path) ? get(path).data.role : '';
-      let after = getAfter(path).data;
-      return event.kind == 'member'
-        && ((event.action == 'member_saved' && exists(path) && (oldStatus == 'active' || after.status == 'revoked'))
-          || (event.action == 'member_accepted' && oldStatus != 'active' && after.status == 'active'
-            && invitationAcceptance(event.organizationId, event.entityId, op)
-            && event.invitationGeneration == get(invitationPath(event.organizationId, event.entityId)).data.generation
-            && after.invitationGeneration == event.invitationGeneration
-            && after.role == get(invitationPath(event.organizationId, event.entityId)).data.role))
-        && event.beforeStatus == oldStatus && event.beforeRole == oldRole && event.afterStatus == after.status && event.afterRole == after.role
-        && (exists(path) || after.status == 'active') && after.role in ['tenant_owner', 'staff'] && after.status in ['active', 'revoked']
-        && after.uid == event.entityId && after.organizationId == event.organizationId && after.updatedAt == request.time && after.lastQuotaOperationId == op
-        && event.after.publishedCaravans == event.before.publishedCaravans
-        && quotaDelta(event.before.activeMembers, event.after.activeMembers, oldStatus == 'active', after.status == 'active')
-        && quotaDelta(event.before.activeOwners, event.after.activeOwners, oldStatus == 'active' && oldRole == 'tenant_owner', after.status == 'active' && after.role == 'tenant_owner')
-        && (event.after.activeMembers <= event.before.activeMembers || (quotaGrowth(event.organizationId)
-          && event.after.activeMembers <= get(/databases/$(database)/documents/tenantEntitlements/$(event.organizationId)).data.limits.internalUsers));
-    }
-    function linkedQuota(orgId, op, kind, entityId) {
-      let path = /databases/$(database)/documents/tenantQuotaOperations/$(op);
-      let event = getAfter(path).data;
-      return !exists(path) && event.organizationId == orgId && event.kind == kind && event.entityId == entityId
-        && quotaBase(event, op) && ((kind == 'caravan' && quotaCaravan(event, op)) || (kind == 'member' && quotaMember(event, op)));
-    }
-    function quotaDirectory(event, op) {
-      return getAfter(/databases/$(database)/documents/tenantTeam/$(event.organizationId)/members/$(event.entityId)).data
-        == { 'uid': event.entityId, 'organizationId': event.organizationId, 'role': event.afterRole, 'status': event.afterStatus, 'updatedAt': request.time, 'lastQuotaOperationId': op };
-    }
+
+
+
+
+
+
+
+
 
     match /tenantTeam/{orgId}/members/{uid} {
       allow get, list: if isPlatformOwner() && (isTenantOwner(orgId));
-      allow create, update: if isPlatformOwner() && (invitationQuota(orgId, uid, request.resource.data.lastQuotaOperationId) || (isTenantOwner(orgId)
-        && request.resource.data == { 'uid': uid, 'organizationId': orgId,
-          'role': getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.role,
-          'status': getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.status,
-          'updatedAt': request.time, 'lastQuotaOperationId': getAfter(/databases/$(database)/documents/memberships/$(uid)/organizations/$(orgId)).data.lastQuotaOperationId }
-        && !exists(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId))
-        && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.organizationId == orgId
-        && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.kind == 'member'
-        && getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.entityId == uid));
+      allow create, update: if false;
       allow delete: if isPlatformOwner() && (false);
       allow create: if isPlatformOwner() && (newTenantNamespace(orgId, request.resource.data.lastPlatformOperationId)
         && request.resource.data == { 'uid': uid, 'organizationId': orgId, 'role': 'tenant_owner', 'status': 'active', 'updatedAt': request.time, 'lastPlatformOperationId': request.resource.data.lastPlatformOperationId }
@@ -2041,15 +1735,9 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && request.resource.data.organizationId == orgId && request.resource.data.version == 'commercial-v1'
         && request.resource.data.publishedCaravans == 0 && request.resource.data.activeMembers == 1 && request.resource.data.activeOwners == 1
         && request.resource.data.updatedAt == request.time);
-      allow update: if isPlatformOwner() && (isTenantOwner(orgId)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publishedCaravans', 'activeMembers', 'activeOwners', 'updatedAt', 'lastQuotaOperationId'])
-        && quotaCounts(request.resource.data) != quotaCounts(resource.data)
-        && linkedQuota(orgId, request.resource.data.lastQuotaOperationId,
-          getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.kind,
-          getAfter(/databases/$(database)/documents/tenantQuotaOperations/$(request.resource.data.lastQuotaOperationId)).data.entityId));
+      allow update: if false;
       // The immutable new receipt validates all counter/member/invitation effects once.
-      allow update: if isPlatformOwner() && (invitationQuota(orgId, request.auth.uid, request.resource.data.lastQuotaOperationId)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publishedCaravans', 'activeMembers', 'activeOwners', 'updatedAt', 'lastQuotaOperationId']));
+      allow update: if false;
     }
     match /subscriptions/{orgId} {
       function initial(data) {
@@ -2154,9 +1842,7 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
     match /memberships/{uid}/organizations/{orgId} {
       allow get: if isPlatformOwner() && ((signedIn() && request.auth.uid == uid) || isTenantOwner(orgId));
       allow list: if isPlatformOwner() && (signedIn() && request.auth.uid == uid);
-      allow create: if isPlatformOwner() && (invitationQuota(orgId, uid, request.resource.data.lastQuotaOperationId)
-        && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt', 'lastQuotaOperationId', 'invitationGeneration'])
-        && request.resource.data.createdAt == request.time);
+      allow create: if false;
       allow create: if isPlatformOwner() && (isPlatformOwner()
         && request.resource.data.keys().hasOnly(['uid', 'organizationId', 'role', 'status', 'createdAt', 'updatedAt', 'lastPlatformOperationId'])
         && request.resource.data.uid == uid && request.resource.data.organizationId == orgId
@@ -2167,12 +1853,8 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && request.resource.data.lastPlatformOperationId == getAfter(/databases/$(database)/documents/organizations/$(orgId)).data.lastPlatformOperationId
         && getAfter(/databases/$(database)/documents/tenantTeam/$(orgId)/members/$(uid)).data == { 'uid': uid, 'organizationId': orgId, 'role': 'tenant_owner', 'status': 'active', 'updatedAt': request.time, 'lastPlatformOperationId': request.resource.data.lastPlatformOperationId }
         && platformOperation(orgId, request.resource.data.lastPlatformOperationId, 'tenant_created'));
-      allow update: if isPlatformOwner() && (isTenantOwner(orgId)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'status', 'updatedAt', 'lastQuotaOperationId'])
-        && linkedQuota(orgId, request.resource.data.lastQuotaOperationId, 'member', uid));
-      allow update: if isPlatformOwner() && (invitationQuota(orgId, uid, request.resource.data.lastQuotaOperationId)
-        && resource.data.status == 'revoked'
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'status', 'updatedAt', 'lastQuotaOperationId', 'invitationGeneration']));
+      allow update: if false;
+      allow update: if false;
       allow delete: if isPlatformOwner() && (false);
     }
 
@@ -2278,94 +1960,19 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
         && (matchingGrant(request.resource.data.action) || matchingSession(request.resource.data.action)));
     }
 
-    function validSeatRelease(caravanId) {
-      let operationId = request.resource.data.get('lastSeatOperationId', '');
-      let event = getAfter(/databases/$(database)/documents/registrationOperations/$(operationId)).data;
-      return operationId.matches('^[a-f0-9]{32}$')
-        && !exists(/databases/$(database)/documents/registrationOperations/$(operationId))
-        && event.action in ['cancelled', 'import_rolled_back'] && event.seatDelta == -1
-        && event.caravanId == caravanId && event.organizationId == resource.data.organizationId
-        && request.resource.data.reservedSeats == resource.data.reservedSeats - 1
-        && getAfter(/databases/$(database)/documents/registrations/$(event.registrationId)).data.lastOperationalId == operationId;
-    }
-    function validBoardingPoint(data) {
-      let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId)).data;
-      return data.boardingPointSnapshot is map
-        && data.boardingPointSnapshot.id == data.boardingPointId && data.boardingPointSnapshot.name == data.boardingPointName
-        && trip.boardingPoints.hasAny([data.boardingPointSnapshot]);
-    }
-    function documentPolicyDays(orgId, kind) {
-      let path = /databases/$(database)/documents/documentPolicies/$(orgId);
-      return exists(path) ? (kind == 'proofs' ? get(path).data.proofDays : get(path).data.authorizationDays) : 90;
-    }
-    function documentEvent(orgId, operationId, action) {
-      let path = /databases/$(database)/documents/documentEvents/$(operationId);
-      let event = getAfter(path).data;
-      return operationId.matches('^[a-f0-9]{32}$') && !exists(path) && event.organizationId == orgId
-        && event.action == action && event.actorUid == request.auth.uid && event.at == request.time;
-    }
-    function validDocumentExpiry(registrationId, kind, file) {
-      let parent = getAfter(/databases/$(database)/documents/registrations/$(registrationId)).data;
-      let event = getAfter(/databases/$(database)/documents/documentEvents/$(parent.lastDocumentOperationId)).data;
-      return isTenantOwner(file.organizationId) && file.registrationId == registrationId
-        && file.retentionDays is int && file.retentionDays >= 1 && file.retentionDays <= 3650
-        && request.time >= file.uploadedAt + duration.value(file.retentionDays, 'd')
-        && event.registrationId == registrationId && event.kind == kind && event.retentionDays == file.retentionDays && event.uploadedAt == file.uploadedAt
-        && documentEvent(file.organizationId, parent.lastDocumentOperationId, 'file_expired');
-    }
-    function validCalendarDate(iso) {
-      let date = timestamp.date(int(iso[0:4]), int(iso[5:7]), int(iso[8:10]));
-      return date.year() == int(iso[0:4]) && date.month() == int(iso[5:7]) && date.day() == int(iso[8:10]);
-    }
-    function boardingReady(data, registrationId) {
-      let trip = get(/databases/$(database)/documents/caravans/$(data.caravanId)).data;
-      let birth = data.get('birthDate', '');
-      let eventDate = trip.get('date', '');
-      let known = birth.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && eventDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && validCalendarDate(birth) && validCalendarDate(eventDate);
-      let adult = known && (int(eventDate[0:4]) - int(birth[0:4]) > 18 || (int(eventDate[0:4]) - int(birth[0:4]) == 18 && eventDate[5:10] >= birth[5:10]));
-      let needsAuthorization = data.get('isMinor', false) == true || (trip.get('requiresMinorAuthorization', false) && !adult);
-      let file = data.get('authorizationId', '') == 'current' ? get(/databases/$(database)/documents/registrations/$(registrationId)/authorizations/current).data : {};
-      return data.registrationStatus == 'confirmed' && (!trip.get('requiresMinorAuthorization', false) || known)
-        && (!needsAuthorization || (data.get('authorizationStatus', '') == 'approved'
-          && (data.get('authorizationId', '') != 'current' || (file.retentionDays is int && request.time < file.uploadedAt + duration.value(file.retentionDays, 'd')))));
-    }
 
 
-    function importNormalize(value) {
-      let lower = value.lower();
-      return lower.matches('^[ -~]*$') ? lower.replace('[^a-z0-9]', '')
-        : lower.replace('[áàâãä]', 'a').replace('[éèêë]', 'e').replace('[íìîï]', 'i')
-        .replace('[óòôõö]', 'o').replace('[úùûü]', 'u').replace('ç', 'c').replace('[^a-z0-9]', '');
-    }
-    function importIdentityKeys(data) {
-      let documents = data.get('documentRecords', []);
-      let name = importNormalize(data.passengerName);
-      return [data.get('cpf', '') != '' ? 'doc_' + importNormalize(data.cpf) : '',
-        documents.size() > 0 ? 'doc_' + importNormalize(documents[0].value) : '',
-        documents.size() > 1 ? 'doc_' + importNormalize(documents[1].value) : '',
-        documents.size() > 2 ? 'doc_' + importNormalize(documents[2].value) : '',
-        data.phone != '' ? 'phone_' + name + '_' + data.phone.replace('[^0-9]', '') : '',
-        data.email != '' ? 'email_' + name + '_' + importNormalize(data.email) : ''];
-    }
-    function importClaimsValid(data) {
-      let path = /databases/$(database)/documents/importRegistries/$(data.caravanId);
-      let before = exists(path) ? get(path).data.claims : {};
-      let after = getAfter(path).data.claims;
-      let keys = data.importIdentityKeys;
-      let identities = keys.toSet().difference([''].toSet());
-      return keys == importIdentityKeys(data) && identities.size() > 0
-        && before.keys().toSet().intersection(identities).size() == 0
-        && after.keys().toSet().hasAll(identities);
-    }
-    function validSeatImport(caravanId) {
-      let operationId = request.resource.data.get('lastImportOperationId', '');
-      let path = /databases/$(database)/documents/importOperations/$(operationId);
-      let event = getAfter(path).data;
-      return operationId.matches('^[a-f0-9]{32}$') && !exists(path)
-        && event.caravanId == caravanId && event.organizationId == resource.data.organizationId
-        && event.seatBefore == resource.data.reservedSeats && event.seatAfter == request.resource.data.reservedSeats
-        && event.seatAfter == event.seatBefore + event.registrationIds.size();
-    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2377,13 +1984,7 @@ allow list: if operationalGrant() && (caravanId == operationalCaravanId()) && (i
 
 
     function money(value) { return value is int && value >= 0 && value <= 9007199254740991; }
-    function financialEvent(data) {
-      let id = data.lastFinancialOperationId;
-      let event = getAfter(/databases/$(database)/documents/financialOperations/$(id)).data;
-      return id.matches('^[a-f0-9]{32}$') && !exists(/databases/$(database)/documents/financialOperations/$(id))
-        && event.organizationId == data.organizationId && event.caravanId == data.caravanId
-        && event.actorUid == request.auth.uid && event.at == request.time;
-    }
+
 
 
       match /platformOwners/{uid} {
