@@ -30,7 +30,9 @@ try {
   const snapshot = await decrypt('snapshot.enc'), copyPlan = await decrypt('copy-plan.enc'), activation = await decrypt('activation-plan.enc');
   requireThat(copyPlan.planHash === '5d3c40d91f0756f0c81903405096def7a306671159e2c3d92b04218797e0bc10'
     && activation.planHash === '95597e20a9fb779598abc7076b74ca2dbb49a53f491b868b312c0baeec18ebf1' && snapshot.documents.length === 24, 'CUTOVER_EXECUTED_COPY_AND_PRIVATE_ACTIVATION_REQUIRED');
-  const expectedRules = createHash('sha256').update(await readFile('firestore.italo-operational.rules')).digest('hex');
+  let rulesFile = 'firestore.italo-operational.rules';
+  try { await lstat('firestore.platform-operational.rules'); rulesFile = 'firestore.platform-operational.rules'; } catch (e) { if (e.code !== 'ENOENT') throw e; }
+  const expectedRules = createHash('sha256').update(await readFile(rulesFile)).digest('hex');
   const token = officialAccessToken('nexus7devstudio@gmail.com'), api = new GoogleSource(token);
   const metadata = await api.metadata(); requireThat(String(metadata.project.projectNumber) === '742921744156', 'CUTOVER_PROJECT_NUMBER_REQUIRED');
   const config = await api.config(), published = config.releases.find(r => r.release.name.endsWith('/cloud.firestore'));

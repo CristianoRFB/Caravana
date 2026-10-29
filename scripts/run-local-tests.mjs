@@ -8,6 +8,7 @@ const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
 const suite = process.argv[2] || "unit";
 const commands = {
+  "platform-operational": "vitest run tests/platform-operational.test.ts tests/italo-operational.test.ts",
   "italo-private-release": "vitest run tests/italo-private-release.test.ts tests/private-history-release.test.ts tests/private-history-package.test.ts",
   "italo-cutover-fence": "vitest run tests/italo-cutover-fence.test.ts tests/italo-private-release.test.ts",
   "italo-operational": "vitest run tests/italo-operational.test.ts tests/operational-cutover-transport.test.ts tests/existing-event-grant.test.ts tests/italo-bootstrap-policy.test.ts tests/italo-operational-package.test.ts tests/reservation-attempt.test.ts tests/public-availability.test.ts",

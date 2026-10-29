@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { initializeTestEnvironment, assertFails, assertSucceeds, type RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import { doc, getDoc, getDocs, collection, setDoc, updateDoc, deleteDoc, type Firestore } from 'firebase/firestore';
 import { buildItaloOperationalRules } from '../scripts/recovery/italo-operational-rules.mjs';
+import { buildPlatformOperationalRules } from '../scripts/recovery/platform-operational-rules.mjs';
 import { CUTOVER_LEDGER_PATH } from '../scripts/recovery/italo-cutover-fence-rules.mjs';
 import type { Caravan, Registration } from '../src/lib/types';
 const runtime = vi.hoisted(() => ({ db: null as Firestore | null, auth: { currentUser: { uid: 'existing-owner' } }, firebaseConfigured: true, assertIdentityAllowed: () => {} }));
@@ -27,7 +28,9 @@ const passenger = { passengerName: 'Synthetic Passenger', phone: '11900000000', 
 beforeAll(async () => {
   const rules = buildItaloOperationalRules(readFileSync('firestore.italo-private.rules'), readFileSync('firestore.rules'));
   expect(readFileSync('firestore.italo-operational.rules', 'utf8')).toBe(rules);
-  env = await initializeTestEnvironment({ projectId: 'demo-caravana77-test', firestore: { rules } });
+  const composed = buildPlatformOperationalRules(Buffer.from(rules), readFileSync('firestore.rules'));
+  expect(readFileSync('firestore.platform-operational.rules', 'utf8')).toBe(composed);
+  env = await initializeTestEnvironment({ projectId: 'demo-caravana77-test', firestore: { rules: composed } });
 });
 afterAll(async () => { runtime.db = null; await env?.cleanup(); });
 beforeEach(async () => {

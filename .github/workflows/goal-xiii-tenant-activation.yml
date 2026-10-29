@@ -26,6 +26,8 @@ jobs:
         run: node scripts/run-local-tests.mjs italo-cutover-fence
       - name: Existing-event operational target, old links, retry handoff and forward freeze (demo only)
         run: node scripts/run-local-tests.mjs italo-operational
+      - name: Global owner authority preserves the activated writer and audited management (demo only)
+        run: node scripts/run-local-tests.mjs platform-operational
       - name: Existing Auth login, private activation, revocation and unknown finance with demo SDKs
         run: npm run test:tenant-activation:integration
       - name: Legacy SDK journeys remain compatible without rewriting historical evidence

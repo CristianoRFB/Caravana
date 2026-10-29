@@ -18,7 +18,8 @@ export async function verifyOperationalRelease(source, rulesSha256, fetcher = fe
       && /^[a-f0-9]{64}$/.test(f.sha256) && Number.isSafeInteger(f.bytes) && f.bytes >= 0 && f.bytes <= 2_000_000, 'CUTOVER_PUBLIC_MANIFEST_BOUND');
     if (f.path.startsWith('_')) { requireThat(['_headers', '_redirects'].includes(f.path), 'CUTOVER_NO_FUNCTIONS_OR_PRIVATE_FILES'); continue; }
     requireThat(f.path === 'index.html' || /^(?:tenant-italo\/)?(?:assets\/[A-Za-z0-9_-]+\.(js|css)|entry-[a-f0-9]{12}\/index\.html)$/.test(f.path)
-      || /^tenant-italo\/(?:index\.html|runtime-[a-f0-9]{12}\.json|private-release(?:-baseline-[a-f0-9]{12})?\.json|operational-(?:release|artifact-[a-f0-9]{12})\.json)$/.test(f.path), 'CUTOVER_STATIC_FILE_REQUIRED');
+      || /^tenant-italo\/(?:index\.html|runtime-[a-f0-9]{12}\.json|private-release(?:-baseline-[a-f0-9]{12})?\.json|operational-(?:release|artifact-[a-f0-9]{12})\.json)$/.test(f.path)
+      || /^platform-app\/(?:index\.html|platform-release\.json|entry-[a-f0-9]{12}\/index\.html|assets\/[A-Za-z0-9_-]+\.(js|css))$/.test(f.path), 'CUTOVER_STATIC_FILE_REQUIRED');
     const pathname = f.path.endsWith('index.html') ? f.path.slice(0, -10) : f.path;
     const response = await get(host + pathname), bytes = await boundedBody(response, 2_000_000);
     requireThat(bytes.length === f.bytes && digest(bytes) === f.sha256, 'CUTOVER_PUBLIC_ASSET_HASH_MISMATCH'); assets++;

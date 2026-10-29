@@ -238,6 +238,7 @@ function Topbar({ admin = false }: { admin?: boolean }) {
   const tenant = useTenantBrand();
   const [open, setOpen] = useState(false);
   const path = useLocation().pathname;
+  if (import.meta.env.VITE_PLATFORM_ONLY === 'true') return <header className="topbar"><nav className="topbar-inner"><Link className="brand" to="/platform">Caravana 77 · Plataforma</Link><Link className="button button-outline" to="/platform">Organizadoras</Link></nav></header>;
   const homePath = tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : "/";
   const home = path === homePath;
   const trip = path.includes("/caravana/") && !path.includes("/inscricao");
@@ -3765,6 +3766,7 @@ function TenantSupport() {
 export default function App() {
   useEffect(() => installDiagnosticHandlers(window), []);
   const location = useLocation();
+  if (import.meta.env.VITE_PLATFORM_ONLY === 'true' && !/^\/platform(?:\/login)?\/?$/.test(location.pathname)) return <Navigate to="/platform" replace />;
   if (privateHistoryScope && !privateHistoryRouteAllowed(location.pathname)) return <Navigate to="/admin" replace />;
   if (operationalScope && !operationalRouteAllowed(location.pathname)) return <Navigate to="/admin" replace />;
   const routes = (
