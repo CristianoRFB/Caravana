@@ -2,15 +2,15 @@
 
 O tenant `italo` está em `target_active`, geração 5. O destino é o único escritor. A caravana existente permanece em operação, conforme decisão do proprietário; a data passada não a encerra. Não foi atribuída assinatura, plano ou trial.
 
-Produto publicado: `e3a465f15a1bd98946f01c037734432848cd9094`. CI [40929890152](https://github.com/CristianoRFB/Caravana/actions/runs/40929890152) e [40929890169](https://github.com/CristianoRFB/Caravana/actions/runs/40929890169), ambos SUCCESS. [Resultado sanitizado](HOSTED_OPERATIONAL_RESULT_2026-10-29.json).
+Pacote combinado e operador publicados: `7f0a56b081ee545a7d1fe1c9291ed69676cc9589`, com o app operacional E3 preservado byte a byte e painel global separado. CI [40976724813](https://github.com/CristianoRFB/Caravana/actions/runs/40976724813) e [40976724803](https://github.com/CristianoRFB/Caravana/actions/runs/40976724803), ambos SUCCESS. [Resultado global atual](../HOSTED_PLATFORM_OWNER_RESULT_2026-10-29.json); [resultado histórico do corte inicial](HOSTED_OPERATIONAL_RESULT_2026-10-29.json).
 
 ## Publicação e âmbito
 
 - Firebase: `caravana-af306`, número `742921744156`, Standard/freeTier, billing=false.
-- Rules: `firestore.italo-operational.rules`, SHA256 `8ceb58325c16b02e2aedc5c1a11e13f7da92ebcf738e70bc5acfb5bff96c2454`, ruleset `336fbe8b-5580-41e4-843f-2d7215f6f3b2`.
-- Pages: deployment `ebce9d69-198f-46e5-9892-afdcb8d3af0b`, `https://caravana-77.pages.dev`, dirty=false, sem Functions ou novo domínio.
-- Manifesto combinado SHA256 `d1e7ef91fa1cd34e0193d15e66b30325c438c45c477bd2c1515df8914a6dd94e`. Seus campos `publicCutover=false` e `readyForDeploy=false` descrevem a construção anterior à ativação; o estado operacional atual vem dos dois controles Firestore e de seus recibos, não de reescrever o manifesto estático.
-- Cinco índices READY; este corte não criou nem removeu índices. As Rules SaaS globais em `firestore.rules` permaneceram intactas.
+- Rules: `firestore.platform-operational.rules`, SHA256 `667cda17de66c2427125590162be8b0249c1dcd4e39fa8ee43bff998ac77db17`, ruleset `c3ca9840-66ef-4748-939b-b82d97c9133d`. A composição mantém os contratos de negócio do E3 e acrescenta somente gestão condicionada ao owner global.
+- Pages: deployment `4f11703d-3f32-4509-9b37-36b096f06a08`, `https://caravana-77.pages.dev`, dirty=false, sem Functions ou novo domínio.
+- Manifesto combinado SHA256 `ff7ec0be9643237d2309db6cfff2f8c4ee798d0b630b5b0b2bdde1a5613fcb58`. Seus campos `publicCutover=false` e `readyForDeploy=false` são marcadores estáticos de construção; o estado operacional atual vem dos dois controles Firestore e de seus recibos, não de reescrever o manifesto estático.
+- Seis índices READY. O corte inicial manteve os cinco anteriores; a etapa global acrescentou somente o índice de histórico `commercialOperations` por organização/data. Nenhuma remoção. As Rules SaaS integrais em `firestore.rules` não foram publicadas.
 - Acesso: [/tenant-italo/admin/login](https://caravana-77.pages.dev/tenant-italo/admin/login), com as contas existentes. O proprietário confirmou anteriormente entrada, dados e comprovante. O smoke atual verificou a tela de login; não é uma nova autenticação observada com senha.
 
 A ativação inicial fez 26 writes: dois controles, três ajustes de metadados, vinte aliases e uma auditoria. Não alterou inscrições, pagamentos, comprovantes, Auth ou os 24 originais. Removeu somente os ponteiros transitórios da última reserva na cópia da caravana. Os totais pagos desconhecidos continuam UNKNOWN; o preço da passagem não comprova recebimento.
@@ -33,8 +33,11 @@ Preserve as Rules operacionais e os dados do destino. A contingência privada `c
 
 Use o checkout operacional limpo no Cloud Shell oficial, ainda no SHA de produto publicado. Os documentos e a chave continuam apenas no diretório privado existente, com diretório 0700 e arquivos 0600. Não transporte esses arquivos ao PC, Git, CI ou chat.
 
+Após o painel global, o SHA obrigatório é **7f0a56b**. PREVIEW freeze nesse código já reconheceu os bytes hospedados, ambos os CIs e as Rules compostas:24originais/29copiados/20aliases,3writes apenas planejados e0aplicados. O banco permaneceu target_active/geração5.
+
 ```bash
 cd ~/caravana-goal-xiii-d7d4ded-pc27
+git switch --detach 7f0a56b081ee545a7d1fe1c9291ed69676cc9589
 privateDirectories=( "$HOME"/caravana-italo-tenant-*/private )
 [ "${#privateDirectories[@]}" -eq 1 ] || exit 1
 node scripts/recovery/cloudshell-operational-cutover.mjs --preview freeze "${privateDirectories[0]}"
@@ -45,7 +48,7 @@ node scripts/recovery/cloudshell-operational-cutover.mjs --verify HASH_DO_PREVIE
 
 O freeze deixa ambos os escritores bloqueados e preserva a consulta histórica. Para retomar o destino após reparar o problema, use PREVIEW `activate` e o novo hash; a retomada a partir de `frozenFrom=target_active` faz somente três gravações de controles e auditoria, preservando os dados de negócio posteriores.
 
-O executor exige frontend, Rules e CI verificáveis. Se uma falha HTTP impedir essa checagem, restaure primeiro o mesmo pacote operacional compatível `e3a465f` no Pages, mantendo os controles e as Rules operacionais. Corrija a infraestrutura e refaça a prévia. Isso não restaura Firestore nem reabre a origem.
+O executor exige frontend, Rules e CI verificáveis. Se uma falha HTTP impedir essa checagem, restaure primeiro o mesmo pacote composto compatível `7f0a56b` no Pages, mantendo os controles e as Rules compostas atuais. Corrija a infraestrutura e refaça a prévia. Isso não restaura Firestore nem reabre a origem.
 
 `return-source` após ativação exige que todos os 33 documentos da marca privada e o inventário coincidam com a baseline anterior ao tráfego. Qualquer nova reserva, pagamento, despesa, edição ou revogação impede esse retorno e exige congelamento e reparo para a frente. Não remova essa proteção. A mera volta de HTML/Rules antigos perderia continuidade dos dados novos.
 
@@ -57,4 +60,4 @@ A configuração anterior foi cifrada e lida de volta em 29/10: SHA256 do cipher
 
 O custo incremental da operação foi R$0: Firebase billing=false/freeTier e Pages estático, sem novos serviços, plano, Blaze, R2 ou Functions. A fatura agregada da conta Cloudflare permanece UNKNOWN porque o escopo de Billing retornou 403; não houve ampliação de permissões ou compromisso financeiro.
 
-As negativas A×B/revogação e as jornadas autenticadas dirigidas foram exercitadas em demo sobre os bytes publicados. Produção tem a confirmação anterior do proprietário, integridade das duas identidades/memberships, smoke público real e negativa anônima do comprovante; não foi fabricada sessão autenticada B ou novo login com senha.
+As negativas A×B/revogação e as jornadas operacionais autenticadas dirigidas foram exercitadas em demo. Produção tem a confirmação anterior do proprietário, integridade das duas identidades/memberships, smoke público real e negativa anônima do comprovante. A nova conta global teve login real com senha, leitura das duas organizadoras e negativas autenticadas de pagamento/comprovante; isso não fabrica uma sessão tenant B ou nova autenticação das duas contas operacionais anteriores.

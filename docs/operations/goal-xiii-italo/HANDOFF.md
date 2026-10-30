@@ -1,6 +1,14 @@
 # GOAL XIII — Ítalo operacional em produção
 
-## 29/10/2026 — Ítalo operacional em produção
+## Atualização posterior — painel global e owner, 29/10/2026
+
+Solicitação explícita posterior autorizou cadastrar a nova conta global e integrar tudo à main. Auth agora tem três contas, com as duas anteriores preservadas. Papel ativo e auditoria foram criados atomicamente; login real da nova conta global PASS em [/platform/login](https://caravana-77.pages.dev/platform/login), com duas organizadoras e leituras privadas de pagamento/comprovante negadas ao owner global. A prova anterior das duas contas operacionais continua distinta.
+
+Publicação vigente: código **7f0a56b081ee545a7d1fe1c9291ed69676cc9589**, na main, CI40976724813 e dedicado40976724803 SUCCESS; Pages **4f11703d-3f32-4509-9b37-36b096f06a08**, Rules **c3ca9840 / 667cda17de66c2427125590162be8b0249c1dcd4e39fa8ee43bff998ac77db17**, seis índices READY. E3 permanece a fonte dos bytes operacionais preservados; o pacote combinado e o operador atuais são 7f0a56b.
+
+86 docs privados conferidos:24originais e marca33 intactos,10inscrições,8totais conciliados/2UNKNOWN,1comprovante idêntico/403anônimo,20aliases. O tenant continua target_active/geração5. PREVIEW freeze com código/publicação novos PASS,3writes planejados/0aplicados. Usar **checkout limpo7f0a56b** para comandos; não reabrir a origem nem restaurar baseline após tráfego. [Resultado global](../HOSTED_PLATFORM_OWNER_RESULT_2026-10-29.json), [registro](../PLATFORM_OWNER_RELEASE.md), [runbook vigente](OPERATIONAL_RELEASE.md).
+
+## Marco anterior — Ítalo operacional em produção em 29/10
 
 **Transferência concluída para o evento existente.** O destino é o único escritor em target_active/geração5. Fonte **e3a465f15a1bd98946f01c037734432848cd9094**, CI principal40929890152 e dedicado40929890169 SUCCESS; Pages **ebce9d69-198f-46e5-9892-afdcb8d3af0b**, Rules **336fbe8b / 8ceb58325c16b02e2aedc5c1a11e13f7da92ebcf738e70bc5acfb5bff96c2454**.
 
@@ -10,7 +18,7 @@ PREVIEW/APPLY/readback: prepare1 → freeze2 → return-source3 → freeze4 → 
 
 **DATA_COPIED=REVERIFIED_HOSTED; AUTHENTICATED=OWNER_REPORTED_EXISTING_ACCOUNT_ACCESS; ACCESS_ACTIVE=EXISTING_OWNER_SCOPE_PRESERVED; APP_ACTIVE=PROD_OPERATIONAL_SINGLE_WRITER; PUBLIC_CUTOVER=true; MIGRATED=true neste escopo.** O proprietário já confirmou entrada/dados/comprovante; nova senha/sessão autenticada não foi observada pelo agente. A×B/revogação autenticados continuam prova demo sobre os bytes publicados.
 
-[Resultado e hashes](HOSTED_OPERATIONAL_RESULT_2026-10-29.json), [matriz](READINESS_MATRIX.md), [runbook atual](OPERATIONAL_RELEASE.md). Executar comandos de controle somente no checkout operacional limpo **e3a465f** do Cloud Shell oficial; o commit posterior de documentação não muda a versão do produto. A contingência privada anterior só é válida antes de novas operações no destino. Depois delas, congelar e reparar para a frente; não reabrir a origem nem restaurar baseline de negócio. Commit incerto exige VERIFY, sem repetir APPLY.
+[Resultado e hashes do corte inicial](HOSTED_OPERATIONAL_RESULT_2026-10-29.json), [matriz](READINESS_MATRIX.md), [runbook atual](OPERATIONAL_RELEASE.md). O checkout E3 pertence ao corte inicial; comandos atuais exigem **7f0a56b**, conforme atualização acima. A contingência privada anterior só é válida antes de novas operações no destino. Depois delas, congelar e reparar para a frente; não reabrir a origem nem restaurar baseline de negócio. Commit incerto exige VERIFY, sem repetir APPLY.
 
 R$0 incremental, billing=false/Standard/freeTier e Pages sem Functions; cinco índices READY/zero mudanças neste corte. Cloudflare agregado UNKNOWN/Billing403. Custódia cifrada única e componentes preservados não constituem backup completo com restore independente. Sem novo bloqueio humano para o corte, sem staging adicional bdall, sem plano/trial inventado ou encerramento por data passada.
 

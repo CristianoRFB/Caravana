@@ -1,6 +1,16 @@
 # Estado atual — Caravana 77
 
-## 29/10/2026 — transferência operacional do Ítalo concluída
+## 29/10/2026 — owner global cadastrado e painel publicado
+
+Conta solicitada criada no Firebase Auth e papel `platform_owner` ativo registrado atomicamente com auditoria. Três contas Auth, duas anteriores preservadas. Login real novo no navegador privado PASS: duas organizadoras, leitura comercial, logout e isolamento dos pagamentos/comprovantes do tenant. [Admin global](https://caravana-77.pages.dev/platform/login); as credenciais fornecidas não foram gravadas no repositório.
+
+Código `7f0a56b081ee545a7d1fe1c9291ed69676cc9589` integrado à main; CI principal40976724813 e dedicado40976724803 SUCCESS no SHA exato. Pages `4f11703d-3f32-4509-9b37-36b096f06a08`, dirty=false, sem Functions. Rules compostas `667cda17…`, ruleset `c3ca9840…`; seis índices READY, um acrescentado para histórico comercial e nenhum removido. Os bytes do app operacional e do histórico Ítalo continuam E3.
+
+Conferência privada: 86 documentos, 24 originais e 33 documentos da marca do destino com hashes/versões intactos; dez inscrições, oito totais conciliados/dois UNKNOWN, comprovante idêntico/403 anônimo e vinte aliases públicos. Ítalo permanece único escritor em `target_active`/geração5. PREVIEW protegido de freeze reconheceu a publicação nova e planejou três writes, sem APPLY ou mudança da fase ativa. HTTP55 arquivos/sete rotas e layouts320/375/768/1440 PASS.
+
+[Resultado global sanitizado](operations/HOSTED_PLATFORM_OWNER_RESULT_2026-10-29.json), [publicação e limites](operations/PLATFORM_OWNER_RELEASE.md), [runbook atual](operations/goal-xiii-italo/OPERATIONAL_RELEASE.md). Operar controles no checkout limpo **7f0a56b** do Cloud Shell oficial; documentação posterior não muda o código publicado. R$0 incremental, Standard/freeTier/billing=false; preservação privada não equivale a restore independente.
+
+## Marco anterior — transferência operacional do Ítalo concluída em 29/10
 
 O tenant **italo** é o único escritor: **target_active, geração 5**, com a caravana existente em operação. Os 24 originais preservam hashes/versões; os 29 documentos já copiados foram revalidados, sem recopy. Dez inscrições, oito totais pagos conciliados, dois UNKNOWN preservados e um comprovante com bytes/MIME idênticos e acesso anônimo negado. Duas contas Auth/claims e memberships existentes preservadas.
 

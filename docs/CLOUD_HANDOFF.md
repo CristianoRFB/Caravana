@@ -1,5 +1,9 @@
 # Continuidade Cloud / LAB04-PC23
 
+## Atualização vigente — 29/10/2026
+
+Ítalo operacional target_active/geração5 e painel global publicados. Código7f0a56b integrado à main, owner global solicitado cadastrado e login real validado. Usar [estado atual](CURRENT.md), [registro global](operations/PLATFORM_OWNER_RELEASE.md) e [runbook operacional](operations/goal-xiii-italo/OPERATIONAL_RELEASE.md); as restrições/pendências abaixo são checkpoints históricos anteriores, não o estado atual de autorização ou publicação.
+
 ## Continuidade consolidada — código a7b5785, runtime49
 
 Override isolado do UUID do CLI e diagnóstico sanitizado de consumidor Auth implementados/testados; audit de ferramentas7→5, runtime0. Compatibilidade HTTP3 testes, guards Python23,Auth8,Storage6 e recuperação conjunta locais PASS. CI39540369156 da própria revisão PASS:290 backend/Rules,8Auth,6Storage,23 guards Python,recuperação conjunta,184 E2E e lint/typechecks/build; preservar a evidência anterior apenas para seu código. Aplicação/Rules/índices e staging não alterados. Desenvolvimento técnico estimado85% (17/20 grupos existentes), GOAL final35% (6/17 gates), F7 preparação9/10 e F8 gates5/14; metodologia e limites no parecer abaixo.
