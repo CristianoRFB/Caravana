@@ -66,3 +66,5 @@
 - Trabalho segue neste checkout main por solicitação explícita do usuário; nenhuma mudança em Rules, índices, Auth, dados financeiros ou dependências. O relatório histórico de cutover sintético tem timestamp reescrito pelo teste preexistente; preservar seus bytes originais, sem apresentar a execução nova como evidência antiga.
 
 - Fechamento local01/11:374gerais,8Auth,6Storage,36UX,44regressões dirigidas,4privado e8operacional PASS. Há sobreposição entre36UX e44dirigidos, não somar como testes distintos. Lint/tipos/build PASS; audit runtime0. A regressão inicial teve41PASS/3FAIL por seletor de status ambíguo e menu usado antes da prontidão; confirmadas10compatibilidades e44dirigidos após corrigir os testes, sem enfraquecer os asserts de negócio.
+
+- Main atualizada diretamente em201f798. Encontrado mais um seletor global de status no editor de planos:2FAIL/4PASS na reprodução; escopo delimitado à seção do editor e6PASS no replay. Follow-up não altera src/ ou comportamento da aplicação. CI41311266508 é substituído pela revisão do teste; não considerar a execução parcial como aprovação integral.
