@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, doc, getDoc, getDocs, query, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
@@ -15,6 +16,14 @@ function assertSyntheticEndpoints() {
   if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18080" || process.env.FIREBASE_AUTH_EMULATOR_HOST !== "127.0.0.1:19099") {
     throw new Error("E2E seeding is restricted to the configured local demo emulators.");
   }
+}
+export async function selectSyntheticOrganization(page: Page, organizationId: "org-a" | "org-b") {
+  assertSyntheticEndpoints();
+  if ((page.viewportSize()?.width ?? 1440) <= 650) {
+    const menu = page.getByRole("button", { name: "Menu", exact: true });
+    if (await menu.getAttribute("aria-expanded") !== "true") await menu.click();
+  }
+  await page.getByLabel("Organização ativa").selectOption(organizationId);
 }
 export async function seedSyntheticFunctionalPlan(planId: PlanId, enabled = true) {
   assertSyntheticEndpoints(); const env = await initializeTestEnvironment({ projectId: "demo-caravana77-test" });

@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { patchSyntheticMembership, seedSyntheticEnvironment, testAccount } from "./fixtures";
+import { selectSyntheticOrganization, patchSyntheticMembership, seedSyntheticEnvironment, testAccount } from "./fixtures";
 let dispose: (() => Promise<void>) | undefined;
 let failures: string[];
 test.beforeEach(async ({ context, page }) => {
@@ -22,7 +22,7 @@ test("audited boarding reverses, survives refresh and never carries history from
   await page.getByRole("button", { name: "Embarcar", exact: true }).click(); await expect(history).toContainText("Embarque registrado");
   page.once("dialog", (dialog) => dialog.accept()); await page.getByRole("button", { name: "Embarcou", exact: true }).click();
   await expect(history).toContainText("Embarque desfeito"); await page.reload(); await expect(history.locator("li")).toHaveCount(2);
-  await page.getByLabel("Organização ativa").selectOption("org-b"); await page.goto("/admin/check-in/ride-b");
+  await selectSyntheticOrganization(page, "org-b"); await page.goto("/admin/check-in/ride-b");
   await expect(history).not.toContainText("AAAAAAAA"); await expect(history.locator("li")).toHaveCount(0);
   await page.getByRole("button", { name: "Embarcar", exact: true }).click(); await expect(history).toContainText("CCCCCCCC");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);

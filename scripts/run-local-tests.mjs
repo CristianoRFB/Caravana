@@ -8,6 +8,7 @@ const startedAt = new Date().toISOString();
 const command = path.join(workspace, "node_modules/firebase-tools/lib/bin/firebase.js");
 const suite = process.argv[2] || "unit";
 const commands = {
+  "usability-tenant-regression": "playwright test e2e/usability.spec.ts e2e/import.spec.ts e2e/operations.spec.ts e2e/tenant-import-review.spec.ts",
   "usability-compatibility": "playwright test e2e/platform.spec.ts e2e/branding.spec.ts --project desktop-1440 --project mobile-320",
   "usability-regression": "playwright test e2e/usability.spec.ts e2e/baseline.spec.ts e2e/platform.spec.ts e2e/branding.spec.ts --project desktop-1440 --project mobile-320",
   "usability-validation": "playwright test e2e/usability.spec.ts --grep \"conditional guardian|numeric limits\" --project desktop-1440",

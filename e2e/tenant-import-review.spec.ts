@@ -1,7 +1,7 @@
 import { test,expect } from '@playwright/test';
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { doc,updateDoc,setDoc,Timestamp } from 'firebase/firestore';
-import { seedSyntheticEnvironment,patchSyntheticMembership,testAccount } from './fixtures';
+import { selectSyntheticOrganization, seedSyntheticEnvironment,patchSyntheticMembership,testAccount } from './fixtures';
 let dispose:(()=>Promise<void>)|undefined;
 let failures:string[];
 test.beforeEach(async({context,page})=>{
@@ -22,6 +22,6 @@ test('imported history remains readable, unknown money explicit, and selection/r
  const metric=page.locator('.finance-summary-card').filter({has:page.getByText('Recebido registrado',{exact:true})});await expect(metric).toContainText('Não conciliado');
  await page.reload();await expect(page.getByText(/Histórico importado em modo somente leitura/)).toBeVisible();
  await page.goto('/admin/relatorios');const report=page.locator('article').filter({has:page.getByRole('heading',{name:'Histórico sintético incompleto'})});await expect(report).toContainText('Não conciliado');await expect(report).toContainText('Relatório incompleto');await expect(page.getByRole('button',{name:'Salvar relatório',exact:true})).toBeDisabled();
- await page.getByLabel('Organização ativa').selectOption('org-b');await expect(page).toHaveURL(/\/admin$/);await page.goto('/admin/financeiro');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
+ await selectSyntheticOrganization(page, "org-b");await expect(page).toHaveURL(/\/admin$/);await page.goto('/admin/financeiro');await expect(page.getByText(/Histórico importado em modo somente leitura/)).toHaveCount(0);await expect(page.locator('.finance-passenger-row')).toHaveCount(1);await expect(page.locator('.finance-passenger-row')).toContainText('Pessoa Sintética ride-b');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
 });

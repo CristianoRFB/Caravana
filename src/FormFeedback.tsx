@@ -17,6 +17,7 @@ function explanation(control: Control) {
     if (control.validity.rangeUnderflow) return `Use no mínimo ${limit(control.min)} em ${label}.`;
     if (control.validity.stepMismatch) return `Use um valor compatível com o incremento ${limit(control.step || "1")} em ${label}.`;
   }
+  if (control.validity.patternMismatch && control.title) return `${label}: ${control.title}`;
   // Preserve the browser's explanation for constraints not translated above.
   return `${label}: ${control.validationMessage}`;
 }

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-01T13:23:55.705993+00:00",
+  "checkedAt": "2026-11-01T14:14:03.086188+00:00",
   "base": "ddf13412e7503892cc223e30e790d0dd4d081d63",
   "targetBranch": "main",
   "scope": "LOCAL_SYNTHETIC_UI_QA_NOT_HOSTED_ACCEPTANCE",
@@ -50,6 +50,18 @@
       "platformExecuted": "Linux",
       "windowsExecution": "NOT_RUN; uses existing project double-quote convention for cmd.exe",
       "logSha256": "a4419d0999aeb052dde0cafd44b8f9ef0dabfa54c151a3f65541d7465491ca38"
+    },
+    "tenantAndUsabilityFollowup": {
+      "status": "PASS",
+      "count": 60,
+      "widths": [
+        320,
+        375,
+        768,
+        1440
+      ],
+      "logSha256": "b781ed3ba843074993a3e32ca0878c198d085a55c4c0ac9ac6ba40dd7134e9d6",
+      "scope": "36 UX plus24 import/check-in/history cases; includes prior six CI failures"
     }
   },
   "widths": [
@@ -72,19 +84,24 @@
   },
   "sourceSha256": {
     "src/App.tsx": "8af54c92ddbf257f8ad50e32303fc3fdf3d83e51087a620eba2c756cdf01f7c1",
-    "src/Platform.tsx": "693f229d4a51c640648ff665286e7e4a94a839931c7602815ddf7c5edafbd875",
+    "src/Platform.tsx": "1cec8c8dc66cdd5673ddb7967cc90a49741ec8f7ea633a91b39f447316a76f5c",
     "src/main.tsx": "35682f171800e8a5d1ef4cd4830913eef2184cf173f88d284301820af4febbfc",
     "src/styles.css": "5d82734594d5df0b1c7987dc1aca2815eccb382a1bb8d9357901ba101b0eee57",
     "src/usability.css": "bf458b74ba3e69ae106c9623c64848329909984568a2c349817242dcf098d6a2",
-    "src/FormFeedback.tsx": "23544d409ea5f4a31f0b653e8079b76ead4559cb8f182ca192d4805865f55cb0",
+    "src/FormFeedback.tsx": "71f24bd03bf18dff651aca349d01a833ed21ab7e68d74b0b5534bb6d6bb44766",
     "src/AdminNavigation.tsx": "af1ab6a529e7c8f70ba46e8ce628518966c055bb60ba54ba6f47a14500f4369b",
     "src/useNavigationMenu.ts": "09b089d6ddd6fea1a2bb29c016a017677aa4a2fb4fb57e8c5ca8a6bfae119542",
-    "e2e/usability.spec.ts": "bd6d1b58f02e2b77a6ec858f03a6d31f643db7725c03127f5448d8ccbf8ac220",
+    "e2e/usability.spec.ts": "e21b921ee64cf48777109ac800c1705694b857b0d90177310b61516dc9ee91d8",
     "e2e/platform.spec.ts": "4e9098404ca80214582fef6327128daf3d4f8b525c8ecbe980a007cb382f3058",
     "e2e/branding.spec.ts": "9db40e1a22e9424dfc72060be632e8243b6ba3766aa3f497d7e9aadd30c07128",
     "e2e/baseline.spec.ts": "4e6e281e7808db7df568331a8f80483a0fc391d1a6cc5ab1e918b2a520c32c20",
-    "scripts/run-local-tests.mjs": "d47dd21504d9ded095d4e88be44058d5def046f9622ff4c24a93013e605b79a1",
-    "e2e/commercial.spec.ts": "c1674896fe002ac8a31351c2eb464f9e4fc171303120ab1033782f267b2bd10f"
+    "scripts/run-local-tests.mjs": "07c74be46b8430d88b1851fdb3f7a649a514f14f8100b4b6bdc6c712a85699e8",
+    "e2e/commercial.spec.ts": "c1674896fe002ac8a31351c2eb464f9e4fc171303120ab1033782f267b2bd10f",
+    "src/TenantBrandSettings.tsx": "51694b750ba07aa6b9c19af316456933a65083faa735d989092f8ded0e5aba00",
+    "e2e/fixtures.ts": "1161f1bb2c0af960181cc41a9884d9ef16801b031534c6de8a17264f3b79ae81",
+    "e2e/import.spec.ts": "4ec8f317dadec5a64461b4a42472eec5cb57ec75f26cc4762832d1a7d60994a9",
+    "e2e/operations.spec.ts": "8aadf369e62c3b30146dc296b2e81d526418bb03de9fa13fa7ad5594c1178c10",
+    "e2e/tenant-import-review.spec.ts": "1df2d56ad7c87bfaafbaff73e6f8aac1d69de9d87029877c282aaeb17f8ecd58"
   },
   "protectedFilesUnchanged": [
     "firestore.rules",
@@ -109,7 +126,7 @@
     "fixedAndCovered": true,
     "freshSecondReviewAfterFix": false
   },
-  "ci": "PENDING_FINAL_QA_COMMAND_REVISION",
+  "ci": "PENDING_TENANT_AND_PATTERN_FOLLOWUP",
   "priorFailures": [
     {
       "suite": "Initial new UX cases",
@@ -139,7 +156,37 @@
       "failed": 2,
       "passed": 4,
       "reason": "Status selector included the new result counter; scoped to plan editor,6PASS afterward. Application code unchanged."
+    },
+    {
+      "suite": "CI41312612497",
+      "source": "443e1bf9672e9fbdd23aea36d4785cca0a57e795",
+      "passed": 218,
+      "failed": 6,
+      "reason": "Closed mobile menu is intentionally hidden; tests now open it before changing organization"
+    },
+    {
+      "suite": "Native onboarding identifier pattern reproduction",
+      "passed": 16,
+      "failed": 2,
+      "reason": "HTML pattern ignored under Unicode v syntax; equivalent valid pattern and Portuguese title now installed"
     }
   ],
-  "applicationCommit": "201f79806e998ac0f5b3bb2ecc72d93da4496edf"
+  "applicationCommit": "201f79806e998ac0f5b3bb2ecc72d93da4496edf",
+  "priorSourceSha256": {
+    "src/App.tsx": "8af54c92ddbf257f8ad50e32303fc3fdf3d83e51087a620eba2c756cdf01f7c1",
+    "src/Platform.tsx": "693f229d4a51c640648ff665286e7e4a94a839931c7602815ddf7c5edafbd875",
+    "src/main.tsx": "35682f171800e8a5d1ef4cd4830913eef2184cf173f88d284301820af4febbfc",
+    "src/styles.css": "5d82734594d5df0b1c7987dc1aca2815eccb382a1bb8d9357901ba101b0eee57",
+    "src/usability.css": "bf458b74ba3e69ae106c9623c64848329909984568a2c349817242dcf098d6a2",
+    "src/FormFeedback.tsx": "23544d409ea5f4a31f0b653e8079b76ead4559cb8f182ca192d4805865f55cb0",
+    "src/AdminNavigation.tsx": "af1ab6a529e7c8f70ba46e8ce628518966c055bb60ba54ba6f47a14500f4369b",
+    "src/useNavigationMenu.ts": "09b089d6ddd6fea1a2bb29c016a017677aa4a2fb4fb57e8c5ca8a6bfae119542",
+    "e2e/usability.spec.ts": "bd6d1b58f02e2b77a6ec858f03a6d31f643db7725c03127f5448d8ccbf8ac220",
+    "e2e/platform.spec.ts": "4e9098404ca80214582fef6327128daf3d4f8b525c8ecbe980a007cb382f3058",
+    "e2e/branding.spec.ts": "9db40e1a22e9424dfc72060be632e8243b6ba3766aa3f497d7e9aadd30c07128",
+    "e2e/baseline.spec.ts": "4e6e281e7808db7df568331a8f80483a0fc391d1a6cc5ab1e918b2a520c32c20",
+    "scripts/run-local-tests.mjs": "d47dd21504d9ded095d4e88be44058d5def046f9622ff4c24a93013e605b79a1",
+    "e2e/commercial.spec.ts": "c1674896fe002ac8a31351c2eb464f9e4fc171303120ab1033782f267b2bd10f"
+  },
+  "verificationScope": "Earlier local checks retained for unchanged backend; followup60 and typecheck/lint/build cover current frontend. CI exact SHA still pending."
 }

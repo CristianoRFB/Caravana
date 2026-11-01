@@ -154,6 +154,18 @@ test("global administrator can find organizations and open assisted onboarding o
   await page.getByLabel("Buscar organizadora", { exact: true }).fill("não existe"); await expect(page.getByText("Nenhuma organizadora encontrada.", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Limpar busca", exact: true }).click(); await expect(page.locator(".platform-tenant")).toHaveCount(2);
   await page.getByText("Cadastrar nova organizadora", { exact: true }).click(); await expect(page.getByLabel("Nome da organizadora", { exact: true })).toBeVisible();
+  const identifier = page.getByLabel("Identificador da organizadora", { exact: true });
+  for (const valid of ["abc", "org-a-123", "a".repeat(60)]) {
+    await identifier.fill(valid);
+    expect(await identifier.evaluate(input => (input as HTMLInputElement).validity.patternMismatch)).toBe(false);
+  }
+  for (const invalid of ["ab", "a".repeat(61), "-abc", "INVALIDO!"]) {
+    await identifier.fill(invalid);
+    expect(await identifier.evaluate(input => (input as HTMLInputElement).validity.patternMismatch)).toBe(true);
+  }
+  await page.getByRole("button", { name: "Cadastrar organizadora", exact: true }).click();
+  expect(await identifier.evaluate(input => (input as HTMLInputElement).validity.patternMismatch)).toBe(true);
+  await expect(page.getByRole("link", { name: /Use de 3 a 60 letras minúsculas/ })).toBeVisible();
   await fits(page);
 });
 

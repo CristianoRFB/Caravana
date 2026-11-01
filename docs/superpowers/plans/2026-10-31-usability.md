@@ -70,3 +70,5 @@
 - Main atualizada diretamente em201f798. Encontrado mais um seletor global de status no editor de planos:2FAIL/4PASS na reprodução; escopo delimitado à seção do editor e6PASS no replay. Follow-up não altera src/ ou comportamento da aplicação. CI41311266508 é substituído pela revisão do teste; não considerar a execução parcial como aprovação integral.
 
 - Fechamento de portabilidade do comando focal: aspas duplas no grep com pipe, conforme os comandos existentes, porque FirebaseCLI usa shell:true e cmd.exe não agrupa com aspas simples.3casos PASS em Linux; Windows não foi executado. Aplicação src/ continua idêntica a201f798. A revisão final do runner será o alvo do CI integral.
+
+- Retorno real do CI41312612497:374gerais/8Auth/6Storage PASS;218E2E PASS e6FAIL móveis na seleção de organização com menu fechado. Helper de teste agora abre o menu antes da seleção. Log revelou pattern HTML inválido, reproduzido em2casos (16PASS); corrigida a expressão em plataforma/branding e mensagem de instrução. Novo conjunto dirigido nas quatro larguras e novo CI obrigatórios antes do fechamento.

@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { inspectSyntheticBookings, patchSyntheticMembership, patchSyntheticTrip, patchSyntheticCommercial, seedSyntheticEnvironment, testAccount } from "./fixtures";
+import { selectSyntheticOrganization, inspectSyntheticBookings, patchSyntheticMembership, patchSyntheticTrip, patchSyntheticCommercial, seedSyntheticEnvironment, testAccount } from "./fixtures";
 let dispose: (() => Promise<void>) | undefined;
 let failures: string[];
 const csv = "Nome;Tipo documento 1;Número documento 1;Pagamento informado;Cidade\nPessoa Histórica Fictícia;RG informado;SYNTHETIC-1234;Pix;Cidade fictícia";
@@ -34,7 +34,7 @@ test("historical CSV report survives reload, rollback preserves record, duplicat
   expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 1, registrationCount: 2 });
   await historicalImport(page); await expect(page.locator(".import-report")).toContainText("0 importados · 1 já cadastrados");
   expect(await inspectSyntheticBookings()).toEqual({ reservedSeats: 1, registrationCount: 2 });
-  await page.getByLabel("Organização ativa").selectOption("org-b"); await page.goto("/admin/caravanas/ride-b/passageiros");
+  await selectSyntheticOrganization(page, "org-b"); await page.goto("/admin/caravanas/ride-b/passageiros");
   await expect(page.locator(".import-history .platform-tenant")).toHaveCount(0);
   await expect(page.getByRole("row").filter({ hasText: "Pessoa Histórica Fictícia" })).toHaveCount(0);
   await historicalImport(page); await expect(page.locator(".import-report")).toContainText("1 importados");
