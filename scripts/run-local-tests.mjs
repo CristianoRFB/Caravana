@@ -10,7 +10,7 @@ const suite = process.argv[2] || "unit";
 const commands = {
   "usability-compatibility": "playwright test e2e/platform.spec.ts e2e/branding.spec.ts --project desktop-1440 --project mobile-320",
   "usability-regression": "playwright test e2e/usability.spec.ts e2e/baseline.spec.ts e2e/platform.spec.ts e2e/branding.spec.ts --project desktop-1440 --project mobile-320",
-  "usability-validation": "playwright test e2e/usability.spec.ts --grep 'conditional guardian|numeric limits' --project desktop-1440",
+  "usability-validation": "playwright test e2e/usability.spec.ts --grep \"conditional guardian|numeric limits\" --project desktop-1440",
   "usability-e2e": "playwright test e2e/usability.spec.ts",
   "usability-focus": "playwright test e2e/usability.spec.ts --project desktop-1440 --project mobile-320",
   "platform-operational": "vitest run tests/platform-operational.test.ts tests/italo-operational.test.ts",

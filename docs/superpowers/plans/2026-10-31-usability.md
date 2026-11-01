@@ -68,3 +68,5 @@
 - Fechamento local01/11:374gerais,8Auth,6Storage,36UX,44regressões dirigidas,4privado e8operacional PASS. Há sobreposição entre36UX e44dirigidos, não somar como testes distintos. Lint/tipos/build PASS; audit runtime0. A regressão inicial teve41PASS/3FAIL por seletor de status ambíguo e menu usado antes da prontidão; confirmadas10compatibilidades e44dirigidos após corrigir os testes, sem enfraquecer os asserts de negócio.
 
 - Main atualizada diretamente em201f798. Encontrado mais um seletor global de status no editor de planos:2FAIL/4PASS na reprodução; escopo delimitado à seção do editor e6PASS no replay. Follow-up não altera src/ ou comportamento da aplicação. CI41311266508 é substituído pela revisão do teste; não considerar a execução parcial como aprovação integral.
+
+- Fechamento de portabilidade do comando focal: aspas duplas no grep com pipe, conforme os comandos existentes, porque FirebaseCLI usa shell:true e cmd.exe não agrupa com aspas simples.3casos PASS em Linux; Windows não foi executado. Aplicação src/ continua idêntica a201f798. A revisão final do runner será o alvo do CI integral.

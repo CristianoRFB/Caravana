@@ -43,6 +43,13 @@
       "status": "PASS",
       "count": 6,
       "logSha256": "3ffa6f305dc32b28438382f3f5f9de4eb88031e874ae0232293bd28a463826b0"
+    },
+    "focusedCommand": {
+      "status": "PASS",
+      "count": 3,
+      "platformExecuted": "Linux",
+      "windowsExecution": "NOT_RUN; uses existing project double-quote convention for cmd.exe",
+      "logSha256": "a4419d0999aeb052dde0cafd44b8f9ef0dabfa54c151a3f65541d7465491ca38"
     }
   },
   "widths": [
@@ -76,7 +83,7 @@
     "e2e/platform.spec.ts": "4e9098404ca80214582fef6327128daf3d4f8b525c8ecbe980a007cb382f3058",
     "e2e/branding.spec.ts": "9db40e1a22e9424dfc72060be632e8243b6ba3766aa3f497d7e9aadd30c07128",
     "e2e/baseline.spec.ts": "4e6e281e7808db7df568331a8f80483a0fc391d1a6cc5ab1e918b2a520c32c20",
-    "scripts/run-local-tests.mjs": "037a56d58350fef445db625377a4c23214a341b5095d2b27bc71411483adee7b",
+    "scripts/run-local-tests.mjs": "d47dd21504d9ded095d4e88be44058d5def046f9622ff4c24a93013e605b79a1",
     "e2e/commercial.spec.ts": "c1674896fe002ac8a31351c2eb464f9e4fc171303120ab1033782f267b2bd10f"
   },
   "protectedFilesUnchanged": [
@@ -102,7 +109,7 @@
     "fixedAndCovered": true,
     "freshSecondReviewAfterFix": false
   },
-  "ci": "PENDING_TEST_ONLY_FOLLOWUP",
+  "ci": "PENDING_FINAL_QA_COMMAND_REVISION",
   "priorFailures": [
     {
       "suite": "Initial new UX cases",
