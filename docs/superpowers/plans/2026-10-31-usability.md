@@ -53,7 +53,7 @@
 - [x] Testar busca por nome/identificador, sem resultados/limpar e abertura de cadastro; observar falha na versão atual.
 - [x] Implementar descoberta progressiva e filtro; adaptar o teste existente apenas para abrir o cadastro.
 - [x] Rodar lint, tipos, build, testes gerais, Auth/Storage e E2E geral/operacional/privado.
-- [ ] Revisar o diff, conferir remoto, enviar checkpoint diretamente à main e acompanhar o CI do SHA enviado.
+- [x] Revisar o diff, conferir remoto, enviar checkpoint diretamente à main e acompanhar o CI do SHA enviado.
 
 ## Execution ledger
 
@@ -72,3 +72,5 @@
 - Fechamento de portabilidade do comando focal: aspas duplas no grep com pipe, conforme os comandos existentes, porque FirebaseCLI usa shell:true e cmd.exe não agrupa com aspas simples.3casos PASS em Linux; Windows não foi executado. Aplicação src/ continua idêntica a201f798. A revisão final do runner será o alvo do CI integral.
 
 - Retorno real do CI41312612497:374gerais/8Auth/6Storage PASS;218E2E PASS e6FAIL móveis na seleção de organização com menu fechado. Helper de teste agora abre o menu antes da seleção. Log revelou pattern HTML inválido, reproduzido em2casos (16PASS); corrigida a expressão em plataforma/branding e mensagem de instrução. Novo conjunto dirigido nas quatro larguras e novo CI obrigatórios antes do fechamento.
+
+- Encerramento:60dirigidos PASS, incluindo36UX nas quatro larguras; `3c24e09` enviado diretamente à main. CI41315184380 integral PASS:374gerais/Rules,8Auth,6Storage,48guards Python,224E2E raiz,4privado e8operacionais. Lint/tipos/build/audit runtime e recuperação sintética PASS. Handoff final somente documental, sem alteração de código/configuração/testes e sem novo deploy. Nenhuma pendência técnica aberta nesta entrega de UX; testes sintéticos não substituem verificação hospedada ou estudo com usuários.

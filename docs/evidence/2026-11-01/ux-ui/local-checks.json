@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-01T14:14:03.086188+00:00",
+  "checkedAt": "2026-11-01T14:33:28.118112+00:00",
   "base": "ddf13412e7503892cc223e30e790d0dd4d081d63",
   "targetBranch": "main",
   "scope": "LOCAL_SYNTHETIC_UI_QA_NOT_HOSTED_ACCEPTANCE",
@@ -126,7 +126,134 @@
     "fixedAndCovered": true,
     "freshSecondReviewAfterFix": false
   },
-  "ci": "PENDING_TENANT_AND_PATTERN_FOLLOWUP",
+  "ci": {
+    "sourceCommit": "3c24e092315da2bbd0a9807f42068e06b9b29913",
+    "runId": 41315184380,
+    "url": "https://github.com/CristianoRFB/Caravana/actions/runs/41315184380",
+    "conclusion": "success",
+    "status": "completed",
+    "updatedAt": "2026-11-01T14:32:01Z",
+    "jobId": 124873602364,
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Checkout",
+        "conclusion": "success"
+      },
+      {
+        "name": "Set up Node.js",
+        "conclusion": "success"
+      },
+      {
+        "name": "Set up Java for Firebase emulators",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install dependencies",
+        "conclusion": "success"
+      },
+      {
+        "name": "Audit runtime dependencies",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint",
+        "conclusion": "success"
+      },
+      {
+        "name": "Typecheck",
+        "conclusion": "success"
+      },
+      {
+        "name": "Typecheck opt-in staging and restore harnesses (no remote execution)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Read-only staging audit guards (no credentials or remote audit)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Unit, integration and Firestore Rules",
+        "conclusion": "success"
+      },
+      {
+        "name": "Bounded public health transport (synthetic streams only)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Auth emulator integration",
+        "conclusion": "success"
+      },
+      {
+        "name": "Storage Rules with Auth",
+        "conclusion": "success"
+      },
+      {
+        "name": "Coordinated Auth Firestore Storage recovery (synthetic emulator only)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install Chromium",
+        "conclusion": "success"
+      },
+      {
+        "name": "Private proof viewer CSP with synthetic in-memory data only",
+        "conclusion": "success"
+      },
+      {
+        "name": "Compiled cutover bootstrap with synthetic metadata and blocked external network",
+        "conclusion": "success"
+      },
+      {
+        "name": "Desktop and mobile E2E (synthetic only)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Private history subpath against the published legacy Rules contract (synthetic only)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Existing-event operational app, retry handoff, freeze and revocation (demo only)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Record synthetic browser summary without artifact storage",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Set up Java for Firebase emulators",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Set up Node.js",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Checkout",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ],
+    "counts": {
+      "generalAndRules": 374,
+      "auth": 8,
+      "storage": 6,
+      "pythonGuards": 48,
+      "e2e": 224,
+      "privateHistory": 4,
+      "existingEventOperational": 8
+    }
+  },
   "priorFailures": [
     {
       "suite": "Initial new UX cases",
@@ -171,7 +298,7 @@
       "reason": "HTML pattern ignored under Unicode v syntax; equivalent valid pattern and Portuguese title now installed"
     }
   ],
-  "applicationCommit": "201f79806e998ac0f5b3bb2ecc72d93da4496edf",
+  "applicationCommit": "3c24e092315da2bbd0a9807f42068e06b9b29913",
   "priorSourceSha256": {
     "src/App.tsx": "8af54c92ddbf257f8ad50e32303fc3fdf3d83e51087a620eba2c756cdf01f7c1",
     "src/Platform.tsx": "693f229d4a51c640648ff665286e7e4a94a839931c7602815ddf7c5edafbd875",
@@ -188,5 +315,6 @@
     "scripts/run-local-tests.mjs": "d47dd21504d9ded095d4e88be44058d5def046f9622ff4c24a93013e605b79a1",
     "e2e/commercial.spec.ts": "c1674896fe002ac8a31351c2eb464f9e4fc171303120ab1033782f267b2bd10f"
   },
-  "verificationScope": "Earlier local checks retained for unchanged backend; followup60 and typecheck/lint/build cover current frontend. CI exact SHA still pending."
+  "verificationScope": "Earlier local results retained with original scope; current source confirmed by complete CI, including224 root E2E,4 private and8 operational. Final handoff modifies documentation only.",
+  "initialApplicationCommit": "201f79806e998ac0f5b3bb2ecc72d93da4496edf"
 }

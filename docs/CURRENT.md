@@ -1,8 +1,8 @@
 # Estado atual — Caravana 77
 
-## 01/11/2026 — UX/UI: código preparado para envio direto à main
+## 01/11/2026 — UX/UI entregue na main; CI integral PASS
 
-Pesquisa documental e revisão heurística aplicadas à navegação das equipes, inscrição, recuperação de erros, entradas de login e gestão global. Menu ativo/agrupado, ajuda contextual, atalhos, teclado/mobile, pesquisa de organizadoras e cadastro recolhível; fallback de pagamento não reutiliza outra marca. [Resultados e limites](UX_UI_2026-11-01.md). Verificações locais concluídas; CI do commit enviado será registrado após o push. Nenhum deploy ou operação Firebase real nesta execução; os resultados hospedados de29/10 abaixo mantêm seu escopo próprio.
+Pesquisa documental e revisão heurística aplicadas à navegação das equipes, inscrição, recuperação de erros, entradas de login e gestão global. Menu ativo/agrupado, ajuda contextual, atalhos, teclado/mobile, pesquisa de organizadoras e cadastro recolhível; fallback de pagamento não reutiliza outra marca. [Resultados e limites](UX_UI_2026-11-01.md). Código verificado em `3c24e09`. [CI41315184380 PASS](https://github.com/CristianoRFB/Caravana/actions/runs/41315184380):374 gerais/Rules,8Auth,6Storage,48guards Python,224E2E,4privado,8operacionais; lint/tipos/build e audit runtime PASS. As seis falhas mobile do CI anterior foram corrigidas e todos esses casos passaram. [Evidência sanitizada](evidence/2026-11-01/ux-ui/github-ci.json). O checkpoint final de documentação preserva exatamente código, configuração e testes desse SHA. Nenhum deploy ou operação Firebase real nesta execução; os resultados hospedados de29/10 abaixo mantêm seu escopo próprio.
 
 ## 29/10/2026 — owner global cadastrado e painel publicado
 
