@@ -1117,7 +1117,7 @@ button:disabled {
   font-weight: 700;
 }
 .summary-card h2 {
-  font: 800 19px/1.3 Manrope;
+  font: 800 19px/1.3 Manrope, sans-serif;
   color: #202945;
   margin: 9px 0 19px;
 }
@@ -1145,7 +1145,7 @@ button:disabled {
   font-size: 11px;
 }
 .summary-price strong {
-  font: 800 20px Manrope;
+  font: 800 20px Manrope, sans-serif;
   color: #222b48;
 }
 .summary-note {
@@ -1197,7 +1197,7 @@ button:disabled {
   place-items: center;
 }
 .portal-heading h1 {
-  font: 800 30px Manrope;
+  font: 800 30px Manrope, sans-serif;
   color: #19223e;
   margin: 5px 0;
 }
@@ -1212,7 +1212,7 @@ button:disabled {
   gap: 18px;
 }
 .portal-card h2 {
-  font: 800 19px Manrope;
+  font: 800 19px Manrope, sans-serif;
   color: #202945;
   margin: 12px 0;
 }
@@ -1323,7 +1323,7 @@ button:disabled {
   font-size: 11px;
 }
 .amount-row strong {
-  font: 800 18px Manrope;
+  font: 800 18px Manrope, sans-serif;
   color: #242e49;
 }
 .upload-button {
@@ -1373,7 +1373,7 @@ button:disabled {
   color: #79deea;
 }
 .login-art-copy h2 {
-  font: 800 34px/1.2 Manrope;
+  font: 800 34px/1.2 Manrope, sans-serif;
   letter-spacing: -1px;
 }
 .login-art-copy p {
@@ -1543,7 +1543,7 @@ button:disabled {
   margin-bottom: 26px;
 }
 .admin-title-row h1 {
-  font: 800 29px Manrope;
+  font: 800 29px Manrope, sans-serif;
   color: #1b2440;
   margin: 8px 0 5px;
   letter-spacing: -0.7px;
@@ -1607,7 +1607,7 @@ button:disabled {
   line-height: 1.4;
 }
 .stat-card > strong {
-  font: 800 24px Manrope;
+  font: 800 24px Manrope, sans-serif;
   color: #222c48;
   margin-top: 5px;
 }
@@ -1632,7 +1632,7 @@ button:disabled {
   border-bottom: 1px solid #eff0f4;
 }
 .panel-heading h2 {
-  font: 700 14px Manrope;
+  font: 700 14px Manrope, sans-serif;
   color: #28324d;
   margin: 0;
 }
@@ -1799,7 +1799,7 @@ td small {
   text-transform: uppercase;
 }
 .caravan-admin-body h2 {
-  font: 800 17px Manrope;
+  font: 800 17px Manrope, sans-serif;
   color: #222b47;
   margin: 7px 0 14px;
 }
@@ -1819,7 +1819,7 @@ td small {
 .admin-card-footer > strong {
   margin-right: auto;
   color: #26304b;
-  font: 800 15px Manrope;
+  font: 800 15px Manrope, sans-serif;
 }
 .admin-card-footer .button {
   font-size: 10px;
@@ -1858,7 +1858,7 @@ td small {
   width: 17px;
 }
 .modal h2 {
-  font: 800 27px/1.2 Manrope;
+  font: 800 27px/1.2 Manrope, sans-serif;
   color: #202945;
   margin: 11px 0 20px;
 }
@@ -1955,14 +1955,14 @@ td small {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font: 800 16px Manrope;
+  font: 800 16px Manrope, sans-serif;
   color: #41358c;
 }
 .meter-circle small {
   font-size: 8px;
 }
 .checkin-meter > div:last-child strong {
-  font: 800 23px Manrope;
+  font: 800 23px Manrope, sans-serif;
   color: #24304d;
 }
 .checkin-meter > div:last-child strong span {
@@ -1986,7 +1986,7 @@ td small {
   width: 24px;
 }
 .checkin-remaining strong {
-  font: 800 23px Manrope;
+  font: 800 23px Manrope, sans-serif;
   display: block;
   color: #26304a;
 }

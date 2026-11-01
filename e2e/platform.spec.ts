@@ -26,6 +26,7 @@ async function login(page: Page, email: string) {
 test("platform owner onboards an existing Auth user, audits status and loses the UI on revocation", async ({ page }) => {
   await login(page, platformTestAccount.email);
   await expect(page.getByRole("heading", { name: "Organizadoras", exact: true })).toBeVisible();
+  await page.getByText("Cadastrar nova organizadora", { exact: true }).click();
   await page.getByLabel("Nome da organizadora").fill("Organizadora Fictícia C");
   await page.getByLabel("Identificador da organizadora").fill("synthetic-organizer-c");
   await page.getByLabel("UID do responsável existente").fill(ownerUid);
@@ -33,12 +34,12 @@ test("platform owner onboards an existing Auth user, audits status and loses the
   await page.getByRole("combobox", { name: "Plano inicial", exact: true }).selectOption("pro");
   await page.getByLabel("Nome público inicial").fill("Marca Sintética C");
   await page.getByRole("button", { name: "Cadastrar organizadora" }).click();
-  await expect(page.getByRole("status")).toContainText("identidade e contadores");
+  await expect(page.getByRole("status", { name: "Resultado da operação", exact: true })).toContainText("identidade e contadores");
   const tenant = page.locator(".platform-tenant").filter({ hasText: "Organizadora Fictícia C" });
   await expect(tenant).toContainText("Ativa");
   page.once("dialog", (dialog) => dialog.accept());
   await tenant.getByRole("button", { name: "Suspender reservas" }).click();
-  await expect(page.getByRole("status")).toContainText("registrada na auditoria");
+  await expect(page.getByRole("status", { name: "Resultado da operação", exact: true })).toContainText("registrada na auditoria");
   await expect(tenant).toContainText("Suspensa para novas reservas");
   await expect(page.getByRole("listitem").filter({ hasText: "synthetic-organizer-c" })).toHaveCount(2);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);

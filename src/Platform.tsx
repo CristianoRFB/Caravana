@@ -1,3 +1,4 @@
+import FormFeedback from "./FormFeedback";
 import CommercialPlanPanel from "./CommercialPlanPanel";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -19,6 +20,7 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [tenants, setTenants] = useState<PlatformTenant[]>([]);
+  const [search, setSearch] = useState("");
   const [events, setEvents] = useState<PlatformEvent[]>([]);
   const [busy, setBusy] = useState(false);
   const [planFor, setPlanFor] = useState("");
@@ -38,7 +40,7 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
     const stopAuth = watchAuth((current) => {
       const request = ++revision;
       stopAccess(); setUser(current); setAllowed(false); setLoading(Boolean(current)); setSupportFor(""); setPlanFor("");
-      setTenants([]); setEvents([]); setError(""); setNotice(""); setName(""); setSlug(""); setOwnerUid("");
+      setTenants([]); setEvents([]); setSearch(""); setError(""); setNotice(""); setName(""); setSlug(""); setOwnerUid("");
       setOwnerUidConfirmed(false); setPlanId("essencial"); setSetupWaived(false); setPublicName(""); setPrimaryColor(BRAND_COLORS[0]); setLogo(""); setContactEmail(""); setWhatsapp("");
       if (current) stopAccess = watchPlatformAccess(current.uid, (value) => {
         if (active && request === revision) {
@@ -55,6 +57,8 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
     const stopEvents = watchPlatformAudit(setEvents, (cause) => { setEvents([]); setError(message(cause)); });
     return () => { stopTenants(); stopEvents(); };
   }, [allowed]);
+  const normalizedSearch = search.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase("pt-BR").trim();
+  const filteredTenants = tenants.filter(tenant => `${tenant.name} ${tenant.id}`.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase("pt-BR").includes(normalizedSearch));
   async function create(event: FormEvent) {
     event.preventDefault(); setBusy(true); setError(""); setNotice("");
     try {
@@ -82,11 +86,11 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
       <Link className="button button-outline" to="/platform/login">Entrar com outra conta</Link>
     </section> : <>
       <div className="admin-title-row"><div><div className="eyebrow eyebrow-dark">ADMINISTRAÇÃO DA PLATAFORMA</div><h1>Organizadoras</h1><p>{user?.email}</p><p>Identificador de suporte: {user?.uid}</p></div><button className="button button-outline" onClick={() => void logout()}>Sair</button></div>
-      {error && <div className="error-message" role="alert">{error}</div>}{notice && <div className="success-message" role="status">{notice}</div>}
+      {error && <div className="error-message" role="alert">{error}</div>}{notice && <div className="success-message" role="status" aria-label="Resultado da operação">{notice}</div>}
       {planFor && <CommercialPlanPanel key={planFor} organizationId={planFor} onExit={() => setPlanFor("")} />}
       {supportFor && <SupportConsole key={supportFor} organizationId={supportFor} onExit={() => setSupportFor("")} />}
-      <section className="admin-panel platform-section"><h2>Cadastro assistido</h2><p>Vincule o UID de uma conta Firebase existente, conferido previamente. Organização, primeiro responsável, plano, identidade e contadores são criados juntos. A criação e a verificação da conta Auth seguem o processo assistido. Não há senha compartilhada nem cobrança automática.</p>
-        <form className="field-grid" onSubmit={(event) => void create(event)}>
+      <details className="admin-panel platform-section platform-onboarding"><summary>Cadastrar nova organizadora</summary><div className="onboarding-content"><h2>Cadastro assistido</h2><p>Vincule o UID de uma conta Firebase existente, conferido previamente. Organização, primeiro responsável, plano, identidade e contadores são criados juntos. A criação e a verificação da conta Auth seguem o processo assistido. Não há senha compartilhada nem cobrança automática.</p>
+        <FormFeedback className="field-grid" onSubmit={(event) => void create(event)}>
           <label className="field"><span>Nome da organizadora</span><input required minLength={2} maxLength={120} value={name} onChange={(event) => setName(event.target.value)} /></label>
           <label className="field"><span>Identificador da organizadora</span><input required pattern="[a-z0-9][a-z0-9-]{2,59}" value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="organizadora-exemplo" /></label>
           <label className="field field-full"><span>UID do responsável existente</span><input required maxLength={128} value={ownerUid} onChange={(event) => setOwnerUid(event.target.value)} /></label>
@@ -100,9 +104,13 @@ export default function PlatformPage({ header }: { header: ReactNode }) {
           <label className="field field-full"><span><input type="checkbox" checked={setupWaived} onChange={(event) => setSetupWaived(event.target.checked)} /> Isentar implantação padrão de R$100</span></label>
           <label className="field field-full"><span><input type="checkbox" required checked={ownerUidConfirmed} onChange={(event) => setOwnerUidConfirmed(event.target.checked)} /> Conferi o UID de uma conta existente</span></label>
           <button className="button button-primary" disabled={busy}>{busy ? "Salvando…" : "Cadastrar organizadora"}</button>
-        </form>
-      </section>
-      <section className="admin-panel platform-section"><h2>Organizadoras cadastradas</h2><div className="platform-tenants">{tenants.map((tenant) => <article key={tenant.id} className="platform-tenant">
+        </FormFeedback>
+      </div></details>
+      <section className="admin-panel platform-section"><h2>Organizadoras cadastradas</h2>
+        <div className="platform-toolbar"><label className="field"><span>Buscar organizadora</span><input type="search" maxLength={120} placeholder="Nome ou identificador" value={search} onChange={event => setSearch(event.target.value)} /></label>{search && <button type="button" className="button button-outline" onClick={() => setSearch("")}>Limpar busca</button>}</div>
+        <p className="platform-result-count" role="status" aria-label="Resultados da busca">{filteredTenants.length} de {tenants.length} organizadora(s)</p>
+        {filteredTenants.length === 0 && <div className="platform-empty"><p>{tenants.length ? "Nenhuma organizadora encontrada." : "Nenhuma organizadora cadastrada."}</p><p>{tenants.length ? "Tente outro nome ou limpe a busca." : "Abra o cadastro assistido para vincular o primeiro responsável."}</p></div>}
+        <div className="platform-tenants">{filteredTenants.map((tenant) => <article key={tenant.id} className="platform-tenant">
         <div><strong>{tenant.name}</strong><small>{tenant.id}</small><span>{tenant.status === "active" ? "Ativa" : tenant.status === "suspended" ? "Suspensa para novas reservas" : "Situação legada: revisão necessária"}</span></div>
         <button className="button button-outline" disabled={busy || tenant.status === "unknown"} onClick={() => void status(tenant)}>{tenant.status === "suspended" ? "Reativar reservas" : "Suspender reservas"}</button>
         <button className="button button-outline" onClick={() => setSupportFor(tenant.id)}>Abrir suporte</button>

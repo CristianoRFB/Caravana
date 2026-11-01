@@ -1,0 +1,125 @@
+{
+  "checkedAt": "2026-11-01T13:23:55.705993+00:00",
+  "base": "ddf13412e7503892cc223e30e790d0dd4d081d63",
+  "targetBranch": "main",
+  "scope": "LOCAL_SYNTHETIC_UI_QA_NOT_HOSTED_ACCEPTANCE",
+  "checks": {
+    "general": {
+      "status": "PASS",
+      "count": 374,
+      "logSha256": "adcaeea760368edd61bcd458d33b0490cf31b0482830efb2cbe03125705b079c"
+    },
+    "auth": {
+      "status": "PASS",
+      "count": 8,
+      "logSha256": "46d5a687016f917bdc73c8d247a83675d83ca00277a17f922cdd34508adbc5fc"
+    },
+    "storage": {
+      "status": "PASS",
+      "count": 6,
+      "logSha256": "0c99bd2c6a31b37f1da65788ece46e530b5aa11798b578968472170f8fac438f"
+    },
+    "usability": {
+      "status": "PASS",
+      "count": 36,
+      "logSha256": "e9282f696cacb5c25dc9ec54dd32a2548d697194f30886db58e6d64e484ede3d"
+    },
+    "regression": {
+      "status": "PASS",
+      "count": 44,
+      "logSha256": "1fcc974df5faa5fdc0fe11da23421e3625ca25b44ed50e5b0b9cc47a57346eee"
+    },
+    "private": {
+      "status": "PASS",
+      "count": 4,
+      "logSha256": "bb6ae1213c8f3d943a58552564198e8125d053e32737212c5225902f410b9197"
+    },
+    "operational": {
+      "status": "PASS",
+      "count": 8,
+      "logSha256": "1c8c9a8d9f14ddd580d2dc87169ab13330dee4addd5fc1d7d2b2da4b7cd1ca54"
+    }
+  },
+  "widths": [
+    320,
+    375,
+    768,
+    1440
+  ],
+  "overlap": "44 targeted cases include18 of the36 usability executions; do not sum as distinct coverage.",
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "build": "PASS",
+  "runtimeAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "sourceSha256": {
+    "src/App.tsx": "8af54c92ddbf257f8ad50e32303fc3fdf3d83e51087a620eba2c756cdf01f7c1",
+    "src/Platform.tsx": "693f229d4a51c640648ff665286e7e4a94a839931c7602815ddf7c5edafbd875",
+    "src/main.tsx": "35682f171800e8a5d1ef4cd4830913eef2184cf173f88d284301820af4febbfc",
+    "src/styles.css": "5d82734594d5df0b1c7987dc1aca2815eccb382a1bb8d9357901ba101b0eee57",
+    "src/usability.css": "bf458b74ba3e69ae106c9623c64848329909984568a2c349817242dcf098d6a2",
+    "src/FormFeedback.tsx": "23544d409ea5f4a31f0b653e8079b76ead4559cb8f182ca192d4805865f55cb0",
+    "src/AdminNavigation.tsx": "af1ab6a529e7c8f70ba46e8ce628518966c055bb60ba54ba6f47a14500f4369b",
+    "src/useNavigationMenu.ts": "09b089d6ddd6fea1a2bb29c016a017677aa4a2fb4fb57e8c5ca8a6bfae119542",
+    "e2e/usability.spec.ts": "bd6d1b58f02e2b77a6ec858f03a6d31f643db7725c03127f5448d8ccbf8ac220",
+    "e2e/platform.spec.ts": "4e9098404ca80214582fef6327128daf3d4f8b525c8ecbe980a007cb382f3058",
+    "e2e/branding.spec.ts": "9db40e1a22e9424dfc72060be632e8243b6ba3766aa3f497d7e9aadd30c07128",
+    "e2e/baseline.spec.ts": "4e6e281e7808db7df568331a8f80483a0fc391d1a6cc5ab1e918b2a520c32c20",
+    "scripts/run-local-tests.mjs": "037a56d58350fef445db625377a4c23214a341b5095d2b27bc71411483adee7b"
+  },
+  "protectedFilesUnchanged": [
+    "firestore.rules",
+    "firestore.indexes.json",
+    "storage.rules",
+    "src/lib/data.ts",
+    "src/lib/financial-operations.ts",
+    "src/lib/plan-catalog.ts",
+    "package-lock.json",
+    "tests/in-place-bootstrap.auth.ts",
+    "docs/operations/goal-xi-italo/sdk-rehearsal.json"
+  ],
+  "firebaseRemoteWrites": 0,
+  "firebaseRemoteReads": 0,
+  "deploys": 0,
+  "newDependencies": false,
+  "screenReaderOrRealUserStudy": false,
+  "review": {
+    "critical": 0,
+    "important": 2,
+    "reproducedBeforeFix": 3,
+    "fixedAndCovered": true,
+    "freshSecondReviewAfterFix": false
+  },
+  "ci": "PENDING_PUSH",
+  "priorFailures": [
+    {
+      "suite": "Initial new UX cases",
+      "failed": 11,
+      "passed": 1,
+      "reason": "Expected missing interface behavior before implementation"
+    },
+    {
+      "suite": "New fallback assertion",
+      "failed": 4,
+      "passed": 20,
+      "reason": "Fixture capitalization mismatch corrected; not an application defect"
+    },
+    {
+      "suite": "Review reproductions",
+      "failed": 3,
+      "reason": "Stale conditional controls and missing numeric limit explanation; fixed"
+    },
+    {
+      "suite": "Initial compatibility regression",
+      "failed": 3,
+      "passed": 41,
+      "reason": "Ambiguous status selector and menu read before readiness; tested again with precise assertions"
+    }
+  ]
+}

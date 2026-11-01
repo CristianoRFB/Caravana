@@ -1,5 +1,9 @@
 # Estado atual — Caravana 77
 
+## 01/11/2026 — UX/UI: código preparado para envio direto à main
+
+Pesquisa documental e revisão heurística aplicadas à navegação das equipes, inscrição, recuperação de erros, entradas de login e gestão global. Menu ativo/agrupado, ajuda contextual, atalhos, teclado/mobile, pesquisa de organizadoras e cadastro recolhível; fallback de pagamento não reutiliza outra marca. [Resultados e limites](UX_UI_2026-11-01.md). Verificações locais concluídas; CI do commit enviado será registrado após o push. Nenhum deploy ou operação Firebase real nesta execução; os resultados hospedados de29/10 abaixo mantêm seu escopo próprio.
+
 ## 29/10/2026 — owner global cadastrado e painel publicado
 
 Conta solicitada criada no Firebase Auth e papel `platform_owner` ativo registrado atomicamente com auditoria. Três contas Auth, duas anteriores preservadas. Login real novo no navegador privado PASS: duas organizadoras, leitura comercial, logout e isolamento dos pagamentos/comprovantes do tenant. [Admin global](https://caravana-77.pages.dev/platform/login); as credenciais fornecidas não foram gravadas no repositório.

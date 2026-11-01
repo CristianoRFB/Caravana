@@ -27,6 +27,7 @@ async function signIn(page: Page) {
   await page.getByLabel(/Senha/).fill(testAccount.password);
   await page.getByRole("button", { name: "Entrar no painel" }).click();
   await expect(page).toHaveURL(/\/admin$/);
+  await expect(page.locator(".admin-content")).toBeVisible();
   await expect(page.locator(".admin-sidebar")).toBeAttached();
 }
 const metric = (page: Page, label: string) => page.locator(".finance-summary-card").filter({ has: page.getByText(label, { exact: true }) }).locator("strong");

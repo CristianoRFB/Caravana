@@ -1,3 +1,6 @@
+import FormFeedback from "./FormFeedback";
+import AdminNavigation, { AdminPageGuide, DashboardTasks } from "./AdminNavigation";
+import { useNavigationMenu } from "./useNavigationMenu";
 import TenantImportNotice from "./TenantImportNotice";
 import { privateHistoryScope, privateHistoryRouteAllowed, scopePrivateHistoryAccess } from "./lib/private-history-release";
 import { operationalScope, operationalRouteAllowed } from './lib/italo-operational-scope';
@@ -152,15 +155,15 @@ const InvitationInbox = lazy(() => import("./InvitationInbox"));
 const CommercialLanding = lazy(() => import("./CommercialLanding"));
 const OperationalTools = lazy(() => import("./OperationalTools"));
 const paymentProcessCopy =
-  "Este site não cobra nem recebe pagamentos. A AnimeSFest informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual.";
+  "Este site não cobra nem recebe pagamentos. A organização informará a forma, o destinatário e o prazo por um canal oficial fora da plataforma. Não pague antes de receber essas orientações. Depois, envie o comprovante pela página da inscrição; a equipe fará a conferência manual.";
 const resolveFaqAnswer = (
   answer: string,
   caravan: Caravan,
   availableSeats: number | null,
   question: string,
-  organizationName = caravan.organizerName || "AnimeSFest",
+  organizationName = caravan.organizerName || "A organização",
 ) => {
-  const processCopy = paymentProcessCopy.replaceAll("AnimeSFest", organizationName);
+  const processCopy = paymentProcessCopy.replaceAll("A organização", organizationName);
   const resolved = answer
     .replaceAll("{{availableSeats}}", availableSeats === null ? "disponibilidade a confirmar" : String(availableSeats))
     .replaceAll("{{price}}", money(caravan.priceCents))
@@ -236,7 +239,7 @@ function BrandLogo({ src, name }: { src: string; name: string }) {
 }
 function Topbar({ admin = false }: { admin?: boolean }) {
   const tenant = useTenantBrand();
-  const [open, setOpen] = useState(false);
+  const { open, trigger, toggle, close } = useNavigationMenu();
   const path = useLocation().pathname;
   if (import.meta.env.VITE_PLATFORM_ONLY === 'true') return <header className="topbar"><nav className="topbar-inner"><Link className="brand" to="/platform">Caravana 77 · Plataforma</Link><Link className="button button-outline" to="/platform">Organizadoras</Link></nav></header>;
   const homePath = tenant.tenantSlug ? tenantHomePath(tenant.tenantSlug) : "/";
@@ -250,12 +253,15 @@ function Topbar({ admin = false }: { admin?: boolean }) {
         <Brand light={admin} />
         <button
           className="mobile-menu"
-          aria-label="Abrir menu"
-          onClick={() => setOpen(!open)}
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={open}
+          aria-controls="public-navigation"
+          ref={trigger}
+          onClick={toggle}
         >
           {open ? <X /> : <Menu />}
         </button>
-        <nav className={open ? "nav-open" : ""}>
+        <nav id="public-navigation" aria-label="Navegação do site" className={open ? "nav-open" : ""} onClick={event => { if (event.target instanceof Element && event.target.closest("a")) close(false); }}>
           {admin ? (
             <>
               <Link to="/admin/login">Área da equipe</Link>
@@ -465,7 +471,7 @@ function PublicLanding() {
           </div>
         </section>
         <section className="payment-process-section" aria-label="Como funciona o pagamento">
-          <PaymentProcessNotice />
+          <PaymentProcessNotice organizationName={caravan.organizerName} />
         </section>
         <section className="content-section" id="experiencia">
           <div className="section-heading">
@@ -615,7 +621,7 @@ function PublicLanding() {
                   {faq.question}
                   <ChevronDown size={18} />
                 </summary>
-                  <p>{resolveFaqAnswer(faq.answer, caravan, free, faq.question, tenant.branding?.publicName || caravan.organizerName || "AnimeSFest")}</p>
+                  <p>{resolveFaqAnswer(faq.answer, caravan, free, faq.question, tenant.branding?.publicName || caravan.organizerName || "A organização")}</p>
               </details>
             ))}
           </div>
@@ -665,9 +671,9 @@ function Fact({
   );
 }
 
-function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
+function PaymentProcessNotice({ compact = false, organizationName }: { compact?: boolean; organizationName?: string }) {
   const tenant = useTenantBrand();
-  const name = tenant.branding?.publicName || "AnimeSFest";
+  const name = tenant.branding?.publicName || organizationName;
   return (
     <aside
       className={`payment-process-notice${compact ? " payment-process-notice-compact" : ""}`}
@@ -681,15 +687,15 @@ function PaymentProcessNotice({ compact = false }: { compact?: boolean }) {
         <strong>Pagamento feito fora do site</strong>
         <p>
           {compact
-            ? `O site não cobra nem recebe pagamentos. ${name} informará a forma, o destinatário e o prazo por um canal oficial. Pague somente depois de receber essas orientações; depois, envie seu comprovante aqui. A equipe confere manualmente e confirma a inscrição.`
-            : paymentProcessCopy.replaceAll("AnimeSFest", name)}
+            ? `O site não cobra nem recebe pagamentos. ${name || "A organização"} informará a forma, o destinatário e o prazo por um canal oficial. Pague somente depois de receber essas orientações; depois, envie seu comprovante aqui. A equipe confere manualmente e confirma a inscrição.`
+            : paymentProcessCopy.replaceAll("A organização", name || "A organização")}
         </p>
         {tenant.branding?.operationalMessage && <p>{tenant.branding.operationalMessage}</p>}
         {tenant.branding?.whatsapp && <p><a href={`https://wa.me/${tenant.branding.whatsapp}`} target="_blank" rel="noopener noreferrer">Pedir orientações à organização</a></p>}
         {tenant.branding?.contactEmail && <p><a href={`mailto:${tenant.branding.contactEmail}`}>Contato oficial por e-mail</a></p>}
         {compact && (
           <small>
-            Comprovante aceito: PDF, JPG ou PNG até {PROOF_POLICY.displayLimit}. Ainda sem orientação? Fale com {name} antes de pagar.
+            Comprovante aceito: PDF, JPG ou PNG até {PROOF_POLICY.displayLimit}. Ainda sem orientação? Fale com {name || "a organização"} antes de pagar.
           </small>
         )}
       </div>
@@ -854,24 +860,17 @@ function RegistrationPage() {
               seu lugar?
             </h1>
             <p className="form-intro">
-              Preencha seus dados para começar. A vaga fica reservada enquanto
-              você envia o comprovante.
+              Informe os dados do passageiro e escolha onde embarcar. Depois,
+              você verá as instruções de pagamento e poderá enviar o comprovante.
             </p>
-            <div className="stepper">
-              <span className="step-active">
-                <b>1</b> Seus dados
-              </span>
-              <i />
-              <span>
-                <b>2</b> Embarque
-              </span>
-              <i />
-              <span>
-                <b>3</b> Revisão
-              </span>
-            </div>
-            <PaymentProcessNotice compact />
-            <form onSubmit={submit} className="form-card">
+            <ol className="booking-journey" aria-label="Etapas da inscrição">
+              <li aria-current="step"><span>1</span><div><strong>Dados e embarque</strong><small>Preencha nesta página</small></div></li>
+              <li><span>2</span><div><strong>Pagamento</strong><small>Veja as instruções e envie o comprovante</small></div></li>
+              <li><span>3</span><div><strong>Conferência</strong><small>A equipe analisa o pagamento</small></div></li>
+            </ol>
+            <p className="form-required-note">Os campos com * são obrigatórios.</p>
+            <PaymentProcessNotice compact organizationName={caravan.organizerName} />
+            <FormFeedback onSubmit={submit} className="form-card">
               <div className="field-grid">
                 <Field label="Nome completo" required>
                   <input
@@ -1017,7 +1016,7 @@ function RegistrationPage() {
                   <ArrowRight size={17} />
                 )}
               </button>
-            </form>
+            </FormFeedback>
           </section>
           <aside className="summary-card">
             <div className="summary-art">
@@ -1402,6 +1401,7 @@ function AdminLogin({ passenger = false, platform = false }: { passenger?: boole
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   async function submit(e: FormEvent) {
@@ -1442,16 +1442,17 @@ function AdminLogin({ passenger = false, platform = false }: { passenger?: boole
               <br />
               {platform ? "plataforma." : passenger ? "conta de passageiro." : "área da equipe."}
             </h1>
-            <p>{passenger ? "Entre com seu e-mail e senha cadastrados." : "Entre com seu e-mail e senha cadastrados pela organização."}</p>
+            <p>{platform ? "Use a conta autorizada para administrar a plataforma." : passenger ? "Entre com seu e-mail e senha cadastrados." : "Use a conta liberada pela sua organização."}</p>
             {!firebaseConfigured && (
               <div className="error-message">
-                Configure as variáveis do Firebase para habilitar o acesso.
+                O acesso está temporariamente indisponível. Tente novamente mais tarde.
               </div>
             )}
-            <form onSubmit={submit}>
+            <FormFeedback onSubmit={submit}>
               <Field label="E-mail" required>
                 <input
                   type="email"
+                  autoComplete="username"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -1459,15 +1460,12 @@ function AdminLogin({ passenger = false, platform = false }: { passenger?: boole
                 />
               </Field>
               <Field label="Senha" required>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Sua senha"
-                />
+                <span className="password-control">
+                  <input id="login-password" type={showPassword ? "text" : "password"} autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} placeholder="Sua senha" />
+                  <button type="button" aria-controls="login-password" aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} aria-pressed={showPassword} onClick={() => setShowPassword(value => !value)}>{showPassword ? "Ocultar" : "Mostrar"}</button>
+                </span>
               </Field>
-              {error && <div className="error-message">{error}</div>}
+              {error && <div className="error-message" role="alert">{error}</div>}
               <button
                 className="button button-primary button-large"
                 disabled={busy || !firebaseConfigured}
@@ -1475,7 +1473,7 @@ function AdminLogin({ passenger = false, platform = false }: { passenger?: boole
                 {busy ? "Entrando…" : passenger ? "Entrar na conta" : "Entrar no painel"}
                 <ArrowRight size={17} />
               </button>
-            </form>
+            </FormFeedback>
             <p className="login-safe">
               <LockKeyhole size={14} /> Acesso restrito a membros autorizados.
             </p>
@@ -1624,7 +1622,7 @@ function AdminShell({
   access: TenantAccess[];
   onSelect: (organizationId: string) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const { open, trigger, toggle, close } = useNavigationMenu();
   const pendingCount = useSyncExternalStore(observePendingWrites, pendingWrites, () => 0);
   useEffect(() => { setDiagnosticScope(`${user.uid}:${orgId}`); return () => setDiagnosticScope("public"); }, [user.uid, orgId]);
   const [importPending, setImportPending] = useState(false);
@@ -1642,12 +1640,13 @@ function AdminShell({
         <header className="admin-top">
           <button
             className="mobile-menu admin-menu-button"
-            onClick={() => setOpen(!open)}
+            onClick={toggle}
+            ref={trigger}
             aria-label="Menu"
             aria-expanded={open}
             aria-controls="admin-navigation"
           >
-            <Menu />
+            {open ? <X /> : <Menu />}
           </button>
           <Brand light />
           <div className="admin-top-right">
@@ -1657,7 +1656,8 @@ function AdminShell({
             </button>
           </div>
         </header>
-        <aside id="admin-navigation" className={`admin-sidebar ${open ? "sidebar-open" : ""}`} onClick={event => { if (event.target instanceof Element && event.target.closest("a")) setOpen(false); }}>
+        {open && <button type="button" className="admin-nav-backdrop" aria-label="Fechar navegação" tabIndex={-1} onClick={() => close()} />}
+        <aside id="admin-navigation" className={`admin-sidebar ${open ? "sidebar-open" : ""}`} onClick={event => { if (event.target instanceof Element && event.target.closest("a")) close(false); }}>
           <span className="sidebar-label">ESPAÇO DA ORGANIZAÇÃO</span>
           {access.length > 1 && (
             <label className="tenant-switcher">
@@ -1668,40 +1668,20 @@ function AdminShell({
                 if (!access.some((item) => item.organizationId === next)) return;
                 onSelect(next);
                 nav("/admin");
+                close(false);
               }}>
                 {access.map((item) => <option key={item.organizationId} value={item.organizationId}>{item.organizationId}</option>)}
               </select>
               {pendingCount > 0 && <small role="status">Aguarde a operação concluir para trocar de organização.</small>}
             </label>
           )}
-          <Link to="/admin">
-            <span>▦</span> Visão geral
-          </Link>
-          <Link to="/admin/caravanas">
-            <span>◫</span> Caravanas
-          </Link>
-          <Link to="/admin/financeiro">
-            <span><WalletCards size={17} /></span> Financeiro
-          </Link>
-          <Link to="/admin/comprovantes">
-            <span>▤</span> Comprovantes
-          </Link>
-          <Link to="/admin/check-in">
-            <span>✓</span> Check-in
-          </Link>
-          {!privateHistoryScope && !operationalScope && <><Link to="/admin/suporte"><span>?</span> Suporte</Link>
-          <Link to="/admin/identidade"><span>◈</span> Identidade pública</Link>
-          <Link to="/admin/documentos"><span>▤</span> Documentos e prazos</Link>
-          <Link to="/admin/plano"><span>◇</span> Plano e limites</Link>
-          <Link to="/admin/equipe"><span>♧</span> Equipe e convites</Link></>}
-          <Link to="/admin/relatorios"><span aria-hidden="true">▥</span> Relatórios</Link>
-          <Link to="/admin/roteiros"><span aria-hidden="true">☷</span> Roteiros da equipe</Link>
-          <Link to="/admin/diagnostico"><span aria-hidden="true">?</span> Diagnóstico local</Link>
+          <AdminNavigation restricted={Boolean(privateHistoryScope || operationalScope)} />
           <div className="sidebar-bottom">
             <ShieldCheck size={16} /> Dados protegidos por organização
           </div>
         </aside>
-        <main className="admin-content" data-org={orgId}>
+        <main className="admin-content" data-org={orgId} inert={open || undefined}>
+          <AdminPageGuide owner={access.find(item => item.organizationId === orgId)?.role === "tenant_owner"} />
           <TenantImportNotice organizationId={orgId} onPending={setImportPending} />
           {operationalScope && operational.readOnly && <p className="error-message" role="status">A operação está em atualização. Os dados continuam disponíveis para consulta; aguarde a confirmação para gravar.</p>}
           <HistoricalImportContext.Provider value={Boolean(privateHistoryScope) || importPending || Boolean(operationalScope && operational.readOnly)}>
@@ -1811,6 +1791,7 @@ function AdminDashboard() {
           <span>＋</span> Nova caravana
         </Link>
       </div>
+      <DashboardTasks />
       {caravans.length > 0 && (
         <label className="admin-selector">
           Caravana{" "}
@@ -2321,13 +2302,13 @@ function AdminCaravans() {
               <br />
               essa caravana.
             </h2>
-            <form onSubmit={submit}>
+            <FormFeedback onSubmit={submit}>
               <div className="field-grid">
                 <Field label="Organização responsável" full>
                   <input
                     value={organizerName}
                     onChange={(e) => setOrganizerName(e.target.value)}
-                    placeholder="AnimeSFest"
+                    placeholder="Nome da sua organização"
                   />
                 </Field>
                 <Field label="Nome da caravana" required full>
@@ -2544,7 +2525,7 @@ function AdminCaravans() {
                     : "Criar e publicar"}
                 <ArrowRight size={16} />
               </button>
-            </form>
+            </FormFeedback>
           </section>
         </div>
       )}
@@ -3390,7 +3371,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
             </button>
             <div className="eyebrow eyebrow-dark">DADOS DO PASSAGEIRO</div>
             <h2>Editar inscrição</h2>
-            <form onSubmit={savePassenger}>
+            <FormFeedback onSubmit={savePassenger}>
               <div className="field-grid">
                 <Field label="Nome completo" required full>
                   <input
@@ -3489,7 +3470,7 @@ function Passengers({ pendingOnly = false }: { pendingOnly?: boolean }) {
               >
                 {editBusy ? "Salvando…" : "Salvar dados"}
               </button>
-            </form>
+            </FormFeedback>
           </section>
         </div>
       )}
@@ -3789,8 +3770,8 @@ export default function App() {
       <Route path="/caravana/:slug" element={<PublicLanding />} />
       <Route path="/caravana/:slug/inscricao" element={<RegistrationPage />} />
       <Route path="/minha-inscricao/:id" element={<MyRegistration />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/platform/login" element={<AdminLogin platform />} />
+      <Route path="/admin/login" element={<AdminLogin key="team" />} />
+      <Route path="/platform/login" element={<AdminLogin key="platform" platform />} />
       <Route path="/platform" element={<PlatformPage header={<Topbar admin />} />} />
       <Route path="/admin/suporte" element={<AdminGuard><TenantSupport /></AdminGuard>} />
       <Route path="/admin/identidade" element={<AdminGuard><TenantIdentity /></AdminGuard>} />
@@ -3801,7 +3782,7 @@ export default function App() {
       <Route path="/admin/roteiros" element={<AdminGuard><TenantOperationalTools mode="worklists" /></AdminGuard>} />
       <Route path="/admin/diagnostico" element={<AdminGuard><SafetyDiagnostics /></AdminGuard>} />
       <Route path="/conta/convites" element={<Suspense fallback={<Loading />}><InvitationInbox /></Suspense>} />
-      <Route path="/conta/entrar" element={<AdminLogin passenger />} />
+      <Route path="/conta/entrar" element={<AdminLogin key="passenger" passenger />} />
       <Route path="/conta" element={<PassengerAccount />} />
       <Route
         path="/admin"

@@ -7,6 +7,7 @@ import { ItaloOperationalProvider } from './lib/italo-operational-release';
 import { operationalScope } from './lib/italo-operational-scope';
 import "./styles.css";
 import "./features.css";
+import "./usability.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
